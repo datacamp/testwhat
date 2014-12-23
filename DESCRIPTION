@@ -1,0 +1,58 @@
+Package: testwhat
+Type: Package
+Title: Easily write submission correctness tests
+Version: 1.1.1
+Date: 2014-07-31
+Description: This package makes it easy for teachers to test students' code
+    submissions for R exercises, e.g., for interactive R courses on
+    \url{www.DataCamp.com}.
+URL: www.DataCamp.com
+Depends:
+    R (>= 3.0.0)
+Imports:
+    digest,
+    methods
+License: MIT + file LICENSE
+LazyData: true
+Authors@R: c(person("Andreas", "Alfons", role = "aut"), person("Jonathan",
+    "Cornelissen", email = "Jonathan@DataCamp.com", role = c("aut", "cre")),
+    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role =
+    c("aut", "cre")), person("Hadley", "Wickham", role = "aut"))
+Collate:
+    'api-overrides.R'
+    'auto-test.r'
+    'colour-text.r'
+    'compare.r'
+    'context.r'
+    'describe.r'
+    'evaluate-promise.r'
+    'expect-that.r'
+    'expectation.r'
+    'expectations.r'
+    'experimental.R'
+    'library.r'
+    'make-expectation.r'
+    'reporter.r'
+    'reporter-DataCamp.R'
+    'reporter-list.r'
+    'reporter-minimal.r'
+    'reporter-multi.r'
+    'reporter-silent.r'
+    'reporter-stop.r'
+    'reporter-summary.r'
+    'reporter-tap.r'
+    'reporter-teamcity.r'
+    'reporter-zzz.r'
+    'test-error.R'
+    'test-exercise.R'
+    'test-files.r'
+    'test-function.R'
+    'test-mc.R'
+    'test-object.R'
+    'test-output-contains.R'
+    'test-package.r'
+    'test-that.r'
+    'testwhat.R'
+    'traceback.r'
+    'utils.r'
+    'watcher.r'

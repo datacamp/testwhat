@@ -1,0 +1,13 @@
+*
+!DESCRIPTION
+!NAMESPACE
+!README.md
+!.gitignore
+.Rproj.user
+!*/
+!R/*.R
+!man/*.Rd
+!tests/*
+!inst/*.R
+!inst/doc/*.R,d
+!.git/
