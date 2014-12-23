@@ -8,3 +8,11 @@ More details concerning course creation can be found in the [datacamp package](h
 For a more detailed course creation guide, send a request to [teach@datacamp.com](teach@datacamp.com) and we will respond asap.
 
 Feel free to contribute to this project.
+
+## Install the package
+
+```
+install.packages("devtools")
+library("devtools")
+install_github("Data-Camp/testwhat")
+```
