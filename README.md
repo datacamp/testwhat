@@ -1,4 +1,3 @@
-[![Build Status](https://api.travis-ci.org/Data-Camp/datacamp.svg?branch=master)](https://travis-ci.org/Data-Camp/datacamp)
 <p align="center">
 <img src="https://s3.amazonaws.com/assets.datacamp.com/img/logo/logo_blue_full.svg" width="250">
 </p>
