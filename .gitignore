@@ -12,3 +12,4 @@
 !inst/*.R
 !inst/doc/*.R,d
 !.git/
+!.travis.yml
