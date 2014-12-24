@@ -5,7 +5,7 @@
 
 ## Testwhat
 
-Welcome to the repository of the __testwhat__ package, an extension to Hadley's testthat package. 
+Welcome to the repository of the __testwhat__ package, an extension to [Hadley's testthat package](https://github.com/hadley/testthat). 
 This package allows you to design Submission Correctness Tests for interactive exercises on DataCamp.
 
 More details concerning course creation can be found in the [datacamp package](https://github.com/Data-Camp/datacamp).
