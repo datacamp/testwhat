@@ -9,9 +9,9 @@ This package allows you to design Submission Correctness Tests for interactive e
 
 More details concerning course creation can be found in the [datacamp package](https://github.com/Data-Camp/datacamp).
 
-For more information on writing SCTs using the testwhat package, consult the [SCT design manual](http://documents.datacamp.com/testwhat_manual.html)
+For more information on writing SCTs using the testwhat package, consult the [SCT design manual](http://documents.datacamp.com/testwhat_manual.html).
 
-Feel free to contribute to this project or contact us at [teach@datacamp.com](teach@datacamp.com)
+Feel free to contribute to this project or contact us at [teach@datacamp.com](teach@datacamp.com).
 
 ## Install the package
 
