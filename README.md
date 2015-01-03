@@ -7,7 +7,7 @@
 Welcome to the repository of the __testwhat__ package, an extension to [Hadley's testthat package](https://github.com/hadley/testthat). 
 This package allows you to design Submission Correctness Tests for interactive exercises on DataCamp.
 
-More details concerning course creation can be found in the [datacamp package](https://github.com/Data-Camp/datacamp).
+More details concerning course creation can be found in the [datacamp package](https://github.com/Data-Camp/datacamp). For a more extensive overview of course creation, covering all the details, contact us at [teach@datacamp.com](teach@datacamp.com).
 
 For more information on writing SCTs using the testwhat package, consult the [SCT design manual](http://documents.datacamp.com/testwhat_manual.html).
 
