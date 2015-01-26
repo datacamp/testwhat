@@ -23,7 +23,7 @@ collapse <- function(x, conn = " and ") {
 }
 
 collapse_args <- function(x, conn = " and ") {
-  collapse_props(x, conn)
+  collapse_props(paste0("<code>",x,"</code>"), conn)
 }
 
 collapse_props <- function(x, conn = " and ") {

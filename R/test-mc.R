@@ -20,6 +20,8 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
     stop("argument 'correct' can not be empty")
   }
 
+  print(result)
+
   #default messages:
   if(is.null(no_selection_msg)) {
     no_selection_msg <- "Please select one of the options!"
@@ -35,8 +37,8 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
   }
 
   test_that("The multiple choice exercise was answered correctly", {
-    expect_that(exists(result), is_true(), failure_msg = no_selection_msg)
-    if(exists(result)) {
+    expect_that(exists("result"), is_true(), failure_msg = no_selection_msg)
+    if(exists("result")) {
       if(!is.numeric(result)) {
         stop("There is something wrong with the result set by the backend.")
       }
@@ -44,6 +46,5 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
     }
   })
 
-  # TO DO add this success message to final expect_that!
   success_msg(feedback_msgs[correct])
 }
