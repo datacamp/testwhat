@@ -61,9 +61,9 @@ success_msg("Great job! Continue to the next exercise!")
 eval(parse(text = pre_exercise_code), envir = globalenv())
 res = try(eval(parse(text = get_student_code()), envir = globalenv()))
 if(inherits(res, "try-error")) {
-  set_student_error(TRUE)
+  set_student_error("there was an error")
 } else {
-  set_student_error(FALSE)
+  set_student_error(NULL)
 }
 set_student_output(get_output(get_student_code()))
 eval(parse(text = pre_exercise_code),envir = get_solution_env())
