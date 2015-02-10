@@ -1,6 +1,9 @@
-#' Test file
+#' Test R Markdown file
 #'
 #' Test a single R Markdown file
+#' 
+#' This test is implemented using \code{\link{test_that}}.
+#' This test should be called when there are multiple files in the submission.
 #' 
 #' @param code the SCT code for the file
 #' @param student_file the name of the student file to be tested
