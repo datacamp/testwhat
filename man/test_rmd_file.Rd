@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-rmd-file.R
 \name{test_rmd_file}
 \alias{test_rmd_file}
-\title{Test file}
+\title{Test R Markdown file}
 \usage{
 test_rmd_file(code, student_file = NULL, solution_file = NULL,
   student_code = get_student_code(), solution_code = get_solution_code(),
@@ -23,5 +23,9 @@ test_rmd_file(code, student_file = NULL, solution_file = NULL,
 }
 \description{
 Test a single R Markdown file
+}
+\details{
+This test is implemented using \code{\link{test_that}}.
+This test should be called when there are multiple files in the submission.
 }
 
