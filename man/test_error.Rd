@@ -7,7 +7,7 @@
 test_error(error = get_student_error(), incorrect_msg = NULL)
 }
 \arguments{
-\item{error}{boolean if the output contained an error.}
+\item{error}{The error message if the output contained an error, NULL if there was no error}
 
 \item{incorrect_msg}{feeback message in case the output contained an error}
 }
