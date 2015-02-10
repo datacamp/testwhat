@@ -11,7 +11,10 @@ Depends:
     R (>= 3.0.0)
 Imports:
     digest,
-    methods
+    methods,
+    datacampAPI,
+    knitr,
+    rmarkdown
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"), person("Jonathan",
@@ -19,7 +22,6 @@ Authors@R: c(person("Andreas", "Alfons", role = "aut"), person("Jonathan",
     person("Filip", "Schouwenaars", email = "filip@datacamp.com", role =
     c("aut", "cre")), person("Hadley", "Wickham", role = "aut"))
 Collate:
-    'api-overrides.R'
     'auto-test.r'
     'colour-text.r'
     'compare.r'
@@ -43,6 +45,7 @@ Collate:
     'reporter-tap.r'
     'reporter-teamcity.r'
     'reporter-zzz.r'
+    'test-chunk-options.R'
     'test-error.R'
     'test-exercise.R'
     'test-files.r'
@@ -51,8 +54,13 @@ Collate:
     'test-object.R'
     'test-output-contains.R'
     'test-package.r'
+    'test-rmd-file.R'
+    'test-rmd-group.R'
+    'test-text.R'
     'test-that.r'
+    'test-yaml-header.R'
     'testwhat.R'
     'traceback.r'
     'utils.r'
+    'utils_rmd.R'
     'watcher.r'

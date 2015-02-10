@@ -1,15 +1,3 @@
-*
-!DESCRIPTION
-!NAMESPACE
-!LICENSE
-!README.md
-!.gitignore
 .Rproj.user
-!*/
-!R/*.R
-!man/*.Rd
-!tests/*
-!inst/*.R
-!inst/doc/*.R,d
-!.git/
-!.travis.yml
+.Rhistory
+.RData
