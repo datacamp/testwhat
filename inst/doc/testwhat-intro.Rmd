@@ -1,0 +1,404 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{How to test whether a student passed an R exercise}
+-->
+
+# How to test whether a student passed an R exercise
+
+
+This document explains how to use package **testwhat** to test whether a student passed an R exercise.
+
+
+```{r setup, include=FALSE}
+set.seed(2014)
+library("knitr")
+opts_chunk$set(comment = NA)
+```
+
+```{r environment, include=FALSE}
+library("testwhat")
+library("datacampAPI")
+```
+
+
+## Exercise #1 and solution code
+
+Consider an example from a course on [DataCamp](www.DataCamp.com), where monthly returns on Microsoft and Starbucks stock (`MSFT` and `SBUX`, respectively) are assumed to be normally distributed.  The exercise is to compute values of the assumed normal densities.  The solution code is given below.
+
+```{r eval=FALSE}
+# Normally distributed monthly returns
+x_vals = seq(-0.25, 0.35, length.out = 100)
+MSFT = dnorm(x_vals, mean = 0.05, sd = 0.1)
+SBUX = dnorm(x_vals, mean = 0.025, sd = 0.05)
+```
+
+It is important to note that the solution code needs to be evaluated in a separate environment, which we refer to as the solution environment.  Package **testwhat** works best if it can access this environment with `get_solution_env()`.
+
+```{r results='hide'}
+eval(parse(text = 
+ '# Normally distributed monthly returns
+  x_vals = seq(-0.25, 0.35, length.out = 100)
+  MSFT = dnorm(x_vals, mean = 0.05, sd = 0.1)
+  SBUX = dnorm(x_vals, mean = 0.025, sd = 0.05)'
+), envir = get_solution_env())
+```
+
+We want to test whether a student correctly defined the `MSFT` and `SBUX` objects.  Of course we first need a code submission from a student before we can run such a test.
+
+
+### Student #1
+
+```{r include=FALSE}
+rm(list=ls())
+```
+
+Student #1 submits the following code.  Clearly, this is the same as the solution code and should pass the test.  We evaluate the student's code in their workspace, i.e., the global environment.
+
+```{r results = 'hide'}
+# Normally distributed monthly returns
+x_vals = seq(-0.25, 0.35, length.out = 100)
+MSFT = dnorm(x_vals, mean = 0.05, sd = 0.1)
+SBUX = dnorm(x_vals, mean = 0.025, sd = 0.05)
+```
+
+The code to test for correctness of this exercise is pretty simple.  We only need to call function `test_object()` twice, each time using the name of the corresponding object to be tested.
+
+```{r}
+test_object("MSFT")
+test_object("SBUX")
+```
+
+By default, `test_object()` looks for the student's objects in the global environment, and tries to access the solution environment via `get_solution_env()` to retrieve the correct objects.  If the student code and the solution code were evaluated in other environments, those can be supplied via arguments `student_env` and `solution_env`, respectively.
+
+However, it is more convenient to wrap the code to test the two objects in a call to function `test_exercise()`.  In this way, results from the two calls to `test_object()` are collected and a final result is reported.  Note that 
+the test codecurrently  needs to be submitted as a character string.
+
+
+```{r}
+result = test_exercise(
+ 'test_object("MSFT")
+  test_object("SBUX")'
+)
+result
+```
+
+The result is a list with two components.  Here the component `passed` indicates that the student passed the exercise.  Furthermore, component `feedback` contains a feedback message.  A custom feedback message for a successful test can be set with argument `success_msg`.
+
+```{r}
+result = test_exercise(
+ 'test_object("MSFT")
+  test_object("SBUX")'
+, success_msg = "This is correct, well done!")
+result
+```
+
+
+### Student #2
+
+```{r include=FALSE}
+rm(list=ls())
+```
+
+Student #2 defined `MSFT` correctly and computed the correct density for the returns on Starbucks stock, but forgot to assign the latter to `SBUX`.
+
+```{r results = 'hide'}
+# Normally distributed monthly returns
+x_vals = seq(-0.25, 0.35, length.out = 100)
+MSFT = dnorm(x_vals, mean = 0.05, sd = 0.1)
+dnorm(x_vals, mean = 0.025, sd = 0.05)
+```
+
+We run the same test code as above with `test_exercise()`.
+
+```{r}
+result = test_exercise(
+ 'test_object("MSFT")
+  test_object("SBUX")'
+)
+result
+```
+
+In case of a failed test, the feedback message from that failed test is reported.  This message can be customized in the corresponding call to `test_object()`.  Arguments `undefined_msg` and `incorrect_msg` allow to supply feedback messages if the student did not define the object and if its value is not the same as in the solution, respectively.
+
+```{r}
+result = test_exercise(
+ 'test_object("MSFT")
+  test_object("SBUX", undefined_msg = "Maybe you forgot to define SBUX?")'
+)
+result
+```
+
+
+### Student #3
+
+```{r include=FALSE}
+rm(list=ls())
+```
+
+Student #3 made the same mistake as Student #2 regarding `SBUX`, but also set the wrong standard deviation in the density for `MSFT`.
+
+```{r results = 'hide'}
+# Normally distributed monthly returns
+x_vals = seq(-0.25, 0.35, length.out = 100)
+MSFT = dnorm(x_vals, mean = 0.05, sd = 0.01)
+dnorm(x_vals, mean = 0.025, sd = 0.05)
+```
+
+Running the test code yields the following result.
+
+```{r}
+result = test_exercise(
+ 'test_object("MSFT")
+  test_object("SBUX")'
+)
+result
+```
+
+By default, `test_exercise()` reports only the feedback message from the first failed test.  Changing argument `report` allows to report feedback on all failed tests.
+
+```{r}
+result = test_exercise(
+ 'test_object("MSFT")
+  test_object("SBUX")'
+, report = "all")
+cat(result$feedback)
+```
+
+As stated earlier, those feedback messages can be customized in function `test_object()`.
+
+```{r}
+result = test_exercise(
+ 'test_object("MSFT", incorrect_msg = "MSFT seems to be incorrect.")
+  test_object("SBUX", undefined_msg = "Maybe you forgot to define SBUX?")'
+, report = "all")
+cat(result$feedback)
+```
+
+
+## Exercise #2 and solution code
+
+```{r include=FALSE}
+assign("solution", 
+       '# Normally distributed monthly returns
+        set.seed(2014)
+        MSFT = rnorm(10, mean = 0.05, sd = 0.1)
+        SBUX = rnorm(10, mean = 0.025, sd = 0.05)',
+       envir = get_datacamp_env())
+```
+
+The second exercise is similar to the first exercise from the previous section.  Now the aim is to simulate 10 values from the assumed normal densities for the returns on Microsoft and Starbucks stock.  The solution code is given below.
+
+```{r eval=FALSE}
+# Normally distributed monthly returns
+set.seed(2014)
+MSFT = rnorm(10, mean = 0.05, sd = 0.1)
+SBUX = rnorm(10, mean = 0.025, sd = 0.05)
+```
+
+Keep in mind that we evaluate the solution code in an environment that we can access with `get_solution_env()`.
+
+```{r results='hide'}
+eval(parse(text = 
+ '# Normally distributed monthly returns
+  set.seed(2014)
+  MSFT = rnorm(10, mean = 0.05, sd = 0.1)
+  SBUX = rnorm(10, mean = 0.025, sd = 0.05)'
+), envir = get_solution_env())
+```
+
+Since generating random numbers depends on the state of the random number generator, we only want to test whether the student called function `rnorm()` twice, each time with the correct argument values.
+
+
+### Student #1
+
+```{r include=FALSE}
+assign("DM.user.code", 
+       '# Normally distributed monthly returns
+        n_obs = 10
+        MSFT = rnorm(n_obs, mean = 0.05, sd = 0.1)
+        SBUX = rnorm(n_obs, mean = 0.025, sd = 0.05)',
+       envir = get_datacamp_env())
+rm(list=ls())
+```
+
+Student #1 again submits code that should pass the test, although this time it is not the same as the solution code.
+
+```{r results = 'hide'}
+# Normally distributed monthly returns
+n_obs = 10
+MSFT = rnorm(n_obs, mean = 0.05, sd = 0.1)
+SBUX = rnorm(n_obs, mean = 0.025, sd = 0.05)
+```
+
+To test whether the student called `rnorm()` correctly, we can use function `test_function()`.  Here it is important whether they supplied the arguments `n`, `mean` and `sd` correctly, hence we specify those in the test code.
+
+```{r}
+test_function("rnorm", args = c("n", "mean", "sd"))
+```
+
+By default, `test_function()` tries to access the student's code and the solution code with functions `get_student_code()` and `get_solution_code()`, respectively.  It is also possible to supply character strings containing the corresponding code via arguments `student_code` and `solution_code`.  In addition, `test_function()` assumes that the student is working in the global environment, and tries to access the solution environment via `get_solution_env()`.  Other environments can be supplied via arguments `student_env` and `solution_env`.
+
+As in the previous exercise, it is more convenient to wrap our test code in a call to `test_exercise()`.
+
+```{r}
+result = test_exercise(
+ 'test_function("rnorm", args = c("n", "mean", "sd"))'
+)
+result
+```
+
+
+### Student #2
+
+```{r include=FALSE}
+assign("DM.user.code", 
+       '# Normally distributed monthly returns
+        n_obs = 10
+        MSFT = rnorm(n_obs, mean = 0.05)
+        SBUX = rnorm(n_obs, mean = 0.025, sd = 0.05)',
+       envir = get_datacamp_env())
+rm(list=ls())
+```
+
+Student #2 by mistake omits argument `sd` in `rnorm()` for the return on Microsoft stock.
+
+```{r results = 'hide'}
+# Normally distributed monthly returns
+n_obs = 10
+MSFT = rnorm(n_obs, mean = 0.05)
+SBUX = rnorm(n_obs, mean = 0.025, sd = 0.05)
+```
+
+Running the test code from above gives the following result.
+
+```{r}
+result = test_exercise(
+ 'test_function("rnorm", args = c("n", "mean", "sd"))'
+)
+result
+```
+
+In `test_function()`, argument `not_called_msg` allows to customize the feedback message in case the student did not call the function often enough with the specified arguments.
+
+```{r}
+result = test_exercise(
+ 'test_function("rnorm", args = c("n", "mean", "sd"), 
+                not_called_msg = "Please check your use of function rnorm().")'
+)
+result
+```
+
+
+### Student #3
+
+```{r include=FALSE}
+assign("DM.user.code", 
+       '# Normally distributed monthly returns
+        n_obs = 10
+        MSFT = rnorm(n_obs, mean = 0.05, sd = 0.1)
+        SBUX = rnorm(n_obs, mean = 0.025, sd = 0.5)',
+       envir = get_datacamp_env())
+rm(list=ls())
+```
+
+Student #3 uses a wrong value of argument `sd` in `rnorm()` for the return on Starbucks stock.
+
+```{r results = 'hide'}
+# Normally distributed monthly returns
+n_obs = 10
+MSFT = rnorm(n_obs, mean = 0.05, sd = 0.1)
+SBUX = rnorm(n_obs, mean = 0.025, sd = 0.5)
+```
+
+We run the test code and get the following result.
+
+```{r}
+result = test_exercise(
+ 'test_function("rnorm", args = c("n", "mean", "sd"))'
+)
+result
+```
+
+With argument `incorrect_msg` of `test_function()`, the feedback message in case of an incorrect function call can be set.  Such a feedback message can be set for each function call in the solution code by supplying a vector of messages.
+
+```{r}
+result = test_exercise(
+ 'test_function("rnorm", args = c("n", "mean", "sd"), 
+                incorrect_msg = c("Did you draw from the correct normal distribution for MSFT?", 
+                                  "Did you draw from the correct normal distribution for SBUX?"))'
+)
+result
+```
+
+
+## Custom tests
+
+We continue the example of Exercise #2.  It may not be enough to check if a student used function `rnorm()` correctly, we may also want to test if they defined the objects `MSFT` and `SBUX`.  Note that `test_object()` may not be suitable in this situation, since the results from `rnorm()` depend on the state of the random number generator.
+
+Package **testwhat** is forked from package **testthat** (Wickham, 2011) and adds functionality for testing students' code submissions in R exercises.  Hence **testwhat** inherits the flexibility for defining custom tests from **testthat**, with functions `test_that()` and `expect_that()` being powerful tools for defining such tests.  More information on on using those functions can be found in Wickham (2011).
+
+Student #4 submits the following code for Exercise #2.  They use a wrong value of argument `sd` for the Microsoft stock, and while they draw from the correct distribution for the Starbucks stock, they forgot to assign the resulting values to `SBUX`.
+
+```{r include=FALSE}
+assign("DM.user.code", 
+       '# Normally distributed monthly returns
+        n_obs = 10
+        MSFT = rnorm(n_obs, mean = 0.05, sd = 0.01)
+        rnorm(n_obs, mean = 0.025, sd = 0.05)',
+       envir = get_datacamp_env())
+rm(list=ls())
+```
+
+```{r results = 'hide'}
+# Normally distributed monthly returns
+n_obs = 10
+MSFT = rnorm(n_obs, mean = 0.05, sd = 0.01)
+rnorm(n_obs, mean = 0.025, sd = 0.05)
+```
+
+Using the test code from the previous section would only catch the first mistake.  We therefore add a custom test to the test code.  For each of the two objects, we test whether it is defined and, if yes, whether it is a numeric vector.
+
+```{r}
+result = test_exercise(
+ 'test_function("rnorm", args = c("n", "mean", "sd"))
+  
+  test_that("MSFT is defined", {
+    expect_that("MSFT", is_defined(), failure_msg = "Did you define MSFT?")
+    expect_that(MSFT, is_a("numeric"), failure_msg = "Please check if MSFT contains numeric values.")
+  })
+  
+  test_that("SBUX is defined", {
+    expect_that("SBUX", is_defined(), failure_msg = "Did you define SBUX?")
+    expect_that(SBUX, is_a("numeric"), failure_msg = "Please check if SBUX contains numeric values.")
+  })'
+, report = "all")
+cat(result$feedback)
+```
+
+Note that with custom tests, it is important to always set informative feedback messages in case of a failed test.  This is done with argument `failure_msg` in function `expect_that()`.
+
+The custom test above can be slightly shortened by using wrapper functions for `expect_that()`.
+
+```{r}
+result = test_exercise(
+ 'test_function("rnorm", args = c("n", "mean", "sd"))
+  
+  test_that("MSFT is defined", {
+    expect_defined("MSFT", failure_msg = "Did you define MSFT?")
+    expect_is(MSFT, "numeric", failure_msg = "Please check if MSFT contains numeric values.")
+  })
+  
+  test_that("SBUX is defined", {
+    expect_defined("SBUX", failure_msg = "Did you define SBUX?")
+    expect_is(SBUX, "numeric", failure_msg = "Please check if SBUX contains numeric values.")
+  })'
+, report = "all")
+cat(result$feedback)
+```
+
+However, while this test code is an improvement, it does not check whether the objects `MSFT` and `SBUX` are defined with the correct calls to function `rnorm()`.  Future plans for package **testwhat** include to add a function `test_assignment()` that provides such functionality.
+
+
+## References
+
+Wickham, H. (2011)  **testthat**: Get Started with Testing.  *The R Journal*, **3**(1), 5--10.
