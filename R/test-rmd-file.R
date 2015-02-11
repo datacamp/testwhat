@@ -22,6 +22,8 @@ test_rmd_file = function(code, student_file = NULL, solution_file = NULL, studen
   on.exit({ 
     set_student_code(student_code)
     set_solution_code(solution_code)
+    remove_student_ds()
+    remove_solution_ds()
   })
   
   if(is.null(student_file)) {
@@ -44,18 +46,8 @@ test_rmd_file = function(code, student_file = NULL, solution_file = NULL, studen
     stop("solution file name was not found in solution code")
   }
   
-  print("STUDENT CODE BEFORE = ")
-  print(get_student_code())
-  print("SOLUTION CODE BEFORE = ")
-  print(get_solution_code())
-  
   set_student_code(student_code[student_file])
   set_solution_code(solution_code[solution_file])
-  
-  print("STUDENT CODE AFTER = ")
-  print(get_student_code())
-  print("SOLUTION CODE AFTER = ")
-  print(get_solution_code())
   
   eval(code, envir = env)
 }

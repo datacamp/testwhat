@@ -20,8 +20,8 @@ test_rmd_group = function(group_number, code, student_code = get_student_code(),
   on.exit({ 
     set_student_code(student_code)
     set_solution_code(solution_code)
-    remove_student_pd(suppress = TRUE)
-    remove_solution_pd(suppress = TRUE)
+    remove_student_pd()
+    remove_solution_pd()
   })
   
   passed <- parse_docs()
