@@ -24,10 +24,16 @@ test_yaml_header <- function(options = NULL,
                                not_called_msg = NULL,
                                incorrect_msg = NULL) {
   require(rmarkdown)
-  yaml_student = unlist(rmarkdown:::parse_yaml_front_matter(strsplit(student_code, split = "\n")[[1]]))
-  yaml_solution = unlist(rmarkdown:::parse_yaml_front_matter(strsplit(solution_code, split = "\n")[[1]]))
     
   test_that("In the yaml header, the options are set correctly", {
+    yaml_student <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(student_code, split = "\n")[[1]])))
+    expect_that(inherits(yaml_student, "try-error"), is_false(), failure_msg = "Make sure the YAML header contains no errors. Beware of erroneous indentation.")
+    
+    yaml_solution <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(solution_code, split = "\n")[[1]])))
+    if(inherits(yaml_solution, "try-error")) {
+      stop("Something wrong with yaml header of solution code!")
+    }
+    
     if(is.null(options)) {
       options <- names(yaml_solution)
       if(length(options) == 0) {
