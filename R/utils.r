@@ -25,7 +25,7 @@ collapse <- function(x, conn = " and ") {
 collapse_args <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"</code>"), conn)
 }
-
+ar
 collapse_props <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"</code>"), conn)
 }
@@ -49,6 +49,9 @@ test_equal_length = function(stud,sol,incorrect_number_of_calls_msg = NULL) {
 
 # convert student/solution code to vector of clean strings with the pipe operator removed.
 get_clean_lines <- function(code) {
+  # convert summarize to summarise.
+  code = gsub("summarize","summarise",code)
+  
   pd <- getParseData(parse(text = code, keep.source = TRUE))
   exprids <- pd$id[pd$parent == 0 & pd$token != "COMMENT"]
   codelines <- sapply(exprids, function(x) getParseText(pd, id = x))
