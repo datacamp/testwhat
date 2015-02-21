@@ -20,8 +20,6 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
     stop("argument 'correct' can not be empty")
   }
 
-  print(result)
-
   #default messages:
   if(is.null(no_selection_msg)) {
     no_selection_msg <- "Please select one of the options!"
