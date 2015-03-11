@@ -17,9 +17,9 @@ Imports:
     rmarkdown
 License: MIT + file LICENSE
 LazyData: true
-Authors@R: c(person("Andreas", "Alfons", role = "aut"), 
-             person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")),
-             person("Hadley", "Wickham", role = "aut"))
+Authors@R: c(person("Andreas", "Alfons", role = "aut"),
+    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")),
+    person("Hadley", "Wickham", role = "aut"))
 Collate:
     'auto-test.r'
     'colour-text.r'
@@ -55,6 +55,7 @@ Collate:
     'test-package.r'
     'test-rmd-file.R'
     'test-rmd-group.R'
+    'test-sufficient-length.R'
     'test-text.R'
     'test-that.r'
     'test-yaml-header.R'

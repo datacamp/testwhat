@@ -16,13 +16,15 @@ test_yaml_header(options = NULL, check_equality = TRUE,
 
 \item{allow_extra}{whether or not the definition of additional options is accepted (default TRUE)}
 
-\item{student_code}{character string containing the entire student code.}
+\item{chunk_number}{The chunk number being treated (set automatically)}
 
-\item{solution_code}{character string containing the entire solution code.}
+\item{student_code}{character string containing the entire student code (set automatically)}
 
-\item{not_called_msg}{feedback message if option was not specified.}
+\item{solution_code}{character string containing the entire solution code (set automatically)}
 
-\item{incorrect_msg}{feedback message if option was incorrectly set.}
+\item{not_called_msg}{feedback message if option was not specified (optional but recommended)}
+
+\item{incorrect_msg}{feedback message if option was incorrectly set (optional but recommended)}
 }
 \description{
 Test whether the student specified the correct options in the yaml header (R Markdown)
