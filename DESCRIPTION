@@ -17,10 +17,9 @@ Imports:
     rmarkdown
 License: MIT + file LICENSE
 LazyData: true
-Authors@R: c(person("Andreas", "Alfons", role = "aut"), person("Jonathan",
-    "Cornelissen", email = "Jonathan@DataCamp.com", role = c("aut", "cre")),
-    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role =
-    c("aut", "cre")), person("Hadley", "Wickham", role = "aut"))
+Authors@R: c(person("Andreas", "Alfons", role = "aut"), 
+             person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")),
+             person("Hadley", "Wickham", role = "aut"))
 Collate:
     'auto-test.r'
     'colour-text.r'
