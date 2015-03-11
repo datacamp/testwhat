@@ -2,12 +2,11 @@
 
 ###################################
 library("testwhat")
+library("datacampAPI")
 
-rm(list = ls())
-rm(list = ls(envir = get_solution_env(), all.names = TRUE),
-   envir = get_solution_env(), inherits = FALSE)
+clean_everything()
 
-#' Override library function
+# Override library function
 library <- function(package, ..., pos = NULL) {
   if (is.null(pos)) {
     pos <- grep("env:", search())
@@ -33,25 +32,22 @@ assign('pre_exercise_code', '
 #SOLUTION CODE
 set_solution_code('
 
-x <- mean(1:5)
-print(x)
+m <- mean(1:5)
 
 ')
 
 # USER CODE
 set_student_code('
 
-x <- mean(1:3)
-x
+m <- mean(1:5)
 
 ')
 
 sct = '
 
 test_error()
-test_output_contains("x",incorrect_msg = "did not print x")
-test_object("x")
-test_function("mean","x")
+test_function(name = "mean", args = "x")
+test_object(name = "m")
 
 success_msg("Great job! Continue to the next exercise!")
 '

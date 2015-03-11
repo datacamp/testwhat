@@ -89,7 +89,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
     additionaltext <- ""
   } else {
     # check if equal number of commands and select parts of code
-    ok = test_equal_length(student_code_parts, solution_code_parts)
+    ok = test_sufficient_length(student_code_parts, index, incorrect_number_of_calls_msg)
     if(isTRUE(ok)) {
       student_code = student_code_parts[index]
       solution_code = solution_code_parts[index]
