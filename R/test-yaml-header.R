@@ -8,10 +8,11 @@
 #' @param options  Set of options. Embedded options have to be specified using the dot notation.
 #' @param check_equality whether or not to actually check the value assigned to the option (default TRUE)
 #' @param allow_extra  whether or not the definition of additional options is accepted (default TRUE)
-#' @param student_code character string containing the entire student code.
-#' @param solution_code  character string containing the entire solution code.
-#' @param not_called_msg feedback message if option was not specified.
-#' @param incorrect_msg  feedback message if option was incorrectly set.
+#' @param chunk_number The chunk number being treated (set automatically)
+#' @param student_code character string containing the entire student code (set automatically)
+#' @param solution_code  character string containing the entire solution code (set automatically)
+#' @param not_called_msg feedback message if option was not specified (optional but recommended)
+#' @param incorrect_msg  feedback message if option was incorrectly set (optional but recommended)
 #'
 #' @import datacampAPI
 #' @export
