@@ -34,17 +34,12 @@ collapse_funs <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"()</code>"), conn)
 }
 
-test_equal_length = function(stud,sol,incorrect_number_of_calls_msg = NULL) {
-  n_student_calls <- length(stud)
-  n_solution_calls <- length(sol)
-  test_that("Student and solution have an equal number of commands", {
-    # build default message
-    if(is.null(incorrect_number_of_calls_msg)) {
-      incorrect_number_of_calls_msg <- sprintf("The solution expects you to submit exactly %i command(s) in total.",n_solution_calls)
-    }
-    expect_that(n_student_calls == n_solution_calls, is_true(), failure_msg = incorrect_number_of_calls_msg)
-  })
-  return(n_student_calls == n_solution_calls)
+get_num <- function(index) {
+  switch(index, 
+         "1" = "first", "2" = "second", 
+         "3" = "third", "4" = "fourth", 
+         "5" = "fifth", "6" = "sixth", 
+         "7" = "seventh", sprintf("%ith", index))
 }
 
 # convert student/solution code to vector of clean strings with the pipe operator removed.
