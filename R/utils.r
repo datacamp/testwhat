@@ -25,7 +25,7 @@ collapse <- function(x, conn = " and ") {
 collapse_args <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"</code>"), conn)
 }
-ar
+
 collapse_props <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"</code>"), conn)
 }
@@ -42,9 +42,10 @@ get_num <- function(index) {
          "7" = "seventh", sprintf("%ith", index))
 }
 
-# convert student/solution code to vector of clean strings with the pipe operator removed.
+#' convert student/solution code to vector of clean strings with the pipe operator removed.
+#' @export
 get_clean_lines <- function(code) {
-  # convert summarize to summarise.
+  # convert summarize to summarise. (hacky solution)
   code = gsub("summarize","summarise",code)
   
   pd <- getParseData(parse(text = code, keep.source = TRUE))
