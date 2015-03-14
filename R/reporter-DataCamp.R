@@ -20,12 +20,15 @@ DataCampReporter <- setRefClass(
     start_test_time = "proc_time",
     report = "character",
     results = "list",
-    current_test_results = "list"),
+    current_test_results = "list",
+    silent = "logical",
+    silent_fail = "logical"),
 
   methods = list(
     ### overriden methods from Reporter
     initialize = function(...) {
       report <<- "first"
+      silent <<- FALSE
       callSuper(...)
     },
     start_reporter = function(...) {
@@ -41,31 +44,51 @@ DataCampReporter <- setRefClass(
     },
 
     end_test = function() {
-      el <- as.double(proc.time() - start_test_time)
-      test_info <- list(context = context, test = test,
-                        user = el[1], system = el[2], real = el[3],
-                        results = current_test_results)
-      results <<- c(results, list(test_info))
+      if(length(current_test_results) == 0) {
+        results <<- list()
+      } else {
+        el <- as.double(proc.time() - start_test_time)
+        test_info <- list(context = context, test = test,
+                          user = el[1], system = el[2], real = el[3],
+                          results = current_test_results)
+        results <<- c(results, list(test_info))
+      }
       current_test_results <<- list()
 
       callSuper() # at the end because it resets the test name
     },
 
     add_result = function(result) {
-      callSuper(result)
-      current_test_results <<- c(current_test_results, list(result))
+      if(silent) {
+        if(!result$passed) {
+          silent_fail <<- TRUE
+          if (!result$error) stop(get_stop_msg())
+        }
+      } else {
+        callSuper(result)
+        current_test_results <<- c(current_test_results, list(result))
 
-      # Stop the test after the first failure by throwing an error.
-      # Of course the error shouldn't be thrown if the result was an
-      # error in the first place.
-      if (!result$passed) {
-        continue <<- report == "all"
-        failed <<- TRUE
-        if (!result$error) stop(get_stop_msg())
+        # Stop the test after the first failure by throwing an error.
+        # Of course the error shouldn't be thrown if the result was an
+        # error in the first place.
+        if (!result$passed) {
+          continue <<- report == "all"
+          failed <<- TRUE
+          if (!result$error) stop(get_stop_msg())
+        }
       }
     },
 
     ### new methods
+    be_silent = function() {
+      silent <<- TRUE
+      silent_fail <<- FALSE
+    },
+
+    be_loud = function() {
+      silent <<- FALSE
+    },
+
     get_summary = function() {
       # Summarize the individuals test results into a data frame
       rows <- lapply(results, summarize_test_results)
