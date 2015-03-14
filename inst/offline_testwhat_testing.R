@@ -45,9 +45,12 @@ m <- mean(1:5)
 
 sct = '
 
-test_error()
-test_function(name = "mean", args = "x")
-test_object(name = "m")
+test_correct({
+  x <- test_object(name = "m")
+} , {
+  test_error()
+  test_function(name = "mean", args = "x")
+})
 
 success_msg("Great job! Continue to the next exercise!")
 '

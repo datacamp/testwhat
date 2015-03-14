@@ -45,6 +45,7 @@ Collate:
     'reporter-teamcity.r'
     'reporter-zzz.r'
     'test-chunk-options.R'
+    'test-correct.R'
     'test-error.R'
     'test-exercise.R'
     'test-files.r'

@@ -14,7 +14,6 @@ test_rmd_group = function(group_number, code, student_code = get_student_code(),
   code <- substitute(code)
   if (is.character(code)) code <- parse(text = code)
 
-  
   # get the entire student code and solution code and reset it on exit.
   # also remove the parse data that might have been saved to the sct env.
   on.exit({ 
