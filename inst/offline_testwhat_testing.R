@@ -41,22 +41,23 @@ hist(chol$BMI)
 # USER CODE
 set_student_code('
 
-# chol <- read.table(url("http://assets.datacamp.com/blog_assets/chol.txt"), header = TRUE)
-# chol$BMI <- chol$WEIGHT/(chol$HEIGHT/100)^2 - 4
-# hist(chol$BMI)
+chol <- read.table(url("http://assets.datacamp.com/blog_assets/chol.txt"), header = TRUE)
+chol$BMI <- chol$WEIGHT/(chol$HEIGHT/100)^2
+hist(chol$BMI)
 
 ')
 
 sct = '
 
 test_instruction(1, {
+  test_error()
   test_function("url", "description")
   test_that("checks on chol being loaded correctly", {
     expect_that(exists("chol", envir = globalenv(), inherits = FALSE), is_true())
-    # expect_that("AGE" %in% names(chol), is_true())
   })
 })
 test_instruction(2, {
+  test_error()
   test_object("chol")
 })
 test_instruction(3, {

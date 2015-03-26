@@ -171,7 +171,7 @@ DataCampReporter <- setRefClass(
             feedback <- "Keep trying, you'll get there!"
           }
         }
-        return(list(passed = passed, feedback = feedback, passed_steps = passed_steps))
+        return(list(passed = passed, feedback = feedback, passed_steps = head(passed_steps, n_inst - 1)))
       } else {
         stop("type of reporting not implemented")
       }
