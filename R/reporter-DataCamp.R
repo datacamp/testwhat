@@ -120,6 +120,7 @@ DataCampReporter <- setRefClass(
           first <- match(FALSE, summary$passed)
           feedback <- summary$feedback[first]  
         }
+        return(list(passed = passed, feedback = feedback))
       } else if (report == "all") {
         if(passed) {
           if (is.null(success_msg)) success_msg <- sample(.praise, 1)
@@ -144,36 +145,37 @@ DataCampReporter <- setRefClass(
           feedback <- paste(feedback, collapse = "\n")
           feedback <- paste(failure_msg, feedback, sep = "\n")  
         }
+        return(list(passed = passed, feedback = feedback))
       } else if (report == "challenge") {
+        n_inst <- max(summary$instruction_index)
         if(passed) {
           if (is.null(success_msg)) success_msg <- sample(.praise, 1)
           feedback <- success_msg
-          passed <- rep(TRUE, max(summary$instruction_index))
+          passed_steps <- rep(TRUE, n_inst)
         } else {
-          passed <- sapply(1:max(summary$instruction_index), function(x) all(summary[summary$instruction_index == x, "passed"]))
-          
-          max_passed = max(which(passed == TRUE))
-          if(max_passed == length(passed)) {
-            passed <- rep(TRUE, max(summary$instruction_index))
+          passed_steps <- sapply(1:n_inst, function(x) all(summary[summary$instruction_index == x, "passed"]))
+          max_passed = suppressWarnings(max(which(passed_steps)))
+          if(max_passed == length(passed_steps)) {
+            passed <- TRUE
             if (is.null(success_msg)) success_msg <- sample(.praise, 1)
             feedback <- success_msg
+            passed_steps <- rep(TRUE, n_inst)
           } else if(max_passed == -Inf) {
             # nothing correct
-            passed <- rep(FALSE, max(summary$instruction_index))
             feedback <- "Keep trying, you'll get there!"
+            passed_steps <- rep(FALSE, n_inst)
           } else {
             # some things correct
             # failed instructions with a lower index than the maximum passed instruction, have passed as well
-            passed <- passed | c(rep(TRUE, max_passed - 1), rep(FALSE, length(passed) - max_passed + 1))
+            passed_steps <- passed_steps | c(rep(TRUE, max_passed - 1), rep(FALSE, n_inst - max_passed + 1))
             feedback <- "Keep trying, you'll get there!"
           }
         }
+        return(list(passed = passed, feedback = feedback, passed_steps = passed_steps))
       } else {
         stop("type of reporting not implemented")
       }
-      list(passed = passed, feedback = feedback)
     }
-
   )
 )
 
