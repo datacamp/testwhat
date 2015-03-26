@@ -22,18 +22,20 @@ DataCampReporter <- setRefClass(
     results = "list",
     current_test_results = "list",
     silent = "logical",
-    silent_fail = "logical"),
+    silent_fail = "logical",
+    instruction_index = "numeric"),
 
   methods = list(
     ### overriden methods from Reporter
     initialize = function(...) {
       report <<- "first"
-      silent <<- FALSE
       callSuper(...)
     },
     start_reporter = function(...) {
       callSuper(...)
       results <<- list()
+      silent <<- FALSE
+      instruction_index <<- 0
       current_test_results <<- list()
     },
 
@@ -50,6 +52,7 @@ DataCampReporter <- setRefClass(
         el <- as.double(proc.time() - start_test_time)
         test_info <- list(context = context, test = test,
                           user = el[1], system = el[2], real = el[3],
+                          instruction_index = instruction_index,
                           results = current_test_results)
         results <<- c(results, list(test_info))
       }
@@ -72,7 +75,7 @@ DataCampReporter <- setRefClass(
         # Of course the error shouldn't be thrown if the result was an
         # error in the first place.
         if (!result$passed) {
-          continue <<- report == "all"
+          continue <<- (report == "all" || report == "challenge")
           failed <<- TRUE
           if (!result$error) stop(get_stop_msg())
         }
@@ -88,6 +91,13 @@ DataCampReporter <- setRefClass(
     be_loud = function() {
       silent <<- FALSE
     },
+    
+    ## challenge methods
+    set_instruction_index = function(index) {
+      instruction_index <<- index
+    },
+    
+    ## summary and feedback messages
 
     get_summary = function() {
       # Summarize the individuals test results into a data frame
@@ -102,33 +112,65 @@ DataCampReporter <- setRefClass(
       summary <- get_summary()
 
       passed <- !failed  # TRUE if there are no tests
-      if (passed) {
-        if (is.null(success_msg)) success_msg <- sample(.praise, 1)
-        feedback <- success_msg
-      } else if (report == "first") {
-        first <- match(FALSE, summary$passed)
-        feedback <- summary$feedback[first]
-      } else if (report == "all") {
-        summary_by_test <- split(summary, summary[, "test", drop=FALSE])
-        n_tests <- length(summary_by_test)
-        feedback <- lapply(summary_by_test, function(x) x$feedback[!x$passed])
-        which_failed <- which(vapply(feedback, length, numeric(1)) > 0)
-        n_failed <- length(which_failed)
-        if (is.null(failure_msg)) {
-          if (n_tests == 1) failure_msg <- "Your code failed our test."
-          else {
-            failure_msg <- sprintf("Your code failed %d out of %d tests.",
-                                      n_failed, n_tests)
-          }
-          mistake_text <- if (n_failed == 1) "mistake" else "mistakes"
-          mistake_prefix <- sprintf("We found the following %s:", mistake_text)
-          failure_msg <- paste(failure_msg, mistake_prefix)
+      if (report == "first") {
+        if (passed) {
+          if (is.null(success_msg)) success_msg <- sample(.praise, 1)
+          feedback <- success_msg
+        } else {
+          first <- match(FALSE, summary$passed)
+          feedback <- summary$feedback[first]  
         }
-        feedback <- paste(seq_len(n_failed), feedback[which_failed], sep = ": ")
-        feedback <- paste(feedback, collapse = "\n")
-        feedback <- paste(failure_msg, feedback, sep = "\n")
-      } else stop("type of reporting not implemented")
-
+      } else if (report == "all") {
+        if(passed) {
+          if (is.null(success_msg)) success_msg <- sample(.praise, 1)
+          feedback <- success_msg
+        } else {
+          summary_by_test <- split(summary, summary[, "test", drop=FALSE])
+          n_tests <- length(summary_by_test)
+          feedback <- lapply(summary_by_test, function(x) x$feedback[!x$passed])
+          which_failed <- which(vapply(feedback, length, numeric(1)) > 0)
+          n_failed <- length(which_failed)
+          if (is.null(failure_msg)) {
+            if (n_tests == 1) failure_msg <- "Your code failed our test."
+            else {
+              failure_msg <- sprintf("Your code failed %d out of %d tests.",
+                                     n_failed, n_tests)
+            }
+            mistake_text <- if (n_failed == 1) "mistake" else "mistakes"
+            mistake_prefix <- sprintf("We found the following %s:", mistake_text)
+            failure_msg <- paste(failure_msg, mistake_prefix)
+          }
+          feedback <- paste(seq_len(n_failed), feedback[which_failed], sep = ": ")
+          feedback <- paste(feedback, collapse = "\n")
+          feedback <- paste(failure_msg, feedback, sep = "\n")  
+        }
+      } else if (report == "challenge") {
+        if(passed) {
+          if (is.null(success_msg)) success_msg <- sample(.praise, 1)
+          feedback <- success_msg
+          passed <- rep(TRUE, max(summary$instruction_index))
+        } else {
+          passed <- sapply(1:max(summary$instruction_index), function(x) all(summary[summary$instruction_index == x, "passed"]))
+          
+          max_passed = max(which(passed == TRUE))
+          if(max_passed == length(passed)) {
+            passed <- rep(TRUE, max(summary$instruction_index))
+            if (is.null(success_msg)) success_msg <- sample(.praise, 1)
+            feedback <- success_msg
+          } else if(max_passed == -Inf) {
+            # nothing correct
+            passed <- rep(FALSE, max(summary$instruction_index))
+            feedback <- "Keep trying, you'll get there!"
+          } else {
+            # some things correct
+            # failed instructions with a lower index than the maximum passed instruction, have passed as well
+            passed <- passed | c(rep(TRUE, max_passed - 1), rep(FALSE, length(passed) - max_passed + 1))
+            feedback <- "Keep trying, you'll get there!"
+          }
+        }
+      } else {
+        stop("type of reporting not implemented")
+      }
       list(passed = passed, feedback = feedback)
     }
 
@@ -155,10 +197,10 @@ summarize_test_results <- function(test) {
 
   data.frame(context = context, test = test$test, passed = passed,
              error = error, feedback = feedback, user = test$user,
-             system = test$system, real = test$real,
+             system = test$system, real = test$real, 
+             instruction_index = test$instruction_index,
              stringsAsFactors = FALSE)
 }
-
 
 # Error message when a test is stopped after the first failure
 get_stop_msg <- function() "**test stopped because of failure**"

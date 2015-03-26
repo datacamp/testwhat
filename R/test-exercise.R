@@ -25,7 +25,7 @@
 #' tests were sucessful, and \code{feedback} that contains a feedback message.
 #'
 #' @export
-test_exercise <- function(code, report = c("first", "all"), failure_msg = NULL,
+test_exercise <- function(code, report = c("first", "all", "challenge"), failure_msg = NULL,
                           success_msg = NULL, env = test_env()) {
   # Parse code and ensure that feedback messages are reset
   code <- parse(text = code)

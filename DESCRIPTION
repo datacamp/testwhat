@@ -50,6 +50,7 @@ Collate:
     'test-exercise.R'
     'test-files.r'
     'test-function.R'
+    'test-instruction.R'
     'test-mc.R'
     'test-object.R'
     'test-output-contains.R'
