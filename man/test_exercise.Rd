@@ -6,8 +6,8 @@
 \alias{test_exercise}
 \title{Run all tests for an exercise}
 \usage{
-test_exercise(code, report = c("first", "all"), failure_msg = NULL,
-  success_msg = NULL, env = test_env())
+test_exercise(code, report = c("first", "all", "challenge"),
+  failure_msg = NULL, success_msg = NULL, env = test_env())
 
 failure_msg(msg)
 
