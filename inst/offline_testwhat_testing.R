@@ -32,27 +32,39 @@ assign('pre_exercise_code', '
 #SOLUTION CODE
 set_solution_code('
 
-m <- mean(1:5)
+chol <- read.table(url("http://assets.datacamp.com/blog_assets/chol.txt"), header = TRUE)
+chol$BMI <- chol$WEIGHT/(chol$HEIGHT/100)^2
+hist(chol$BMI)
 
 ')
 
 # USER CODE
 set_student_code('
 
-m <- mean(1:5)
+# chol <- read.table(url("http://assets.datacamp.com/blog_assets/chol.txt"), header = TRUE)
+# chol$BMI <- chol$WEIGHT/(chol$HEIGHT/100)^2 - 4
+# hist(chol$BMI)
 
 ')
 
 sct = '
 
-test_correct({
-  x <- test_object(name = "m")
-} , {
-  test_error()
-  test_function(name = "mean", args = "x")
+test_instruction(1, {
+  test_function("url", "description")
+  test_that("checks on chol being loaded correctly", {
+    expect_that(exists("chol", envir = globalenv(), inherits = FALSE), is_true())
+    # expect_that("AGE" %in% names(chol), is_true())
+  })
 })
+test_instruction(2, {
+  test_object("chol")
+})
+test_instruction(3, {
+  test_error()
+  test_function("hist", "x")
+})
+success_msg("Wonderful! Sure you dont want to become a doctor?!")
 
-success_msg("Great job! Continue to the next exercise!")
 '
 
 
@@ -68,7 +80,7 @@ set_student_output(get_output(get_student_code()))
 eval(parse(text = pre_exercise_code),envir = get_solution_env())
 eval(parse(text = get_solution_code()), envir = get_solution_env())
 
-result = test_exercise(sct)
+result = test_exercise(sct, "challenge")
 print(result)
 ###################################
 
