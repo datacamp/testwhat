@@ -43,6 +43,8 @@ get_num <- function(index) {
 }
 
 #' convert student/solution code to vector of clean strings with the pipe operator removed.
+#' 
+#' @param code the code to convert to a vector of unpiped clean strings 
 #' @export
 get_clean_lines <- function(code) {
   # convert summarize to summarise. (hacky solution)

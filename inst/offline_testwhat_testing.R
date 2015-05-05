@@ -25,47 +25,43 @@ get_output <- function(code) {
 ####################################
 
 assign('pre_exercise_code', '
-	# pre exercise code comes here
+	train <- read.csv(url("http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/train.csv"))
+  
+  # Assing the testing set
+  test <- read.csv(url("http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/test.csv"))
 ',env=globalenv())
 
 
 #SOLUTION CODE
 set_solution_code('
 
-chol <- read.table(url("http://assets.datacamp.com/blog_assets/chol.txt"), header = TRUE)
-chol$BMI <- chol$WEIGHT/(chol$HEIGHT/100)^2
-hist(chol$BMI)
+# Create the variable child, and indicate whether child or no child
+train$Child <- 0
+train$Child[train$Age < 18] <- 1
+
+# two way comparison
+table(train$Child, train$Survived)
+prop.table(table(train$Child, train$Survived),1)
 
 ')
 
 # USER CODE
 set_student_code('
 
-chol <- read.table(url("http://assets.datacamp.com/blog_assets/chol.txt"), header = TRUE)
-chol$BMI <- chol$WEIGHT/(chol$HEIGHT/100)^2
-hist(chol$BMI)
+# Create the variable child, and indicate whether child or no child
+train$Child <- 0
+train$Child[train$Age < 18] <- 1
+
+# two way comparison
+table(train$Child, train$Survived)
+prop.table(table(train$Child, train$Survived),1)
 
 ')
 
 sct = '
 
-test_instruction(1, {
-  test_error()
-  test_function("url", "description")
-  test_that("checks on chol being loaded correctly", {
-    expect_that(exists("chol", envir = globalenv(), inherits = FALSE), is_true())
-  })
-})
-test_instruction(2, {
-  test_error()
-  test_object("chol")
-})
-test_instruction(3, {
-  test_error()
-  test_function("hist", "x")
-})
-success_msg("Wonderful! Sure you dont want to become a doctor?!")
-
+test_data_frame("train","Child")
+test_object("train")
 '
 
 
@@ -81,7 +77,7 @@ set_student_output(get_output(get_student_code()))
 eval(parse(text = pre_exercise_code),envir = get_solution_env())
 eval(parse(text = get_solution_code()), envir = get_solution_env())
 
-result = test_exercise(sct, "challenge")
+result = test_exercise(sct)
 print(result)
 ###################################
 
