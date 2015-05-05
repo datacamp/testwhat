@@ -46,6 +46,7 @@ Collate:
     'reporter-zzz.r'
     'test-chunk-options.R'
     'test-correct.R'
+    'test-data-frame.R'
     'test-error.R'
     'test-exercise.R'
     'test-files.r'

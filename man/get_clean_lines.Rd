@@ -6,6 +6,9 @@
 \usage{
 get_clean_lines(code)
 }
+\arguments{
+\item{code}{the code to convert to a vector of unpiped clean strings}
+}
 \description{
 convert student/solution code to vector of clean strings with the pipe operator removed.
 }
