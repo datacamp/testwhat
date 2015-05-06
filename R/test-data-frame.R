@@ -37,7 +37,7 @@ test_data_frame <- function(name, columns, eq_condition = "equivalent",
     undefined_msg <- sprintf("Did you define %s?", quoted_name)
   }
   if (is.null(undefined_cols_msg)) {
-    undefined_cols_msg <- sprintf("Make sure to specify the columns %s inside %s.", col_names, quoted_name)
+    undefined_cols_msg <- sprintf("Make sure to specify the column%s %s inside %s.", if(length(columns) > 1) "s" else "", col_names, quoted_name)
   }
   if (is.null(incorrect_msg)) {
     incorrect_msg <- sprintf("It looks like you didn't correctly set one or more of %s inside %s.", col_names, quoted_name)
