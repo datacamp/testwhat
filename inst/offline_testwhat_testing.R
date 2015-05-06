@@ -26,42 +26,58 @@ get_output <- function(code) {
 
 assign('pre_exercise_code', '
 	train <- read.csv(url("http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/train.csv"))
-  
-  # Assing the testing set
-  test <- read.csv(url("http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/test.csv"))
+test <- read.csv(url("http://s3.amazonaws.com/assets.datacamp.com/course/Kaggle/test.csv"))
+library(rpart)
 ',env=globalenv())
 
 
 #SOLUTION CODE
 set_solution_code('
 
-# Create the variable child, and indicate whether child or no child
-train$Child <- 0
-train$Child[train$Age < 18] <- 1
+# Build the decision tree
+my_tree_two <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train, method="class")
 
-# two way comparison
-table(train$Child, train$Survived)
-prop.table(table(train$Child, train$Survived),1)
+# Visualize the decision tree using plot() and text()
+plot(my_tree_two)
+text(my_tree_two)
+
+# Load in the packages to create a fancified version of your tree
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+
+# Time to plot your fancified tree
+fancyRpartPlot(my_tree_two)
 
 ')
 
 # USER CODE
 set_student_code('
 
-# Create the variable child, and indicate whether child or no child
-train$Child <- 0
-train$Child[train$Age < 18] <- 1
+# Build the decision tree
+my_tree_two <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train, method="class")
 
-# two way comparison
-table(train$Child, train$Survived)
-prop.table(table(train$Child, train$Survived),1)
+# Visualize the decision tree using plot() and text()
+plot(my_tree_two)
+text(my_tree_two)
+
+# Load in the packages to create a fancified version of your tree
+library(rattle)
+library("rpart.plot")
+library(RColorBrewer)
+
+# Time to plot your fancified tree
+fancyRpartPlot(my_tree_two)
 
 ')
 
 sct = '
 
-test_data_frame("train","Child")
-test_object("train")
+test_library_function("rattle")
+test_library_function("rpart.plot")
+test_library_function("RColorBrewer")
+
+
 '
 
 

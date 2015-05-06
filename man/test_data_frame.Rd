@@ -24,7 +24,9 @@ objects.  Possible values are \code{"equivalent"} (the default),
 evaluated.}
 
 \item{undefined_msg}{feedback message in case the student did not define
-the data frame or columns.}
+the data frame.}
+
+\item{undefined_cols_msg}{feedback message in case the student did define one or more fo the columns inside the data frame}
 
 \item{incorrect_msg}{feedback message in case the columns queried does not correspond between student and solution
 

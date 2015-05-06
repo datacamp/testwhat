@@ -20,7 +20,8 @@
 #' @param solution_env  environment in which the sample solution code was
 #' evaluated.
 #' @param undefined_msg  feedback message in case the student did not define
-#' the data frame or columns.
+#' the data frame.
+#' @param undefined_cols_msg feedback message in case the student did define one or more fo the columns inside the data frame
 #' @param incorrect_msg  feedback message in case the columns queried does not correspond between student and solution
 #'
 #' # Other examples: see SCT design guide
@@ -40,7 +41,11 @@ test_data_frame <- function(name, columns, eq_condition = "equivalent",
     undefined_cols_msg <- sprintf("Make sure to specify the column%s %s inside %s.", if(length(columns) > 1) "s" else "", col_names, quoted_name)
   }
   if (is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("It looks like you didn't correctly set one or more of %s inside %s.", col_names, quoted_name)
+    if(length(columns) == 1) {
+      incorrect_msg <- sprintf("It looks like you didn't correctly set the column %s inside %s.", col_names, quoted_name)  
+    } else {
+      incorrect_msg <- sprintf("It looks like you didn't correctly set one or more of the columns %s inside %s.", col_names, quoted_name)  
+    }
   }
   
   test_that(sprintf("Object %s is correctly defined", quoted_name), {
