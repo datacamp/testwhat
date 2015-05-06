@@ -7,6 +7,7 @@
 #' @param student_code  character string containing the student's code.
 #' @param not_called_msg Feedback message in case the library function wasn't called a single time
 #' @param incorrect_msg Feedback message in case the library function wasn't called for the specified package.
+#' @export
 test_library_function <- function(package,
                           student_code = get_student_code(),
                           not_called_msg = NULL, incorrect_msg = NULL) {
