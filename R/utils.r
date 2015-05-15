@@ -54,8 +54,7 @@ get_clean_lines <- function(code) {
   exprids <- pd$id[pd$parent == 0 & pd$token != "COMMENT"]
   codelines <- sapply(exprids, function(x) getParseText(pd, id = x))
 
-  unpipedexprs <- sapply(codelines, clean_unpipe, USE.NAMES = FALSE)
-  cleanlines <- gsub(" ","",unpipedexprs)
+  cleanlines <- sapply(codelines, clean_unpipe, USE.NAMES = FALSE)
 
   # remove "obj = " assignments: delete "=" lines and the ones preceding
   eqsubsids = which(cleanlines == "=", TRUE)

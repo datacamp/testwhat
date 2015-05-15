@@ -4,7 +4,7 @@
 \alias{test_output_contains}
 \title{Check whether the student printed something to the console}
 \usage{
-test_output_contains(expr, console_output = get_student_output(),
+test_output_contains(expr, times = 1, console_output = get_student_output(),
   incorrect_msg = NULL)
 }
 \arguments{

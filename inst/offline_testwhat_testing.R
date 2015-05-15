@@ -16,7 +16,7 @@ library <- function(package, ..., pos = NULL) {
 }
 
 get_output <- function(code) {
-  output = try(capture.output(try(eval(parse(text=code)))))
+  output <- capture.output(source(file = textConnection(get_student_code()), print.eval = TRUE))
   if (inherits(output, "try-error")) {
     return("code contains an error")
   }
@@ -34,49 +34,47 @@ library(rpart)
 #SOLUTION CODE
 set_solution_code('
 
-# Build the decision tree
-my_tree_two <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train, method="class")
+# Comparison of logicals
+TRUE == FALSE
 
-# Visualize the decision tree using plot() and text()
-plot(my_tree_two)
-text(my_tree_two)
+# Comparison of numerics
+-6 * 14 != 17 - 101
 
-# Load in the packages to create a fancified version of your tree
-library(rattle)
-library(rpart.plot)
-library(RColorBrewer)
+# Comparison of character strings
+"useR" == "user"
 
-# Time to plot your fancified tree
-fancyRpartPlot(my_tree_two)
-
+# Compare a logical with a numeric
+TRUE == 1
 ')
 
 # USER CODE
 set_student_code('
 
-# Build the decision tree
-my_tree_two <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train, method="class")
+# Comparison of logicals
+TRUE == FALSE
 
-# Visualize the decision tree using plot() and text()
-plot(my_tree_two)
-text(my_tree_two)
+# Comparison of numerics
+17 - 101 != -6 * 14
 
-# Load in the packages to create a fancified version of your tree
-library(rattle)
-library("rpart.plot")
-library(RColorBrewer)
+# Comparison of character strings
+"useR" == "user"
 
-# Time to plot your fancified tree
-fancyRpartPlot(my_tree_two)
+# Compare a logical with a numeric
+TRUE == 1
 
 ')
 
 sct = '
 
-test_library_function("rattle")
-test_library_function("rpart.plot")
-test_library_function("RColorBrewer")
+test_student_typed(strings = c("TRUE == FALSE", "FALSE == TRUE"), not_typed_msg = "Have another look at the comparison of logicals")
+test_student_typed(strings = c("-6 * 14 != 17 - 101", "17 - 101 != -6 * 14"), not_typed_msg = "Have a closer look at the comparison of numerics (second instruction).")
+test_student_typed(strings = c("\\"useR\\" == \\"user\\"", "\\"user\\" == \\"useR\\""), not_typed_msg = "Check your code for the comparison of character strings again.")
+test_student_typed(strings = c("TRUE == 1", "1 == TRUE"), not_typed_msg = "Your code for comparing a logical with a numeric does not appear to be correct. Have another look.")
 
+test_output_contains("FALSE", times = 3, incorrect_msg = "Your code should output <code>FALSE</code> three times. Have another look and make sure to print the results.")
+test_output_contains("TRUE", times = 1, incorrect_msg = "Make sure to print the result of the last comparison.")
+
+success_msg("Awesome! Since `TRUE` coerces to `1` under the hood, the last R expression you entered will evaluate to `TRUE`. Make sure not to mix up <code>==</code> (comparison) and <code>=</code> (assignment), <code>==</code> is the one you need to check the equality of R objects.")
 
 '
 
