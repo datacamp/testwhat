@@ -21,15 +21,14 @@
 #' }
 #'
 #' @export
-test_output_contains <- function(expr, console_output = get_student_output(), incorrect_msg = NULL) {
+test_output_contains <- function(expr, times = 1, console_output = get_student_output(), incorrect_msg = NULL) {
 
   test_that(sprintf("The student printed %s to the console", expr), {
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
     if(is.null(incorrect_msg)) {
       incorrect_msg = sprintf("Make sure to print %s to the console",expr)
     }
-
-    expect_that(output_contains(expr,console_output = console_output), is_true(), failure_msg = incorrect_msg)
+    expect_that(output_contains(expr,console_output = console_output) >= times, is_true(), failure_msg = incorrect_msg)
   })
 }
 
@@ -47,8 +46,8 @@ output_contains = function(expr, console_output = get_student_output()) {
 
   where.is.regex = gregexpr(pattern = correct_output, text = console_output, fixed = TRUE)
   if (any(where.is.regex[[1]] == (-1))) {
-    return(FALSE)
+    return(0L)
   } else {
-    return(TRUE)
+    return(length(where.is.regex[[1]]))
   }
 }
