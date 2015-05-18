@@ -7,6 +7,7 @@ test_if_else <- function(index = 1,
                          else_expr_test = NULL,
                          student_code = get_student_code(), 
                          solution_code = get_solution_code(),
+                         not_found_msg = NULL,
                          env = parent.frame()) {
   
   if_cond_test <- substitute(if_cond_test)
@@ -23,10 +24,15 @@ test_if_else <- function(index = 1,
   sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n")))
   solution_structs <- extract_control_wrapper(0, sol_pd)
   
+  if(is.null(not_found_msg)) {
+    not_found_msg <- sprintf(paste("The system wants to test if the %s control construct",
+                                  "you coded is correct, but it hasn't found it. Add more code."), 
+                            get_num(index))
+  }
+  
+  
   ok = test_sufficient_length(student_structs, index, 
-                              incorrect_number_of_calls_msg = sprintf(paste("The system wants to test if the %s control construct",
-                                                                            "you coded is correct, but it hasn't found it. Add more code."), 
-                                                                      get_num(index)))
+                              incorrect_number_of_calls_msg = not_found_msg)
   if(isTRUE(ok)) {
     stud_str <- student_structs[[index]]
     sol_str <- solution_structs[[index]]
@@ -78,14 +84,6 @@ extract_control_wrapper <- function(parent_id, pd) {
     structs <- lapply(top_ids, extract_control, pd)
     structs <- structs[!sapply(structs, is.null)]  
     if(length(structs) == 0) {
-#       out <- list()
-#       for(id in top_ids) {
-#         x <- extract_control_wrapper(id, pd)
-#         if(!is.null(x)) {
-#           out <- c(out, x)
-#         }
-#       }
-      
       return(unlist(lapply(top_ids, extract_control_wrapper, pd), recursive = FALSE))
     } else {
       return(structs)

@@ -6,7 +6,8 @@
 \usage{
 test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
   else_expr_test = NULL, student_code = get_student_code(),
-  solution_code = get_solution_code(), env = parent.frame())
+  solution_code = get_solution_code(), not_found_msg = NULL,
+  env = parent.frame())
 }
 \description{
 Check whether the student wrote a conditional construct correctly
