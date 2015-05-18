@@ -37,7 +37,7 @@ test_if_else <- function(index = 1,
 
   on.exit({
     set_student_code(student_code)
-    set_solution_code(student_code)
+    set_solution_code(solution_code)
   })
   
   # IF condition part should always be there
