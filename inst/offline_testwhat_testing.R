@@ -34,48 +34,65 @@ library(rpart)
 #SOLUTION CODE
 set_solution_code('
 
-# Comparison of logicals
-TRUE == FALSE
+# Variables related to your last day of recordings
+medium <- "LinkedIn"
+num_views <- 14
 
-# Comparison of numerics
--6 * 14 != 17 - 101
+# Examine the if statement for medium
+if(medium == "LinkedIn") {
+  print("Showing LinkedIn information")
+}
 
-# Comparison of character strings
-"useR" == "user"
+# Write the if statement for num_views
+if(num_views > 15) {
+  print("You\'re popular!")
+}
 
-# Compare a logical with a numeric
-TRUE == 1
 ')
 
 # USER CODE
 set_student_code('
 
-# Comparison of logicals
-TRUE == FALSE
+# Variables related to your last day of recordings
+medium <- "LinkedIn"
+num_views <- 14
 
-# Comparison of numerics
-17 - 101 != -6 * 14
+# Examine the if statement for medium
+if(medium == "LinkedIn") {
+  print("Showing LinkedIn information")
+}
 
-# Comparison of character strings
-"useR" == "user"
-
-# Compare a logical with a numeric
-TRUE == 1
-
+# Write the if statement for num_views
+if(num_views > 15) {
+  
+}
 ')
 
 sct = '
 
-test_student_typed(strings = c("TRUE == FALSE", "FALSE == TRUE"), not_typed_msg = "Have another look at the comparison of logicals")
-test_student_typed(strings = c("-6 * 14 != 17 - 101", "17 - 101 != -6 * 14"), not_typed_msg = "Have a closer look at the comparison of numerics (second instruction).")
-test_student_typed(strings = c("\\"useR\\" == \\"user\\"", "\\"user\\" == \\"useR\\""), not_typed_msg = "Check your code for the comparison of character strings again.")
-test_student_typed(strings = c("TRUE == 1", "1 == TRUE"), not_typed_msg = "Your code for comparing a logical with a numeric does not appear to be correct. Have another look.")
+test_error()
 
-test_output_contains("FALSE", times = 3, incorrect_msg = "Your code should output <code>FALSE</code> three times. Have another look and make sure to print the results.")
-test_output_contains("TRUE", times = 1, incorrect_msg = "Make sure to print the result of the last comparison.")
+test_if_else(index = 1, 
+if_cond_test = {
+test_student_typed(c("medium == \\"LinkedIn\\"", "\\"LinkedIn\\" == medium"),
+not_typed_msg = "Have another look at the <code>condition</code> part of the first <code>if</code> statement. It was already coded for you!")
+},
+if_expr_test = {
+msg <- "Don\'t change anything about the printout of the message in the first <code>if</code> statement. It has already been coded for you!"
+test_function("print", "x", not_called_msg = msg, incorrect_msg = msg)
+})
 
-success_msg("Awesome! Since `TRUE` coerces to `1` under the hood, the last R expression you entered will evaluate to `TRUE`. Make sure not to mix up <code>==</code> (comparison) and <code>=</code> (assignment), <code>==</code> is the one you need to check the equality of R objects.")
+test_if_else(index = 2,
+if_cond_test = {
+test_student_typed(c("num_views > 15", "15 < num_views"),
+not_typed_msg = "Have another look at the <code>condition</code> part of your second <code>if</code> statement. You should use <code>num_views</code>!")
+},
+if_expr_test = {
+msg <- "Use the function <code>print()</code> to print the message <code>\\"You\'re popular!\\"</code> when the number of views exceeds 15."
+test_function("print", "x", not_called_msg = msg, incorrect_msg = msg)
+})
 
+success_msg("Great! Try to see what happens if you change the <code>medium</code> and <code>num_views</code> variables and run your code again. Let\'s further customize these if statements in the next exercise.")
 '
 
 
