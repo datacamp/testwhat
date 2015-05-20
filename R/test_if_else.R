@@ -8,6 +8,7 @@ test_if_else <- function(index = 1,
                          student_code = get_student_code(), 
                          solution_code = get_solution_code(),
                          not_found_msg = NULL,
+                         missing_else_msg = NULL,
                          env = parent.frame()) {
   
   if_cond_test <- substitute(if_cond_test)
@@ -47,9 +48,6 @@ test_if_else <- function(index = 1,
   })
   
   # IF condition part should always be there
-  test_that("if_cond is available", {
-    expect_that(is.null(stud_str$if_cond), is_false(), failure_msg = sprintf("The <code>condition</code> part%s is missing.", additionaltext))  
-  })
   if(!is.null(if_cond_test) && !is.null(stud_str$if_cond) && !is.null(sol_str$if_cond)) {
     set_student_code(stud_str$if_cond)
     set_solution_code(sol_str$if_cond)
@@ -57,18 +55,19 @@ test_if_else <- function(index = 1,
   }
       
   # IF expression part should always be available.
-  test_that("if_expr is available", {
-    expect_that(is.null(stud_str$if_expr), is_false(), failure_msg = sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
-  })
   if(!is.null(if_expr_test) && !is.null(stud_str$if_expr) && !is.null(sol_str$if_expr)) {
     set_student_code(stud_str$if_expr)
     set_solution_code(sol_str$if_expr)
     eval(if_expr_test, envir = env)
   }
       
+  
   if(!is.null(else_expr_test)) {
     test_that("else_expr is available", {
-      expect_that(is.null(stud_str$else_expr), is_false(), failure_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext))  
+      if(is.null(missing_else_message)) {
+        missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
+      }
+      expect_that(is.null(stud_str$else_expr), is_false(), failure_msg = missing_else_message)
     })
     if(!is.null(stud_str$else_expr)) {
       set_student_code(stud_str$else_expr)
