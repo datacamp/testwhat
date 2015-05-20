@@ -2,8 +2,8 @@
 #' 
 #' @export
 test_for_loop <- function(index = 1, 
-                            cond_test,
-                            expr_test,                          
+                            cond_test = NULL,
+                            expr_test = NULL,                          
                             student_code = get_student_code(), 
                             solution_code = get_solution_code(),
                             not_found_msg = NULL,
@@ -24,7 +24,7 @@ test_for_loop <- function(index = 1,
   solution_fors <- extract_for_wrapper(0, sol_pd)
   
   if(is.null(not_found_msg)) {
-    not_found_msg <- sprintf(paste("The system wants to test if the %s for loop",
+    not_found_msg <- sprintf(paste("The system wants to test if the %s <code>for</code> loop",
                                    "you coded is correct, but it hasn't found it. Add more code."), 
                              get_num(index))
   }
@@ -34,7 +34,7 @@ test_for_loop <- function(index = 1,
   if(isTRUE(ok)) {
     stud_for <- student_fors[[index]]
     sol_for <- solution_fors[[index]]
-    additionaltext <- sprintf(" in the %s for loop of your submission", get_num(index))
+    additionaltext <- sprintf(" in the %s <code>for</code> loop of your submission", get_num(index))
   } else {
     return(FALSE)
   }

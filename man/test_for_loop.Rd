@@ -4,7 +4,7 @@
 \alias{test_for_loop}
 \title{Check whether the student wrote a for loop correctly}
 \usage{
-test_for_loop(index = 1, cond_test, expr_test,
+test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
   student_code = get_student_code(), solution_code = get_solution_code(),
   not_found_msg = NULL, env = parent.frame())
 }
