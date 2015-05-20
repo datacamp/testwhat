@@ -2,10 +2,10 @@
 #' 
 #' @export
 test_function_definition <- function(name, 
-                                     function_tests = NULL, 
+                                     function_test = NULL, 
+                                     body_test = NULL,
                                      arguments = c(),
                                      check_defaults = TRUE,
-                                     body_test = NULL,
                                      student_env = .GlobalEnv,
                                      solution_env = get_solution_env(),
                                      student_code = get_student_code(), 
