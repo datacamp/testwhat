@@ -48,7 +48,7 @@ test_if_else <- function(index = 1,
   
   # IF condition part should always be there
   test_that("if_cond is available", {
-    expect_that(is.null(stud_str$if_cond), is_false(), failure_msg = sprintf("The <code>if</code> part%s is missing.", additionaltext))  
+    expect_that(is.null(stud_str$if_cond), is_false(), failure_msg = sprintf("The <code>condition</code> part%s is missing.", additionaltext))  
   })
   if(!is.null(if_cond_test) && !is.null(stud_str$if_cond) && !is.null(sol_str$if_cond)) {
     set_student_code(stud_str$if_cond)
@@ -58,7 +58,7 @@ test_if_else <- function(index = 1,
       
   # IF expression part should always be available.
   test_that("if_expr is available", {
-    expect_that(is.null(stud_str$if_expr), is_false(), failure_msg = sprintf("The <code>if</code> part%s is missing.", additionaltext))  
+    expect_that(is.null(stud_str$if_expr), is_false(), failure_msg = sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
   })
   if(!is.null(if_expr_test) && !is.null(stud_str$if_expr) && !is.null(sol_str$if_expr)) {
     set_student_code(stud_str$if_expr)
