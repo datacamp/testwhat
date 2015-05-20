@@ -32,46 +32,63 @@ assign('pre_exercise_code', '
 #SOLUTION CODE
 set_solution_code('
 
-pow_two <- function(x) {
-    x*x
+# Define the function my_filter()
+my_filter <- function(x) {
+  if(x > 0) {
+    return(x)
+  } else {
+    return(NULL)
+  }
 }
 
-# Create a function sum_abs()
-sum_abs <- function(x, y) {
-  abs(x) + abs(y)
-}
-
+# Call the function my_filter() twice
+my_filter(5)
+my_filter(-5)
 
 ')
 
 # USER CODE
 set_student_code('
 
-pow_two <- function(x) {
-    x*x
+# Define the function my_filter()
+my_filter <- function(x) {
+  if(x > 0) {
+    return(x)
+  }
 }
 
-# Create a function sum_abs()
-sum_abs <- function(x) {
-  abs(x) + abs(y)
-}
-
-
+# Call the function my_filter() twice
+my_filter(5)
+my_filter(-5)
 ')
 
 sct = '
 
-test_function_definition("sum_abs",
+test_function_definition("my_filter",
                          function_tests = {
-                           have_a_look <- "Have another look at your implementation of the <code>sum_abs</code> function."
-                           expect_that(sum_abs(1,2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(1,2)</code> should equal 3."))
-                           expect_that(sum_abs(-1,2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(-1,2)</code> should equal 3."))
-                           expect_that(sum_abs(1,-2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(1,-2)</code> should equal 3."))
-                           expect_that(sum_abs(-1,-2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(-1,-2)</code> should equal 3."))
-                         },
-                         body_test = {
-                           test_function("abs", not_called_msg = "You should use the <code>abs()</code> function twice in your definition of <code>sum_abs()</code>.")
-                         })
+                           have_a_look <- "Have another look at the definition of the <code>my_filter()</code> function."
+expect_that(my_filter(5), equals(5), 
+failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with 5 as the input, should equal 5."))
+expect_that(my_filter(-5), equals(NULL), 
+failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with -5 as the input, should equal <code>NULL</code>"))
+},
+body_test = {
+test_if_else(index = 1,
+if_cond_test = {
+test_student_typed(c("> 0","0 <"), 
+not_typed_msg = paste("Have another look at the condition of the <code>if</code> statement",
+"inside the definition of <code>my_filter</code>."))
+},
+else_expr_test = {
+student_typed("NULL", 
+not_typed_msg="Make sure to return <code>NULL</code> in the <code>else</code> part inside <code>my_filter()</code>.")
+},
+not_found_msg = paste("You should include an <code>if</code>-<code>else</code> statement inside",
+"your defnition of <code>my_filter()</code>."))
+})
+
+
+success_msg("Truly impressive functionality! Head over to the next exercise.")
 
 '
 
