@@ -32,25 +32,47 @@ assign('pre_exercise_code', '
 #SOLUTION CODE
 set_solution_code('
 
-my_fun <- function(a, b) {
-  a + b
+pow_two <- function(x) {
+    x*x
 }
+
+# Create a function sum_abs()
+sum_abs <- function(x, y) {
+  abs(x) + abs(y)
+}
+
 
 ')
 
 # USER CODE
 set_student_code('
 
-my_fun <- function(c = 2, b = 3) {
-  a + b + 1
+pow_two <- function(x) {
+    x*x
 }
-  
+
+# Create a function sum_abs()
+sum_abs <- function(x) {
+  abs(x) + abs(y)
+}
+
+
 ')
 
 sct = '
 
-test_function_definition(name = "my_fun", function_tests = { expect_that(my_fun(1,2), equals(3), failure_msg = "1 + 2 should be 3") },arguments = c("a","b"),check_defaults = FALSE,body_sct = test_student_typed("a + b")) 
-success_msg("OKE!")
+test_function_definition("sum_abs",
+                         function_tests = {
+                           have_a_look <- "Have another look at your implementation of the <code>sum_abs</code> function."
+                           expect_that(sum_abs(1,2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(1,2)</code> should equal 3."))
+                           expect_that(sum_abs(-1,2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(-1,2)</code> should equal 3."))
+                           expect_that(sum_abs(1,-2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(1,-2)</code> should equal 3."))
+                           expect_that(sum_abs(-1,-2), equals(3), failure_msg = paste(have_a_look, "<code>sum_abs(-1,-2)</code> should equal 3."))
+                         },
+                         body_test = {
+                           test_function("abs", not_called_msg = "You should use the <code>abs()</code> function twice in your definition of <code>sum_abs()</code>.")
+                         })
+
 '
 
 ###################################
