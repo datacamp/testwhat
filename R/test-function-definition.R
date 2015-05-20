@@ -35,14 +35,6 @@ test_function_definition <- function(name,
     expect_that(name, is_defined(env = student_env), failure_msg = undefined_msg)
   })
   
-  # if not correct, go into more detail
-  stud_function <- get(name, envir = student_env, inherits = FALSE)
-  sol_function <- get(name, envir = solution_env, inherits = FALSE)
-  
-  # Check for correct definition of arguments
-  stud_arguments <- as.list(formals(stud_function))
-  sol_arguments <- as.list(formals(sol_function))
-  
   test_correct({
     # Perform the tests on the function in the student environment
     test_that("Function works as expected", {
@@ -51,6 +43,14 @@ test_function_definition <- function(name,
     })
   }, {
     test_that("arguments are correctly defined", {
+      # if not correct, go into more detail
+      stud_function <- get(name, envir = student_env, inherits = FALSE)
+      sol_function <- get(name, envir = solution_env, inherits = FALSE)
+      
+      # Check for correct definition of arguments
+      stud_arguments <- as.list(formals(stud_function))
+      sol_arguments <- as.list(formals(sol_function))
+      
       expect_that(length(stud_arguments), equals(length(sol_arguments)), failure_msg = incorrect_number_arguments_msg)
       for(argument in arguments) {
         expect_that(argument %in% names(stud_arguments), is_true(), failure_msg = incorrect_arguments_msg)
