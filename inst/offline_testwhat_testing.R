@@ -67,25 +67,26 @@ sct = '
 test_function_definition("my_filter",
                          function_tests = {
                            have_a_look <- "Have another look at the definition of the <code>my_filter()</code> function."
-expect_that(my_filter(5), equals(5), 
-failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with 5 as the input, should equal 5."))
-expect_that(my_filter(-5), equals(NULL), 
-failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with -5 as the input, should equal <code>NULL</code>"))
-},
-body_test = {
-test_if_else(index = 1,
-if_cond_test = {
-test_student_typed(c("> 0","0 <"), 
-not_typed_msg = paste("Have another look at the condition of the <code>if</code> statement",
-"inside the definition of <code>my_filter</code>."))
-},
-else_expr_test = {
-student_typed("NULL", 
-not_typed_msg="Make sure to return <code>NULL</code> in the <code>else</code> part inside <code>my_filter()</code>.")
-},
-not_found_msg = paste("You should include an <code>if</code>-<code>else</code> statement inside",
-"your defnition of <code>my_filter()</code>."))
-})
+                           expect_that(my_filter(5), equals(5), 
+                                       failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with 5 as the input, should equal 5."))
+                           expect_that(grepl("NULL", paste(capture.output(my_filter(-5)), collapse = "\n")), is_true(),
+                                       failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with -5 as the input, should equal <code>NULL</code>"))
+                         },
+                         body_test = {
+                           test_if_else(index = 1,
+                                        if_cond_test = {
+                                          test_student_typed(c("> 0","0 <"), 
+                                                             not_typed_msg = paste("Have another look at the condition of the <code>if</code> statement",
+                                                                                   "inside the definition of <code>my_filter</code>."))
+                                        },
+                                        else_expr_test = {
+                                          test_student_typed("NULL", 
+                                                             not_typed_msg="Make sure to return <code>NULL</code> explicitly in the <code>else</code> part inside <code>my_filter()</code>.")
+                                        },
+                                        missing_else_msg = "You should include an <code>else</code> statement inside <code>my_filter()</code>.",
+                                        not_found_msg = paste("You should include an <code>if</code>-<code>else</code> statement inside",
+                                                              "your defnition of <code>my_filter()</code>."))
+                         })
 
 
 success_msg("Truly impressive functionality! Head over to the next exercise.")

@@ -64,7 +64,7 @@ test_if_else <- function(index = 1,
   
   if(!is.null(else_expr_test)) {
     test_that("else_expr is available", {
-      if(is.null(missing_else_message)) {
+      if(is.null(missing_else_msg)) {
         missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
       }
       expect_that(is.null(stud_str$else_expr), is_false(), failure_msg = missing_else_message)
