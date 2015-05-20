@@ -4,8 +4,11 @@
 \alias{test_function_definition}
 \title{Check whether the student defined a function correctly}
 \usage{
-test_function_definition(name, in_and_out, student_code, student_env,
-  undefined_msg, incorrect_msg)
+test_function_definition(name, function_tests = NULL, arguments = c(),
+  check_defaults = TRUE, body_test = NULL, student_env = .GlobalEnv,
+  solution_env = get_solution_env(), student_code = get_student_code(),
+  solution_code = get_solution_code(), undefined_msg = NULL,
+  incorrect_arguments_msg = NULL, env = parent.frame())
 }
 \description{
 Check whether the student defined a function correctly
