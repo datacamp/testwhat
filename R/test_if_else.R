@@ -67,7 +67,7 @@ test_if_else <- function(index = 1,
       if(is.null(missing_else_msg)) {
         missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
       }
-      expect_that(is.null(stud_str$else_expr), is_false(), failure_msg = missing_else_message)
+      expect_that(is.null(stud_str$else_expr), is_false(), failure_msg = missing_else_msg)
     })
     if(!is.null(stud_str$else_expr)) {
       set_student_code(stud_str$else_expr)
