@@ -32,16 +32,17 @@ assign('pre_exercise_code', '
 #SOLUTION CODE
 set_solution_code('
 
-medium <- "LinkedIn"
-num_views <- 14
+# The linkedin vector has already been defined for you
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
 
-# Control structure for medium
-if(medium == "LinkedIn") {
-  print("Showing LinkedIn information")
-} else if(medium == "Facebook") {
-  print("Showing Facebook information")
-} else {
-  print("Unknown medium")
+# Loop version 1
+for(li in linkedin) {
+  print(li)
+}
+
+# Loop version 2
+for(i in 1:length(linkedin)) {
+  print(linkedin[i])
 }
 
 ')
@@ -49,51 +50,28 @@ if(medium == "LinkedIn") {
 # USER CODE
 set_student_code('
 
-medium <- "LinkedIn"
-num_views <- 14
+# The linkedin vector has already been defined for you
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
 
-# Control structure for medium
-if(medium == "LinkedIn") {
-  print("Showing LinkedIn information")
-} else if(medium == "Facebook") {
-  print("Showing Facebook information")
-} else {
-  print("Unknown medium")
+# Loop version 1
+for(li in linkedin) {
+  
+}
+
+# Loop version 2
+for(i in 1:length(linkedin)) {
+  print(linkedin[i])
 }
   
 ')
 
 sct = '
 
-test_error()
-test_if_else(index = 1, 
-             if_cond_test = {
-               test_student_typed(c("medium == \\"LinkedIn\\"", "\\"LinkedIn\\" == medium"),
-                                  not_typed_msg = paste("Don\'t change anything about the <code>if</code> part of the first control structure,",
-                                                        "it has already been coded for you."))
-             },
-             if_expr_test = {
-               test_if_else(index = 1,
-                            if_cond_test = {
-                              test_student_typed(c("medium == \\"Facebook\\"", "\\"Facebook\\" == medium"),
-not_typed_msg = paste("Make sure to code the correct condition for the <code>if else</code>", 
-                      "part of the control structure."))
+test_for_loop(index = 1, cond_test = { test_student_typed("li"); test_student_typed("linked") }, expr_test = { test_function("print") })
 
-}, 
-if_expr_test = {
-  msg <- paste("In the <code>if else</code> part of the first control construct, make sure to print", 
-               "<code>\\"Showing Facebook Information\\"</code> using the <code>print()</code> function.")
-  test_function("print", "x", not_called_msg = msg, incorrect_msg = msg)
-},
-else_expr_test = {
-  msg <- "Don\'t change anything about the <code>else</code> part of the first control structure."
-  test_function("print", "x", not_called_msg = msg, incorrect_msg = msg)
-})
-})
+success_msg("OKOKOK!")
 
-success_msg("Great!")
 '
-
 
 ###################################
 eval(parse(text = pre_exercise_code), envir = globalenv())
