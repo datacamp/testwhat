@@ -1,7 +1,9 @@
 #' Check whether the student wrote a while loop correctly
 #' 
 #' @export
-test_while_loop <- function(index = 1, cond_test, expr_test,                          
+test_while_loop <- function(index = 1, 
+                            cond_test = NULL, 
+                            expr_test = NULL,                          
                             student_code = get_student_code(), 
                             solution_code = get_solution_code(),
                             not_found_msg = NULL,
@@ -19,7 +21,7 @@ test_while_loop <- function(index = 1, cond_test, expr_test,
   solution_whiles <- extract_while_wrapper(0, sol_pd)
   
   if(is.null(not_found_msg)) {
-    not_found_msg <- sprintf(paste("The system wants to test if the %s while loop",
+    not_found_msg <- sprintf(paste("The system wants to test if the %s <code>while</code> loop",
                                    "you coded is correct, but it hasn't found it. Add more code."), 
                              get_num(index))
   }
@@ -29,7 +31,7 @@ test_while_loop <- function(index = 1, cond_test, expr_test,
   if(isTRUE(ok)) {
     stud_while <- student_whiles[[index]]
     sol_while <- solution_whiles[[index]]
-    additionaltext <- sprintf(" in the %s while loop of your submission", get_num(index))
+    additionaltext <- sprintf(" in the %s <code>while</code> loop of your submission", get_num(index))
   } else {
     return(FALSE)
   }

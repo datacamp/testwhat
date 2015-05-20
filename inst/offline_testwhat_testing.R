@@ -32,42 +32,58 @@ assign('pre_exercise_code', '
 #SOLUTION CODE
 set_solution_code('
 
-# The linkedin vector has already been defined for you
-linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+# Initialize the speed variable
+speed <- 64
 
-# Loop version 1
-for(li in linkedin) {
-  print(li)
+# Code the while loop
+while(speed > 30) {
+  print("Slow down!")
+  speed <- speed - 7
 }
 
-# Loop version 2
-for(i in 1:length(linkedin)) {
-  print(linkedin[i])
-}
+# Print out the speed variable
+speed
 
 ')
 
 # USER CODE
 set_student_code('
 
-# The linkedin vector has already been defined for you
-linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+# Initialize the speed variable
+speed <- 64
 
-# Loop version 1
-for(li in linkedin) {
-  
+# Code the while loop
+while(speed > 30) {
+  print("Slow d!")
+  speed <- speed - 6
 }
 
-# Loop version 2
-for(i in 1:length(linkedin)) {
-  print(linkedin[i])
-}
+# Print out the speed variable
+speed
   
 ')
 
 sct = '
 
-test_for_loop(index = 1, cond_test = { test_student_typed("li"); test_student_typed("linked") }, expr_test = { test_function("print") })
+test_correct({
+  test_output_contains("invisible(lapply(rep(\\"Slow down!\\", 5), print))", 
+                       incorrect_msg = "Are you sure you coded the <code>while</code> loop correctly? It should print out <code>\\"Slow Down\\"</code> exactly five times!")
+}, {
+  test_while_loop(index = 1,
+                  cond_test = {
+                    test_student_typed(c("speed > 30", "30 < speed"), not_typed_msg = "Have another look at the condition of the <code>while</code> loop.")
+                  },
+                  expr_test = {
+                    msg <- "Make sure to use the <code>print()</code> function to output \\"Slow down!\\" in each run of the <code>while</code> loop."
+                    test_function("print", "x", not_called_msg = msg, incorrect_msg = msg)
+                    test_student_typed(strings = "asdfasdfasdf", not_typed_msg = "Make sure to update the <code>speed</code> variable correctly inside the <code>while</code> loop")
+                  })
+})
+
+
+test_object("speed", incorrect_msg = "After the <code>while</code> loop has executed, <code>speed</code> should equal 29. Make sure that the <code>speed</code> variable is initialized to 64 in the beginning.")
+test_output_contains("speed", incorrect_msg = "Make sure to print the final contents of the <code>speed</code> variable to the console.")
+success_msg("Great job! Proceed to the next exercise.")
 
 success_msg("OKOKOK!")
 
