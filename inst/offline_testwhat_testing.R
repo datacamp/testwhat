@@ -32,60 +32,39 @@ assign('pre_exercise_code', '
 #SOLUTION CODE
 set_solution_code('
 
-# Define the function my_filter()
-my_filter <- function(x) {
-  if(x > 0) {
-    return(x)
-  } else {
-    return(NULL)
+pow_two <- function(x, print_info = TRUE) {
+  y <- x^2
+  if(print_info) {
+    print(paste(x, "to the power two equals", y))
   }
+  y
 }
-
-# Call the function my_filter() twice
-my_filter(5)
-my_filter(-5)
 
 ')
 
 # USER CODE
 set_student_code('
 
-# Define the function my_filter()
-my_filter <- function(x) {
-  if(x > 0) {
-    return(x)
+pow_two <- function(x, print_info = TRUE) {
+  y <- x^2
+  if(print_info) {
+    print(paste(x, "to the power two equals", y))
   }
+  y
 }
 
-# Call the function my_filter() twice
-my_filter(5)
-my_filter(-5)
 ')
 
 sct = '
 
-test_function_definition("my_filter",
-                         function_tests = {
-                           have_a_look <- "Have another look at the definition of the <code>my_filter()</code> function."
-                           expect_that(my_filter(5), equals(5), 
-                                       failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with 5 as the input, should equal 5."))
-                           expect_that(grepl("NULL", paste(capture.output(my_filter(-5)), collapse = "\n")), is_true(),
-                                       failure_msg = paste(have_a_look, "Calling <code>my_filter()</code> with -5 as the input, should equal <code>NULL</code>"))
-                         },
-                         body_test = {
-                           test_if_else(index = 1,
-                                        if_cond_test = {
-                                          test_student_typed(c("> 0","0 <"), 
-                                                             not_typed_msg = paste("Have another look at the condition of the <code>if</code> statement",
-                                                                                   "inside the definition of <code>my_filter</code>."))
-                                        },
-                                        else_expr_test = {
-                                          test_student_typed("NULL", 
-                                                             not_typed_msg="Make sure to return <code>NULL</code> explicitly in the <code>else</code> part inside <code>my_filter()</code>.")
-                                        },
-                                        missing_else_msg = "You should include an <code>else</code> statement inside <code>my_filter()</code>.",
-                                        not_found_msg = paste("You should include an <code>if</code>-<code>else</code> statement inside",
-                                                              "your defnition of <code>my_filter()</code>."))
+
+test_function_definition(name = "pow_two", 
+                         function_test = {
+                           have_a_look <- "Check your code to extend the <code>pow_two()</code> function again."
+                           expect_that(pow_two(3, FALSE), equals(9), failure_msg = paste(have_a_look, "<code>pow_two(3,FALSE)</code> should return 9."))
+                           expect_that(pow_two(3, TRUE), equals(9), failure_msg = paste(have_a_look, "<code>pow_two(3,TRUE)</code> should return 9."))
+                           expect_that(grepl("3 to the power two equals 9", paste(capture.output(pow_two(3,TRUE)), collapse = "\n")), is_true(),
+                                       failure_msg = paste(have_a_look, "<code>pow_two(3,TRUE)</code> should return 9 and print out \\"3 to the power two equals 9\\"."))
                          })
 
 
