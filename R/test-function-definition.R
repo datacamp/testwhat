@@ -38,7 +38,7 @@ test_function_definition <- function(name,
   test_correct({
     # Perform the tests on the function in the student environment
     test_that("Function works as expected", {
-      result <- try(eval(function_tests, envir = student_env),silent = TRUE)
+      result <- try(eval(function_test, envir = student_env),silent = TRUE)
       expect_that(inherits(result, "try-error"), is_false(), failure_msg = "Running some tests on your functions generated an error.")
     })
   }, {
