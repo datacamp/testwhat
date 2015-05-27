@@ -11,25 +11,26 @@ test_function_definition(name, function_test = NULL, body_test = NULL,
   env = parent.frame())
 }
 \arguments{
-\item{name}{fill in}
+\item{name}{The name of the function to test}
 
-\item{function_test}{fill in}
+\item{function_test}{Set of testthat (testwhat) tests to perform on the function}
 
-\item{body_test}{fill in}
+\item{body_test}{fill SCT for the function body}
 
-\item{student_env}{fill in}
+\item{student_env}{environment in which the student's code was evaluated.}
 
-\item{solution_env}{fill in}
+\item{solution_env}{environment in which the sample solution code was
+evaluated.}
 
-\item{student_code}{fill in}
+\item{student_code}{character string containing the student's code.}
 
-\item{solution_code}{fill in}
+\item{solution_code}{character string containing the sample solution code.}
 
-\item{undefined_msg}{fill in}
+\item{undefined_msg}{Feedback message in case the specified function was not defined}
 
-\item{incorrect_number_arguments_msg}{fill in}
+\item{incorrect_number_arguments_msg}{Feedback message in case the function does not have the correct number of arguments.}
 
-\item{env}{fill in}
+\item{env}{Environment in which to perform the tests}
 }
 \description{
 Check whether the student defined a function correctly
