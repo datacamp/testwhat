@@ -66,5 +66,5 @@ test_function_definition <- function(name,
       set_student_code(student_code)
       set_solution_code(solution_code)  
     }
-  }, env = env)
+  })
 }
