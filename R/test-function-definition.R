@@ -46,18 +46,19 @@ test_function_definition <- function(name,
       expect_that(inherits(result, "try-error"), is_false(), failure_msg = "Running some tests on your functions generated an error.")
     })
   }, {
+    
+    # if not correct, go into more detail
+    stud_function <- get(name, envir = student_env, inherits = FALSE)
+    sol_function <- get(name, envir = solution_env, inherits = FALSE)
+    
     test_that("arguments are correctly defined", {
-      # if not correct, go into more detail
-      stud_function <- get(name, envir = student_env, inherits = FALSE)
-      sol_function <- get(name, envir = solution_env, inherits = FALSE)
-      
       # Check for correct definition of arguments
       stud_arguments <- as.list(formals(stud_function))
       sol_arguments <- as.list(formals(sol_function))
       
       expect_that(length(stud_arguments), equals(length(sol_arguments)), failure_msg = incorrect_number_arguments_msg)
     })
-  
+
     # Run SCT code for function body
     if(!is.null(body_test)) {
       set_student_code(paste(deparse(stud_function), collapse = "\n"))
