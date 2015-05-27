@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-data-frame.R
 \name{test_data_frame}
 \alias{test_data_frame}
-\title{Test whether a student correctly defined an object}
+\title{Test whether a student correctly defined the column(s) of a data.frame}
 \usage{
 test_data_frame(name, columns, eq_condition = "equivalent",
   student_env = .GlobalEnv, solution_env = get_solution_env(),
@@ -33,15 +33,13 @@ the data frame.}
 # Other examples: see SCT design guide}
 }
 \description{
-Test whether a student defined a certain object and, if yes, test whether
-that object is the same as in a sample solution.
+Test whether a student defined a data.frame, and, if see, whether the columns of this data.frame
+correspond to the sample solution.
 }
 \details{
 This test is implemented using \code{\link{test_that}}.  Whether the
-student's object and the sample solution object are the same is tested with
+student's column and the sample solution object are the same is tested with
 \code{\link{is_equivalent_to}}, hence small numeric differences or
 differences in attributes are allowed.
-
-See vignette \code{"testwhat-intro"} for examples.
 }
 

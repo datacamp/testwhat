@@ -5,11 +5,31 @@
 \title{Check whether the student defined a function correctly}
 \usage{
 test_function_definition(name, function_test = NULL, body_test = NULL,
-  arguments = c(), check_defaults = TRUE, student_env = .GlobalEnv,
-  solution_env = get_solution_env(), student_code = get_student_code(),
-  solution_code = get_solution_code(), undefined_msg = NULL,
-  incorrect_number_arguments_msg = NULL, incorrect_arguments_msg = NULL,
+  student_env = .GlobalEnv, solution_env = get_solution_env(),
+  student_code = get_student_code(), solution_code = get_solution_code(),
+  undefined_msg = NULL, incorrect_number_arguments_msg = NULL,
   env = parent.frame())
+}
+\arguments{
+\item{name}{fill in}
+
+\item{function_test}{fill in}
+
+\item{body_test}{fill in}
+
+\item{student_env}{fill in}
+
+\item{solution_env}{fill in}
+
+\item{student_code}{fill in}
+
+\item{solution_code}{fill in}
+
+\item{undefined_msg}{fill in}
+
+\item{incorrect_number_arguments_msg}{fill in}
+
+\item{env}{fill in}
 }
 \description{
 Check whether the student defined a function correctly

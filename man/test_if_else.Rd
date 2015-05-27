@@ -9,6 +9,23 @@ test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
   solution_code = get_solution_code(), not_found_msg = NULL,
   missing_else_msg = NULL, env = parent.frame())
 }
+\arguments{
+\item{index}{The index of the control structure to check.}
+
+\item{if_cond_test}{SCT to perform in the if condition part of the control structure}
+
+\item{if_expr_test}{SCT to perform in the if expression part of the control structure}
+
+\item{else_expr_test}{SCT to perform in the else expression part of the control structure}
+
+\item{student_code}{character string containing the student's code.}
+
+\item{solution_code}{character string containing the sample solution code.}
+
+\item{not_found_msg}{Message in case the control structure (at given index) is not found.}
+
+\item{env}{Environment in which to perform all these SCTs}
+}
 \description{
 Check whether the student wrote a conditional construct correctly
 }

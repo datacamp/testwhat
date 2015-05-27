@@ -1,13 +1,21 @@
 #' Check whether the student wrote a for loop correctly
 #' 
+#' @param index  The index of the for loop to check.
+#' @param cond_test  SCT to perform on the condition part of the for loop
+#' @param expr_test  SCT to perform on the expression part of the for loop
+#' @param student_code  character string containing the student's code.
+#' @param solution_code  character string containing the sample solution code.
+#' @param not_found_msg  Message in case the for loop (at given index) is not found.
+#' @param env  Environment in which to perform all these SCTs
+#' 
 #' @export
 test_for_loop <- function(index = 1, 
-                            cond_test = NULL,
-                            expr_test = NULL,                          
-                            student_code = get_student_code(), 
-                            solution_code = get_solution_code(),
-                            not_found_msg = NULL,
-                            env = parent.frame()) {
+                          cond_test = NULL,
+                          expr_test = NULL,                          
+                          student_code = get_student_code(), 
+                          solution_code = get_solution_code(),
+                          not_found_msg = NULL,
+                          env = parent.frame()) {
   
   var_test <- substitute(var_test)
   if (is.character(var_test)) code <- parse(text = var_test)
