@@ -15,6 +15,9 @@ test_student_typed(strings, student_code = get_student_code(),
 \item{not_typed_msg}{Feedback message in case the student did not type the string.}
 }
 \description{
-Test whether a student typed something
+Test whether a student typed something.
+Some basic string formatting is performed to allow for different
+ways of saying the same things (removing spaces, changing single
+quotes to double quotes, changing TRUE to T ...)
 }
 

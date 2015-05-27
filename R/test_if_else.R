@@ -1,5 +1,14 @@
 #' Check whether the student wrote a conditional construct correctly
 #' 
+#' @param index  The index of the control structure to check.
+#' @param if_cond_test  SCT to perform in the if condition part of the control structure
+#' @param if_expr_test  SCT to perform in the if expression part of the control structure
+#' @param else_expr_test  SCT to perform in the else expression part of the control structure
+#' @param student_code  character string containing the student's code.
+#' @param solution_code  character string containing the sample solution code.
+#' @param not_found_msg  Message in case the control structure (at given index) is not found.
+#' @param env  Environment in which to perform all these SCTs
+#' 
 #' @export
 test_if_else <- function(index = 1, 
                          if_cond_test = NULL, 

@@ -1,4 +1,9 @@
 #' Test whether a student typed something
+#' 
+#' Test whether a student typed something. 
+#' Some basic string formatting is performed to allow for different 
+#' ways of saying the same things (removing spaces, changing single 
+#' quotes to double quotes, changing TRUE to T ...)
 #'
 #' @param strings A set of strings, at least one of which must be in the student_code
 #' @param student_code student submission as a string

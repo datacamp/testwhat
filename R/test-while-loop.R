@@ -1,5 +1,13 @@
 #' Check whether the student wrote a while loop correctly
 #' 
+#' @param index  The index of the while loop to check.
+#' @param cond_test  SCT to perform on the condition part of the while loop
+#' @param expr_test  SCT to perform on the expression part of the while loop
+#' @param student_code  character string containing the student's code.
+#' @param solution_code  character string containing the sample solution code.
+#' @param not_found_msg  Message in case the while loop (at given index) is not found.
+#' @param env  Environment in which to perform all these SCTs
+#' 
 #' @export
 test_while_loop <- function(index = 1, 
                             cond_test = NULL, 

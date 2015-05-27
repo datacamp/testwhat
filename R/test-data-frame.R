@@ -1,14 +1,12 @@
-#' Test whether a student correctly defined an object
+#' Test whether a student correctly defined the column(s) of a data.frame
 #'
-#' Test whether a student defined a certain object and, if yes, test whether
-#' that object is the same as in a sample solution.
+#' Test whether a student defined a data.frame, and, if see, whether the columns of this data.frame
+#' correspond to the sample solution.
 #'
 #' This test is implemented using \code{\link{test_that}}.  Whether the
-#' student's object and the sample solution object are the same is tested with
+#' student's column and the sample solution object are the same is tested with
 #' \code{\link{is_equivalent_to}}, hence small numeric differences or
 #' differences in attributes are allowed.
-#'
-#' See vignette \code{"testwhat-intro"} for examples.
 #'
 #' @param name  name of the data frame to test.
 #' @param columns vector of names of columns to test
@@ -27,10 +25,13 @@
 #' # Other examples: see SCT design guide
 #'
 #' @export
-test_data_frame <- function(name, columns, eq_condition = "equivalent",
-                        student_env = .GlobalEnv,
-                        solution_env = get_solution_env(),
-                        undefined_msg = NULL, undefined_cols_msg = NULL, incorrect_msg = NULL) {
+test_data_frame <- function(name, columns, 
+                            eq_condition = "equivalent",
+                            student_env = .GlobalEnv,
+                            solution_env = get_solution_env(),
+                            undefined_msg = NULL, 
+                            undefined_cols_msg = NULL, 
+                            incorrect_msg = NULL) {
   
   quoted_name <- paste0("<code>",name,"</code>")
   col_names <- collapse_props(columns)

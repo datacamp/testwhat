@@ -8,6 +8,7 @@
 #' This test is implemented using \code{\link{test_that}}.
 #'
 #' @param expr The expression (as string) for which the output should be in the student's console.
+#' @param times How often the expression's output should occur in the student's console
 #' @param console_output The string containing the output printed to the student's console.
 #' The default is DM.console.output which is set on the DataCamp server (automagically).
 #' This means you don't have to specify this argument when writing SCTs for DataCamp.com.
