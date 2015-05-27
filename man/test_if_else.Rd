@@ -24,6 +24,8 @@ test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
 
 \item{not_found_msg}{Message in case the control structure (at given index) is not found.}
 
+\item{missing_else_msg}{Messing in case the else part of the control structure should be there but is missing}
+
 \item{env}{Environment in which to perform all these SCTs}
 }
 \description{

@@ -1,15 +1,16 @@
 #' Check whether the student defined a function correctly
 #' 
-#' @param name  fill in
-#' @param function_test fill in
-#' @param body_test fill in
-#' @param student_env fill in
-#' @param solution_env fill in
-#' @param student_code fill in
-#' @param solution_code fill in
-#' @param undefined_msg fill in
-#' @param incorrect_number_arguments_msg fill in
-#' @param env fill in
+#' @param name  The name of the function to test
+#' @param function_test Set of testthat (testwhat) tests to perform on the function
+#' @param body_test fill SCT for the function body
+#' @param student_env  environment in which the student's code was evaluated.
+#' @param solution_env  environment in which the sample solution code was
+#' evaluated.
+#' @param student_code  character string containing the student's code.
+#' @param solution_code  character string containing the sample solution code.
+#' @param undefined_msg Feedback message in case the specified function was not defined
+#' @param incorrect_number_arguments_msg Feedback message in case the function does not have the correct number of arguments.
+#' @param env Environment in which to perform the tests
 #' 
 #' @export
 test_function_definition <- function(name, 
@@ -65,5 +66,5 @@ test_function_definition <- function(name,
       set_student_code(student_code)
       set_solution_code(solution_code)  
     }
-  })
+  }, env = env)
 }
