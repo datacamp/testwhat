@@ -54,7 +54,7 @@ test_data_frame <- function(name, columns,
                 failure_msg = undefined_msg)
     student <- get(name, envir = student_env, inherits = FALSE)
     solution <- get(name, envir = solution_env, inherits = FALSE)
-    expect_that(columns %in% names(student), is_true(), failure_msg = undefined_cols_msg)
+    expect_that(all(columns %in% names(student)), is_true(), failure_msg = undefined_cols_msg)
     eq_fun <- switch(eq_condition, equivalent = is_equivalent_to,
                      equal = equals, identical = is_identical_to,
                      stop("invalid equality condition"))
