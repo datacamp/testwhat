@@ -38,15 +38,14 @@ test_object <- function(name, eq_condition = "equivalent",
                         solution_env = get_solution_env(),
                         undefined_msg = NULL, incorrect_msg = NULL) {
 
-  quoted_name <- paste0("<code>",name,"</code>")
   if (is.null(undefined_msg)) {
-    undefined_msg <- sprintf("Did you define %s?", quoted_name)
+    undefined_msg <- build_undefined_object_msg(name)
   }
   if (is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("It looks like you didn't assign the correct value to %s.", quoted_name)
+    incorrect_msg <- build_incorrect_object_msg(name)
   }
 
-  test_that(sprintf("Object %s is correctly defined", quoted_name), {
+  test_that(sprintf("Object %s is correctly defined", name), {
     expect_that(name, is_defined(env = student_env),
                 failure_msg = undefined_msg)
     student <- get(name, envir = student_env, inherits = FALSE)

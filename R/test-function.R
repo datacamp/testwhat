@@ -72,11 +72,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
 
-  if (n_args == 0) arg_text <- ""
-  else {
-    arg_text <- if (n_args == 1) "argument" else "arguments"
-    arg_text <- sprintf(" with %s %s", arg_text, collapse_args(args))
-  }
+  arg_text <- build_arg_text(n_args, args)
 
   # remove the pipe operator from the calls, if present.
   student_code_parts = get_clean_lines(code = student_code)
@@ -93,7 +89,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
     if(isTRUE(ok)) {
       student_code = student_code_parts[index]
       solution_code = solution_code_parts[index]
-      additionaltext <- sprintf(" in command %i of your solution", index)
+      additionaltext <- build_additional_text(index)
     } else {
       return(FALSE)
     }
@@ -117,11 +113,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
     # Test if there are at least as many student function calls as solution
     # function calls
     if (is.null(not_called_msg)) {
-      if (n_solution_calls <= 1) n_text <- ""
-      else if (n_solution_calls == 2) n_text <- " twice"
-      else n_text <- sprintf(" %d times", n_solution_calls)
-      not_called_msg <- sprintf("Did you call function <code>%s()</code>%s%s%s?",
-                                name, n_text, arg_text, additionaltext)
+      not_called_msg <- build_not_called_msg(n_solution_calls, name, arg_text, additionaltext)
     }
     expect_that(n_student_calls >= n_solution_calls, is_true(),
                 failure_msg = not_called_msg)
@@ -133,11 +125,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
       # Extract the specified arguments from current solution function call and
       # test if there exists a student function call with the same values
       if (is.null(incorrect_msg)) {
-        insert <- if (n_solution_calls == 1) "" else " always"
-        val_text <- if (n_args == 1) "value" else "values"
-        arg_text <- gsub(" with", "for", arg_text)  # whitespace is important
-        incorrect_msg <- sprintf("It looks like you didn't%s set the correct %s %s in function <code>%s()</code>%s.",
-                                 insert, val_text, arg_text, name, additionaltext)
+        incorrect_msg <- build_incorrect_msg(n_solution_calls, n_args, arg_text, name, additionaltext)
       }
       incorrect_msg <- rep(incorrect_msg, length.out = n_solution_calls)
       for (i in seq_len(n_solution_calls)) {

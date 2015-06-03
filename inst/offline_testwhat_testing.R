@@ -25,50 +25,40 @@ get_output <- function(code) {
 ####################################
 
 assign('pre_exercise_code', '
-
+options(lang = "fr")
 ',env=globalenv())
 
 
 #SOLUTION CODE
 set_solution_code('
 
-pow_two <- function(x, print_info = TRUE) {
-  y <- x^2
-  if(print_info) {
-    print(paste(x, "to the power two equals", y))
-  }
-  y
-}
+y <- 8
+x <- 5
+c(x,y)
+plot(x)
 
 ')
 
 # USER CODE
 set_student_code('
 
-pow_two <- function(x, print_info = TRUE) {
-  y <- x^2
-  if(print_info) {
-    print(paste(x, "to the power two equals", y))
-  }
-  y
-}
+y <- 8
+x <- 5
+c(x,y)
+plot(6)
+
 
 ')
 
 sct = '
 
 
-test_function_definition(name = "pow_two", 
-                         function_test = {
-                           have_a_look <- "Check your code to extend the <code>pow_two()</code> function again."
-                           expect_that(pow_two(3, FALSE), equals(9), failure_msg = paste(have_a_look, "<code>pow_two(3,FALSE)</code> should return 9."))
-                           expect_that(pow_two(3, TRUE), equals(9), failure_msg = paste(have_a_look, "<code>pow_two(3,TRUE)</code> should return 9."))
-                           expect_that(grepl("3 to the power two equals 9", paste(capture.output(pow_two(3,TRUE)), collapse = "\n")), is_true(),
-                                       failure_msg = paste(have_a_look, "<code>pow_two(3,TRUE)</code> should return 9 and print out \\"3 to the power two equals 9\\"."))
-                         })
+test_object("y")
+test_object("x")
+test_output_contains("c(x,y)")
 
-
-success_msg("Truly impressive functionality! Head over to the next exercise.")
+test_function("plot", c("x"), index = 4)
+success_msg("OK")
 
 '
 
