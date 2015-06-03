@@ -27,7 +27,7 @@ test_output_contains <- function(expr, times = 1, console_output = get_student_o
   test_that(sprintf("The student printed %s to the console", expr), {
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
     if(is.null(incorrect_msg)) {
-      incorrect_msg = sprintf("Make sure to print %s to the console",expr)
+      incorrect_msg <- build_incorrect_output_msg(expr)
     }
     expect_that(output_contains(expr,console_output = console_output) >= times, is_true(), failure_msg = incorrect_msg)
   })

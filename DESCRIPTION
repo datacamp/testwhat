@@ -25,6 +25,7 @@ Collate:
     'colour-text.r'
     'compare.r'
     'context.r'
+    'default_messages.r'
     'describe.r'
     'evaluate-promise.r'
     'expect-that.r'
