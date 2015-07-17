@@ -11,6 +11,7 @@
 #' @export
 test_student_typed <- function(strings,
                                student_code = get_student_code(),
+                               fixed = TRUE,
                                not_typed_msg = NULL) {
   
   if(is.null(not_typed_msg)) {
@@ -31,7 +32,7 @@ test_student_typed <- function(strings,
   strings <- gsub("\"", "'", strings)
   
   test_that("one of strings found in student_code", {
-    hits <- sapply(strings, grepl, x = student_code, fixed = TRUE)
+    hits <- sapply(strings, grepl, x = student_code, fixed = fixed)
     expect_that(any(hits), is_true(), failure_msg = not_typed_msg)
   })
 }
