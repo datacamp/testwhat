@@ -4,7 +4,7 @@
 \alias{test_student_typed}
 \title{Test whether a student typed something}
 \usage{
-test_student_typed(strings, student_code = get_student_code(),
+test_student_typed(strings, student_code = get_student_code(), fixed = TRUE,
   not_typed_msg = NULL)
 }
 \arguments{
