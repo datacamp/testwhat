@@ -25,6 +25,16 @@ build_arg_text <- function(n_args, args) {
   return(arg_text)
 }
 
+# TODO: REVIEW LANGUAGE
+build_function_call_text <- function(index) {
+  template <- switch(get_language(),
+                     en = ", in the %s call of the function",
+                     fr = " , dans exécution %i de la function",
+                     en = " , en ejecución %i de la función",
+                     stop(no_msg))
+  sprintf(template, ifelse(get_language() == "en", get_num(index), index))
+}
+
 build_additional_text <- function(index) {
   template <- switch(get_language(),
                      en = " in command %i of your solution",
@@ -32,6 +42,16 @@ build_additional_text <- function(index) {
                      es = " en el comando %i de tu respuesta",
                      stop(no_msg))
   sprintf(template, index)
+}
+
+# TODO: REVIEW LANGUAGE
+build_not_enough_calls_text <- function(name, index) {
+  template <- switch(get_language(),
+                     en = "You are missing the %s call of <code>%s()</code>.",
+                     fr = "",
+                     en = "",
+                     stop(no_msg))
+  sprintf(template, get_num(index), name)
 }
 
 build_not_called_msg <- function(n_solution_calls, name, arg_text, additionaltext) {

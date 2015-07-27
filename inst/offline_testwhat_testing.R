@@ -25,7 +25,6 @@ get_output <- function(code) {
 ####################################
 
 assign('pre_exercise_code', '
-options(lang = "fr")
 ',env=globalenv())
 
 
@@ -33,9 +32,11 @@ options(lang = "fr")
 set_solution_code('
 
 y <- 8
-x <- 5
-c(x,y)
-plot(x)
+x <- 4
+
+plot(c(1, 2, 3, 4), c(4,5,6,7))
+plot(c(1,2,3), y=c(1,2,3))
+
 
 ')
 
@@ -44,10 +45,11 @@ set_student_code('
 
 y <- 8
 x <- 5
-c(x,y)
-plot(6)
 
+plot(c(1, 2, 3, x))
+plot(c(1,2,3), c(1,2,3))
 
+x <- 4
 ')
 
 sct = '
@@ -55,9 +57,11 @@ sct = '
 
 test_object("y")
 test_object("x")
-test_output_contains("c(x,y)")
 
-test_function("plot", c("x"), index = 4)
+test_function("plot", c("x", "y"))
+test_function("plot", "x", index = 2)
+
+
 success_msg("OK")
 
 '
