@@ -53,6 +53,7 @@ Collate:
     'test-files.r'
     'test-for-loop.R'
     'test-function-definition.R'
+    'test-function-v2.R'
     'test-function.R'
     'test-instruction.R'
     'test-library-function.R'
