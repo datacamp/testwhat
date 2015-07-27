@@ -166,8 +166,7 @@ DataCampReporter <- setRefClass(
             passed_steps <- rep(FALSE, n_inst)
           } else {
             # some things correct
-            # failed instructions with a lower index than the maximum passed instruction, have passed as well
-            passed_steps <- passed_steps | c(rep(TRUE, max_passed - 1), rep(FALSE, n_inst - max_passed + 1))
+            # passed_steps <- passed_steps | c(rep(TRUE, max_passed - 1), rep(FALSE, n_inst - max_passed + 1))
             feedback <- "Keep trying, you'll get there!"
           }
         }
