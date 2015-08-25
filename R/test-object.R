@@ -36,7 +36,8 @@
 test_object <- function(name, eq_condition = "equivalent",
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env(),
-                        undefined_msg = NULL, incorrect_msg = NULL) {
+                        undefined_msg = NULL, incorrect_msg = NULL,
+                        same_name = TRUE, eval = TRUE) {
 
   if (is.null(undefined_msg)) {
     undefined_msg <- build_undefined_object_msg(name)
@@ -44,15 +45,47 @@ test_object <- function(name, eq_condition = "equivalent",
   if (is.null(incorrect_msg)) {
     incorrect_msg <- build_incorrect_object_msg(name)
   }
-
-  test_that(sprintf("Object %s is correctly defined", name), {
-    expect_that(name, is_defined(env = student_env),
-                failure_msg = undefined_msg)
-    student <- get(name, envir = student_env, inherits = FALSE)
-    solution <- get(name, envir = solution_env, inherits = FALSE)
-    eq_fun <- switch(eq_condition, equivalent = is_equivalent_to,
-                     equal = equals, identical = is_identical_to,
-                     stop("invalid equality condition"))
-    expect_that(student, eq_fun(solution), failure_msg = incorrect_msg)
-  })
+  
+  if (!eval || same_name) {
+    test_that(sprintf("Object %s is defined", name), {
+      expect_that(name, is_defined(env = student_env),
+                  failure_msg = undefined_msg)
+    })
+  }
+  
+  if (eval) {
+    test_that(sprintf("Object %s is correctly defined", name), {
+      solution <- get(name, envir = solution_env, inherits = FALSE)
+      
+      if (isTRUE(same_name)) {
+        eq_fun <- switch(eq_condition, equivalent = is_equivalent_to,
+                         equal = equals, identical = is_identical_to,
+                         stop("invalid equality condition"))
+        
+        student <- get(name, envir = student_env, inherits = FALSE)
+        
+        expect_that(student, eq_fun(solution), failure_msg = incorrect_msg)
+      } else {
+        eq_fun <- switch(eq_condition, equivalent = .equivalent, equal = .equal,
+                         identical = identical, stop("invalid equality condition"))
+        
+        valid_values <- list()
+        length(valid_values) <- length(ls(student_env))
+        
+        counter <- 1
+        for (student_var in ls(student_env)) {
+          student_value <- get(student_var, envir = student_env, inherits = FALSE)
+          if (identical(class(student_value), class(solution))) {
+            valid_values[[counter]] <- student_value
+            counter <- counter + 1
+          }
+        }
+        valid_values[counter:length(valid_values)] <- NULL
+  
+        correct <- vapply(valid_values, function(x) { eq_fun(x, solution) }, logical(1))
+        
+        expect_that(any(correct), is_true(), failure_msg = undefined_msg)
+      }
+    })
+  }
 }
