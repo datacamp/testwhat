@@ -45,6 +45,7 @@ Collate:
     'reporter-tap.r'
     'reporter-teamcity.r'
     'reporter-zzz.r'
+    'test-an-object.R'
     'test-chunk-options.R'
     'test-correct.R'
     'test-data-frame.R'
