@@ -30,58 +30,21 @@ assign('pre_exercise_code', '
 
 #SOLUTION CODE
 set_solution_code('
-movies <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/course/introduction_to_r/movies.csv", header = TRUE, stringsAsFactors = FALSE)
-movies$genre <- factor(movies$genre)
-# movies is already pre-loaded
 
-# Create a boxplot of the runtime variable
-boxplot(movies$runtime)
-
-# Subset the dateframe and plot it entirely
-plot(movies[,c("rating", "votes", "runtime")] )
-
-# Create a pie chart of the table of counts of the genres
-pie(table(movies$genre))
-
-test = 3
+a <- list("some code", 2, data.frame(a=c(1,2,3), b=c(4,5,6)))
+test <- 3
 ')
 
 # USER CODE
 set_student_code('
-movies <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/course/introduction_to_r/movies.csv", header = TRUE, stringsAsFactors = FALSE)
-movies$genre <- factor(movies$genre)
-# movies is already pre-loaded
-
-# Create a boxplot of the runtime variable
-boxplot(movies$runtime)
-
-# Subset the dateframe and plot it entirely
-plot(movies[,c("rating", "votes", "runtime")] )
-
-# Create a pie chart of the table of counts of the genres
-pie(table(movies$genre))
-
-test <- 3
+b <- data.frame(c=c(1,2,3), d=c(4,5,6))
+test <- list("some code", 2, b)
 ')
 
 sct = '
-test_error()
-msg <- "Do not overwrite the <code>movies</code> data frame; it has already been created for you!"
-test_object("movies", undefined_msg = msg, incorrect_msg = msg)
 
-test_function("boxplot", "x",
-              incorrect_msg = paste("Have you correctly possed the <code>runtime</code> variable of",
-                                    "<code>movies</code> to the <code>boxplot()</code> function?"))
-
-test_function("plot", "x", 
-              incorrect_msg = paste("Have you passed the correct data frame to the <code>plot()</code> function?",
-                                    "Make sure that it\'s an entire data frame, containing the three columns in the listed order!"))
-
-test_function("pie", "x", 
-              incorrect_msg = paste("Have you created a table of genre counts and subsequently",
-                                    "passed it to the <code>pie()</code> function? Try again."))
-
-test_object("test")
+test_an_object("a", "You didn\'t define the thing", eq_condition = "equivalent")
+test_object("test", eval = TRUE)
 
 
 success_msg("Perfect! Know that there are many more functions to create the plots that you need in R!")
