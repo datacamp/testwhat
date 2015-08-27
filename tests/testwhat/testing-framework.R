@@ -1,5 +1,6 @@
-library("testwhat")
-library("datacampAPI")
+library(testwhat)
+library(datacampAPI)
+library(crayon)
 
 get_output <- function(code) {
   output <- capture.output(source(file = textConnection(get_student_code()), print.eval = TRUE))
@@ -21,34 +22,77 @@ set_scenarios <- function(scenarios) {
   scenarios <- scenarios
 }
 
-test_scenario <- function(description, scenario.id, code) {
+test_scenario <- function(name, 
+                          pre_ex= '', student = '', solution = '',
+                          msg = NULL, 
+                          passes = NULL) {
+  if (is.list(name)) {
+    if (!is.list(passes)) {
+      stop("if 'name' is a list, 'passes' should be a list as well.")
+    }
+    if (!is.null(msg) && !is.list(msg)) {
+      stop("if 'name' is a list, 'msg' should be NULL or a list.")
+    }
+  } else if (!is.list(msg) && !is.list(passes)) {
+    name <- list(name)
+    msg <- list(msg)
+    passes <- list(passes)
+  } else {
+    stop("if 'passes' or 'msg' is a list, 'name' should be a list as well.")
+  }
+
   saved_global_env <- ls(globalenv())
   saved_solution_env <- ls(get_solution_env())
-  with(get(scenario.id, envir = scenarios), {
-    set_solution_code(solution)
-    set_student_code(student)
-    eval(parse(text = pre_ex), envir = globalenv())
-    res <- try(eval(parse(text = get_student_code()), envir = globalenv()))
-    if(inherits(res, "try-error")) {
-      set_student_error("there was an error")
-    } else {
-      set_student_error(NULL)
-    }
-    rm(res)
-    set_student_output(get_output(get_student_code()))
-    eval(parse(text = pre_ex),envir = get_solution_env())
-    eval(parse(text = get_solution_code()), envir = get_solution_env())
-  })
-  eval(code)
+  set_solution_code(solution)
+  set_student_code(student)
+  log <- capture.output(eval(parse(text = pre_ex), envir = globalenv()))
+  log <- capture.output(try(eval(parse(text = get_student_code()), envir = globalenv())))
+  if(inherits(log, "try-error")) {
+    set_student_error("there was an error")
+  } else {
+    set_student_error(NULL)
+  }
+  set_student_output(get_output(get_student_code()))
+  log <- capture.output(eval(parse(text = pre_ex),envir = get_solution_env()))
+  log <- capture.output(eval(parse(text = get_solution_code()), envir = get_solution_env()))
+  
+  rm(log)
+  
+  for (i in 1:length(name)) {
+    tryCatch({
+      if (is.function(passes[[i]])) {
+        passes[[i]]()
+      } else {
+        eval(passes[[i]])
+      }
+      cat(green(paste0("\t✔\tPASSED: ", ifelse(is.null(msg[i]), name[i], paste0(name[i],' - ',msg[i])),"\n")))
+    },
+      error = function(e) { 
+        cat(red(paste0("\t✘\tFAILED: ", ifelse(is.null(msg[i]), name[i], paste0(name[i],' - ',msg[i])),"\n")))
+        cat(bold(red(paste0("\t\t\t",e))))
+      }
+    )
+  }
+  
   rm(list=ls(globalenv())[!(ls(globalenv()) %in% saved_global_env)], envir=globalenv())
   rm(list=ls(get_solution_env())[!(ls(get_solution_env()) %in% saved_solution_env)], envir=get_solution_env())
-  print(paste0("PASSED: ", description))
 }
 
-test_call <- function(description, code) {
-  tryCatch(code,
-           error = function(e) {
-             stop(description)
-           })
-  print(paste0("PASSED: ",description))
+test_call <- function(name, 
+                      msg = NULL,
+                      passes = NULL) {
+  
+  tryCatch({
+    if (is.function(passes)) {
+      passes()
+    } else {
+      eval(passes)
+    }
+    cat(green(paste0("\t✔\tPASSED: ", ifelse(is.null(msg), name, paste0(name,' - ',msg)),"\n")))
+  },
+    error = function(e) { 
+      cat(red(paste0("\t✘\tFAILED: ", ifelse(is.null(msg), name, paste0(name,' - ',msg)),"\n")))
+      cat(paste0("\t\t\t",e))
+    }
+  )
 }

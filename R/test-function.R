@@ -207,7 +207,8 @@ is_equal <- function(x, y, condition = "equivalent") {
 # Expand argument names of a function call
 standardize_call <- function (call, env = parent.frame()) {
   stopifnot(is.call(call))
-  f <- eval(call[[1]], env)
-  if (is.primitive(f)) return(call)
+  
+  f <- args(eval(call[[1]], env))
+  
   match.call(f, call)
 }
