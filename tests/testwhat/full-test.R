@@ -1,9 +1,11 @@
-library(testwhat)
-library(datacampAPI)
-library(crayon)
-
 rm(list = ls(globalenv()), envir = globalenv())
 rm(list = ls(get_solution_env()), envir = get_solution_env())
+
+library(testwhat)
+library(datacampAPI)
+
+source("reporter-full-test.R")
+set_reporter(FullTestReporter$new())
 
 cat(bold("Starting testwhat testing\n=========================\n\n\n"))
 
