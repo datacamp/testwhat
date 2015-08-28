@@ -1,6 +1,5 @@
 library(testwhat)
 library(datacampAPI)
-library(crayon)
 
 get_output <- function(code) {
   output <- capture.output(source(file = textConnection(get_student_code()), print.eval = TRUE))
@@ -16,10 +15,6 @@ library <- function(package, ..., pos = NULL) {
     pos <- if (length(pos) == 0) 2 else max(pos) + 1
   }
   base::library(package = as.character(substitute(package)), ..., character.only = TRUE, pos=pos)
-}
-
-set_scenarios <- function(scenarios) {
-  scenarios <- scenarios
 }
 
 test_scenario <- function(name, 
@@ -59,19 +54,14 @@ test_scenario <- function(name,
   rm(log)
   
   for (i in 1:length(name)) {
-    tryCatch({
-      if (is.function(passes[[i]])) {
-        passes[[i]]()
-      } else {
-        eval(passes[[i]])
-      }
-      cat(green(paste0("\t✔\tPASSED: ", ifelse(is.null(msg[i]), name[i], paste0(name[i],' - ',msg[i])),"\n")))
-    },
-      error = function(e) { 
-        cat(red(paste0("\t✘\tFAILED: ", ifelse(is.null(msg[i]), name[i], paste0(name[i],' - ',msg[i])),"\n")))
-        cat(bold(red(paste0("\t\t\t",e))))
-      }
-    )
+    descr <- ifelse(is.null(msg[i]), name[i], paste0(name[i],' - ',msg[i]))
+    get_reporter()$start_high_level_test(descr)
+    if (is.function(passes[[i]])) {
+      passes[[i]]()
+    } else {
+      eval(passes[[i]])
+    }
+    get_reporter()$end_high_level_test()
   }
   
   rm(list=ls(globalenv())[!(ls(globalenv()) %in% saved_global_env)], envir=globalenv())
@@ -82,17 +72,16 @@ test_call <- function(name,
                       msg = NULL,
                       passes = NULL) {
   
-  tryCatch({
-    if (is.function(passes)) {
-      passes()
-    } else {
-      eval(passes)
-    }
-    cat(green(paste0("\t✔\tPASSED: ", ifelse(is.null(msg), name, paste0(name,' - ',msg)),"\n")))
-  },
-    error = function(e) { 
-      cat(red(paste0("\t✘\tFAILED: ", ifelse(is.null(msg), name, paste0(name,' - ',msg)),"\n")))
-      cat(paste0("\t\t\t",e))
-    }
-  )
+  descr <- ifelse(is.null(msg), name, paste0(name,' - ',msg))
+  get_reporter()$start_high_level_test(descr)
+  if (is.function(passes)) {
+    passes()
+  } else {
+    eval(passes)
+  }
+  get_reporter()$end_high_level_test()
+}
+
+expect_error <- function(code, msg) {
+  if(get_reporter()$failed) {}
 }
