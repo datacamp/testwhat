@@ -67,13 +67,12 @@ test_function <- function(name, args = NULL, ignore = NULL,
                           solution_env = get_solution_env(),
                           not_called_msg = NULL, incorrect_msg = NULL,
                           incorrect_number_of_calls_msg = NULL) {
-  
   n_args <- length(args)
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
   
   arg_text <- build_arg_text(n_args, args)
-  
+
   # remove the pipe operator from the calls, if present.
   student_code_parts = get_clean_lines(code = student_code)
   solution_code_parts = get_clean_lines(code = solution_code)
