@@ -61,7 +61,7 @@ test_for_loop <- function(index = 1,
     set_solution_code(sol_for$for_cond)
     eval(cond_test, envir = env)
   }
-  
+
   # IF expression part should always be available.
   test_that("for_expr is available", {
     expect_that(is.null(stud_for$for_expr), is_false(), failure_msg = sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
