@@ -1,8 +1,10 @@
+library(datacampAPI)
+
 rm(list = ls(globalenv()), envir = globalenv())
 rm(list = ls(get_solution_env()), envir = get_solution_env())
 
+library(testthat)
 library(testwhat)
-library(datacampAPI)
 
 source("reporter-full-test.R")
 set_reporter(FullTestReporter$new())

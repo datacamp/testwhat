@@ -23,18 +23,23 @@ FullTestReporter <- setRefClass("FullTestReporter", contains = "Reporter",
                             fields = c("failures",
                                        "n_fails",
                                        "n_pass",
-                                       "failed"),
+                                       "fail",
+                                       "expected_fail_passed",
+                                       "expected_fail_feedback",
+                                       "expected_fail_msg"),
                             methods = list(
                               initialize = function(...) {
                                 failures <<- list()
                                 n_fails <<- 0
                                 n_pass <<- 0
-                                failed <<- FALSE
+                                fail <<- FALSE
+                                expected_fail_passed <<- FALSE
+                                expected_fail_msg <<- NULL
+                                expected_fail_feedback <<- list()
                                 callSuper(...)
                               },
                               
                               start_high_level_test = function(desc) {
-                                failed <<- FALSE
                                 test <<- desc
                               },
                               
@@ -49,19 +54,43 @@ FullTestReporter <- setRefClass("FullTestReporter", contains = "Reporter",
                                   n_fails <<- n_fails + 1
                                   cat(red(paste0("\t✘\tFAILED: ", cur_test, "\n")))
                                   invisible(sapply(failures, function(failure) {
-                                    cat(paste0("\t\t\t", red(bold(as.character(failure$failure_msg))), "\n"))
+                                    cat(paste0("\t\t\t", red(bold(as.character(failure))), "\n"))
                                   }))
                                   failures <<- list()
                                 }
-                                failed <<- FALSE
+                              },
+                              
+                              toggle_fail = function(new_fail, msg = NULL) {
+                                fail <<- new_fail
+                                if(isTRUE(fail)) {
+                                  expected_fail_passed <<- FALSE
+                                  expected_fail_feedback <<- list()
+                                  expected_fail_msg <<- NULL
+                                  if (!is.null(msg)) {
+                                    expected_fail_msg <<- msg
+                                  }
+                                } else {
+                                  if (!expected_fail_passed) {
+                                    failures <<- c(failures, paste("Expected fail:",expected_fail_feedback))
+                                  }
+                                }
                               },
                               
                               add_result = function(result) {
-                                if (result$passed) {
-                                  failed <<- FALSE
+                                if (isTRUE(fail)) {
+                                  if (result$passed) {
+                                    expected_fail_feedback <<- c(expected_fail_feedback, result$failure_msg)
+                                  } else {
+                                    if (is.null(expected_fail_msg) || length(grep(expected_fail_msg, result$failure_msg)) != 0) {
+                                      expected_fail_passed <<- TRUE
+                                    } else {
+                                      expected_fail_feedback <<- c(expected_fail_feedback, paste(result$failure_msg, " - need fail msg:", expected_fail_msg))
+                                    }
+                                  }
                                 } else {
-                                  failed <<- TRUE
-                                  failures <<- c(failures, list(result))
+                                  if (!result$passed) {
+                                    failures <<- c(failures, result$failure_msg)
+                                  }
                                 }
                               },
                               

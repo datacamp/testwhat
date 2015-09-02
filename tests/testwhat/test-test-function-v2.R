@@ -28,17 +28,12 @@ test_scenario(
   passes = list(
     function() {
       test_function_v2("summary")
-      expect_error(test_function_v2("dim"))
+      expect_fail(test_function_v2("dim"))
     },
     function() {
-      expect_error(
+      expect_fail(
         test_function_v2("dim", not_called_msg ="This is the not called message"), 
         "This is the not called message")
-      expect_error(
-        expect_error(
-          test_function_v2("dim", not_called_msg ="This is the not called message"), 
-          "This is not the not called message")
-      )
     })
 )
 
@@ -65,21 +60,16 @@ test_scenario(
   passes = list(
     function() {
       test_function_v2("summary", "object")
-      expect_error(test_function_v2("dim", "x"))
+      expect_fail(test_function_v2("dim", "x"))
       test_function_v2("rep", "x")
       test_function_v2("dnorm", c("x", "mean"))
-      expect_error(test_function_v2("dnorm", c("x", "mean"), allow_extra = FALSE))
-      expect_error(test_function_v2("mean", c("x", "na.rm")))
+      expect_fail(test_function_v2("dnorm", c("x", "mean"), allow_extra = FALSE))
+      expect_fail(test_function_v2("mean", c("x", "na.rm")))
     },
     function() {
-      expect_error(
+      expect_fail(
         test_function_v2("dim", "x", incorrect_msg = "This is the incorrect message"), 
         "This is the incorrect message")
-      expect_error(
-        expect_error(
-          test_function_v2("dim", "x", incorrect_msg = "This is the incorrect message"), 
-          "This is not the incorrect message")
-      )
     })
 )
 
@@ -99,9 +89,9 @@ test_scenario(
   msg = 'difference between equal and equivalent for arguments', 
   passes = function() {
     test_function_v2("var", "x")
-    expect_error(test_function_v2("lm", "formula"))
-    expect_error(test_function_v2("var", "x", eq_condition = "equal"))
-    expect_error(test_function_v2("lm", "formula", eq_condition = "equal"))
+    expect_fail(test_function_v2("lm", "formula"))
+    expect_fail(test_function_v2("var", "x", eq_condition = "equal"))
+    expect_fail(test_function_v2("lm", "formula", eq_condition = "equal"))
   }
 )
 
@@ -121,9 +111,9 @@ test_scenario(
   msg = 'difference between equal and equivalent for arguments', 
   passes = function() {
     test_function_v2("var", "x")
-    expect_error(test_function_v2("lm", "formula"))
-    expect_error(test_function_v2("var", "x", eq_condition = "equal"))
-    expect_error(test_function_v2("lm", "formula", eq_condition = "equal"))
+    expect_fail(test_function_v2("lm", "formula"))
+    expect_fail(test_function_v2("var", "x", eq_condition = "equal"))
+    expect_fail(test_function_v2("lm", "formula", eq_condition = "equal"))
     test_function_v2("var", eval = FALSE)
     test_function_v2("lm", eval = FALSE)
     test_function_v2("var", eval = FALSE, eq_condition = "equal")
@@ -148,7 +138,7 @@ test_scenario(
   passes = function() {
     test_function_v2("var", "x", eq_condition = "equal")
     test_function_v2("mean", "formula", eq_condition = "equal")
-    expect_error(test_function_v2("var", "x", eq_condition = "identical"))
+    expect_fail(test_function_v2("var", "x", eq_condition = "identical"))
     test_function_v2("mean", "formula", eq_condition = "identical")
     test_function_v2("var", eval = FALSE, eq_condition = "equal")
     test_function_v2("mean", eval = FALSE, eq_condition = "equal")
@@ -171,7 +161,7 @@ test_scenario(
   msg = 'checks whether the eval argument works properly',
   passes = function() {
     test_function_v2("mean", "x")
-    expect_error(test_function_v2("var", "x", eval = FALSE))
+    expect_fail(test_function_v2("var", "x", eval = FALSE))
   }
 )
 
@@ -188,7 +178,7 @@ test_scenario(
   passes = function() {
     test_function_v2("mean", "x")
     test_function_v2("mean", c("x", "trim"), allow_extra = FALSE)
-    expect_error(test_function_v2("mean", "x", allow_extra = FALSE))
+    expect_fail(test_function_v2("mean", "x", allow_extra = FALSE))
     test_function_v2("var", c("x", "y"), allow_extra = FALSE)
   }
 )
@@ -205,8 +195,8 @@ test_scenario(
   msg = 'checks whether the ignore argument works properly',
   passes = function() {
     test_function_v2("mean", "x", allow_extra = FALSE, ignore = c("trim", "na.rm"))
-    expect_error(test_function_v2("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
-    expect_error(test_function_v2("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
+    expect_fail(test_function_v2("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
+    expect_fail(test_function_v2("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
     test_function_v2("var", "x", allow_extra = FALSE, ignore = "y")
   }
 )
@@ -225,9 +215,9 @@ test_scenario(
   msg = 'checks whether the index argument works properly',
   passes = function() {
     test_function_v2("mean", "x", index = 1)
-    expect_error(test_function_v2("mean", "x", index = 2))
-    expect_error(test_function_v2("mean", c("x", "trim"), allow_extra = FALSE, index = 1))
-    expect_error(test_function_v2("mean", "x", allo_extra = FALSE, index = 1))
+    expect_fail(test_function_v2("mean", "x", index = 2))
+    expect_fail(test_function_v2("mean", c("x", "trim"), allow_extra = FALSE, index = 1))
+    expect_fail(test_function_v2("mean", "x", allow_extra = FALSE, index = 1))
     test_function_v2("mean", c("x", "trim"))
   }
 )

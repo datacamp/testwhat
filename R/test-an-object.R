@@ -39,8 +39,12 @@ test_an_object <- function(name, undefined_msg,
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env()) {
   
+  if (is.null(name)) {
+    stop("argument \"name\" is missing, with no default")
+  }
+  
   if (is.null(undefined_msg)) {
-    undefined_msg <- "It seems that you forgot to define an object."
+    stop("argument \"undefined\" is missing, with no default")
   }
   
   test_that(sprintf("Object %s is correctly defined", name), {
