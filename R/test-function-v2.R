@@ -69,6 +69,10 @@ test_function_v2 <- function(name, args = NULL, ignore = NULL,
                              incorrect_number_of_calls_msg = NULL,
                              index_not_called_msg = NULL) {
   
+  if (is.null(name)) {
+    stop("argument \"name\" is missing, with no default")
+  }
+  
   n_args <- length(args)
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
@@ -153,6 +157,8 @@ test_function_v2 <- function(name, args = NULL, ignore = NULL,
           # Extract the specified arguments from current solution function call
           solution_args <- extract_arguments(solution_calls[[i]], args, eval,
                                              env = solution_env)
+          
+          correct <- NULL
           
           # Loop over the student function calls:
           # Extract the specified arguments from current student function call

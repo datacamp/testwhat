@@ -76,7 +76,7 @@ find_test_srcref <- function() {
   .is_test_frame <- function(i) {
     # is enclosure of the frame containing the call inside testthat package ?
     inside <- identical(environmentName(parent.env(sys.frame(i - 1)))
-      , 'testthat')
+      , 'testwhat')
     match_expect <- any(grepl('expect_', sys.call(i)))
     has_srcref <- !is.null(attr(sys.call(i), 'srcref'))
 

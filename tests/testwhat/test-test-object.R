@@ -31,28 +31,18 @@ test_scenario(
     'test on incorrect message'),
   passes = list(
     function() {
-      expect_error(test_object("var.not_equiv"))
+      expect_fail(test_object("var.not_equiv"))
       test_object("var.equiv")
     },
     function() {
-      expect_error(
+      expect_fail(
         test_object("var.not_here", undefined_msg="This is the undefined message"), 
         "This is the undefined message")
-      expect_error(
-        expect_error(
-          test_object("var.not_here", undefined_msg="This is the undefined message"), 
-          "This is not the undefined message")
-      )
     },
     function() {
-      expect_error(
+      expect_fail(
         test_object("var.not_equiv", incorrect_msg = "This is the incorrect message"), 
         "This is the incorrect message")
-      expect_error(
-        expect_error(
-          test_object("var.not_equiv", incorrect_msg = "This is the incorrect message"), 
-          "This is not the incorrect message")
-      )
     })
 )
 
@@ -67,10 +57,10 @@ test_scenario(
     df.not_equiv <- data.frame(c=c(7,8,9), d=c(4,5,6))',
   msg = 'difference between equals and equivalent',
   passes = function() {
-    expect_error(test_object("df.equiv", eq_condition = "equal"))
+    expect_fail(test_object("df.equiv", eq_condition = "equal"))
     test_object("df.equiv")
-    expect_error(test_object("df.not_equiv", eq_condition = "equal"))
-    expect_error(test_object("df.not_equiv"))
+    expect_fail(test_object("df.not_equiv", eq_condition = "equal"))
+    expect_fail(test_object("df.not_equiv"))
   }
 )
 
@@ -85,7 +75,7 @@ test_scenario(
     var.equal <- 3',
   msg = 'difference between equals and identical',
   passes = function() {
-    expect_error(test_object("var.equal", eq_condition = "identical"))
+    expect_fail(test_object("var.equal", eq_condition = "identical"))
     test_object("var.iden", eq_condition = "identical")
     test_object("var.equal", eq_condition = "equal")
   }
@@ -102,8 +92,8 @@ test_scenario(
     var.other <- 3',
   msg = 'test on eval parameter',
   passes = function() {
-    expect_error(test_object("var"))
+    expect_fail(test_object("var"))
     test_object("var", eval = FALSE)
-    expect_error(test_object("var.not_here", eval=FALSE))
+    expect_fail(test_object("var.not_here", eval=FALSE))
   }
 )
