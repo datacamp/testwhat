@@ -68,6 +68,46 @@ test_scenario <- function(name,
   rm(list=ls(get_solution_env())[!(ls(get_solution_env()) %in% saved_solution_env)], envir=get_solution_env())
 }
 
+test_rmd_scenario <- function(name,
+                              student = '', solution = '',
+                              msg = NULL, 
+                              passes = NULL) {
+  if (is.list(name)) {
+    if (!is.list(passes)) {
+      stop("if 'name' is a list, 'passes' should be a list as well.")
+    }
+    if (!is.null(msg) && !is.list(msg)) {
+      stop("if 'name' is a list, 'msg' should be NULL or a list.")
+    }
+  } else if (!is.list(msg) && !is.list(passes)) {
+    name <- list(name)
+    msg <- list(msg)
+    passes <- list(passes)
+  } else {
+    stop("if 'passes' or 'msg' is a list, 'name' should be a list as well.")
+  }
+  
+  saved_global_env <- ls(globalenv())
+  saved_solution_env <- ls(get_solution_env())
+  clean_sct_env()
+  set_solution_code(solution)
+  set_student_code(student)
+  
+  for (i in 1:length(name)) {
+    descr <- ifelse(is.null(msg[i]), name[i], paste0(name[i],' - ',msg[i]))
+    get_reporter()$start_high_level_test(descr)
+    if (is.function(passes[[i]])) {
+      passes[[i]]()
+    } else {
+      eval(passes[[i]])
+    }
+    get_reporter()$end_high_level_test()
+  }
+  
+  rm(list=ls(globalenv())[!(ls(globalenv()) %in% saved_global_env)], envir=globalenv())
+  rm(list=ls(get_solution_env())[!(ls(get_solution_env()) %in% saved_solution_env)], envir=get_solution_env())
+}
+
 test_call <- function(name, 
                       msg = NULL,
                       passes = NULL) {
@@ -82,6 +122,9 @@ test_call <- function(name,
   get_reporter()$end_high_level_test()
 }
 
-expect_error <- function(code, msg) {
-  if(get_reporter()$failed) {}
+expect_fail <- function(code, msg = NULL) {
+  get_reporter()$toggle_fail(TRUE, msg)
+  code
+  get_reporter()$toggle_fail(FALSE)
 }
+  

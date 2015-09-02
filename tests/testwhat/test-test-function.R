@@ -6,7 +6,7 @@ test_call(
   name = 'test_no_name' , 
   msg = 'receives name argument',
   passes = function() {
-    expect_error(test_function(), "argument \"name\" is missing")
+    expect_error(test_function())
   }
 )
 
@@ -28,17 +28,12 @@ test_scenario(
   passes = list(
     function() {
       test_function("summary")
-      expect_error(test_function("dim"))
+      expect_fail(test_function("dim"))
     },
     function() {
-      expect_error(
+      expect_fail(
         test_function("dim", not_called_msg ="This is the not called message"), 
         "This is the not called message")
-      expect_error(
-        expect_error(
-          test_function("dim", not_called_msg ="This is the not called message"), 
-          "This is not the not called message")
-      )
     })
 )
 
@@ -65,21 +60,16 @@ test_scenario(
   passes = list(
     function() {
       test_function("summary", "object")
-      expect_error(test_function("dim", "x"))
+      expect_fail(test_function("dim", "x"))
       test_function("rep", "x")
       test_function("dnorm", c("x", "mean"))
-      expect_error(test_function("dnorm", c("x", "mean"), allow_extra = FALSE))
-      expect_error(test_function("mean", c("x", "na.rm")))
+      expect_fail(test_function("dnorm", c("x", "mean"), allow_extra = FALSE))
+      expect_fail(test_function("mean", c("x", "na.rm")))
     },
     function() {
-      expect_error(
+      expect_fail(
         test_function("dim", "x", incorrect_msg = "This is the incorrect message"), 
         "This is the incorrect message")
-      expect_error(
-        expect_error(
-          test_function("dim", "x", incorrect_msg = "This is the incorrect message"), 
-          "This is not the incorrect message")
-      )
     })
 )
 
@@ -99,9 +89,9 @@ test_scenario(
   msg = 'difference between equal and equivalent for arguments', 
   passes = function() {
     test_function("var", "x")
-    expect_error(test_function("lm", "formula"))
-    expect_error(test_function("var", "x", eq_condition = "equal"))
-    expect_error(test_function("lm", "formula", eq_condition = "equal"))
+    expect_fail(test_function("lm", "formula"))
+    expect_fail(test_function("var", "x", eq_condition = "equal"))
+    expect_fail(test_function("lm", "formula", eq_condition = "equal"))
   }
 )
 
@@ -121,9 +111,9 @@ test_scenario(
   msg = 'difference between equal and equivalent for arguments', 
   passes = function() {
     test_function("var", "x")
-    expect_error(test_function("lm", "formula"))
-    expect_error(test_function("var", "x", eq_condition = "equal"))
-    expect_error(test_function("lm", "formula", eq_condition = "equal"))
+    expect_fail(test_function("lm", "formula"))
+    expect_fail(test_function("var", "x", eq_condition = "equal"))
+    expect_fail(test_function("lm", "formula", eq_condition = "equal"))
     test_function("var", eval = FALSE)
     test_function("lm", eval = FALSE)
     test_function("var", eval = FALSE, eq_condition = "equal")
@@ -148,7 +138,7 @@ test_scenario(
   passes = function() {
     test_function("var", "x", eq_condition = "equal")
     test_function("mean", "formula", eq_condition = "equal")
-    expect_error(test_function("var", "x", eq_condition = "identical"))
+    expect_fail(test_function("var", "x", eq_condition = "identical"))
     test_function("mean", "formula", eq_condition = "identical")
     test_function("var", eval = FALSE, eq_condition = "equal")
     test_function("mean", eval = FALSE, eq_condition = "equal")
@@ -171,7 +161,7 @@ test_scenario(
   msg = 'checks whether the eval argument works properly',
   passes = function() {
     test_function("mean", "x")
-    expect_error(test_function("var", "x", eval = FALSE))
+    expect_fail(test_function("var", "x", eval = FALSE))
   }
 )
 
@@ -188,7 +178,7 @@ test_scenario(
   passes = function() {
     test_function("mean", "x")
     test_function("mean", c("x", "trim"), allow_extra = FALSE)
-    expect_error(test_function("mean", "x", allow_extra = FALSE))
+    expect_fail(test_function("mean", "x", allow_extra = FALSE))
     test_function("var", c("x", "y"), allow_extra = FALSE)
   }
 )
@@ -205,8 +195,8 @@ test_scenario(
   msg = 'checks whether the ignore argument works properly',
   passes = function() {
     test_function("mean", "x", allow_extra = FALSE, ignore = c("trim", "na.rm"))
-    expect_error(test_function("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
-    expect_error(test_function("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
+    expect_fail(test_function("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
+    expect_fail(test_function("mean", "x", allow_extra = FALSE, ignore = "na.rm"))
     test_function("var", "x", allow_extra = FALSE, ignore = "y")
   }
 )
@@ -217,17 +207,19 @@ test_scenario(
   student = '
   a <- "test"
   mean(1:10, trim = 0.9, na.rm = FALSE)
-  mean(1:5, trim = 0.8)',
+  mean(1:5, trim = 0.8)
+  mean(1:10, trim = 0.9)',
   solution = '
   a <- "test"
   mean(1:10, trim = 0.9)
-  mean(1:9)',
+  mean(1:9)
+  mean(1:10)',
   msg = 'checks whether the index argument works properly',
   passes = function() {
     test_function("mean", "x", index = 2)
-    expect_error(test_function("mean", "x", index = 3))
-    expect_error(test_function("mean", c("x", "trim"), allow_extra = FALSE, index = 2))
-    expect_error(test_function("mean", "x", allo_extra = FALSE, index = 2))
+    expect_fail(test_function("mean", "x", index = 3))
+    expect_fail(test_function("mean", c("x", "trim"), allow_extra = FALSE, index = 2))
+    expect_fail(test_function("mean", "x", allow_extra = FALSE, index = 4))
     test_function("mean", c("x", "trim"))
   }
 )
