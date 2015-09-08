@@ -90,6 +90,7 @@ test_rmd_scenario <- function(name,
   saved_global_env <- ls(globalenv())
   saved_solution_env <- ls(get_solution_env())
   clean_sct_env()
+
   set_solution_code(solution)
   set_student_code(student)
   

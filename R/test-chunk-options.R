@@ -57,8 +57,11 @@ test_chunk_options <- function(options = NULL,
     }
         
     # select from sol_options and stud_props the ones to check on
-    sol_options_select = sol_options[options]
-    stud_options_select = stud_options[options]
+    #
+    # reverse the list, because in case options are defined multiple times,
+    # the last options are the ones that are seen as valid by RMarkdown
+    sol_options_select = rev(sol_options)[options]
+    stud_options_select = rev(stud_options)[options]
     if(any(is.na(names(sol_options_select)))) {
         stop(sprintf("You defined options that are not in code chunk %i of the solution", chunk_number))
     }
@@ -67,11 +70,11 @@ test_chunk_options <- function(options = NULL,
     expect_that(any(is.na(names(stud_options_select))), is_false(), failure_msg = not_called_msg)
     
     # check the equality of stud and solution options.
-    n_common = length(intersect(stud_options_select, sol_options_select))
-    expect_that(length(sol_options_select), equals(n_common), failure_msg = incorrect_msg)
+    expect_equal(sol_options_select, stud_options_select, failure_msg = incorrect_msg)
 
     if(!allow_extra) {
       expect_that(length(stud_options_select), equals(length(stud_options)), failure_msg = incorrect_msg)
     }
   })
 }
+
