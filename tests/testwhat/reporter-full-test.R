@@ -79,7 +79,7 @@ FullTestReporter <- setRefClass("FullTestReporter", contains = "Reporter",
                               add_result = function(result) {
                                 if (isTRUE(fail)) {
                                   if (result$passed) {
-                                    expected_fail_feedback <<- c(expected_fail_feedback, result$failure_msg)
+                                    expected_fail_feedback <<- c(expected_fail_feedback, paste("Passed:",result$failure_msg))
                                   } else {
                                     if (is.null(expected_fail_msg) || length(grep(expected_fail_msg, result$failure_msg)) != 0) {
                                       expected_fail_passed <<- TRUE
