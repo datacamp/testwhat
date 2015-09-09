@@ -66,11 +66,15 @@ test_chunk_options <- function(options = NULL,
         stop(sprintf("You defined options that are not in code chunk %i of the solution", chunk_number))
     }
     
+    no_nas = any(is.na(names(stud_options_select)))
     # check if all options available
-    expect_that(any(is.na(names(stud_options_select))), is_false(), failure_msg = not_called_msg)
+    expect_that(no_nas, is_false(), failure_msg = not_called_msg)
+    
     
     # check the equality of stud and solution options.
-    expect_equal(sol_options_select, stud_options_select, failure_msg = incorrect_msg)
+    if (!no_nas) {
+      expect_equal(sol_options_select, stud_options_select, failure_msg = incorrect_msg)
+    }
 
     if(!allow_extra) {
       expect_that(length(stud_options_select), equals(length(stud_options)), failure_msg = incorrect_msg)
