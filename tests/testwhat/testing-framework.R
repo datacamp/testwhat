@@ -98,9 +98,9 @@ test_rmd_scenario <- function(name,
     descr <- ifelse(is.null(msg[i]), name[i], paste0(name[i],' - ',msg[i]))
     get_reporter()$start_high_level_test(descr)
     if (is.function(passes[[i]])) {
-      passes[[i]]()
+      log <- capture.output(passes[[i]]())
     } else {
-      eval(passes[[i]])
+      log <- capture.output(eval(passes[[i]]))
     }
     get_reporter()$end_high_level_test()
   }
