@@ -73,7 +73,7 @@ test_yaml_header <- function(options = NULL,
     }
 
     if(!allow_extra) {
-      expect_that(length(stud_options_select), equals(length(stud_options)), failure_msg = incorrect_msg)
+      expect_that(length(stud_options_select), equals(length(yaml_student)), failure_msg = incorrect_msg)
     }
   })
 }
