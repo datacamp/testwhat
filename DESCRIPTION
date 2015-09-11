@@ -21,112 +21,56 @@ Authors@R: c(person("Andreas", "Alfons", role = "aut"),
     person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")),
     person("Hadley", "Wickham", role = "aut"))
 Collate:
-    'auto-
-    test.r'
-    'colour-
-    text.r'
+    'auto-test.r'
+    'colour-text.r'
     'compare.r'
     'context.r'
     'default_messages.r'
     'describe.r'
-    'evaluate-
-    promise.r'
-    'expect-
-    that.r'
+    'evaluate-promise.r'
+    'expect-that.r'
     'expectation.r'
     'expectations.r'
     'experimental.R'
     'library.r'
-    'make-
-    expectation.r'
+    'make-expectation.r'
     'reporter.r'
-    'reporter-
-    DataCamp.R'
-    'reporter-
-    list.r'
-    'reporter-
-    minimal.r'
-    'reporter-
-    multi.r'
-    'reporter-
-    silent.r'
-    'reporter-
-    stop.r'
-    'reporter-
-    summary.r'
-    'reporter-
-    tap.r'
-    'reporter-
-    teamcity.r'
-    'reporter-
-    zzz.r'
-    'test-
-    an-
-    object.R'
-    'test-
-    chunk-
-    options.R'
-    'test-
-    correct.R'
-    'test-
-    data-
-    frame.R'
-    'test-
-    error.R'
-    'test-
-    exercise.R'
-    'test-
-    file-
-    exists.R'
-    'test-
-    files.r'
-    'test-
-    for-
-    loop.R'
-    'test-
-    function-
-    definition.R'
-    'test-
-    function-
-    v2.R'
-    'test-
-    function.R'
-    'test-
-    instruction.R'
-    'test-
-    library-
-    function.R'
-    'test-
-    mc.R'
-    'test-
-    object.R'
-    'test-
-    output-
-    contains.R'
-    'test-
-    package.r'
-    'test-
-    rmd-
-    file.R'
-    'test-
-    rmd-
-    group.R'
-    'test-
-    student-
-    typed.R'
-    'test-
-    sufficient-
-    length.R'
-    'test-
-    text.R'
-    'test-
-    that.r'
-    'test-
-    while-
-    loop.R'
-    'test-
-    yaml-
-    header.R'
+    'reporter-DataCamp.R'
+    'reporter-list.r'
+    'reporter-minimal.r'
+    'reporter-multi.r'
+    'reporter-silent.r'
+    'reporter-stop.r'
+    'reporter-summary.r'
+    'reporter-tap.r'
+    'reporter-teamcity.r'
+    'reporter-zzz.r'
+    'test-an-object.R'
+    'test-chunk-options.R'
+    'test-correct.R'
+    'test-data-frame.R'
+    'test-error.R'
+    'test-exercise.R'
+    'test-file-exists.R'
+    'test-files.r'
+    'test-for-loop.R'
+    'test-function-definition.R'
+    'test-function-v2.R'
+    'test-function.R'
+    'test-instruction.R'
+    'test-library-function.R'
+    'test-mc.R'
+    'test-object.R'
+    'test-output-contains.R'
+    'test-package.r'
+    'test-rmd-file.R'
+    'test-rmd-group.R'
+    'test-student-typed.R'
+    'test-sufficient-length.R'
+    'test-text.R'
+    'test-that.r'
+    'test-while-loop.R'
+    'test-yaml-header.R'
     'test_if_else.R'
     'testwhat.R'
     'traceback.r'
