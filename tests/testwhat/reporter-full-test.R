@@ -20,21 +20,31 @@ library(crayon)
 #' @keywords debugging
 #' @param ... Arguments used to initialise class
 FullTestReporter <- setRefClass("FullTestReporter", contains = "Reporter",
-                            fields = c("failures",
-                                       "n_fails",
-                                       "n_pass",
-                                       "failed"),
+                            fields = list(
+                                      failures = "list",
+                                      n_fails = "integer",
+                                      n_pass = "integer",
+                                      fail = "logical",
+                                      expected_fail_passed = "logical",
+                                      expected_fail_feedback = "list",
+                                      expected_fail_msg = "character",
+                                      silent = "logical",
+                                      silent_fail = "logical"),
                             methods = list(
                               initialize = function(...) {
                                 failures <<- list()
-                                n_fails <<- 0
-                                n_pass <<- 0
-                                failed <<- FALSE
+                                n_fails <<- 0L
+                                n_pass <<- 0L
+                                fail <<- FALSE
+                                expected_fail_passed <<- FALSE
+                                expected_fail_msg <<- ""
+                                expected_fail_feedback <<- list()
+                                silent_fail <<- FALSE
+                                silent <<- FALSE
                                 callSuper(...)
                               },
                               
                               start_high_level_test = function(desc) {
-                                failed <<- FALSE
                                 test <<- desc
                               },
                               
@@ -42,26 +52,55 @@ FullTestReporter <- setRefClass("FullTestReporter", contains = "Reporter",
                                 cur_test <- test
                                 test <<- NULL
                                 if (length(failures) == 0) {
-                                  n_pass <<- n_pass + 1
+                                  n_pass <<- n_pass + 1L
                                   cat(green(paste0("\t✔\tPASSED: ", cur_test, "\n")))
                                   return()
                                 } else {
-                                  n_fails <<- n_fails + 1
+                                  n_fails <<- n_fails + 1L
                                   cat(red(paste0("\t✘\tFAILED: ", cur_test, "\n")))
                                   invisible(sapply(failures, function(failure) {
-                                    cat(paste0("\t\t\t", red(bold(as.character(failure$failure_msg))), "\n"))
+                                    cat(paste0("\t\t\t", red(bold(as.character(failure))), "\n"))
                                   }))
                                   failures <<- list()
                                 }
-                                failed <<- FALSE
+                              },
+                              
+                              toggle_fail = function(new_fail, msg = NULL) {
+                                fail <<- new_fail
+                                if(isTRUE(fail)) {
+                                  expected_fail_passed <<- FALSE
+                                  expected_fail_feedback <<- list()
+                                  expected_fail_msg <<- ""
+                                  if (!is.null(msg)) {
+                                    expected_fail_msg <<- msg
+                                  }
+                                } else {
+                                  if (!expected_fail_passed) {
+                                    failures <<- c(failures, paste("Expected fail:",expected_fail_feedback))
+                                  }
+                                }
                               },
                               
                               add_result = function(result) {
-                                if (result$passed) {
-                                  failed <<- FALSE
+                                if (isTRUE(fail)) {
+                                  if (result$passed) {
+                                    if (!silent) expected_fail_feedback <<- c(expected_fail_feedback, paste("Passed:",result$failure_msg))
+                                  } else {
+                                    if (is.null(expected_fail_msg) || length(grep(expected_fail_msg, result$failure_msg)) != 0) {
+                                      expected_fail_passed <<- TRUE
+                                      silent_fail <<- FALSE
+                                    } else {
+                                      if (!silent) expected_fail_feedback <<- c(expected_fail_feedback, paste(result$failure_msg, " - need fail msg:", expected_fail_msg))
+                                    }
+                                  }
                                 } else {
-                                  failed <<- TRUE
-                                  failures <<- c(failures, list(result))
+                                  if (!result$passed) {
+                                    if (!silent) {
+                                      failures <<- c(failures, result$failure_msg)
+                                    } else {
+                                      silent_fail <<- TRUE
+                                    }
+                                  }
                                 }
                               },
                               
@@ -70,6 +109,17 @@ FullTestReporter <- setRefClass("FullTestReporter", contains = "Reporter",
                               },
                               
                               end_test = function() {
+                              },
+                              
+                              ### new methods
+                              be_silent = function() {
+                                silent <<- TRUE
+                                silent_fail <<- fail
+                              },
+                              
+                              be_loud = function() {
+                                silent <<- FALSE
                               }
                             )
+                                               
 )
