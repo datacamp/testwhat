@@ -26,19 +26,19 @@
 #'   expect_that(sin(pi / 4), equals(1))
 #' })
 #' }
-# test_that <- function(desc, code) {
-#   if (require(testthat)) {
-#     testthat::test_that(desc, code)
-#   } else {
-#     stop("You require the testthat package in order to run the testwhat package.")
-#   }
-# }
+ test_that <- function(desc, code) {
+   if (require(testthat)) {
+     testthat::test_that(desc, code)
+   } else {
+     stop("You require the testthat package in order to run the testwhat package.")
+   }
+ }
 
 
-test_that <- function(desc, code) {
- test_code(desc, substitute(code), env = parent.frame())
- invisible()
-}
+#test_that <- function(desc, code) {
+# test_code(desc, substitute(code), env = parent.frame())
+# invisible()
+#}
 
 # Generate error report from traceback.
 #
