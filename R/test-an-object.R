@@ -64,9 +64,12 @@ test_an_object <- function(name, undefined_msg,
         counter <- counter + 1
       }
     }
-    valid_values[counter:length(valid_values)] <- NULL
     
-    correct <- vapply(valid_values, function(x) { eq_fun(x, solution) }, logical(1))
+    if (counter > 1) {
+      correct <- vapply(valid_values[1:counter-1], function(x) { eq_fun(x, solution) }, logical(1))
+    } else {
+      correct <- FALSE
+    }
     
     expect_that(any(correct), is_true(), failure_msg = undefined_msg)
   })
