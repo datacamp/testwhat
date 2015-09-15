@@ -33,7 +33,7 @@ test_scenario(
   }',
   msg = 'check whether basic test fails if there is no for statement',
   passes = function() {
-    expect_error(test_while_loop())
+    expect_fail(test_while_loop())
   }
 )
 
@@ -82,14 +82,14 @@ test_scenario(
     'check if cond_test fail message is displayed correctly'),
   passes = list(
     function() {
-      expect_error(
+      expect_fail(
         test_while_loop(
           cond_test = {
             test_object("i")
           }
         )
       )
-      expect_error(
+      expect_fail(
         test_while_loop(
           cond_test = {
             test_object("n")
@@ -98,23 +98,13 @@ test_scenario(
       )
     },
     function() {
-      expect_error(
+      expect_fail(
         test_while_loop(
           cond_test = {
             test_object("i",incorrect_msg = "Wrong condition")
           }
         ),
         "Wrong condition"
-      )
-      expect_error(
-        expect_error(
-          test_while_loop(
-            cond_test = {
-              test_object("i",incorrect_msg = "Wrong condition")
-            }
-          ),
-          "Wrong oops condition"
-        )
       )
     }
   )
@@ -173,14 +163,14 @@ test_scenario(
     'check if cond_test fail message is displayed correctly'),
   passes = list(
     function() {
-      expect_error(
+      expect_fail(
         test_while_loop(
           expr_test = {
             test_function("rpois", c("n","lambda"))
           }
         )
       )
-      expect_error(
+      expect_fail(
         test_while_loop(
           expr_test = {
             test_function("rnorm")
@@ -189,23 +179,13 @@ test_scenario(
       )
     },
     function() {
-      expect_error(
+      expect_fail(
         test_while_loop(
           expr_test = {
             test_function("rpois", c("n","lambda"), incorrect_msg = "Wrong expression")
           }
         ),
         "Wrong expression"
-      )
-      expect_error(
-        expect_error(
-          test_while_loop(
-            expr_test = {
-              test_function("rpois", c("n","lambda"), incorrect_msg = "Wrong expression")
-            }
-          ),
-          "Wrong oops expression"
-        )
       )
     }
   )
@@ -252,7 +232,7 @@ test_scenario(
                       test_function("rnorm", c("n","lambda"))
                     }
       )
-      expect_error(
+      expect_fail(
         test_while_loop(1,
                       expr_test = {
                         test_function("rpois", c("n","lambda"))
@@ -262,15 +242,9 @@ test_scenario(
       )
     },
     function() {
-      expect_error(
+      expect_fail(
         test_while_loop(3, not_found_msg = "Too much looooooops"),
         "Too much looooooops"
-      )
-      expect_error(
-        expect_error(
-          test_while_loop(3, not_found_msg = "Too much looooooops"),
-          "Too much looooooooooooooooooooops"
-        )
       )
     }
   )

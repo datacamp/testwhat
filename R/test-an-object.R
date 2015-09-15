@@ -39,8 +39,12 @@ test_an_object <- function(name, undefined_msg,
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env()) {
   
+  if (is.null(name)) {
+    stop("argument \"name\" is missing, with no default")
+  }
+  
   if (is.null(undefined_msg)) {
-    undefined_msg <- "It seems that you forgot to define an object."
+    stop("argument \"undefined\" is missing, with no default")
   }
   
   test_that(sprintf("Object %s is correctly defined", name), {
@@ -60,9 +64,12 @@ test_an_object <- function(name, undefined_msg,
         counter <- counter + 1
       }
     }
-    valid_values[counter:length(valid_values)] <- NULL
     
-    correct <- vapply(valid_values, function(x) { eq_fun(x, solution) }, logical(1))
+    if (counter > 1) {
+      correct <- vapply(valid_values[1:counter-1], function(x) { eq_fun(x, solution) }, logical(1))
+    } else {
+      correct <- FALSE
+    }
     
     expect_that(any(correct), is_true(), failure_msg = undefined_msg)
   })

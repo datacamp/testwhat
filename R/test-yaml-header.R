@@ -64,17 +64,16 @@ test_yaml_header <- function(options = NULL,
       stop(sprintf("You want to test on yaml options that are not in the solution's yaml header", chunk_number))
     }
     
+    no_nas = any(is.na(names(stud_options_select)))
     # check if all options available
-    expect_that(any(is.na(names(stud_options_select))), is_false(), failure_msg = not_called_msg)
+    expect_that(no_nas, is_false(), failure_msg = not_called_msg)
     
-    if(check_equality) {
-      # check the equality of stud and solution options.
-      n_common = length(intersect(stud_options_select, sol_options_select))
-      expect_that(length(sol_options_select), equals(n_common), failure_msg = incorrect_msg)
+    if(!no_nas && check_equality) {
+      expect_equal(sol_options_select, stud_options_select, failure_msg = incorrect_msg)
     }
 
     if(!allow_extra) {
-      expect_that(length(stud_options_select), equals(length(stud_options)), failure_msg = incorrect_msg)
+      expect_that(length(stud_options_select), equals(length(yaml_student)), failure_msg = incorrect_msg)
     }
   })
 }
