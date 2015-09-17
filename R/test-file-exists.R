@@ -6,10 +6,10 @@
 test_file_exists <- function(path, incorrect_msg = NULL) {
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("The file \"%s\" does not appear to be in your working directory; make sure you don't delete it!", path)
+    incorrect_msg <- sprintf("The file <code>%s</code> does not appear to be in your working directory; make sure you don't delete it!", path)
   }
   
   test_that("file is still there", {
-    expect_true(path %in% dir(), failure_msg = incorrect_msg)
+    expect_true(file.exists(path), failure_msg = incorrect_msg)
   })
 }
