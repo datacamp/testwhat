@@ -20,9 +20,7 @@ test_library_function <- function(package,
     incorrect_msg <- sprintf("Have you correctly called the <code>library()</code> function to load the <code>%s</code> package?", package)
   }
   
-  test_that(sprintf("Library function called correctly"), {
-    expect_that(grepl("library\\(", student_code), is_true(), failure_msg = not_called_msg)
-    expect_that(grepl(sprintf("library\\(%s\\)|library\\(\"%s\"\\)|library\\('%s'\\)",package,package,package), student_code), 
-                is_true(), failure_msg = incorrect_msg)
-  })
+  test_what(expect_true(grepl("library\\(", student_code)), not_called_msg)
+  test_what(expect_true(grepl(sprintf("library\\(%s\\)|library\\(\"%s\"\\)|library\\('%s'\\)",package,package,package), student_code)), 
+            incorrect_msg)
 }
