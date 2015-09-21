@@ -13,8 +13,9 @@ scen <- list(
     ),
     fail = list(
       test_result_equal = list(
-        long = "test succeeds if result of expr are equal",
-        sct = "test_expression_result(\"func(3)\")"
+        long = "test fails if result of expr are not equal",
+        sct = "test_expression_result(\"func_not_eq(3)\")",
+        message = "Make sure that.*results in.*"
       )
     )
   ),
@@ -24,7 +25,7 @@ scen <- list(
     solution = "func <- function(x) { x + 3 }",
     fail = list(
       test_result_not_equal = list(
-        long = "test succeeds if result of expr are equal",
+        long = "test fails if result of expr are not equal",
         sct = "test_expression_result(\"func(3)\")"
       )
     )
