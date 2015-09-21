@@ -17,6 +17,7 @@ setOldClass('proc_time')
 DataCampReporter <- setRefClass(
   "DataCampReporter", contains = "Reporter",
   fields = list(
+    continue = "logical",
     start_test_time = "proc_time",
     report = "character",
     results = "list",
