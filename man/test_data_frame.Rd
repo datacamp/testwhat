@@ -4,7 +4,7 @@
 \alias{test_data_frame}
 \title{Test whether a student correctly defined the column(s) of a data.frame}
 \usage{
-test_data_frame(name, columns, eq_condition = "equivalent",
+test_data_frame(name, columns = NULL, eq_condition = "equivalent",
   student_env = .GlobalEnv, solution_env = get_solution_env(),
   undefined_msg = NULL, undefined_cols_msg = NULL, incorrect_msg = NULL)
 }
@@ -37,7 +37,7 @@ Test whether a student defined a data.frame, and, if see, whether the columns of
 correspond to the sample solution.
 }
 \details{
-This test is implemented using \code{\link{test_that}}.  Whether the
+This test is implemented using \code{\link{test_what}}.  Whether the
 student's column and the sample solution object are the same is tested with
 \code{\link{is_equivalent_to}}, hence small numeric differences or
 differences in attributes are allowed.

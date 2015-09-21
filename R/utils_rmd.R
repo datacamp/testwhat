@@ -55,20 +55,18 @@ parse_docs <- function(student_code = get_student_code(), solution_code = get_so
   n_block_student = sum(sapply(student_ds, class) == "block")
   n_block_solution = sum(sapply(solution_ds, class) == "block")
   
-  test_that("student structure corresponds to solution structure", {
-    expect_that(n_student == n_solution, is_true(), 
-                failure_msg = sprintf("Make sure the structure of your document is OK. The solution expects %i inline (text) blocks and %i code chunks.", n_inline_solution, n_block_solution))
+  test_what(expect_equal(n_student, n_solution),
+            sprintf("Make sure the structure of your document is OK. The solution expects %i inline (text) blocks and %i code chunks.", n_inline_solution, n_block_solution))
     
-    expect_that(n_inline_student == n_inline_solution, is_true(), 
-                failure_msg = sprintf("Make sure you have the correct amount of inline (text) blocks in your R markdown document. The solution expects %i.",n_inline_solution))
+  test_what(expect_equal(n_inline_student, n_inline_solution), 
+            sprintf("Make sure you have the correct amount of inline (text) blocks in your R markdown document. The solution expects %i.",n_inline_solution))
     
-    expect_that(n_block_student == n_block_solution, is_true(), 
-                failure_msg = sprintf("Make sure you have the correct amount of code blocks in your R markdown document. The solution expects %i.", n_block_solution))
+  test_what(expect_equal(n_block_student, n_block_solution),
+            sprintf("Make sure you have the correct amount of code blocks in your R markdown document. The solution expects %i.", n_block_solution))
     
-    expect_that(isTRUE(all.equal(sapply(student_ds, class), sapply(solution_ds, class))), is_true(),
-                failure_msg = sprintf("Make sure the overall code structure of your document is OK. The soltion expects the following setup: %s.", 
+  test_what(expect_true(all.equal(sapply(student_ds, class), sapply(solution_ds, class))),
+            sprintf("Make sure the overall code structure of your document is OK. The soltion expects the following setup: %s.", 
                                       collapse_props(sapply(solution_ds, class), conn = ", ")))
-  })
   
   if(n_student != n_solution) return(FALSE)
   if(n_inline_student != n_inline_solution) return(FALSE) 
