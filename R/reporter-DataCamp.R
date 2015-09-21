@@ -23,7 +23,9 @@ DataCampReporter <- setRefClass(
     current_test_results = "list",
     silent = "logical",
     silent_fail = "logical",
-    instruction_index = "numeric"),
+    instruction_index = "numeric",
+    inh_failure = "logical",
+    inh_failure_msg = "character"),
 
   methods = list(
     ### overriden methods from Reporter
@@ -36,9 +38,20 @@ DataCampReporter <- setRefClass(
       results <<- list()
       silent <<- FALSE
       instruction_index <<- 0
+      inh_failure <<- FALSE
+      inh_failure_msg <<- ""
       current_test_results <<- list()
     },
 
+    toggle_inherit_failure = function(toggle_to = FALSE, toggle_msg = NULL) {
+      inh_failure <<- toggle_to
+      if (!is.null(toggle_msg) && is.character(toggle_msg)) {
+        inh_failure_msg <<- toggle_msg
+      } else {
+        inh_failure_msg <<- ""
+      }
+    },
+    
     start_test = function(desc) {
       callSuper(desc)
       current_test_results <<- list()
@@ -62,6 +75,10 @@ DataCampReporter <- setRefClass(
     },
 
     add_result = function(result) {
+      if(inh_failure) {
+        result$failure_msg <- inh_failure_msg
+      }
+      
       if(silent) {
         if(!result$passed) {
           silent_fail <<- TRUE
@@ -104,7 +121,6 @@ DataCampReporter <- setRefClass(
       rows <- lapply(results, summarize_test_results)
       summary <- do.call(rbind, rows)
       # Ensure the order of the tests with factor levels
-      summary$test <- factor(summary$test, levels = unique(summary$test))
       summary
     },
 
@@ -196,7 +212,7 @@ summarize_test_results <- function(test) {
     context <- if (length(test$context) == 0) "" else test$context
   }
 
-  data.frame(context = context, test = test$test, passed = passed,
+  data.frame(context = context, passed = passed,
              error = error, feedback = feedback, user = test$user,
              system = test$system, real = test$real, 
              instruction_index = test$instruction_index,
@@ -205,3 +221,14 @@ summarize_test_results <- function(test) {
 
 # Error message when a test is stopped after the first failure
 get_stop_msg <- function() "**test stopped because of failure**"
+
+
+.praise <- c(
+  "You rock!",
+  "You are a coding rockstar!",
+  "Keep up the good work.",
+  ":)",
+  "Woot!",
+  "Way to go!",
+  "Nice code."
+)

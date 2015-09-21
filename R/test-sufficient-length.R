@@ -8,13 +8,13 @@ test_sufficient_length = function(stud,index,incorrect_number_of_calls_msg = NUL
   if(index < 1) {
     stop("The index argument must be positive!")
   }
+  
+  if(is.null(incorrect_number_of_calls_msg)) {
+    incorrect_number_of_calls_msg <- sprintf("The system wants to test if the %s command you entered is correct, but it hasn't found one. Add more code.", get_num(index))
+  }
+  
   n_student_calls <- length(stud)
-  test_that("Student and solution have sufficient number of commands", {
-    # build default message
-    if(is.null(incorrect_number_of_calls_msg)) {
-      incorrect_number_of_calls_msg <- sprintf("The system wants to test if the %s command you entered is correct, but it hasn't found one. Add more code.", get_num(index))
-    }
-    expect_that(index <= n_student_calls, is_true(), failure_msg = incorrect_number_of_calls_msg)
-  })
-  return(index <= n_student_calls)
+  less_or_equal <- test_what(expect_less_than(index-1, n_student_calls), incorrect_number_of_calls_msg)
+  
+  return(less_or_equal)
 }

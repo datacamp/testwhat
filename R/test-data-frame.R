@@ -3,7 +3,7 @@
 #' Test whether a student defined a data.frame, and, if see, whether the columns of this data.frame
 #' correspond to the sample solution.
 #'
-#' This test is implemented using \code{\link{test_that}}.  Whether the
+#' This test is implemented using \code{\link{test_what}}.  Whether the
 #' student's column and the sample solution object are the same is tested with
 #' \code{\link{is_equivalent_to}}, hence small numeric differences or
 #' differences in attributes are allowed.
@@ -25,13 +25,27 @@
 #' # Other examples: see SCT design guide
 #'
 #' @export
-test_data_frame <- function(name, columns, 
+test_data_frame <- function(name, columns = NULL, 
                             eq_condition = "equivalent",
                             student_env = .GlobalEnv,
                             solution_env = get_solution_env(),
                             undefined_msg = NULL, 
                             undefined_cols_msg = NULL, 
                             incorrect_msg = NULL) {
+  
+  if (is.null(name)) {
+    stop("argument \"name\" is missing, with no default")
+  }
+  
+  if (!exists(name, solution_env)) {
+    stop(sprintf("%s is not defined in your solution environment.", name))
+  }
+  
+  solution <- get(name, envir = solution_env, inherits = FALSE)
+  
+  if (is.null(columns)) {
+    columns <- names(get(name, envir = solution_env, inherits = FALSE))
+  }
   
   quoted_name <- paste0("<code>",name,"</code>")
   col_names <- collapse_props(columns)
@@ -49,17 +63,22 @@ test_data_frame <- function(name, columns,
     }
   }
   
-  test_that(sprintf("Object %s is correctly defined", quoted_name), {
-    expect_that(name, is_defined(env = student_env),
-                failure_msg = undefined_msg)
+  defined <- test_what(expect_defined(name, student_env), undefined_msg)
+  if (defined) {
     student <- get(name, envir = student_env, inherits = FALSE)
-    solution <- get(name, envir = solution_env, inherits = FALSE)
-    expect_that(all(columns %in% names(student)), is_true(), failure_msg = undefined_cols_msg)
-    eq_fun <- switch(eq_condition, equivalent = is_equivalent_to,
-                     equal = equals, identical = is_identical_to,
-                     stop("invalid equality condition"))
-    for(col in columns) {
-      expect_that(student[col], eq_fun(solution[col]), failure_msg = incorrect_msg)
+    
+    columns_defined <- test_what(expect_true(all(columns %in% names(student))), undefined_cols_msg)
+    
+    if (columns_defined) {
+      eq_fun <- switch(eq_condition, 
+                       equivalent = expect_equivalent,
+                       equal = expect_equal, 
+                       identical = expect_identical,
+                       stop("invalid equality condition"))
+      
+      for(col in columns) {
+        test_what(eq_fun(student[col], solution[col]), incorrect_msg)
+      }
     }
-  })
+  }
 }
