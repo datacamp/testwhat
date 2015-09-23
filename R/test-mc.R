@@ -1,6 +1,6 @@
 #' Test a multiple choice exercise
 #'
-#' Test a multiple choice exercise using \code{\link{test_that}}. This code expects the DM.result variable
+#' Test a multiple choice exercise using \code{\link{test_what}}. This code expects the DM.result variable
 #' to be defined by the angular front-end of DataCamp. There is need to define the success_msg seperately,
 #' since it is defined inside the function.
 #'
@@ -34,15 +34,13 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
     stop("There is no feedback message available for this user input! Make sure you define enough feedback messages")
   }
 
-  test_that("The multiple choice exercise was answered correctly", {
-    expect_that(exists("result"), is_true(), failure_msg = no_selection_msg)
-    if(exists("result")) {
-      if(!is.numeric(result)) {
-        stop("There is something wrong with the result set by the backend.")
-      }
-      expect_that(identical(correct,result), is_true(), failure_msg = feedback_msgs[result])
+  defined <- test_what(expect_true(exists("result")), no_selection_msg)
+  if(defined) {
+    if(!is.numeric(result)) {
+      stop("There is something wrong with the result set by the backend.")
     }
-  })
+    test_what(expect_identical(correct,result), feedback_msgs[result])
+  }
 
   success_msg(feedback_msgs[correct])
 }

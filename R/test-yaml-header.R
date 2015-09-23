@@ -2,7 +2,7 @@
 #'
 #' Test whether the student specified the correct options in the yaml header (R Markdown)
 #'
-#' This test is implemented using \code{\link{test_that}}.
+#' This test is implemented using \code{\link{test_what}}.
 #' This test should be called outside an test_rmd_group call.
 #'
 #' @param options  Set of options. Embedded options have to be specified using the dot notation.

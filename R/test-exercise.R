@@ -52,6 +52,14 @@ test_exercise <- function(code, report = c("first", "all", "challenge"), failure
   end_context()
 }
 
+end_context <- function() {
+  rep <- get_reporter()
+  if (!rep$context_open) return(invisible())
+  rep$end_context()
+  rep$context_open <- FALSE
+  invisible()
+}
+
 #' @rdname test_exercise
 #' @export
 failure_msg <- function(msg) options(failure_msg = msg)
