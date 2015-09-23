@@ -18,7 +18,6 @@ is_defined <- function(env = .GlobalEnv) {
 }
 
 #' @rdname is_defined
-#' @export
 #' @param object  name of the object to test
 #' @param label  object label used in the default feedback message.  If
 #' \code{NULL}, the object name is used.  This is ignored for feedback
