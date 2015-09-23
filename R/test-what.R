@@ -1,3 +1,10 @@
+#' Expectation wrapper
+#'
+#' This function wraps around an expect_... function. When the expectation fails to be
+#' met, the feedback message is sent to the reporter.
+#'
+#' @param code The expectation that should be wrapped
+#' @param feedback_msg The feedback message that results when the expectation is not met
 #' @importFrom testthat test_that
 test_what <- function(code, feedback_msg) {
   rep <- get_reporter()
@@ -7,3 +14,23 @@ test_what <- function(code, feedback_msg) {
   rep$toggle_inherit_failure()
   return(!rep$failed)
 }
+
+#' Easily write submission correctness tests
+#'
+#' This package makes it easy for teachers to test students' code submissions
+#' for R exercises, e.g., for interactive R courses on \url{www.DataCamp.com}.
+#'
+#' @docType package
+#' @name testwhat
+#'
+#' @note \pkg{testwhat} is forked from package \pkg{testthat} such that
+#' teachers can write their tests using a familiar framework.
+#'
+#' @references \url{www.DataCamp.com}
+#'
+#' @examples
+#' library("testwhat")
+#' a <- 9
+#' expect_that(a, is_less_than(10))
+#' expect_less_than(a, 10)
+NULL
