@@ -32,7 +32,7 @@ If none of the above, the format string is appended to text in front and in the 
 Test inline text and its formatting (R Markdown exercises)
 }
 \details{
-This test is implemented using \code{\link{test_that}}.
+This test is implemented using \code{\link{test_what}}.
 This test can only be called inside a test_rmd_group() call!
 }
 

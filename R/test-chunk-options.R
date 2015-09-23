@@ -2,7 +2,7 @@
 #'
 #' Test whether the student defined the correct chunk options in an R Markdown exercise
 #'
-#' This test is implemented using \code{\link{test_that}}. 
+#' This test is implemented using \code{\link{test_what}}. 
 #' This test can only be called inside a test_rmd_group() call!
 #'
 #' @param options  Set of options

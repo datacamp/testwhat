@@ -13,7 +13,7 @@ test_error(error = get_student_error(), incorrect_msg = NULL)
 }
 \description{
 Check whether the output of the student code contained an error, based on the DM.contains.error variable.
-This function is implemented using \code{\link{test_that}}.
+This function is implemented using \code{\link{test_what}}.
 }
 \examples{
 \dontrun{
