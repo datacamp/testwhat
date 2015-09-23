@@ -27,10 +27,4 @@ test_what <- function(code, feedback_msg) {
 #' teachers can write their tests using a familiar framework.
 #'
 #' @references \url{www.DataCamp.com}
-#'
-#' @examples
-#' library("testwhat")
-#' a <- 9
-#' expect_that(a, is_less_than(10))
-#' expect_less_than(a, 10)
 NULL

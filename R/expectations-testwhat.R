@@ -5,10 +5,6 @@
 #' @param env  environment in which to look for the object.
 #' @seealso \code{\link{exists}}
 #' @family expectations
-#' @examples
-#' a <- matrix(1:10, nrow = 5)
-#' expect_that("a", is_defined())
-#' expect_defined("a")
 #' @export
 is_defined <- function(env = .GlobalEnv) {
   function(name) {

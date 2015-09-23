@@ -21,11 +21,6 @@ messages supplied via \code{failure_msg} or \code{success_msg}.}
 \description{
 Tests whether or not an object is defined in a certain environment.
 }
-\examples{
-a <- matrix(1:10, nrow = 5)
-expect_that("a", is_defined())
-expect_defined("a")
-}
 \seealso{
 \code{\link{exists}}
 }

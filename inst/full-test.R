@@ -1,5 +1,7 @@
 library(RAutomatedTesting)
 
+oldwd <- getwd()
+setwd(file.path(system.file(package = "testwhat")))
 if (file.exists("results.log")) file.remove("results.log")
 
 for (filename in dir("scenarios/")) {
@@ -11,3 +13,6 @@ for (filename in dir("scenarios/")) {
     write(paste(output,collapse="\n"), file = "results.log", append = TRUE)
   }
 }
+
+file.edit("results.log")
+setwd(oldwd)
