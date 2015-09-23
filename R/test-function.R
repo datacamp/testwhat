@@ -5,7 +5,7 @@
 #' the sample solution whether the student called the function with the same
 #' argument values.
 #'
-#' This test is implemented using \code{\link{test_that}}.  When testing
+#' This test is implemented using \code{\link{test_what}}.  When testing
 #' whether argument values are the same, small numeric differences or
 #' differences in attributes are allowed.
 #'

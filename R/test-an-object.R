@@ -4,7 +4,7 @@
 #' this function will check if any defined variable by the user corresponds to
 #' a specific variable in the solution code.
 #'
-#' This test is implemented using \code{\link{test_that}}.  Whether the
+#' This test is implemented using \code{\link{test_what}}.  Whether the
 #' student's object and the sample solution object are the same is tested with
 #' \code{\link{is_equivalent_to}}, hence small numeric differences or
 #' differences in attributes are allowed.

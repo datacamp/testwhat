@@ -3,7 +3,7 @@
 #' Test whether a student defined a certain object and, if yes, test whether
 #' that object is the same as in a sample solution.
 #'
-#' This test is implemented using \code{\link{test_that}}.  Whether the
+#' This test is implemented using \code{\link{test_what}}.  Whether the
 #' student's object and the sample solution object are the same is tested with
 #' \code{\link{is_equivalent_to}}, hence small numeric differences or
 #' differences in attributes are allowed.
