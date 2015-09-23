@@ -13,12 +13,6 @@ for R exercises, e.g., for interactive R courses on \url{www.DataCamp.com}.
 \pkg{testwhat} is forked from package \pkg{testthat} such that
 teachers can write their tests using a familiar framework.
 }
-\examples{
-library("testwhat")
-a <- 9
-expect_that(a, is_less_than(10))
-expect_less_than(a, 10)
-}
 \references{
 \url{www.DataCamp.com}
 }
