@@ -30,7 +30,7 @@ test_yaml_header(options = NULL, check_equality = TRUE,
 Test whether the student specified the correct options in the yaml header (R Markdown)
 }
 \details{
-This test is implemented using \code{\link{test_that}}.
+This test is implemented using \code{\link{test_what}}.
 This test should be called outside an test_rmd_group call.
 }
 

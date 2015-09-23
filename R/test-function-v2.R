@@ -5,7 +5,7 @@
 #' the sample solution whether the student called the function with the same
 #' argument values.
 #'
-#' This test is implemented using \code{\link{test_that}}.  When testing
+#' This test is implemented using \code{\link{test_what}}.  When testing
 #' whether argument values are the same, small numeric differences or
 #' differences in attributes are allowed.
 #'
@@ -126,6 +126,7 @@ test_function_v2 <- function(name, args = NULL, ignore = NULL,
   } else {
     arguments <- as.list(match.call())[-1]
     arguments <- arguments[intersect(names(as.list(args(test_function))), names(arguments))]
+    
     do.call(test_function, arguments)
   }
 }

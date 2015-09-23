@@ -20,6 +20,6 @@ test_rmd_group(group_number, code, student_code = get_student_code(),
 }
 \description{
 Test a single R Markdown file group (R Markdown exercises) with arbitrary testwhat functions.
-This test is implemented using \code{\link{test_that}}.
+This test is implemented using \code{\link{test_what}}.
 }
 

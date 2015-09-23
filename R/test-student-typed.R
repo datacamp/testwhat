@@ -31,8 +31,7 @@ test_student_typed <- function(strings,
   student_code <- gsub("\"", "'", student_code)
   strings <- gsub("\"", "'", strings)
   
-  test_that("one of strings found in student_code", {
-    hits <- sapply(strings, grepl, x = student_code, fixed = fixed)
-    expect_that(any(hits), is_true(), failure_msg = not_typed_msg)
-  })
+  hits <- sapply(strings, grepl, x = student_code, fixed = fixed)
+  
+  test_what(expect_true(any(hits)), not_typed_msg)
 }

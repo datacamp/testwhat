@@ -1,7 +1,3 @@
-#' @include reporter.r
-NULL
-
-
 setOldClass('proc_time')
 
 #' DataCamp reporter: gather test results along with elapsed time and
@@ -42,6 +38,7 @@ DataCampReporter <- setRefClass(
       inh_failure <<- FALSE
       inh_failure_msg <<- ""
       current_test_results <<- list()
+      continue <<- TRUE
     },
 
     toggle_inherit_failure = function(toggle_to = FALSE, toggle_msg = NULL) {
