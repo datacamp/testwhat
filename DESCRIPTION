@@ -52,6 +52,5 @@ Collate:
     'test-what.R'
     'test-while-loop.R'
     'test-yaml-header.R'
-    'testwhat.R'
     'utils.r'
     'utils_rmd.R'
