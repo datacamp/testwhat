@@ -44,6 +44,12 @@ test_object <- function(name, eq_condition = "equivalent",
     stop("argument \"name\" is missing, with no default")
   }
   
+  if (!exists(name, solution_env)) {
+    stop(sprintf("%s is not defined in your solution environment.", name))
+  }
+  
+  solution <- get(name, envir = solution_env, inherits = FALSE)
+  
   if (is.null(undefined_msg)) {
     undefined_msg <- build_undefined_object_msg(name)
   }
@@ -51,24 +57,15 @@ test_object <- function(name, eq_condition = "equivalent",
     incorrect_msg <- build_incorrect_object_msg(name)
   }
   
-  test_that(sprintf("Object %s is defined", name), {
-    expect_that(name, is_defined(env = student_env),
-                failure_msg = undefined_msg)
-  })
+  defined <- test_what(expect_defined(name, student_env), undefined_msg)
   
-  if (eval) {
-    test_that(sprintf("Object %s is correctly defined", name), {
-      if (exists(name, envir = solution_env, inherits = FALSE) &&
-          exists(name, envir = student_env, inherits = FALSE)) {
-        solution <- get(name, envir = solution_env, inherits = FALSE)
-        student <- get(name, envir = student_env, inherits = FALSE)
-        eq_fun <- switch(eq_condition, equivalent = is_equivalent_to,
-                         equal = equals, identical = is_identical_to,
-                         stop("invalid equality condition"))
-        expect_that(student, eq_fun(solution), failure_msg = incorrect_msg)
-      } else {
-        fail()
-      }
-    })
+  if (defined && eval) {
+    student <- get(name, envir = student_env, inherits = FALSE)
+    eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
+                                   identical = expect_identical,
+                                   equal = expect_equal,
+                                   stop("invalid equality condition"))
+    
+    test_what(eq_fun(student, solution), incorrect_msg)
   }
 }

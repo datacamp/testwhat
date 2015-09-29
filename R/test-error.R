@@ -14,10 +14,9 @@
 #'
 #' @export
 test_error <- function(error = get_student_error(), incorrect_msg = NULL) {
-  test_that("There were no errors in the code", {
-    expect_that(is.null(error), is_true(),
-                failure_msg = ifelse(is.null(incorrect_msg), 
-                                     sprintf("Your solution contains an error:<br><i>%s</i>", error),
-                                     incorrect_msg))
-  })
+  build_msg = sprintf("Your solution contains an error:<br><i>%s</i>%s", 
+                      error,
+                      ifelse(is.null(incorrect_msg), "", paste0("<br>",incorrect_msg)))
+  
+  test_what(expect_null(error), build_msg)
 }
