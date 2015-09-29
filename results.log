@@ -1,0 +1,229 @@
+PASS - test_equivalence_pass_1: handle equivalence correctly - pass 1
+PASS - test_equivalence_pass_2: handle equivalence correctly - pass 2
+PASS - test_equivalence_fail_1: handle equivalence correctly - fail 1
+PASS - test_undefined_msg_fail_1: test on undefined message - fail 1
+PASS - test_equal_pass_1: difference between equals and equivalent - pass 1
+PASS - test_equal_fail_1: difference between equals and equivalent - fail 1
+PASS - test_equal_fail_2: difference between equals and equivalent - fail 2
+PASS - test_equal_fail_3: difference between equals and equivalent - fail 3
+PASS - test_identical_pass_1: difference between equals and identical - pass 1
+PASS - test_identical_pass_2: difference between equals and identical - pass 2
+PASS - test_identical_fail_1: difference between equals and identical - fail 1
+PASS - test_one_option_pass_1: test if one option is correctly recognized - pass 1
+PASS - test_two_options_two_chunks_pass_1: test if two options in seperate chunks is correctly recognized - pass 1
+PASS - test_two_options_two_chunks_pass_2: test if two options in seperate chunks is correctly recognized - pass 2
+PASS - test_two_options_one_chunk_pass_1: test if two options in seperate chunks is correctly recognized - pass 1
+PASS - test_multiple_options_multiple_chunks_pass_1: test if multiple options in multiple chunks are recognized - pass 1
+PASS - test_multiple_options_multiple_chunks_pass_2: test if multiple options in multiple chunks are recognized - pass 2
+PASS - test_multiple_options_multiple_chunks_pass_3: test if multiple options in multiple chunks are recognized - pass 3
+PASS - test_allow_extra_pass_1: test if multiple options in multiple chunks are recognized with allow_extra - pass 1
+PASS - test_allow_extra_pass_2: test if multiple options in multiple chunks are recognized with allow_extra - pass 2
+PASS - test_allow_extra_pass_3: test if multiple options in multiple chunks are recognized with allow_extra - pass 3
+PASS - test_one_option_fail_fail_1: test if one option fails correctly - fail 1
+PASS - test_one_option_fail_fail_2: test if one option fails correctly - fail 2
+PASS - test_not_called_msg_fail_1: test if not called msg is displayed after fail - fail 1
+PASS - test_incorrect_msg_fail_1: test if incorrect msg is displayed after fail - fail 1
+PASS - test_two_options_fail_two_chunks_fail_1: test if two options in seperate chunks fail correctly - fail 1
+PASS - test_two_options_fail_two_chunks_fail_2: test if two options in seperate chunks fail correctly - fail 2
+PASS - test_two_options_fail_one_chunk_fail_1: test if two options in seperate chunks fail correctly - fail 1
+PASS - test_two_options_fail_one_chunk_fail_2: test if two options in seperate chunks fail correctly - fail 2
+PASS - test_multiple_options_fail_multiple_chunks_fail_1: test if multiple options in multiple chunks fail correctly - fail 1
+PASS - test_multiple_options_fail_multiple_chunks_fail_2: test if multiple options in multiple chunks fail correctly - fail 2
+PASS - test_multiple_options_fail_multiple_chunks_fail_3: test if multiple options in multiple chunks fail correctly - fail 3
+PASS - test_allow_extra_fails_fail_1: test if multiple options in multiple chunks fail correctly with allow_extra - fail 1
+PASS - test_allow_extra_fails_fail_2: test if multiple options in multiple chunks fail correctly with allow_extra - fail 2
+PASS - test_allow_extra_fails_fail_3: test if multiple options in multiple chunks fail correctly with allow_extra - fail 3
+PASS - test_check_correct_pass_1: test succeeds if check is correct and diagnose is correct - pass 1
+PASS - test_diagnose_false_pass_1: test succeeds if check is correct and diagnose is false - pass 1
+PASS - test_check_false_fail_1: test fails if check is false and diagnose is correct - fail 1
+PASS - test_check_false_fail_2: test fails if check is false and diagnose is correct - fail 2
+PASS - test_check_diagnose_msg_fail_1: tests if the correct feedback is send for diangose - fail 1
+PASS - test_check_diagnose_msg_2_fail_1: tests if the correct feedback is send for diangose 2 - fail 1
+PASS - test_check_msg_fail_1: tests if the correct feedback is send for check - fail 1
+PASS - test_equivalent_pass: test succeeds if data.frame is equivalent
+PASS - test_specific_columns_pass: test succeeds if data.frame is equivalent in certain column
+PASS - test_equivalent_fail: test fails if check data.frame is not equivalent
+PASS - test_specific_columns_fail: test fail if data.frame is not equivalent in certain column
+PASS - test_undefined_msg: test undefined msg if data.frame is not there
+PASS - test_undefined_cols_msg: test undefined cols msg if data.frame column is not there
+PASS - test_incorrect_msg: test undefined cols msg if data.frame column is not there
+PASS - test_equivalent_pass_not_equal: test succeeds if data.frame is equivalent while not being equal
+PASS - test_equal_pass: test succeeds if data.frame is equal
+PASS - test_equal_fail: test fails if data.frame is not equal
+PASS - test_equivalent_pass_not_iden: test succeeds if data.frame is equivalent while not being identical
+PASS - test_iden_pass: test succeeds if data.frame is identical
+PASS - test_iden_fail: test fails if data.frame is not identical
+PASS - test_fail_pass: test succeeds if code contains no error
+PASS - test_fail_fail: test fails if code contains an error
+PASS - test_incorrect_msg: test fails if code contains an error
+PASS - test_output_equal: test succeeds if output of expr are equal
+PASS - test_output_equal: test fails if output of expr are not equal
+PASS - test_output_not_equal_2: test fails if outputs of expr are not equal
+PASS - test_result_equal: test succeeds if result of expr are equal
+PASS - test_result_equal: test fails if result of expr are not equal
+PASS - test_result_not_equal: test fails if result of expr are not equal
+PASS - test_file_exists_pass: test succeeds if file exists
+PASS - test_file_exists_fail: test fails if file does not exist
+PASS - test_file_exists_incorrect_msg: test fails if file does not exist
+PASS - test_basic_check_pass_1: check whether basic test works - pass 1
+PASS - test_basic_check_fails_fail_1: check whether basic test fails if there is no for statement - fail 1
+PASS - test_cond_test_pass_1: check if cond_test is checked correctly - pass 1
+PASS - test_cond_test_fails_fail_1: check if cond_test fails correctly - fail 1
+PASS - test_cond_test_fails_fail_2: check if cond_test fails correctly - fail 2
+PASS - test_cond_test_msg_fail_1: check if cond_test fail message is displayed correctly - fail 1
+PASS - test_expr_test_pass_1: check if expr_test is checked correctly - pass 1
+PASS - test_expr_test_pass_2: check if expr_test is checked correctly - pass 2
+PASS - test_expr_test_fails_fail_1: check if expr_test fails correctly - fail 1
+PASS - test_expr_test_fails_fail_2: check if expr_test fails correctly - fail 2
+PASS - test_expr_test_msg_fail_1: check if cond_test fail message is displayed correctly - fail 1
+PASS - test_index_pass_1: check if index is checked correctly - pass 1
+PASS - test_index_fail_1: check if index is checked correctly - fail 1
+PASS - test_not_found_msg_fail_1: check if not_found_msg is displayed correctly - fail 1
+PASS - test_simpe_pass: test succeeds if the function is defined
+PASS - test_func_same_result: test succeeds if the function result is the same
+PASS - test_func_same_output: test succeeds if the function output is the same
+PASS - test_simpe_fail: test fails if the function is undefined
+PASS - test_simpe_fail: test fails if the function is undefined
+PASS - test_passes_without_function: test succeeds with no function test and wrong number of arguments
+PASS - test_func_correct_feedback: test fails with correct feedback if result is not the same and not same n of arguments
+PASS - test_func_correct_feedback_2: test fails with correct feedback if result is not the same and not same n of arguments
+PASS - test_func_correct_feedback: test fails with correct feedback if result is not the same and not same n of arguments
+PASS - test_func_correct_feedback_2: test fails with correct feedback if result is not the same and not same n of arguments
+PASS - test_basic_check_pass_1: basic function check - pass 1
+PASS - test_basic_check_fail_1: basic function check - fail 1
+PASS - test_not_called_msg_fail_1: check if not_called_msg feedback is correct - fail 1
+PASS - test_arguments_pass_1: checks on the function arguments - pass 1
+PASS - test_arguments_pass_2: checks on the function arguments - pass 2
+PASS - test_arguments_pass_3: checks on the function arguments - pass 3
+PASS - test_arguments_fail_1: checks on the function arguments - fail 1
+PASS - test_arguments_fail_2: checks on the function arguments - fail 2
+PASS - test_arguments_fail_3: checks on the function arguments - fail 3
+PASS - test_incorrect_msg_fail_1: check if incorrect_msg feedback is correct - fail 1
+PASS - test_equal_pass_1: difference between equal and equivalent for arguments - pass 1
+PASS - test_equal_fail_1: difference between equal and equivalent for arguments - fail 1
+PASS - test_equal_fail_2: difference between equal and equivalent for arguments - fail 2
+PASS - test_equal_fail_3: difference between equal and equivalent for arguments - fail 3
+PASS - test_equal_pass_1: difference between equal and equivalent for arguments - pass 1
+PASS - test_equal_pass_2: difference between equal and equivalent for arguments - pass 2
+PASS - test_equal_pass_3: difference between equal and equivalent for arguments - pass 3
+PASS - test_equal_pass_4: difference between equal and equivalent for arguments - pass 4
+PASS - test_equal_pass_5: difference between equal and equivalent for arguments - pass 5
+PASS - test_equal_fail_1: difference between equal and equivalent for arguments - fail 1
+PASS - test_equal_fail_2: difference between equal and equivalent for arguments - fail 2
+PASS - test_equal_fail_3: difference between equal and equivalent for arguments - fail 3
+PASS - test_identical_pass_1: difference between identical and equal for arguments - pass 1
+PASS - test_identical_pass_2: difference between identical and equal for arguments - pass 2
+PASS - test_identical_pass_3: difference between identical and equal for arguments - pass 3
+PASS - test_identical_pass_4: difference between identical and equal for arguments - pass 4
+PASS - test_identical_pass_5: difference between identical and equal for arguments - pass 5
+PASS - test_identical_pass_6: difference between identical and equal for arguments - pass 6
+PASS - test_identical_pass_7: difference between identical and equal for arguments - pass 7
+PASS - test_identical_fail_1: difference between identical and equal for arguments - fail 1
+PASS - test_eval_pass_1: checks whether the eval argument works properly - pass 1
+PASS - test_eval_fail_1: checks whether the eval argument works properly - fail 1
+PASS - test_allow_extra_pass_1: checks whether the allow_extra argument works properly - pass 1
+PASS - test_allow_extra_pass_2: checks whether the allow_extra argument works properly - pass 2
+PASS - test_allow_extra_pass_3: checks whether the allow_extra argument works properly - pass 3
+PASS - test_allow_extra_fail_1: checks whether the allow_extra argument works properly - fail 1
+PASS - test_ignore_pass_1: checks whether the ignore argument works properly - pass 1
+PASS - test_ignore_pass_2: checks whether the ignore argument works properly - pass 2
+PASS - test_ignore_fail_1: checks whether the ignore argument works properly - fail 1
+PASS - test_ignore_fail_2: checks whether the ignore argument works properly - fail 2
+PASS - test_index_new_pass_1: checks whether the index argument works properly - pass 1
+PASS - test_index_new_pass_2: checks whether the index argument works properly - pass 2
+PASS - test_index_new_fail_1: checks whether the index argument works properly - fail 1
+PASS - test_index_new_fail_2: checks whether the index argument works properly - fail 2
+PASS - test_index_new_fail_3: checks whether the index argument works properly - fail 3
+PASS - test_basic_check_pass_1: basic function check - pass 1
+PASS - test_basic_check_fail_1: basic function check - fail 1
+PASS - test_not_called_msg_fail_1: check if not_called_msg feedback is correct - fail 1
+PASS - test_arguments_pass_1: checks on the function arguments - pass 1
+PASS - test_arguments_pass_2: checks on the function arguments - pass 2
+PASS - test_arguments_pass_3: checks on the function arguments - pass 3
+PASS - test_arguments_fail_1: checks on the function arguments - fail 1
+PASS - test_arguments_fail_2: checks on the function arguments - fail 2
+PASS - test_arguments_fail_3: checks on the function arguments - fail 3
+PASS - test_incorrect_msg_fail_1: check if incorrect_msg feedback is correct - fail 1
+PASS - test_equal_pass_1: difference between equal and equivalent for arguments - pass 1
+PASS - test_equal_fail_1: difference between equal and equivalent for arguments - fail 1
+PASS - test_equal_fail_2: difference between equal and equivalent for arguments - fail 2
+PASS - test_equal_fail_3: difference between equal and equivalent for arguments - fail 3
+PASS - test_equal_pass_1: difference between equal and equivalent for arguments - pass 1
+PASS - test_equal_pass_2: difference between equal and equivalent for arguments - pass 2
+PASS - test_equal_pass_3: difference between equal and equivalent for arguments - pass 3
+PASS - test_equal_pass_4: difference between equal and equivalent for arguments - pass 4
+PASS - test_equal_pass_5: difference between equal and equivalent for arguments - pass 5
+PASS - test_equal_fail_1: difference between equal and equivalent for arguments - fail 1
+PASS - test_equal_fail_2: difference between equal and equivalent for arguments - fail 2
+PASS - test_equal_fail_3: difference between equal and equivalent for arguments - fail 3
+PASS - test_identical_pass_1: difference between identical and equal for arguments - pass 1
+PASS - test_identical_pass_2: difference between identical and equal for arguments - pass 2
+PASS - test_identical_pass_3: difference between identical and equal for arguments - pass 3
+PASS - test_identical_pass_4: difference between identical and equal for arguments - pass 4
+PASS - test_identical_pass_5: difference between identical and equal for arguments - pass 5
+PASS - test_identical_pass_6: difference between identical and equal for arguments - pass 6
+PASS - test_identical_pass_7: difference between identical and equal for arguments - pass 7
+PASS - test_identical_fail_1: difference between identical and equal for arguments - fail 1
+PASS - test_eval_pass_1: checks whether the eval argument works properly - pass 1
+PASS - test_eval_fail_1: checks whether the eval argument works properly - fail 1
+PASS - test_allow_extra_pass_1: checks whether the allow_extra argument works properly - pass 1
+PASS - test_allow_extra_pass_2: checks whether the allow_extra argument works properly - pass 2
+PASS - test_allow_extra_pass_3: checks whether the allow_extra argument works properly - pass 3
+PASS - test_allow_extra_fail_1: checks whether the allow_extra argument works properly - fail 1
+PASS - test_ignore_pass_1: checks whether the ignore argument works properly - pass 1
+PASS - test_ignore_pass_2: checks whether the ignore argument works properly - pass 2
+PASS - test_ignore_fail_1: checks whether the ignore argument works properly - fail 1
+PASS - test_ignore_fail_2: checks whether the ignore argument works properly - fail 2
+PASS - test_index_old_pass_1: checks whether the index argument works properly - pass 1
+PASS - test_index_old_pass_2: checks whether the index argument works properly - pass 2
+PASS - test_index_old_fail_1: checks whether the index argument works properly - fail 1
+PASS - test_index_old_fail_2: checks whether the index argument works properly - fail 2
+PASS - test_index_old_fail_3: checks whether the index argument works properly - fail 3
+PASS - test_passes_cond: test succeeds with right condition test
+PASS - test_passes_expr: test succeeds with right expression test
+PASS - test_passes_else: test succeeds with right else expression test
+PASS - test_passes_all: test succeeds with all the right tests
+PASS - test_fails_cond: test fails with right condition test
+PASS - test_fails_expr: test fails with right expression test
+PASS - test_fails_else: test fails with right else expression test
+PASS - test_fails_all: test fails with all the right tests
+PASS - test_missing_else: test fails with missing else
+PASS - test_not_found: test fails with missing if
+PASS - test_pass_with_index: test succeeds with index
+PASS - test_missing_else_with_index: test fails with missing else with index
+PASS - test_pass_with_nested: test succeeds with nested ifs
+PASS - test_fails_with_nested: test succeeds with nested ifs
+PASS - test_one_instruction: test passes if one instruction passes
+PASS - test_two_instructions: test passes if two instruction passes
+PASS - test_first_fails_second_passes: test passes if first fails and second passes
+PASS - test_one_instruction_fails: test passes if one instruction passes
+PASS - test_two_instructions_fail: test passes if two instruction passes
+PASS - test_first_fails_second_fails: test passes if first fails and second passes
+PASS - test_not_called: test fails when no library function is called
+PASS - test_not_called_with_msg: test fails when no library function is called with undefined msg
+PASS - test_correct_library: test succeeds when the correct library function is called
+PASS - test_incorrect_library: test fails when the incorrectcorrect library function is called
+PASS - test_incorrect_library_with_msg: test fails when the incorrect library function is called with incorrect msg
+PASS - test_correct_eventually_chall: test succeeds when the correct library function is called eventually in challenge
+PASS - test_not_called_chall: test fails when no library function is called in challenge
+PASS - test_not_called_with_msg_chall: test fails when not all library functions are called in challenge
+PASS - test_right_choice: test succeeds if choice is correct
+PASS - test_right_choice: test fails if choice is incorrect
+PASS - test_equivalence_pass_1: handle equivalence correctly - pass 1
+PASS - test_equivalence_fail_1: handle equivalence correctly - fail 1
+PASS - test_undefined_msg_fail_1: test on undefined message - fail 1
+PASS - test_incorrect_msg_fail_1: test on incorrect message - fail 1
+PASS - test_equal_pass_1: difference between equals and equivalent - pass 1
+PASS - test_equal_fail_1: difference between equals and equivalent - fail 1
+PASS - test_equal_fail_2: difference between equals and equivalent - fail 2
+PASS - test_equal_fail_3: difference between equals and equivalent - fail 3
+PASS - test_identical_pass_1: difference between equals and identical - pass 1
+PASS - test_identical_pass_2: difference between equals and identical - pass 2
+PASS - test_identical_fail_1: difference between equals and identical - fail 1
+PASS - test_eval_pass_1: test on eval parameter - pass 1
+PASS - test_eval_fail_1: test on eval parameter - fail 1
+PASS - test_eval_fail_2: test on eval parameter - fail 2
+PASS - test_output_contains_pass: test succeeds if output contains the string
+PASS - test_output_contains_fail: test fails if output doesn't contain the string
+PASS - test_output_contains_pass_with_times: test succeeds if output contains the string 3 times
+PASS - test_output_contains_fails_with_times: test fails if output contains the string 3 times (need 4)
