@@ -19,10 +19,9 @@ Imports:
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
-    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")),
-    person("Hadley", "Wickham", role = "aut"))
+    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")))
 Collate:
-    'default_messages.r'
+    'default_messages.R'
     'expectations-testwhat.R'
     'reporter-DataCamp.R'
     'test-an-object.R'
@@ -52,5 +51,6 @@ Collate:
     'test-what.R'
     'test-while-loop.R'
     'test-yaml-header.R'
-    'utils.r'
+    'testwhat.R'
+    'utils.R'
     'utils_rmd.R'
