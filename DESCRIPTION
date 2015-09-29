@@ -7,10 +7,10 @@ Description: This package makes it easy for teachers to test students' code
     submissions for R exercises, e.g., for interactive R courses on
     \url{www.DataCamp.com}.
 URL: www.DataCamp.com
-Depends:
+Depends: 
     R (>= 3.0.0),
     testthat
-Imports:
+Imports: 
     digest,
     methods,
     datacampAPI,
@@ -20,7 +20,7 @@ License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
     person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")))
-Collate:
+Collate: 
     'default_messages.R'
     'expectations-testwhat.R'
     'reporter-DataCamp.R'
