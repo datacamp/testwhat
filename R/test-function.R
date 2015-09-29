@@ -75,11 +75,18 @@ test_function <- function(name, args = NULL, ignore = NULL,
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
   
+  eq_fun <- lapply(eq_condition, function(cond) {
+    switch(cond, equivalent = expect_equivalent,
+                         identical = expect_identical,
+                         equal = expect_equal,
+                         stop("invalid equality condition"))
+  })
+  
   arg_text <- build_arg_text(n_args, args)
 
   # remove the pipe operator from the calls, if present.
-  student_code_parts = get_clean_lines(code = student_code)
-  solution_code_parts = get_clean_lines(code = solution_code)
+  student_code_parts <- get_clean_lines(code = student_code)
+  solution_code_parts <- get_clean_lines(code = solution_code)
   
   if(is.null(index)) {
     # paste together again, all code is considered
@@ -88,75 +95,80 @@ test_function <- function(name, args = NULL, ignore = NULL,
     additionaltext <- ""
   } else {
     # check if equal number of commands and select parts of code
-    ok = test_sufficient_length(student_code_parts, index, incorrect_number_of_calls_msg)
+    ok <- test_sufficient_length(student_code_parts, index, incorrect_number_of_calls_msg)
     if(isTRUE(ok)) {
-      student_code = student_code_parts[index]
-      solution_code = solution_code_parts[index]
+      student_code <- student_code_parts[index]
+      solution_code <- solution_code_parts[index]
       additionaltext <- build_additional_text(index)
     } else {
       return(FALSE)
     }
   }
   
-  test_that(sprintf("Function %s()%s is correctly called", name, arg_text), {
+  # Find all function calls in the student and solution code
+  student_calls <- find_function_calls(name, student_code, student_env)
+  solution_calls <- find_function_calls(name, solution_code, solution_env)
+  
+  if (n_args > 0) {
+    # Only use function calls with the specified arguments
+    keep_student <- have_arguments(student_calls, args, ignore, allow_extra)
+    student_calls <- student_calls[keep_student]
+    keep_solution <- have_arguments(solution_calls, args, ignore, allow_extra)
+    solution_calls <- solution_calls[keep_solution]
+  }
+  
+  n_student_calls <- length(student_calls)
+  n_solution_calls <- length(solution_calls)
     
-    # Find all function calls in the student and solution code
-    student_calls <- find_function_calls(name, student_code, student_env)
-    solution_calls <- find_function_calls(name, solution_code, solution_env)
-    if (n_args > 0) {
-      # Only use function calls with the specified arguments
-      keep_student <- have_arguments(student_calls, args, ignore, allow_extra)
-      student_calls <- student_calls[keep_student]
-      keep_solution <- have_arguments(solution_calls, args, ignore, allow_extra)
-      solution_calls <- solution_calls[keep_solution]
+  # Test if there are at least as many student function calls as solution
+  # function calls
+  if (is.null(not_called_msg)) {
+    not_called_msg <- build_not_called_msg(n_solution_calls, name, arg_text, additionaltext)
+  }
+  
+  test_what(expect_more_than(n_student_calls+1, n_solution_calls), not_called_msg)
+    
+  ## If supplied, test arguments
+  if (n_args > 0) {
+    
+    
+    # Loop over the solution function calls:
+    # Extract the specified arguments from current solution function call and
+    # test if there exists a student function call with the same values
+    if (is.null(incorrect_msg)) {
+      incorrect_msg <- build_incorrect_msg(n_solution_calls, n_args, arg_text, name, additionaltext)
     }
-    n_student_calls <- length(student_calls)
-    n_solution_calls <- length(solution_calls)
-    
-    # Test if there are at least as many student function calls as solution
-    # function calls
-    if (is.null(not_called_msg)) {
-      not_called_msg <- build_not_called_msg(n_solution_calls, name, arg_text, additionaltext)
-    }
-    expect_that(n_student_calls >= n_solution_calls, is_true(),
-                failure_msg = not_called_msg)
-    
-    ## If supplied, test arguments
-    if (n_args > 0) {
+    incorrect_msg <- rep(incorrect_msg, length.out = n_solution_calls)
+    for (i in seq_len(n_solution_calls)) {
+      # Extract the specified arguments from current solution function call
+      solution_args <- extract_arguments(solution_calls[[i]], args, eval,
+                                         env = solution_env)
       
-      # Loop over the solution function calls:
-      # Extract the specified arguments from current solution function call and
-      # test if there exists a student function call with the same values
-      if (is.null(incorrect_msg)) {
-        incorrect_msg <- build_incorrect_msg(n_solution_calls, n_args, arg_text, name, additionaltext)
-      }
-      incorrect_msg <- rep(incorrect_msg, length.out = n_solution_calls)
-      for (i in seq_len(n_solution_calls)) {
-        # Extract the specified arguments from current solution function call
-        solution_args <- extract_arguments(solution_calls[[i]], args, eval,
-                                           env = solution_env)
+      correct <- NULL
+      
+      # Loop over the student function calls:
+      # Extract the specified arguments from current student function call
+      # and test if they are the same as the values in the solution
+      for (j in seq_len(n_student_calls)) {
+        student_args <- extract_arguments(student_calls[[j]], args, eval,
+                                          env = student_env)
         
-        correct <- NULL
+        correct <- numeric(n_args)
         
-        # Loop over the student function calls:
-        # Extract the specified arguments from current student function call
-        # and test if they are the same as the values in the solution
-        for (j in seq_len(n_student_calls)) {
-          student_args <- extract_arguments(student_calls[[j]], args, eval,
-                                            env = student_env)
-          correct <- mapply(is_equal, student_args, solution_args, eq_condition)
-          correct <- all(correct)
-          
-          if (correct) {
-            student_calls[[j]] <- NULL
-            n_student_calls <- length(student_calls)
-            break
-          }
+        for (n in 1:n_args) {
+          correct[n] <- test_what(eq_fun[[n]](student_args,solution_args), incorrect_msg[[i]])
         }
-        expect_that(correct, is_true(), failure_msg = incorrect_msg[[i]])
+
+        correct <- all(correct)
+        
+        if (correct) {
+          student_calls[[j]] <- NULL
+          n_student_calls <- length(student_calls)
+          break
+        }
       }
     }
-  })
+  }
 }
 
 # Extract specified arguments from a function call and evaluate if necessary

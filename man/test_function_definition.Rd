@@ -4,7 +4,7 @@
 \alias{test_function_definition}
 \title{Check whether the student defined a function correctly}
 \usage{
-test_function_definition(name, function_test = NULL, body_test = NULL,
+test_function_definition(name, function_test = NULL,
   student_env = .GlobalEnv, solution_env = get_solution_env(),
   student_code = get_student_code(), solution_code = get_solution_code(),
   undefined_msg = NULL, incorrect_number_arguments_msg = NULL,
@@ -14,8 +14,6 @@ test_function_definition(name, function_test = NULL, body_test = NULL,
 \item{name}{The name of the function to test}
 
 \item{function_test}{Set of testthat (testwhat) tests to perform on the function}
-
-\item{body_test}{fill SCT for the function body}
 
 \item{student_env}{environment in which the student's code was evaluated.}
 
@@ -31,6 +29,8 @@ evaluated.}
 \item{incorrect_number_arguments_msg}{Feedback message in case the function does not have the correct number of arguments.}
 
 \item{env}{Environment in which to perform the tests}
+
+\item{body_test}{fill SCT for the function body}
 }
 \description{
 Check whether the student defined a function correctly
