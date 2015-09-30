@@ -61,6 +61,8 @@ feedback messages can be supplied.}
 
 \item{incorrect_number_of_calls_msg}{feedback message in case the number of commands
 in the solution does not correspond to the solution. (only used if index is not NULL.)}
+
+\item{index_not_called_msg}{feedback message in case the call was not done enough times.}
 }
 \description{
 Test whether a student called a function with certain arguments as least as

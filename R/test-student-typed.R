@@ -7,6 +7,7 @@
 #'
 #' @param strings A set of strings, at least one of which must be in the student_code
 #' @param student_code student submission as a string
+#' @param fixed exact string matching (TRUE) or use regex (FALSE)?
 #' @param not_typed_msg Feedback message in case the student did not type the string.
 #' @export
 test_student_typed <- function(strings,

@@ -14,6 +14,8 @@ expect_defined(object, env = .GlobalEnv, info = NULL, label = NULL)
 
 \item{object}{name of the object to test}
 
+\item{info}{no idea.}
+
 \item{label}{object label used in the default feedback message.  If
 \code{NULL}, the object name is used.  This is ignored for feedback
 messages supplied via \code{failure_msg} or \code{success_msg}.}

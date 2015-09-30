@@ -2,6 +2,7 @@
 #'
 #' Tests whether or not an object is defined in a certain environment.
 #'
+#' @rdname is_defined
 #' @param env  environment in which to look for the object.
 #' @seealso \code{\link{exists}}
 #' @family expectations
@@ -15,6 +16,7 @@ is_defined <- function(env = .GlobalEnv) {
 
 #' @rdname is_defined
 #' @param object  name of the object to test
+#' @param info no idea.
 #' @param label  object label used in the default feedback message.  If
 #' \code{NULL}, the object name is used.  This is ignored for feedback
 #' messages supplied via \code{failure_msg} or \code{success_msg}.

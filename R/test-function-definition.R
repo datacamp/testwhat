@@ -2,7 +2,6 @@
 #' 
 #' @param name  The name of the function to test
 #' @param function_test Set of testthat (testwhat) tests to perform on the function
-#' @param body_test fill SCT for the function body
 #' @param student_env  environment in which the student's code was evaluated.
 #' @param solution_env  environment in which the sample solution code was
 #' evaluated.
