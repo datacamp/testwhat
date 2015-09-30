@@ -44,6 +44,7 @@
 #' feedback messages can be supplied.
 #' @param incorrect_number_of_calls_msg feedback message in case the number of commands
 #' in the solution does not correspond to the solution. (only used if index is not NULL.)
+#' @param index_not_called_msg feedback message in case the call was not done enough times.
 #' @inheritParams test_object
 #'
 #' @examples

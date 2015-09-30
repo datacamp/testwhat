@@ -29,8 +29,6 @@ evaluated.}
 \item{incorrect_number_arguments_msg}{Feedback message in case the function does not have the correct number of arguments.}
 
 \item{env}{Environment in which to perform the tests}
-
-\item{body_test}{fill SCT for the function body}
 }
 \description{
 Check whether the student defined a function correctly

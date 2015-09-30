@@ -3,6 +3,7 @@ sudo: required
 
 r_github_packages:
  - data-camp/datacampAPI
+ - hadley/testthat
 
 after_failure:
  - ./travis-tool.sh dump_logs
