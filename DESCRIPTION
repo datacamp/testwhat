@@ -21,7 +21,7 @@ LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
     person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")))
 Collate: 
-    'default_messages.R'
+    'message_builder.R'
     'expectations-testwhat.R'
     'reporter-DataCamp.R'
     'test-an-object.R'
@@ -52,5 +52,4 @@ Collate:
     'test-while-loop.R'
     'test-yaml-header.R'
     'testwhat.R'
-    'utils.R'
-    'utils_rmd.R'
+    'util.R'
