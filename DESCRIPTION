@@ -48,6 +48,7 @@ Collate:
     'test-student-typed.R'
     'test-sufficient-length.R'
     'test-text.R'
+    'test-that.R'
     'test-what.R'
     'test-while-loop.R'
     'test-yaml-header.R'
