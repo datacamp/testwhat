@@ -1,23 +1,21 @@
+# testwhat
+
 [![Build Status](https://api.travis-ci.org/Data-Camp/testwhat.svg?branch=master)](https://travis-ci.org/Data-Camp/testwhat)
 
-<p align="center">
-<img src="https://s3.amazonaws.com/assets.datacamp.com/img/logo/logo_blue_full.svg" width="250">
-</p>
+The `testwhat` package provides rich functionality to write Submission Correctness Tests for interactive R exercises on the DataCamp platform. The package is a wrapper around [Hadley Wickham's `testthat` package](https://github.com/hadley/testthat), the standard for unit testing R.
 
-## Testwhat
+Want to learn more about course creation for DataCamp and writing SCTs in particular? Visit our [Teach Documentation](http://docs.datacamp.com/teach).
 
-Welcome to the repository of the __testwhat__ package, an extension to [Hadley's testthat package](https://github.com/hadley/testthat). 
-This package allows you to design Submission Correctness Tests for interactive exercises on DataCamp.
-For more information on writing SCTs, consult the [SCT design manual](http://teach.datacamp.com/sct-design).
-
-For a more extensive overview of course creation, covering all the details, visit [DataCamp's Course Creation Guide](http://teach.datacamp.com/course-creation).
-
-Feel free to contribute to this project or contact us at [teach@datacamp.com](teach@datacamp.com).
-
-## Install the package
+## Installation
 
 ```
 install.packages("devtools")
 library("devtools")
 install_github("Data-Camp/testwhat")
 ```
+
+For more details, questions and suggestions, you can contact <b>support@datacamp.com</b>.
+
+<p align="center">
+<img src="https://s3.amazonaws.com/assets.datacamp.com/img/logo/logo_blue_full.svg" width="250">
+</p>
