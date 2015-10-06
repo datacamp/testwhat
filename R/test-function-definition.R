@@ -14,6 +14,7 @@
 #' @export
 test_function_definition <- function(name, 
                                      function_test = NULL, 
+                                     body_test = NULL,
                                      student_env = .GlobalEnv,
                                      solution_env = get_solution_env(),
                                      student_code = get_student_code(), 
@@ -56,6 +57,14 @@ test_function_definition <- function(name,
     }, {
       # if not correct, go into more detail
       test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
+      
+      if(!is.null(body_test)) {
+        set_student_code(paste(deparse(stud_function), collapse = "\n"))
+        set_solution_code(paste(deparse(sol_function), collapse = "\n"))
+        eval(body_test, envir = env)
+        set_student_code(student_code)
+        set_solution_code(solution_code)  
+      }
     })
   }
 }
