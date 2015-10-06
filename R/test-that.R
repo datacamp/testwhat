@@ -9,6 +9,8 @@ test_that <- function(descr, code) {
       tw_repl = "test_what(\\1), \\3)"
       repl_text = sub(et_pattern, tw_repl, text)
       eval(parse(text=repl_text))
+    } else {
+      eval(parse(text = text))
     }
   }
 }
