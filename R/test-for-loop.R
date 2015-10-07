@@ -53,9 +53,7 @@ test_for_loop <- function(index = 1,
   })
   
   # for var part should always be there
-  test_that("for_var is available", {
-    expect_that(is.null(stud_for$for_cond), is_false(), failure_msg = sprintf("The <code>condition</code> part%s is missing.", additionaltext))  
-  })
+  test_what(expect_false(is.null(stud_for$for_cond)), sprintf("The <code>condition</code> part%s is missing.", additionaltext))
   if(!is.null(cond_test) && !is.null(stud_for$for_cond) && !is.null(sol_for$for_cond)) {
     set_student_code(stud_for$for_cond)
     set_solution_code(sol_for$for_cond)
@@ -63,9 +61,8 @@ test_for_loop <- function(index = 1,
   }
 
   # IF expression part should always be available.
-  test_that("for_expr is available", {
-    expect_that(is.null(stud_for$for_expr), is_false(), failure_msg = sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
-  })
+  test_what(expect_false(is.null(stud_for$for_expr)), sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
+
   if(!is.null(expr_test) && !is.null(stud_for$for_expr) && !is.null(sol_for$for_expr)) {
     set_student_code(stud_for$for_expr)
     set_solution_code(sol_for$for_expr)

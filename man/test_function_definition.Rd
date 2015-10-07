@@ -15,8 +15,6 @@ test_function_definition(name, function_test = NULL, body_test = NULL,
 
 \item{function_test}{Set of testthat (testwhat) tests to perform on the function}
 
-\item{body_test}{fill SCT for the function body}
-
 \item{student_env}{environment in which the student's code was evaluated.}
 
 \item{solution_env}{environment in which the sample solution code was

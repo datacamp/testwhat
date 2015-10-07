@@ -12,6 +12,8 @@ test_student_typed(strings, student_code = get_student_code(), fixed = TRUE,
 
 \item{student_code}{student submission as a string}
 
+\item{fixed}{exact string matching (TRUE) or use regex (FALSE)?}
+
 \item{not_typed_msg}{Feedback message in case the student did not type the string.}
 }
 \description{

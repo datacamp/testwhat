@@ -47,9 +47,17 @@ test_exercise <- function(code, report = c("first", "all", "challenge"), failure
 .test_exercise <- function(code, parent_env) {
   n <- length(code)
   if (n == 0L) return(invisible())
-
-  eval(code, new.env(parent = parent_env))
+  # Try because if sct fails, execution is thrown back here.
+  try(eval(code, new.env(parent = parent_env)))
   end_context()
+}
+
+end_context <- function() {
+  rep <- get_reporter()
+  if (!rep$context_open) return(invisible())
+  rep$end_context()
+  rep$context_open <- FALSE
+  invisible()
 }
 
 #' @rdname test_exercise

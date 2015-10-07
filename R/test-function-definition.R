@@ -2,7 +2,6 @@
 #' 
 #' @param name  The name of the function to test
 #' @param function_test Set of testthat (testwhat) tests to perform on the function
-#' @param body_test fill SCT for the function body
 #' @param student_env  environment in which the student's code was evaluated.
 #' @param solution_env  environment in which the sample solution code was
 #' evaluated.
@@ -24,8 +23,18 @@ test_function_definition <- function(name,
                                      incorrect_number_arguments_msg = NULL,
                                      env = parent.frame()) {
   
-  body_test <- substitute(body_test)
-  if (is.character(body_test)) code <- parse(text = body_test)
+  if (is.null(name)) {
+    stop("argument \"name\" is missing, with no default")
+  }
+  
+  if (!exists(name, solution_env)) {
+    stop(sprintf("%s is not defined in your solution environment.", name))
+  }
+  
+  sol_function <- get(name, envir = solution_env, inherits = FALSE)
+
+  function_test <- substitute(function_test)
+  if (is.character(function_test)) code <- parse(text = function_test)
   
   if (is.null(undefined_msg)) {
     undefined_msg <- sprintf("Did you define the function <code>%s()</code>?", name)
@@ -35,37 +44,27 @@ test_function_definition <- function(name,
     incorrect_number_arguments_msg <- sprintf("Did you specify the correct number of arguments in the function <code>%s()</code>?", name)
   }
   
-  test_that("Function is defined", {
-    expect_that(name, is_defined(env = student_env), failure_msg = undefined_msg)
-  })
+  defined <- test_what(expect_defined(name, env = student_env), undefined_msg)
   
-  test_correct({
-    # Perform the tests on the function in the student environment
-    test_that("Function works as expected", {
-      result <- try(eval(function_test, envir = student_env),silent = TRUE)
-      expect_that(inherits(result, "try-error"), is_false(), failure_msg = "Running some tests on your functions generated an error.")
-    })
-  }, {
-    
-    # if not correct, go into more detail
+  if (defined) {
     stud_function <- get(name, envir = student_env, inherits = FALSE)
-    sol_function <- get(name, envir = solution_env, inherits = FALSE)
+    stud_arguments <- as.list(formals(stud_function))
+    sol_arguments <- as.list(formals(sol_function))
     
-    test_that("arguments are correctly defined", {
-      # Check for correct definition of arguments
-      stud_arguments <- as.list(formals(stud_function))
-      sol_arguments <- as.list(formals(sol_function))
+    test_correct({
+      # Perform the tests on the function in the student environment
+      eval(function_test, envir = student_env)
+    }, {
+      # if not correct, go into more detail
+      test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
       
-      expect_that(length(stud_arguments), equals(length(sol_arguments)), failure_msg = incorrect_number_arguments_msg)
+      if(!is.null(body_test)) {
+        set_student_code(paste(deparse(stud_function), collapse = "\n"))
+        set_solution_code(paste(deparse(sol_function), collapse = "\n"))
+        eval(body_test, envir = env)
+        set_student_code(student_code)
+        set_solution_code(solution_code)  
+      }
     })
-
-    # Run SCT code for function body
-    if(!is.null(body_test)) {
-      set_student_code(paste(deparse(stud_function), collapse = "\n"))
-      set_solution_code(paste(deparse(sol_function), collapse = "\n"))
-      eval(body_test, envir = env)
-      set_student_code(student_code)
-      set_solution_code(solution_code)  
-    }
-  })
+  }
 }
