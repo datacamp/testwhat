@@ -1,38 +1,34 @@
+#' Check if the student defined an object, independent of the name
+#' 
 #' This function is an adaption of \code{\link{test_object}}. The function will
-#' check if a specific object, defined in the solution, exists. The difference
-#' here is that the object does not require the same variable name. In other words,
+#' check if a specific object, defined in the solution, exists. The object the 
+#' student defined doesn't have to have the same name. In other words,
 #' this function will check if any defined variable by the user corresponds to
-#' a specific variable in the solution code.
-#'
-#' This test is implemented using \code{\link{test_what}}.  Whether the
-#' student's object and the sample solution object are the same is tested with
-#' \code{\link{is_equivalent_to}}, hence small numeric differences or
-#' differences in attributes are allowed.
-#'
-#' See vignette \code{"testwhat-intro"} for examples.
-#'
-#' @param name  name of the object to test.
-#' @param undefined_msg  feedback message in case the student did not define 
-#' an object which corresponds to the solution object. This parameter should 
-#' always be used by the sct designer, since the function is used in very
-#' specific cases.
-#' @param eq_condition  character string indicating how to compare the
-#' objects.  Possible values are \code{"equivalent"} (the default),
-#' \code{"equal"} and \code{"identical"}.  See \code{\link{is_equivalent_to}},
-#' \code{\link{equals}}, and \code{\link{is_identical_to}}, respectively.
-#' @param student_env  environment in which the student's code was evaluated.
-#' @param solution_env  environment in which the sample solution code was
-#' evaluated.
+#' a specific variable in the solution code. 
+#' 
+#' @param name  name of object in solution to test.
+#' @param undefined_msg feedback message in case the student did not define 
+#' an object that corresponds to the solution object. This argument should 
+#' always be specified.
+#' @param eq_condition character string indicating how to compare the
+#' objects. See \code{\link{test_object}})
+#' @param student_env environment in which the student's code was evaluated.
+#' @param solution_env environment in which the solution code was evaluated.
 #' 
 #' @examples
 #' \dontrun{
-#' # Suppose the solution contains: x <- mean(1:3, na.rm = TRUE)
-#' # To test this submission, provide the following in the sct
-#' test_function("x")
+#' # Example 1 solution code:
+#' # x <- 5
+#' 
+#' # sct command to test whether student defined _an_ object with same value
+#' test_an_object("x")
+#' 
+#' # All of the following student submissions are accepted
+#' # x <- 5
+#' # y <- 5
+#' # z <- 4 + 1 + 1e-8
 #' }
-#'
-#' # Other examples: see SCT design guide
-#'
+#' 
 #' @export
 test_an_object <- function(name, undefined_msg,
                         eq_condition = "equivalent",

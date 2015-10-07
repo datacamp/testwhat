@@ -48,8 +48,7 @@ comparison for each argument.  Possible values are \code{"equivalent"}
 
 \item{student_env}{environment in which the student's code was evaluated.}
 
-\item{solution_env}{environment in which the sample solution code was
-evaluated.}
+\item{solution_env}{environment in which the solution code was evaluated.}
 
 \item{not_called_msg}{feedback message in case the student did not call the
 function at least as often as in the solution code.}
