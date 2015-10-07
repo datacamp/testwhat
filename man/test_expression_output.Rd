@@ -8,19 +8,30 @@ test_expression_output(expr, student_env = .GlobalEnv,
   solution_env = get_solution_env(), incorrect_msg = NULL)
 }
 \arguments{
-\item{expr}{The expression that is executed in both environments}
+\item{expr}{The expression that is executed in both environments.}
 
-\item{student_env}{Environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student's code was evaluated.}
 
-\item{solution_env}{Environment in which the sample solution code was
-evaluated.}
+\item{solution_env}{environment in which the solution code was evaluated.}
 
-\item{incorrect_msg}{Feedback message in case the evaluation is not the
-same in both environments. If none is given, a standard message will be
-generated.}
+\item{incorrect_msg}{Optional feedback message in case the evaluation is not the
+same in both environments. Automatically generated if not specified.}
 }
 \description{
-This test tests whether the given expression gives the same output in
+Test whether the given expression gives the same output in
 the student and the solution environment.
+}
+\examples{
+\dontrun{
+# Example 1 solution code:
+# my_fun <- function(a, b) { a + b }
+
+# Test whether my_fun(1,2) and my_fun(1,2)
+# give same _output_
+test_function_defintion({
+ test_expression_output(my_fun(1,2))
+ test_expression_output(my_fun(-1,-2))
+})
+}
 }
 

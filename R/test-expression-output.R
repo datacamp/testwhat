@@ -1,15 +1,26 @@
 #' Test output of expression
 #' 
-#' This test tests whether the given expression gives the same output in 
+#' Test whether the given expression gives the same output in 
 #' the student and the solution environment.
 #' 
-#' @param expr The expression that is executed in both environments
-#' @param student_env Environment in which the student's code was evaluated.
-#' @param solution_env Environment in which the sample solution code was
-#' evaluated.
-#' @param incorrect_msg Feedback message in case the evaluation is not the
-#' same in both environments. If none is given, a standard message will be
-#' generated.
+#' @param expr The expression that is executed in both environments.
+#' @param student_env environment in which the student's code was evaluated.
+#' @param solution_env environment in which the solution code was evaluated.
+#' @param incorrect_msg Optional feedback message in case the evaluation is not the
+#' same in both environments. Automatically generated if not specified.
+#' 
+#' @examples
+#' \dontrun{
+#' # Example 1 solution code:
+#' # my_fun <- function(a, b) { a + b }
+#' 
+#' # Test whether my_fun(1,2) and my_fun(1,2)
+#' # give same _output_
+#' test_function_defintion({
+#'  test_expression_output(my_fun(1,2))
+#'  test_expression_output(my_fun(-1,-2))
+#' })
+#' }
 #' 
 #' @export 
 test_expression_output <- function(expr, 

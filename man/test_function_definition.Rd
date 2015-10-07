@@ -13,24 +13,43 @@ test_function_definition(name, function_test = NULL, body_test = NULL,
 \arguments{
 \item{name}{The name of the function to test}
 
-\item{function_test}{Set of testthat (testwhat) tests to perform on the function}
+\item{function_test}{tests to perform on the function
+(use \code{\link{test_expression_output}} and \code{\link{test_expression_result}}).}
+
+\item{body_test}{Additional tests to perform on the body of the function if the tests
+in \code{function_test} fail. Only able to test on strings here!}
 
 \item{student_env}{environment in which the student's code was evaluated.}
 
-\item{solution_env}{environment in which the sample solution code was
-evaluated.}
+\item{solution_env}{environment in which the solution code was evaluated.}
 
 \item{student_code}{character string containing the student's code.}
 
-\item{solution_code}{character string containing the sample solution code.}
+\item{solution_code}{character string containing the solution code.}
 
-\item{undefined_msg}{Feedback message in case the specified function was not defined}
+\item{undefined_msg}{Optional feedback message in case the specified
+function was not defined}
 
-\item{incorrect_number_arguments_msg}{Feedback message in case the function does not have the correct number of arguments.}
+\item{incorrect_number_arguments_msg}{Optional feedback message in case the
+function does not have the correct number of arguments.}
 
 \item{env}{Environment in which to perform the tests}
 }
 \description{
 Check whether the student defined a function correctly
+}
+\examples{
+\dontrun{
+# Example 1 solution code:
+# my_fun <- function(a, b) { a + b }
+
+# SCT testing both result and printouts:
+test_function_defintion({
+ test_expression_result(my_fun(1,2))
+ test_expression_output(my_fun(1,2))
+}, {
+ test_student_typed("+")
+})
+}
 }
 

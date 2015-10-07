@@ -2,32 +2,40 @@
 % Please edit documentation in R/test-expression-result.R
 \name{test_expression_result}
 \alias{test_expression_result}
-\title{Test results of expression}
+\title{Test result of expression}
 \usage{
 test_expression_result(expr, eq_condition = "equivalent",
   student_env = .GlobalEnv, solution_env = get_solution_env(),
   incorrect_msg = NULL)
 }
 \arguments{
-\item{expr}{The expression that is executed in both environments}
+\item{expr}{The expression that is executed in both environments.}
 
 \item{eq_condition}{Character vector indicating how to perform the
-comparison of the results Possible values are \code{"equivalent"}
-(the default), \code{"equal"} and \code{"identical"}.  See
-\code{\link{is_equivalent_to}}, \code{\link{equals}}, and
-\code{\link{is_identical_to}}, respectively.}
+comparison of the results. See \code{\link{test_object}}.}
 
-\item{student_env}{Environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student's code was evaluated.}
 
-\item{solution_env}{Environment in which the sample solution code was
-evaluated.}
+\item{solution_env}{environment in which the solution code was evaluated.}
 
-\item{incorrect_msg}{Feedback message in case the evaluation is not the
-same in both environments. If none is given, a standard message will be
-generated.}
+\item{incorrect_msg}{Optional feedback message in case the evaluation is not the
+same in both environments. Automatically generated if not specified.}
 }
 \description{
-This test tests whether the given expression gives the same result in
+Test whether the given expression gives the same result in
 the student and the solution environment.
+}
+\examples{
+\dontrun{
+# Example 1 solution code:
+# my_fun <- function(a, b) { a + b }
+
+# Test whether my_fun(1,2) and my_fun(1,2)
+# give same _result_
+test_function_defintion({
+ test_expression_result(my_fun(1,2))
+ test_expression_result(my_fun(-1,-2))
+})
+}
 }
 
