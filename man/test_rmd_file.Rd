@@ -25,7 +25,7 @@ test_rmd_file(code, student_file = NULL, solution_file = NULL,
 Test a single R Markdown file
 }
 \details{
-This test is implemented using \code{\link{test_that}}.
+This test is implemented using \code{\link{test_what}}.
 This test should be called when there are multiple files in the submission.
 }
 

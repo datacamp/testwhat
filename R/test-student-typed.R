@@ -7,6 +7,7 @@
 #'
 #' @param strings A set of strings, at least one of which must be in the student_code
 #' @param student_code student submission as a string
+#' @param fixed exact string matching (TRUE) or use regex (FALSE)?
 #' @param not_typed_msg Feedback message in case the student did not type the string.
 #' @export
 test_student_typed <- function(strings,
@@ -31,8 +32,7 @@ test_student_typed <- function(strings,
   student_code <- gsub("\"", "'", student_code)
   strings <- gsub("\"", "'", strings)
   
-  test_that("one of strings found in student_code", {
-    hits <- sapply(strings, grepl, x = student_code, fixed = fixed)
-    expect_that(any(hits), is_true(), failure_msg = not_typed_msg)
-  })
+  hits <- sapply(strings, grepl, x = student_code, fixed = fixed)
+  
+  test_what(expect_true(any(hits)), not_typed_msg)
 }

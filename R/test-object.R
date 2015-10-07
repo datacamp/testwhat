@@ -3,7 +3,7 @@
 #' Test whether a student defined a certain object and, if yes, test whether
 #' that object is the same as in a sample solution.
 #'
-#' This test is implemented using \code{\link{test_that}}.  Whether the
+#' This test is implemented using \code{\link{test_what}}.  Whether the
 #' student's object and the sample solution object are the same is tested with
 #' \code{\link{is_equivalent_to}}, hence small numeric differences or
 #' differences in attributes are allowed.
@@ -40,7 +40,16 @@ test_object <- function(name, eq_condition = "equivalent",
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env(),
                         undefined_msg = NULL, incorrect_msg = NULL) {
-
+  if (is.null(name)) {
+    stop("argument \"name\" is missing, with no default")
+  }
+  
+  if (!exists(name, solution_env)) {
+    stop(sprintf("%s is not defined in your solution environment.", name))
+  }
+  
+  solution <- get(name, envir = solution_env, inherits = FALSE)
+  
   if (is.null(undefined_msg)) {
     undefined_msg <- build_undefined_object_msg(name)
   }
@@ -48,22 +57,15 @@ test_object <- function(name, eq_condition = "equivalent",
     incorrect_msg <- build_incorrect_object_msg(name)
   }
   
-  test_that(sprintf("Object %s is defined", name), {
-    expect_that(name, is_defined(env = student_env),
-                failure_msg = undefined_msg)
-  })
+  defined <- test_what(expect_defined(name, student_env), undefined_msg)
   
-  if (eval) {
-    test_that(sprintf("Object %s is correctly defined", name), {
-      solution <- get(name, envir = solution_env, inherits = FALSE)
-      
-      eq_fun <- switch(eq_condition, equivalent = is_equivalent_to,
-                       equal = equals, identical = is_identical_to,
-                       stop("invalid equality condition"))
-      
-      student <- get(name, envir = student_env, inherits = FALSE)
-      
-      expect_that(student, eq_fun(solution), failure_msg = incorrect_msg)
-    })
+  if (defined && eval) {
+    student <- get(name, envir = student_env, inherits = FALSE)
+    eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
+                                   identical = expect_identical,
+                                   equal = expect_equal,
+                                   stop("invalid equality condition"))
+    
+    test_what(eq_fun(student, solution), incorrect_msg)
   }
 }

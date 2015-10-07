@@ -4,7 +4,7 @@
 #' this function will check if any defined variable by the user corresponds to
 #' a specific variable in the solution code.
 #'
-#' This test is implemented using \code{\link{test_that}}.  Whether the
+#' This test is implemented using \code{\link{test_what}}.  Whether the
 #' student's object and the sample solution object are the same is tested with
 #' \code{\link{is_equivalent_to}}, hence small numeric differences or
 #' differences in attributes are allowed.
@@ -39,32 +39,43 @@ test_an_object <- function(name, undefined_msg,
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env()) {
   
-  if (is.null(undefined_msg)) {
-    undefined_msg <- "It seems that you forgot to define an object."
+  if (is.null(name)) {
+    stop("argument \"name\" is missing, with no default")
   }
   
-  test_that(sprintf("Object %s is correctly defined", name), {
-    solution <- get(name, envir = solution_env, inherits = FALSE)
+  if (is.null(undefined_msg)) {
+    stop("argument \"undefined\" is missing, with no default")
+  }
+  
+  if (!exists(name, solution_env)) {
+    stop(sprintf("%s is not defined in your solution environment.", name))
+  }
+  
+  solution <- get(name, envir = solution_env, inherits = FALSE)
     
-    eq_fun <- switch(eq_condition, equivalent = .equivalent, equal = .equal,
-                     identical = identical, stop("invalid equality condition"))
+  eq_fun <- switch(eq_condition, equivalent = .equivalent, 
+                                 equal = .equal,
+                                 identical = identical, 
+                                 stop("invalid equality condition"))
     
-    valid_values <- list()
-    length(valid_values) <- length(ls(student_env))
-    
-    counter <- 1
-    for (student_var in ls(student_env)) {
-      student_value <- get(student_var, envir = student_env, inherits = FALSE)
-      if (identical(class(student_value), class(solution))) {
-        valid_values[[counter]] <- student_value
-        counter <- counter + 1
-      }
+  valid_values <- list()
+  length(valid_values) <- length(ls(student_env))
+  
+  counter <- 1
+  for (student_var in ls(student_env)) {
+    student_value <- get(student_var, envir = student_env, inherits = FALSE)
+    if (identical(class(student_value), class(solution))) {
+      valid_values[[counter]] <- student_value
+      counter <- counter + 1
     }
-    valid_values[counter:length(valid_values)] <- NULL
-    
-    correct <- vapply(valid_values, function(x) { eq_fun(x, solution) }, logical(1))
-    
-    expect_that(any(correct), is_true(), failure_msg = undefined_msg)
-  })
+  }
+  
+  if (counter > 1) {
+    correct <- vapply(valid_values[1:counter-1], function(x) { eq_fun(x, solution) }, logical(1))
+  } else {
+    correct <- FALSE
+  }
+  
+  test_what(expect_true(any(correct)), undefined_msg)
 }
 

@@ -7,7 +7,7 @@ find_expr <- function(name, env = parent.frame()) {
 # A version of grepl that's vectorised along pattern, not x
 grepl2 <- function(pattern, x, ...) {
   stopifnot(length(x) == 1)
-
+  
   vapply(pattern, grepl, x, ..., FUN.VALUE = logical(1), USE.NAMES = FALSE)
 }
 
@@ -53,9 +53,9 @@ get_clean_lines <- function(code) {
   pd <- getParseData(parse(text = code, keep.source = TRUE))
   exprids <- pd$id[pd$parent == 0 & pd$token != "COMMENT"]
   codelines <- sapply(exprids, function(x) getParseText(pd, id = x))
-
+  
   cleanlines <- sapply(codelines, clean_unpipe, USE.NAMES = FALSE)
-
+  
   # remove "obj = " assignments: delete "=" lines and the ones preceding
   eqsubsids = which(cleanlines == "=", TRUE)
   if(length(eqsubsids) == 0) {
@@ -80,16 +80,16 @@ unpipe <- function(expr) {
   cnv <- function(x) {
     lhs <- x[[2]]
     rhs <- x[[3]]
-
+    
     dot_pos <- which(
       vapply(rhs
              , function(x) paste0(as.character(x), collapse = "") == "."
              , logical(1)
              , USE.NAMES = FALSE))
-
+    
     if (any(all.names(rhs) == "%>%")) rhs <- decomp(rhs)
     if (any(all.names(lhs) == "%>%")) lhs <- decomp(lhs)
-
+    
     # main
     if (length(dot_pos) > 0) {
       rhs[[dot_pos]] <- lhs
@@ -102,7 +102,7 @@ unpipe <- function(expr) {
       stop("missing condition error")
     }
   }
-
+  
   decomp <- function(x) {
     if (length(x) == 1) x
     else if (length(x) == 3 && x[[1]] == "%>%") cnv(x)
@@ -113,11 +113,13 @@ unpipe <- function(expr) {
 }
 
 
-
-
 # build R markdown document structure, using knitr functions
 build_doc_structure <- function(text) {
   require(knitr)
+  
+  # Fix markdown format
+  old.format <- knitr:::opts_knit$get()
+  knitr:::opts_knit$set(out.format = "markdown")
   
   # Fix pattern business
   apat = knitr::all_patterns; opat = knit_patterns$get()
@@ -125,6 +127,7 @@ build_doc_structure <- function(text) {
     knit_patterns$restore(opat)
     knitr:::chunk_counter(reset = TRUE)
     knitr:::knit_code$restore(list())
+    knitr:::opts_knit$set(old.format)
   })
   pat_md()
   
@@ -167,20 +170,18 @@ parse_docs <- function(student_code = get_student_code(), solution_code = get_so
   n_block_student = sum(sapply(student_ds, class) == "block")
   n_block_solution = sum(sapply(solution_ds, class) == "block")
   
-  test_that("student structure corresponds to solution structure", {
-    expect_that(n_student == n_solution, is_true(), 
-                failure_msg = sprintf("Make sure the structure of your document is OK. The solution expects %i inline (text) blocks and %i code chunks.", n_inline_solution, n_block_solution))
-    
-    expect_that(n_inline_student == n_inline_solution, is_true(), 
-                failure_msg = sprintf("Make sure you have the correct amount of inline (text) blocks in your R markdown document. The solution expects %i.",n_inline_solution))
-    
-    expect_that(n_block_student == n_block_solution, is_true(), 
-                failure_msg = sprintf("Make sure you have the correct amount of code blocks in your R markdown document. The solution expects %i.", n_block_solution))
-    
-    expect_that(isTRUE(all.equal(sapply(student_ds, class), sapply(solution_ds, class))), is_true(),
-                failure_msg = sprintf("Make sure the overall code structure of your document is OK. The soltion expects the following setup: %s.", 
-                                      collapse_props(sapply(solution_ds, class), conn = ", ")))
-  })
+  test_what(expect_equal(n_student, n_solution),
+            sprintf("Make sure the structure of your document is OK. The solution expects %i inline (text) blocks and %i code chunks.", n_inline_solution, n_block_solution))
+  
+  test_what(expect_equal(n_inline_student, n_inline_solution), 
+            sprintf("Make sure you have the correct amount of inline (text) blocks in your R markdown document. The solution expects %i.",n_inline_solution))
+  
+  test_what(expect_equal(n_block_student, n_block_solution),
+            sprintf("Make sure you have the correct amount of code blocks in your R markdown document. The solution expects %i.", n_block_solution))
+  
+  test_what(expect_true(all.equal(sapply(student_ds, class), sapply(solution_ds, class))),
+            sprintf("Make sure the overall code structure of your document is OK. The soltion expects the following setup: %s.", 
+                    collapse_props(sapply(solution_ds, class), conn = ", ")))
   
   if(n_student != n_solution) return(FALSE)
   if(n_inline_student != n_inline_solution) return(FALSE) 

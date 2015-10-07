@@ -25,7 +25,7 @@ console indeed contains the expected output and FALSE otherwise. This function i
 a testwhat version from an earlier datacampSCT function. (copied into this package to reduce dependency)
 }
 \details{
-This test is implemented using \code{\link{test_that}}.
+This test is implemented using \code{\link{test_what}}.
 }
 \examples{
 \dontrun{
