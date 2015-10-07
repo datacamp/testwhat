@@ -11,19 +11,38 @@ test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
 \arguments{
 \item{index}{The index of the for loop to check.}
 
-\item{cond_test}{SCT to perform on the condition part of the for loop}
+\item{cond_test}{testwhat tests for the condition part of the for loop}
 
-\item{expr_test}{SCT to perform on the expression part of the for loop}
+\item{expr_test}{testwhat tests for the expression part of the for loop}
 
 \item{student_code}{character string containing the student's code.}
 
-\item{solution_code}{character string containing the sample solution code.}
+\item{solution_code}{character string containing the solution code.}
 
-\item{not_found_msg}{Message in case the for loop (at given index) is not found.}
+\item{not_found_msg}{Optional feedback message in case the for loop
+(at given index) is not found.}
 
-\item{env}{Environment in which to perform all these SCTs}
+\item{env}{Environment in which to run the additional testwhat tests.}
 }
 \description{
-Check whether the student wrote a for loop correctly
+The tests for the conditional part and the expression part
+of the for loop can only be text-based, not object-based!
+}
+\examples{
+\dontrun{
+# Example 1 solution code:
+for(i in 1:5) {
+ print("hurray!")
+}
+
+# SCT testing this for loop:
+test_for_loop({
+ test_student_typed("in")
+ test_student_typed("1")
+ test_student_typed("5")
+}, {
+ test_function("print")
+})
+}
 }
 
