@@ -23,24 +23,24 @@ test_expression_output <- function(expr,
     stop("expr in test_output() results in an error in the solution environment")
   }
   
-  output_sol <- paste0(output_sol, collapse = "")
+  output_sol <- paste0(output_sol, collapse = "<br>")
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs:<br><code>%s</code>.", expr, paste(output_sol, collapse = "<br>"))
+    incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs:<br><code>%s</code>.", expr, output_sol)
   }
   
   output_stud <- try(capture.output(try(eval(parse(text = expr), envir = student_env), silent = TRUE)))
   
   if (inherits(output_stud, "try-error")) {
     test_what(fail(), 
-              sprintf("%s<br>Instead, it resulted in the following error: <br><i>%s</i>", 
+              sprintf("%s<br>Instead, it resulted in the following error:<br><i>%s</i>", 
                       incorrect_msg, 
                       attr(output_stud,"condition")$message))
   } else {
-    output_stud <- paste0(output_stud, collapse = "")
+    output_stud <- paste0(output_stud, collapse = "<br>")
     test_what(expect_equal(output_sol, output_stud),
-              sprintf("%s<br>Instead, got: <code>%s</code>", 
+              sprintf("%s<br>Instead, got:<br><code>%s</code>", 
                       incorrect_msg, 
-                      paste(output_stud, collapse = "<br>")))
+                      output_stud))
   }
 }
