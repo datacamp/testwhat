@@ -30,6 +30,9 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
     feedback_msgs = c(incorrect_msgs[1:correct-1],default_success_msg,incorrect_msgs[correct:length(incorrect_msgs)])
   }
 
+  print(feedback_msgs)
+  print(result)
+  
   if(is.na(feedback_msgs[result])) {
     stop("There is no feedback message available for this user input! Make sure you define enough feedback messages")
   }
