@@ -8,16 +8,31 @@ test_library_function(package, student_code = get_student_code(),
   not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
-\item{package}{package name for which the library() function should've been called}
+\item{package}{package name for which the library()
+function should've been called}
 
-\item{student_code}{character string containing the student's code.}
+\item{student_code}{character string containing the student code.}
 
-\item{not_called_msg}{Feedback message in case the library function wasn't called a single time}
+\item{not_called_msg}{optional feedback message in case the library
+function wasn't called a single time}
 
-\item{incorrect_msg}{Feedback message in case the library function wasn't called for the specified package.}
+\item{incorrect_msg}{optinoal feedback message in case the library
+function wasn't called for the specified package.}
 }
 \description{
-Convenience function to test in a very hacky way whether the library function was called correctly in its most simple form.
+Convenience function to test in a very hacky way whether
+the library function was called correctly in its most simple form.
 There is support for the different ways to call the library function
+}
+\examples{
+\dontrun{
+# Example solution code
+library(ggvis)
+library(dplyr)
+
+# SCT to test both library calls:
+test_library_function("ggvis")
+test_library_function("dplyr")
+}
 }
 

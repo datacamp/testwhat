@@ -63,16 +63,7 @@ in the solution does not correspond to the solution. (only used if index is not 
 }
 \description{
 Test whether a student called a function with certain arguments as least as
-many times as in a sample solution.  If yes, test for each function call in
-the sample solution whether the student called the function with the same
-argument values.
-}
-\details{
-This test is implemented using \code{\link{test_what}}.  When testing
-whether argument values are the same, small numeric differences or
-differences in attributes are allowed.
-
-See vignette \code{"testwhat-intro"} for examples.
+many times as in a sample solution. More details in vignette.
 }
 \examples{
 \dontrun{

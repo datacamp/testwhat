@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-if-else.R
 \name{test_if_else}
 \alias{test_if_else}
-\title{Check whether the student wrote a conditional construct correctly}
+\title{Test a conditional statement}
 \usage{
 test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
   else_expr_test = NULL, student_code = get_student_code(),
@@ -12,23 +12,67 @@ test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
 \arguments{
 \item{index}{The index of the control structure to check.}
 
-\item{if_cond_test}{SCT to perform in the if condition part of the control structure}
+\item{if_cond_test}{tests to perform in the if condition part
+of the control structure}
 
-\item{if_expr_test}{SCT to perform in the if expression part of the control structure}
+\item{if_expr_test}{tests to perform in the if expression part
+of the control structure}
 
-\item{else_expr_test}{SCT to perform in the else expression part of the control structure}
+\item{else_expr_test}{tests to perform in the else expression
+part of the control structure}
 
 \item{student_code}{character string containing the student's code.}
 
-\item{solution_code}{character string containing the sample solution code.}
+\item{solution_code}{character string containing the solution code.}
 
-\item{not_found_msg}{Message in case the control structure (at given index) is not found.}
+\item{not_found_msg}{Message in case the control structure
+(at given index) is not found.}
 
-\item{missing_else_msg}{Messing in case the else part of the control structure should be there but is missing}
+\item{missing_else_msg}{Messing in case the else part of the
+control structure should be there but is missing}
 
 \item{env}{Environment in which to perform all these SCTs}
 }
 \description{
-Check whether the student wrote a conditional construct correctly
+Check whether the student correctly coded a conditional statement.
+The function parses all \code{if-else} constructs and then runs tests for
+all composing parts of this constructions.
+}
+\details{
+If there's an \code{else if} in there, this counts as a 'sub-conditional'
+statement (see example).
+}
+\examples{
+\dontrun{
+# Example solution code
+vec <- c("a", "b", "c")
+if("a" \%in\% vec) {
+ print("a in here")
+} else if(any("b" > vec)) {
+ cat("b not smallest")
+} else {
+ str(vec)
+}
+
+# SCT to test this loop
+test_if_else({
+ test_student_typed("\%in\%")
+}, {
+ # test if expr part
+ test_function("print")
+}, {
+ # test else expr part
+ test_if_else({
+   # test cond part of else if
+   test_student_typed(">")
+ }, {
+   # test else if expr part
+   test_function("cat")
+ }, {
+   # test else part
+   test_function("str")
+ })
+})
+}
 }
 

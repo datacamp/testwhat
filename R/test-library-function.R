@@ -1,12 +1,28 @@
 #' Test whether the library function was called correctly
 #' 
-#' Convenience function to test in a very hacky way whether the library function was called correctly in its most simple form.
+#' Convenience function to test in a very hacky way whether 
+#' the library function was called correctly in its most simple form.
 #' There is support for the different ways to call the library function
 #' 
-#' @param package package name for which the library() function should've been called
-#' @param student_code  character string containing the student's code.
-#' @param not_called_msg Feedback message in case the library function wasn't called a single time
-#' @param incorrect_msg Feedback message in case the library function wasn't called for the specified package.
+#' @param package package name for which the library()
+#' function should've been called
+#' @param student_code character string containing the student code.
+#' @param not_called_msg optional feedback message in case the library
+#' function wasn't called a single time
+#' @param incorrect_msg optinoal feedback message in case the library
+#' function wasn't called for the specified package.
+#' 
+#' @examples
+#' \dontrun{
+#' # Example solution code
+#' library(ggvis)
+#' library(dplyr)
+#' 
+#' # SCT to test both library calls:
+#' test_library_function("ggvis")
+#' test_library_function("dplyr")
+#' }
+#' 
 #' @export
 test_library_function <- function(package,
                           student_code = get_student_code(),
