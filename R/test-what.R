@@ -9,7 +9,7 @@
 #' @export
 test_what <- function(code, feedback_msg) {
   rep <- get_reporter()
-  if (!rep$continue) return(FALSE)
+  if (!rep$continue) stop("stop here because sct test has failed")
   rep$toggle_inherit_failure(TRUE, feedback_msg)
   testthat::test_that(paste0("Testing with feedback message ",feedback_msg), code)
   rep$toggle_inherit_failure()
