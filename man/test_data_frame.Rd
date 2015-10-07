@@ -2,44 +2,50 @@
 % Please edit documentation in R/test-data-frame.R
 \name{test_data_frame}
 \alias{test_data_frame}
-\title{Test whether a student correctly defined the column(s) of a data.frame}
+\title{Test list elements (or data frame columns)}
 \usage{
 test_data_frame(name, columns = NULL, eq_condition = "equivalent",
   student_env = .GlobalEnv, solution_env = get_solution_env(),
   undefined_msg = NULL, undefined_cols_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
-\item{name}{name of the data frame to test.}
+\item{name}{name of the list or data frame to test.}
 
-\item{columns}{vector of names of columns to test}
+\item{columns}{character vector or integer vector of list elements or
+indices to test.}
 
 \item{eq_condition}{character string indicating how to compare the
-objects.  Possible values are \code{"equivalent"} (the default),
-\code{"equal"} and \code{"identical"}.  See \code{\link{is_equivalent_to}},
-\code{\link{equals}}, and \code{\link{is_identical_to}}, respectively.}
+objects. See \code{\link{test_object}}}
 
 \item{student_env}{environment in which the student's code was evaluated.}
 
-\item{solution_env}{environment in which the sample solution code was
+\item{solution_env}{environment in which the solution code was evaluated.
 evaluated.}
 
-\item{undefined_msg}{feedback message in case the student did not define
-the data frame.}
+\item{undefined_msg}{optional feedback message if list is not defined.}
 
-\item{undefined_cols_msg}{feedback message in case the student did define one or more fo the columns inside the data frame}
+\item{undefined_cols_msg}{optional feedback message if not all specified elements
+of the solution list were found in the student's list.}
 
-\item{incorrect_msg}{feedback message in case the columns queried does not correspond between student and solution
-
-# Other examples: see SCT design guide}
+\item{incorrect_msg}{optional feedback message if not all specified elements of
+the solution list match those in the student list.}
 }
 \description{
-Test whether a student defined a data.frame, and, if see, whether the columns of this data.frame
-correspond to the sample solution.
+Test whether a student defined a list, and if this is the case,
+whether the elements of the list correspond to the ones in the solution.
+A data frame is also a list, so you can use this function to test the
+correspondence of data frame columns.
 }
-\details{
-This test is implemented using \code{\link{test_what}}.  Whether the
-student's column and the sample solution object are the same is tested with
-\code{\link{is_equivalent_to}}, hence small numeric differences or
-differences in attributes are allowed.
+\examples{
+\dontrun{
+# Example 1 solution code:
+# df <- data.frame(a = 1:3, b = LETTERS[1:3])
+
+# sct command to test column a
+test_data_frame("df", columns = "a")
+
+# sct command to test column b
+test_data_frame("df", columns = "b")
+}
 }
 

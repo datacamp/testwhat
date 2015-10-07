@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-object.R
 \name{test_object}
 \alias{test_object}
-\title{Test whether a student correctly defined an object}
+\title{Test R object existence and value}
 \usage{
 test_object(name, eq_condition = "equivalent", eval = TRUE,
   student_env = .GlobalEnv, solution_env = get_solution_env(),
@@ -12,43 +12,51 @@ test_object(name, eq_condition = "equivalent", eval = TRUE,
 \item{name}{name of the object to test.}
 
 \item{eq_condition}{character string indicating how to compare the
-objects.  Possible values are \code{"equivalent"} (the default),
-\code{"equal"} and \code{"identical"}.  See \code{\link{is_equivalent_to}},
-\code{\link{equals}}, and \code{\link{is_identical_to}}, respectively.}
+objects. Possible values are \code{"equivalent"} (the default),
+\code{"equal"} and \code{"identical"}.  See \code{\link{expect_equivalent}},
+\code{\link{expect_equals}}, and \code{\link{expect_identical}}, respectively.}
 
-\item{eval}{evaluate the object with name \code{\link{name}} or just check
-if its exists, without evaluating it.}
+\item{eval}{Next to existence, check if the value of the object corresponds
+between student en solution environment.}
 
 \item{student_env}{environment in which the student's code was evaluated.}
 
-\item{solution_env}{environment in which the sample solution code was
-evaluated.}
+\item{solution_env}{environment in which the solution code was evaluated.}
 
-\item{undefined_msg}{feedback message in case the student did not define
-the object.}
+\item{undefined_msg}{optional feedback message in case the student did not define
+the object. A meaningful message is automatically generated if not supplied.}
 
-\item{incorrect_msg}{feedback message in case the student's object is not
-the same as in the sample solution.}
+\item{incorrect_msg}{optional feedback message in case the student's object is not
+the same as in the sample solution. Only used if \code{eval} is \code{TRUE}.
+A meaningful message is automatically generated if not supplied.}
 }
 \description{
-Test whether a student defined a certain object and, if yes, test whether
-that object is the same as in a sample solution.
-}
-\details{
-This test is implemented using \code{\link{test_what}}.  Whether the
-student's object and the sample solution object are the same is tested with
-\code{\link{is_equivalent_to}}, hence small numeric differences or
-differences in attributes are allowed.
-
-See vignette \code{"testwhat-intro"} for examples.
+Test whether a student defined a certain object. If this is the case, and
+if \code{eval} is \code{TRUE}, also check whether the value of the object
+matches that of the solution.
 }
 \examples{
 \dontrun{
-# Suppose the solution contains: x <- mean(1:3, na.rm = TRUE)
-# To test this submission, provide the following in the sct
-test_function("x")
-}
+# Example 1 solution code:
+# x <- mean(1:3, na.rm = TRUE)
 
-# Other examples: see SCT design guide
+# sct command to test existence and value of x:
+test_object("x")
+
+# sct command to test only existence of x:
+test_object("x", eval = FALSE)
+
+# Example 2 solution code:
+# y <- list(a = 2, b = 3, c = 4)
+
+# Small numerical difference allowed + no check on attributes
+test_object(y)
+
+# Small numerical difference allowed + check attributes
+test_object(y, eq_condition = "equals")
+
+# No numerical difference allowed + check attributes
+test_object(y, eq_condtion = "identical")
+}
 }
 

@@ -54,4 +54,4 @@ Collate:
     'test-while-loop.R'
     'test-yaml-header.R'
     'testwhat.R'
-    'util.R'
+    'utils.R'

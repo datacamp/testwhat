@@ -1,28 +1,35 @@
-#' Test whether a student correctly defined the column(s) of a data.frame
+#' Test list elements (or data frame columns)
 #'
-#' Test whether a student defined a data.frame, and, if see, whether the columns of this data.frame
-#' correspond to the sample solution.
+#' Test whether a student defined a list, and if this is the case,
+#' whether the elements of the list correspond to the ones in the solution.
+#' A data frame is also a list, so you can use this function to test the
+#' correspondence of data frame columns.
 #'
-#' This test is implemented using \code{\link{test_what}}.  Whether the
-#' student's column and the sample solution object are the same is tested with
-#' \code{\link{is_equivalent_to}}, hence small numeric differences or
-#' differences in attributes are allowed.
-#'
-#' @param name  name of the data frame to test.
-#' @param columns vector of names of columns to test
+#' @param name  name of the list or data frame to test.
+#' @param columns character vector or integer vector of list elements or 
+#' indices to test.
 #' @param eq_condition  character string indicating how to compare the
-#' objects.  Possible values are \code{"equivalent"} (the default),
-#' \code{"equal"} and \code{"identical"}.  See \code{\link{is_equivalent_to}},
-#' \code{\link{equals}}, and \code{\link{is_identical_to}}, respectively.
-#' @param student_env  environment in which the student's code was evaluated.
-#' @param solution_env  environment in which the sample solution code was
+#' objects. See \code{\link{test_object}}
+#' @param student_env environment in which the student's code was evaluated.
+#' @param solution_env environment in which the solution code was evaluated.
 #' evaluated.
-#' @param undefined_msg  feedback message in case the student did not define
-#' the data frame.
-#' @param undefined_cols_msg feedback message in case the student did define one or more fo the columns inside the data frame
-#' @param incorrect_msg  feedback message in case the columns queried does not correspond between student and solution
+#' @param undefined_msg optional feedback message if list is not defined.
+#' @param undefined_cols_msg optional feedback message if not all specified elements 
+#' of the solution list were found in the student's list.
+#' @param incorrect_msg optional feedback message if not all specified elements of
+#' the solution list match those in the student list.
+#' 
+#' @examples
+#' \dontrun{
+#' # Example 1 solution code:
+#' # df <- data.frame(a = 1:3, b = LETTERS[1:3])
+#' 
+#' # sct command to test column a
+#' test_data_frame("df", columns = "a")
 #'
-#' # Other examples: see SCT design guide
+#' # sct command to test column b
+#' test_data_frame("df", columns = "b") 
+#' }
 #'
 #' @export
 test_data_frame <- function(name, columns = NULL, 
@@ -75,10 +82,12 @@ test_data_frame <- function(name, columns = NULL,
                        equal = expect_equal, 
                        identical = expect_identical,
                        stop("invalid equality condition"))
-      
       for(col in columns) {
         test_what(eq_fun(student[col], solution[col]), incorrect_msg)
       }
     }
   }
 }
+
+#' @export
+test_list_elements <- test_data_frame

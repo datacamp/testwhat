@@ -1,38 +1,47 @@
-#' Test whether a student correctly defined an object
+#' Test R object existence and value
 #'
-#' Test whether a student defined a certain object and, if yes, test whether
-#' that object is the same as in a sample solution.
+#' Test whether a student defined a certain object. If this is the case, and
+#' if \code{eval} is \code{TRUE}, also check whether the value of the object
+#' matches that of the solution.
 #'
-#' This test is implemented using \code{\link{test_what}}.  Whether the
-#' student's object and the sample solution object are the same is tested with
-#' \code{\link{is_equivalent_to}}, hence small numeric differences or
-#' differences in attributes are allowed.
-#'
-#' See vignette \code{"testwhat-intro"} for examples.
-#'
-#' @param name  name of the object to test.
-#' @param eq_condition  character string indicating how to compare the
-#' objects.  Possible values are \code{"equivalent"} (the default),
-#' \code{"equal"} and \code{"identical"}.  See \code{\link{is_equivalent_to}},
-#' \code{\link{equals}}, and \code{\link{is_identical_to}}, respectively.
-#' @param eval  evaluate the object with name \code{\link{name}} or just check
-#' if its exists, without evaluating it.
-#' @param student_env  environment in which the student's code was evaluated.
-#' @param solution_env  environment in which the sample solution code was
-#' evaluated.
-#' @param undefined_msg  feedback message in case the student did not define
-#' the object.
-#' @param incorrect_msg  feedback message in case the student's object is not
-#' the same as in the sample solution.
+#' @param name name of the object to test.
+#' @param eq_condition character string indicating how to compare the
+#' objects. Possible values are \code{"equivalent"} (the default),
+#' \code{"equal"} and \code{"identical"}.  See \code{\link{expect_equivalent}},
+#' \code{\link{expect_equals}}, and \code{\link{expect_identical}}, respectively.
+#' @param eval Next to existence, check if the value of the object corresponds
+#' between student en solution environment.
+#' @param student_env environment in which the student's code was evaluated.
+#' @param solution_env environment in which the solution code was evaluated.
+#' @param undefined_msg optional feedback message in case the student did not define
+#' the object. A meaningful message is automatically generated if not supplied.
+#' @param incorrect_msg optional feedback message in case the student's object is not
+#' the same as in the sample solution. Only used if \code{eval} is \code{TRUE}. 
+#' A meaningful message is automatically generated if not supplied.
 #'
 #' @examples
 #' \dontrun{
-#' # Suppose the solution contains: x <- mean(1:3, na.rm = TRUE)
-#' # To test this submission, provide the following in the sct
-#' test_function("x")
+#' # Example 1 solution code:
+#' # x <- mean(1:3, na.rm = TRUE)
+#' 
+#' # sct command to test existence and value of x:
+#' test_object("x")
+#' 
+#' # sct command to test only existence of x:
+#' test_object("x", eval = FALSE)
+#' 
+#' # Example 2 solution code:
+#' # y <- list(a = 2, b = 3, c = 4)
+#' 
+#' # Small numerical difference allowed + no check on attributes
+#' test_object(y)
+#' 
+#' # Small numerical difference allowed + check attributes
+#' test_object(y, eq_condition = "equals")
+#' 
+#' # No numerical difference allowed + check attributes
+#' test_object(y, eq_condtion = "identical")
 #' }
-#'
-#' # Other examples: see SCT design guide
 #'
 #' @export
 test_object <- function(name, eq_condition = "equivalent",
