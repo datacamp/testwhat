@@ -29,12 +29,9 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
     default_success_msg = "Very good! Continue to the next exercise."
     feedback_msgs = c(incorrect_msgs[1:correct-1],default_success_msg,incorrect_msgs[correct:length(incorrect_msgs)])
   }
-
-  print(feedback_msgs)
-  print(result)
   
   if(is.na(feedback_msgs[result])) {
-    stop("There is no feedback message available for this user input! Make sure you define enough feedback messages")
+    stop(paste("There is no feedback message available for this user input! Make sure you define enough feedback messages", str(feedback_msgs), str(result)))
   }
 
   defined <- test_what(expect_true(exists("result")), no_selection_msg)
