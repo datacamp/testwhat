@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-for-loop.R
 \name{test_for_loop}
 \alias{test_for_loop}
-\title{Check whether the student wrote a for loop correctly}
+\title{Test a for loop}
 \usage{
 test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
   student_code = get_student_code(), solution_code = get_solution_code(),
@@ -19,14 +19,25 @@ test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
 
 \item{solution_code}{character string containing the solution code.}
 
-\item{not_found_msg}{Optional feedback message in case the for loop
+\item{not_found_msg}{optional feedback message in case the for loop
 (at given index) is not found.}
 
 \item{env}{Environment in which to run the additional testwhat tests.}
 }
 \description{
+Test whether a student coded a for loop correctly. The function parses
+the student and solution code and selects the first, second ... for loop in the
+code depending on the \code{index} argument, and then runs two chunks of tests:
+\itemize{
+ \item{\code{cond_test}: \code{testwhat} tests specifically for
+ the iteration part of the for loop, inside the parentheses of \code{for}.}
+ \item{\code{expr_test}: \code{testwhat} tests to test the
+ code inside the for loop itself.}
+}
 The tests for the conditional part and the expression part
-of the for loop can only be text-based, not object-based!
+of the for loop can only be text-based. You cannot use functions such
+as \code{\link{test_object}} that also depend on the student and solution
+environment.
 }
 \examples{
 \dontrun{
@@ -35,7 +46,7 @@ for(i in 1:5) {
  print("hurray!")
 }
 
-# SCT testing this for loop:
+# SCT to test this loop:
 test_for_loop({
  test_student_typed("in")
  test_student_typed("1")

@@ -22,8 +22,20 @@ the correct collection. The third and fourth messages correspond to feedback on 
 fourth option.}
 }
 \description{
-Test a multiple choice exercise using \code{\link{test_what}}. This code expects the DM.result variable
-to be defined by the angular front-end of DataCamp. There is need to define the success_msg seperately,
-since it is defined inside the function.
+Test a multiple choice exercise using \code{\link{test_what}}.
+This code expects the DM.result variable to be defined by the DataCamp frontend.
+There is need to define the success_msg seperately, since it is defined inside the function.
+}
+\examples{
+\dontrun{
+# Example solution: second instruction correct.
+
+# Corresponding SCT:
+msg1 <- "Not good, try again!"
+msg2 <- "Nice one!"
+msg3 <- "Not quite, give it another shot."
+msg4 <- "Don't be silly..."
+test_mc(2, feedback_msgs = c(msg1, msg2, msg3, msg4))
+}
 }
 

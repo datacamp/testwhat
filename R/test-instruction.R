@@ -1,9 +1,11 @@
 #' Test a single instruction of the challenges interface
 #' 
+#' See vignette for more information.
+#' 
 #' @param index the instruction index
 #' @param code the test code for that instruction
 #' @param env environment in which to execute tests.
-#' 
+#'
 #' @export
 test_instruction = function(index, code, env = parent.frame()) {
   code <- substitute(code)
