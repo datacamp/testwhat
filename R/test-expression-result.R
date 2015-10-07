@@ -1,20 +1,28 @@
-#' Test results of expression
+#' Test result of expression
 #' 
-#' This test tests whether the given expression gives the same result in 
+#' Test whether the given expression gives the same result in 
 #' the student and the solution environment.
 #' 
-#' @param expr The expression that is executed in both environments
+#' @param expr The expression that is executed in both environments.
 #' @param eq_condition Character vector indicating how to perform the
-#' comparison of the results Possible values are \code{"equivalent"}
-#' (the default), \code{"equal"} and \code{"identical"}.  See
-#' \code{\link{is_equivalent_to}}, \code{\link{equals}}, and
-#' \code{\link{is_identical_to}}, respectively.
-#' @param student_env Environment in which the student's code was evaluated.
-#' @param solution_env Environment in which the sample solution code was
-#' evaluated.
-#' @param incorrect_msg Feedback message in case the evaluation is not the
-#' same in both environments. If none is given, a standard message will be
-#' generated.
+#' comparison of the results. See \code{\link{test_object}}.
+#' @param student_env environment in which the student's code was evaluated.
+#' @param solution_env environment in which the solution code was evaluated.
+#' @param incorrect_msg Optional feedback message in case the evaluation is not the
+#' same in both environments. Automatically generated if not specified.
+#' 
+#' @examples
+#' \dontrun{
+#' # Example 1 solution code:
+#' # my_fun <- function(a, b) { a + b }
+#' 
+#' # Test whether my_fun(1,2) and my_fun(1,2)
+#' # give same _result_
+#' test_function_defintion({
+#'  test_expression_result(my_fun(1,2))
+#'  test_expression_result(my_fun(-1,-2))
+#' })
+#' }
 #' 
 #' @export 
 test_expression_result <- function(expr, 

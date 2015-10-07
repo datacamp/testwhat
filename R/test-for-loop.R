@@ -1,12 +1,33 @@
 #' Check whether the student wrote a for loop correctly
 #' 
-#' @param index  The index of the for loop to check.
-#' @param cond_test  SCT to perform on the condition part of the for loop
-#' @param expr_test  SCT to perform on the expression part of the for loop
-#' @param student_code  character string containing the student's code.
-#' @param solution_code  character string containing the sample solution code.
-#' @param not_found_msg  Message in case the for loop (at given index) is not found.
-#' @param env  Environment in which to perform all these SCTs
+#' The tests for the conditional part and the expression part
+#' of the for loop can only be text-based, not object-based!
+#' 
+#' @param index The index of the for loop to check.
+#' @param cond_test testwhat tests for the condition part of the for loop
+#' @param expr_test testwhat tests for the expression part of the for loop
+#' @param student_code character string containing the student's code.
+#' @param solution_code character string containing the solution code.
+#' @param not_found_msg Optional feedback message in case the for loop 
+#' (at given index) is not found.
+#' @param env Environment in which to run the additional testwhat tests.
+#' 
+#' @examples
+#' \dontrun{
+#' # Example 1 solution code:
+#' for(i in 1:5) {
+#'  print("hurray!") 
+#' }
+#' 
+#' # SCT testing this for loop:
+#' test_for_loop({
+#'  test_student_typed("in")
+#'  test_student_typed("1")
+#'  test_student_typed("5")
+#' }, {
+#'  test_function("print")
+#' })
+#' }
 #' 
 #' @export
 test_for_loop <- function(index = 1, 

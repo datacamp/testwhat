@@ -2,16 +2,25 @@
 % Please edit documentation in R/test-file-exists.R
 \name{test_file_exists}
 \alias{test_file_exists}
-\title{Test whether a file is availabe in the working directory}
+\title{Test whether a file exists}
 \usage{
 test_file_exists(path, incorrect_msg = NULL)
 }
 \arguments{
 \item{path}{Path to the file you want to check}
 
-\item{incorrect_msg}{Feedback message in case the file does not exist}
+\item{incorrect_msg}{Optional feedback message in case the file does not exist}
 }
 \description{
-Test whether a file is availabe in the working directory
+Test whether a file exists
+}
+\examples{
+\dontrun{
+# Example 1 solution code:
+# write("hello", file = "test.txt")
+
+# SCT to test if file exists
+test_file_exists("test.txt")
+}
 }
 
