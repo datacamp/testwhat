@@ -55,3 +55,6 @@ Collate:
     'test-yaml-header.R'
     'testwhat.R'
     'utils.R'
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,0 +1,19 @@
+---
+title: "Introduction to testwhat"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to testwhat}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+A major part of DataCamp's interactive learning is centered around automated and meaningful feedback. When a student has submits an incorrect asnwer, the system tells the student what he or she is doing wrong. These so-called submission correctness tests, or SCTs, should guide the student towards the solution in a manner that is not too obvious but still helpful and informative. The design of good SCTs is challenging, but the [`testwhat` package](https://github.com/Data-Camp/testwhat) attempts to make this easier.
+
+The `testwhat` package is a wrapper around [Hadley Wickham's `testthat` package](https://github.com/Data-Camp/testthat), the de facto standard of unit testing in R. You can use `testwhat` to write your own unit tests, that test whether a student correctly solved an exercise. Next to that, `testwhat` provides a bunch of tests to test object definitions, function calls, function definitions, for loops, while loops, and many more.
+
+This vignette lists the current functionality available in `testwhat`, together with examples. Different use cases and subtleties are pointed out. For details concerning all functions, refer to the documentation. After reading through this vignette, writing SCTs yourself for DataCamp hopefully becomes a painless experience. If this is not the case and you think improvements to testwhat and this vignette are possible, [please let us know](mailto:support@datacamp.com)!
+
+## Overview of architecture
