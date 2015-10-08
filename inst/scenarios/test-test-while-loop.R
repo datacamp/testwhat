@@ -5,7 +5,7 @@ scen <- list(list(type = "NormalExercise", pre_exercise_code = "i <- 1", student
         sct = "test_while_loop()"))), list(type = "NormalExercise", pre_exercise_code = "i = 1", student = "\n  while (i < 10) {\n    rpois(10,i)\n    i = i + 1\n  }", 
     solution = "\n  while (i < 10) {\n    rpois(10,i)\n    i = i + 1\n  }", pass = list(test_cond_test_pass_1 = list(long = "check if cond_test is checked correctly - pass 1", 
         sct = c("test_while_loop(cond_test = {", "    test_object(\"i\")", "})")))), list(type = "NormalExercise", 
-    pre_exercise_code = "i = 1", student = "\n  while (i < 10) {\n    rpois(10,i)\n    i = i + 1\n  }", solution = "\n  while (i < 3) {\n    rpois(10,i)\n    i = i + 1\n  }", 
+    pre_exercise_code = "i = 1", student = "\n  while (i < 10) {\n    rpois(10,i)\n    i = i + 1\n  }", solution = "n <- 4\n  while (i < 3) {\n    rpois(10,i)\n    i = i + 1\n  }", 
     fail = list(test_cond_test_fails_fail_1 = list(long = "check if cond_test fails correctly - fail 1", sct = c("test_while_loop(cond_test = {", 
         "    test_object(\"i\")", "})")), test_cond_test_fails_fail_2 = list(long = "check if cond_test fails correctly - fail 2", 
         sct = c("test_while_loop(cond_test = {", "    test_object(\"n\")", "})")), test_cond_test_msg_fail_1 = list(long = "check if cond_test fail message is displayed correctly - fail 1", 

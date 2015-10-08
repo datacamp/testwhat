@@ -10,8 +10,8 @@ scen <- list(
         sct = "test_library_function(\"yaml\")"
       ),
       test_not_called_with_msg = list(
-        long = "test fails when no library function is called with undefined msg",
-        sct = "test_library_function(\"yaml\", undefined_msg = \"blieblabloe\")",
+        long = "test fails when no library function is called with not_called_msg",
+        sct = "test_library_function(\"yaml\", not_called_msg = \"blieblabloe\")",
         message = "blieblabloe"
       )
     )

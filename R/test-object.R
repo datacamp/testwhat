@@ -7,7 +7,7 @@
 #' @param name name of the object to test.
 #' @param eq_condition character string indicating how to compare. Possible values 
 #' are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
-#' See \code{\link{expect_equivalent}}, \code{\link{expect_equals}}, 
+#' See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
 #' and \code{\link{expect_identical}}, respectively.
 #' @param eval Next to existence, check if the value of the object corresponds
 #' between student en solution environment.
@@ -53,10 +53,7 @@ test_object <- function(name, eq_condition = "equivalent",
     stop("argument \"name\" is missing, with no default")
   }
   
-  if (!exists(name, solution_env)) {
-    stop(sprintf("%s is not defined in your solution environment.", name))
-  }
-  
+  stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
   if (is.null(undefined_msg)) {
@@ -66,7 +63,7 @@ test_object <- function(name, eq_condition = "equivalent",
     incorrect_msg <- build_incorrect_object_msg(name)
   }
   
-  defined <- test_what(expect_defined(name, student_env), undefined_msg)
+  defined <- test_what(expect_true(exists(name, envir = student_env, inherits = FALSE)), undefined_msg)
   
   if (defined && eval) {
     student <- get(name, envir = student_env, inherits = FALSE)

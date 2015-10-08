@@ -66,7 +66,7 @@ test_data_frame <- function(name, columns = NULL,
     }
   }
   
-  defined <- test_what(expect_defined(name, student_env), undefined_msg)
+  defined <- test_what(expect_true(exists(name, envir = student_env, inherits = FALSE)), undefined_msg)
   if (defined) {
     student <- get(name, envir = student_env, inherits = FALSE)
     
