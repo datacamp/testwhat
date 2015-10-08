@@ -15,6 +15,12 @@ test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
 
 \item{expr_test}{testwhat tests for the expression part of the for loop}
 
+\item{student_code}{character string: (chunk of) student submission that is being tested.
+Do not set this manually.}
+
+\item{solution_code}{character string: (chunk of) solution code.
+Do not set this manually.}
+
 \item{not_found_msg}{optional feedback message in case the for loop
 (at given index) is not found.}
 

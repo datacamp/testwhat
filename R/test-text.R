@@ -13,6 +13,8 @@
 #' @param not_called_msg feedback message if the text was not there
 #' @param incorrect_msg  feedback message if the text was not properly formatted
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_text <- function(text,
                       format = "any",

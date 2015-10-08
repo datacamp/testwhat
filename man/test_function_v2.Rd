@@ -12,7 +12,7 @@ test_function_v2(name, args = NULL, ignore = NULL, allow_extra = TRUE,
   incorrect_number_of_calls_msg = NULL, index_not_called_msg = NULL)
 }
 \arguments{
-\item{name}{name of the function to test.}
+\item{name}{name of the object to test.}
 
 \item{args}{character vector of argument names that the student should have
 supplied in the function calls.  If no argument names are given, it is only
@@ -26,33 +26,39 @@ arguments to be ignored, but not others).}
 \item{allow_extra}{indicates whether extra arguments not specified by
 \code{args} or \code{ignore} are allowed in the student's function calls.}
 
-\item{eval}{logical vector indicating whether the corresponding argument
-should be evaluated before testing.  Setting this to \code{FALSE} can be
-useful, e.g., to test whether the student supplied a large predefined
-object, as only the corresponding \code{\link{name}} is compared in this
-case (use with care!).}
+\item{eval}{Next to existence, check if the value of the object corresponds
+between student en solution environment.}
 
 \item{index}{Which command to check on (both in solution and student).
 If index is specified, it is checked whether solution and student contain
 the same amount of function calls.}
 
-\item{eq_condition}{character vector indicating how to perform the
-comparison for each argument. See \code{\link{object}}}
+\item{eq_condition}{character string indicating how to compare. Possible values
+are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+See \code{\link{expect_equivalent}}, \code{\link{expect_equal}},
+and \code{\link{expect_identical}}, respectively.}
 
-\item{student_env}{environment in which the student code was evaluated.}
+\item{student_code}{character string: (chunk of) student submission that is being tested.
+Do not set this manually.}
 
-\item{solution_env}{environment in which the solution code was evaluated.}
+\item{solution_code}{character string: (chunk of) solution code.
+Do not set this manually.}
+
+\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
+
+\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
 \item{not_called_msg}{feedback message in case the student did not call the
 function at least as often as in the solution code.}
 
-\item{incorrect_msg}{feedback message in case the student did not call the
-function with the same argument values as in the sample solution.  If
-there are multiple function calls in the sample solution, a vector of
-feedback messages can be supplied.}
+\item{incorrect_msg}{optional feedback message in case the student's object is not
+the same as in the sample solution. Only used if \code{eval} is \code{TRUE}.
+A meaningful message is automatically generated if not supplied.}
 
 \item{incorrect_number_of_calls_msg}{feedback message in case the number of commands
 in the solution does not correspond to the solution. (only used if index is not NULL.)}
+
+\item{index_not_called_msg}{feedback message in case the queried index wasn't found.}
 }
 \description{
 Test whether a student called a function with certain arguments as least as

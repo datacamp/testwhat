@@ -113,7 +113,10 @@ unpipe <- function(expr) {
 }
 
 
-# build R markdown document structure, using knitr functions
+#' build R markdown document structure, using knitr functions
+#' 
+#' @importFrom knitr pat_md
+#' @param text text representing an R Markdown document
 build_doc_structure <- function(text) {
   require(knitr)
   
@@ -150,7 +153,12 @@ build_doc_structure <- function(text) {
   return(content)
 }
 
-# Parse both the student and solution document
+#' Parse both the student and solution document
+#' 
+#' @inheritParams test_function
+#' 
+#' @import datacampAPI
+#' @import testthat
 parse_docs <- function(student_code = get_student_code(), solution_code = get_solution_code()) {
   if(exists_student_ds() & exists_solution_ds()) {
     # Both variables exist already

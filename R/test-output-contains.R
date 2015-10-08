@@ -17,6 +17,8 @@
 #' test_output_contains("for(i in 1:10) print(i)")
 #' }
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_output_contains <- function(expr, times = 1, console_output = get_student_output(), incorrect_msg = NULL) {
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.

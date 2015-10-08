@@ -19,9 +19,9 @@ are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
 See \code{\link{expect_equivalent}}, \code{\link{expect_equal}},
 and \code{\link{expect_identical}}, respectively.}
 
-\item{student_env}{environment in which the student code was evaluated.}
+\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
 
-\item{solution_env}{environment in which the solution code was evaluated.}
+\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
 \item{undefined_msg}{optional feedback message if list is not defined.}
 

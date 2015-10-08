@@ -10,7 +10,7 @@
 #' function wasn't called a single time
 #' @param incorrect_msg optional feedback message in case the library
 #' function wasn't called for the specified package.
-#' @inheritParams test_object
+#' @inheritParams test_function
 #' 
 #' @examples
 #' \dontrun{
@@ -23,6 +23,8 @@
 #' test_library_function("dplyr")
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_library_function <- function(package,
                           student_code = get_student_code(),

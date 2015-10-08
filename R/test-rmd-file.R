@@ -8,8 +8,9 @@
 #' @param student_file the name of the student file to be tested
 #' @param solution_file the name of the solution file to be tested
 #' @param env The environment in which the code should be tested.
-#' @inheritParams test_object
+#' @inheritParams test_function
 #' 
+#' @import datacampAPI
 #' @export
 test_rmd_file = function(code, 
                          student_file = NULL, 

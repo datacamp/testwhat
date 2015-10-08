@@ -21,6 +21,8 @@
 #' })
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export 
 test_expression_output <- function(expr, 
                                    student_env = .GlobalEnv,

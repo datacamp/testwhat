@@ -5,7 +5,7 @@
 #' student defined doesn't have to have the same name. In other words,
 #' this function will check if any defined variable by the user corresponds to
 #' a specific variable in the solution code. 
-#' 
+#'
 #' @param name  name of object in solution to test.
 #' @param undefined_msg feedback message in case the student did not define 
 #' an object that corresponds to the solution object. This argument should 
@@ -26,6 +26,8 @@
 #' # z <- 4 + 1 + 1e-8
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_an_object <- function(name, undefined_msg,
                         eq_condition = "equivalent",

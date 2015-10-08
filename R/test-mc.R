@@ -26,6 +26,8 @@
 #' test_mc(2, feedback_msgs = c(msg1, msg2, msg3, msg4))
 #' }
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg = NULL, feedback_msgs = NULL) {
   if(is.null(correct)) {

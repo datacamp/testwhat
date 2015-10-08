@@ -19,11 +19,11 @@ and \code{\link{expect_identical}}, respectively.}
 \item{eval}{Next to existence, check if the value of the object corresponds
 between student en solution environment.}
 
-\item{student_env}{environment in which the student code was evaluated.}
+\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
 
-\item{solution_env}{environment in which the solution code was evaluated.}
+\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
-\item{undefined_msg}{optional feedback message in case the student did not define
+\item{undefined_msg}{Optional feedback message in case the student did not define
 the object. A meaningful message is automatically generated if not supplied.}
 
 \item{incorrect_msg}{optional feedback message in case the student's object is not

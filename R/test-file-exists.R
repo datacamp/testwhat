@@ -12,6 +12,7 @@
 #' test_file_exists("test.txt")
 #' }
 #' 
+#' @import testthat
 #' @export
 test_file_exists <- function(path, incorrect_msg = NULL) {
   if(is.null(incorrect_msg)) {

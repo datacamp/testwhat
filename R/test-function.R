@@ -2,7 +2,7 @@
 #'
 #' Test whether a student called a function with certain arguments as least as
 #' many times as in a sample solution. More details in vignette.
-#'
+#' 
 #' @param name  name of the function to test.
 #' @param args  character vector of argument names that the student should have
 #' supplied in the function calls.  If no argument names are given, it is only
@@ -22,7 +22,11 @@
 #' If index is specified, it is checked whether solution and student contain
 #' the same amount of commands. index = NULL by default, i.e. the entire submission is checked.
 #' @param eq_condition  character vector indicating how to perform the
-#' comparison for each argument. See \code{\link{object}}
+#' comparison for each argument. See \code{\link{test_object}}
+#' @param student_code character string: (chunk of) student submission that is being tested.
+#' Do not set this manually.
+#' @param solution_code character string: (chunk of) solution code.
+#' Do not set this manually.
 #' @param not_called_msg  feedback message in case the student did not call the
 #' function at least as often as in the solution code.
 #' @param incorrect_msg  feedback message in case the student did not call the
@@ -32,7 +36,7 @@
 #' @param incorrect_number_of_calls_msg feedback message in case the number of commands
 #' in the solution does not correspond to the solution. (only used if index is not NULL.)
 #' @inheritParams test_object
-#'
+#' 
 #' @examples
 #' \dontrun{
 #' # Suppose the solution contains: mean(1:3, na.rm = TRUE)
@@ -40,6 +44,8 @@
 #' test_function("mean", c("x", "na.rm"))
 #' }
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_function <- function(name, args = NULL, ignore = NULL,
                           allow_extra = TRUE,

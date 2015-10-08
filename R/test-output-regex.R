@@ -4,6 +4,8 @@
 # #' @param console_output The string containing the output printed to the student's console.
 # #' @param incorrect_msg feeback message in case the pattern was not found in the console output
 # #' 
+# #' @import datacampAPI
+# #' @import testthat
 # #' @export
 # test_output_regex <- function(pattern, console_output = get_student_output(), incorrect_msg = NULL) {
 #   if(is.null(incorrect_msg)) {

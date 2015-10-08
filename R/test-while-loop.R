@@ -18,10 +18,9 @@
 #' @param expr_test  SCT to perform on the expression part of the while loop
 #' @param not_found_msg  Message in case the while loop (at given index) is not found.
 #' @param env  Environment in which to perform all these SCTs
-#' @inheritParams test_object
+#' @inheritParams test_function
 #' 
-#' 
-#' #' @examples
+#' @examples
 #' \dontrun{
 #' # Example solution code:
 #' while(x < 18) {
@@ -38,6 +37,8 @@
 #' })
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_while_loop <- function(index = 1, 
                             cond_test = NULL, 

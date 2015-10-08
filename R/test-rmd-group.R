@@ -9,6 +9,7 @@
 #' @param solution_code  the entire solution code.
 #' @param env The environment in which the code should be tested.
 #'
+#' @import datacampAPI
 #' @export
 test_rmd_group = function(group_number, code, student_code = get_student_code(), solution_code = get_solution_code(), env = parent.frame()) {
   code <- substitute(code)
