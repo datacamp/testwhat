@@ -15,17 +15,12 @@ test_rmd_file(code, student_file = NULL, solution_file = NULL,
 
 \item{solution_file}{the name of the solution file to be tested}
 
-\item{student_code}{the entire code that has been submitted by the student.}
-
-\item{solution_code}{the entire solution code.}
-
 \item{env}{The environment in which the code should be tested.}
 }
 \description{
 Test a single R Markdown file
 }
 \details{
-This test is implemented using \code{\link{test_what}}.
 This test should be called when there are multiple files in the submission.
 }
 

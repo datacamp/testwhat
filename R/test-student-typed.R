@@ -1,14 +1,26 @@
-#' Test whether a student typed something
+#' Test student's submission as text
 #' 
-#' Test whether a student typed something. 
+#' Test whether a student typed something in his submission.
 #' Some basic string formatting is performed to allow for different 
 #' ways of saying the same things (removing spaces, changing single 
-#' quotes to double quotes, changing TRUE to T ...)
+#' quotes to double quotes, changing TRUE to T ...).
+#' 
+#' Using this function should be a last resort, as there are myriad ways of
+#' solving the same problems in R!
 #'
 #' @param strings A set of strings, at least one of which must be in the student_code
-#' @param student_code student submission as a string
 #' @param fixed exact string matching (TRUE) or use regex (FALSE)?
 #' @param not_typed_msg Feedback message in case the student did not type the string.
+#' @inheritParams test_object
+#' 
+#' @examples
+#' \dontrun{
+#' # Example solution code: TRUE & FALSE
+#' 
+#' # SCT to test this as a string (both T & F and F & T should be accepted)
+#' test_student_typed(c("TRUE & FALSE", "FALSE & TRUE"))
+#' }
+#' 
 #' @export
 test_student_typed <- function(strings,
                                student_code = get_student_code(),

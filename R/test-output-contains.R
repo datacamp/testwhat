@@ -1,13 +1,10 @@
 #' Check whether the student printed something to the console
 #'
 #' Function checks whether the student's console contains the output one gets by
-#' evaluating the character provided to expr. It returns TRUE when the student's
-#' console indeed contains the expected output and FALSE otherwise. This function is
-#' a testwhat version from an earlier datacampSCT function. (copied into this package to reduce dependency)
+#' evaluating the character string provided in \code{expr} provided to expr. 
+#' This function needs refactoring, as all new lines etc are removed.
 #'
-#' This test is implemented using \code{\link{test_what}}.
-#'
-#' @param expr The expression (as string) for which the output should be in the student's console.
+#' @param expr The expression (as string) for which the output should be in the student's console output.
 #' @param times How often the expression's output should occur in the student's console
 #' @param console_output The string containing the output printed to the student's console.
 #' The default is DM.console.output which is set on the DataCamp server (automagically).
@@ -16,14 +13,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Suppose the student has to write a loop that prints the numbers 1 up to 10.
-#' # Add the following line to the SCT:
+#' # SCT to test whether student printed numbers 1 to 10
 #' test_output_contains("for(i in 1:10) print(i)")
 #' }
 #'
 #' @export
 test_output_contains <- function(expr, times = 1, console_output = get_student_output(), incorrect_msg = NULL) {
-
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
     if(is.null(incorrect_msg)) {
       incorrect_msg <- build_incorrect_output_msg(expr)

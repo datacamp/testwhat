@@ -10,7 +10,7 @@ test_expression_output(expr, student_env = .GlobalEnv,
 \arguments{
 \item{expr}{The expression that is executed in both environments.}
 
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
 \item{solution_env}{environment in which the solution code was evaluated.}
 

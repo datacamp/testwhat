@@ -8,7 +8,7 @@ test_output_contains(expr, times = 1, console_output = get_student_output(),
   incorrect_msg = NULL)
 }
 \arguments{
-\item{expr}{The expression (as string) for which the output should be in the student's console.}
+\item{expr}{The expression (as string) for which the output should be in the student's console output.}
 
 \item{times}{How often the expression's output should occur in the student's console}
 
@@ -20,17 +20,12 @@ This means you don't have to specify this argument when writing SCTs for DataCam
 }
 \description{
 Function checks whether the student's console contains the output one gets by
-evaluating the character provided to expr. It returns TRUE when the student's
-console indeed contains the expected output and FALSE otherwise. This function is
-a testwhat version from an earlier datacampSCT function. (copied into this package to reduce dependency)
-}
-\details{
-This test is implemented using \code{\link{test_what}}.
+evaluating the character string provided in \code{expr} provided to expr.
+This function needs refactoring, as all new lines etc are removed.
 }
 \examples{
 \dontrun{
-# Suppose the student has to write a loop that prints the numbers 1 up to 10.
-# Add the following line to the SCT:
+# SCT to test whether student printed numbers 1 to 10
 test_output_contains("for(i in 1:10) print(i)")
 }
 }

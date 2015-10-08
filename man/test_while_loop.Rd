@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-while-loop.R
 \name{test_while_loop}
 \alias{test_while_loop}
-\title{Check whether the student wrote a while loop correctly}
+\title{Test a while loop}
 \usage{
 test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
   student_code = get_student_code(), solution_code = get_solution_code(),
@@ -15,15 +15,39 @@ test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
 
 \item{expr_test}{SCT to perform on the expression part of the while loop}
 
-\item{student_code}{character string containing the student's code.}
-
-\item{solution_code}{character string containing the sample solution code.}
-
 \item{not_found_msg}{Message in case the while loop (at given index) is not found.}
 
 \item{env}{Environment in which to perform all these SCTs}
 }
 \description{
-Check whether the student wrote a while loop correctly
+Test whether a student correctly coded a while loop. The function parses
+the student and solution code and selects the first, second ... while loop in the
+code depending on the \code{index} argument, and then runs two chunks of tests:
+\itemize{
+ \item{\code{cond_test}: \code{testwhat} tests specifically for
+ the condition part of the while loop.}
+ \item{\code{expr_test}: \code{testwhat} tests for the code inside the while loop}
+}
+The tests for the conditional part and the expression part
+of the while loop can only be text-based. You cannot use functions such
+as \code{\link{test_object}} that also depend on the student and solution
+environment.
+}
+\examples{
+\dontrun{
+# Example solution code:
+while(x < 18) {
+ x <- x + 5
+ print(x)
+}
+
+# SCT to test this loop:
+test_while_loop({
+ test_student_typed(c("< 18", "18 >"))
+}, {
+ test_student_Typed(c("x + 5", "5 = x"))
+ test_function("print", eval = FALSE) # no actual value matching possible!!
+})
+}
 }
 

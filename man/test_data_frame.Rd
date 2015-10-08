@@ -14,13 +14,14 @@ test_data_frame(name, columns = NULL, eq_condition = "equivalent",
 \item{columns}{character vector or integer vector of list elements or
 indices to test.}
 
-\item{eq_condition}{character string indicating how to compare the
-objects. See \code{\link{test_object}}}
+\item{eq_condition}{character string indicating how to compare. Possible values
+are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+See \code{\link{expect_equivalent}}, \code{\link{expect_equals}},
+and \code{\link{expect_identical}}, respectively.}
 
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
-\item{solution_env}{environment in which the solution code was evaluated.
-evaluated.}
+\item{solution_env}{environment in which the solution code was evaluated.}
 
 \item{undefined_msg}{optional feedback message if list is not defined.}
 

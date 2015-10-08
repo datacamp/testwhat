@@ -19,13 +19,9 @@ test_function_definition(name, function_test = NULL, body_test = NULL,
 \item{body_test}{Additional tests to perform on the body of the function if the tests
 in \code{function_test} fail. Only able to test on strings here!}
 
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
 \item{solution_env}{environment in which the solution code was evaluated.}
-
-\item{student_code}{character string containing the student's code.}
-
-\item{solution_code}{character string containing the solution code.}
 
 \item{undefined_msg}{Optional feedback message in case the specified
 function was not defined}

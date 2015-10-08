@@ -11,15 +11,15 @@ test_object(name, eq_condition = "equivalent", eval = TRUE,
 \arguments{
 \item{name}{name of the object to test.}
 
-\item{eq_condition}{character string indicating how to compare the
-objects. Possible values are \code{"equivalent"} (the default),
-\code{"equal"} and \code{"identical"}.  See \code{\link{expect_equivalent}},
-\code{\link{expect_equals}}, and \code{\link{expect_identical}}, respectively.}
+\item{eq_condition}{character string indicating how to compare. Possible values
+are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+See \code{\link{expect_equivalent}}, \code{\link{expect_equals}},
+and \code{\link{expect_identical}}, respectively.}
 
 \item{eval}{Next to existence, check if the value of the object corresponds
 between student en solution environment.}
 
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
 \item{solution_env}{environment in which the solution code was evaluated.}
 

@@ -22,12 +22,7 @@
 #' If index is specified, it is checked whether solution and student contain
 #' the same amount of commands. index = NULL by default, i.e. the entire submission is checked.
 #' @param eq_condition  character vector indicating how to perform the
-#' comparison for each argument.  Possible values are \code{"equivalent"}
-#' (the default), \code{"equal"} and \code{"identical"}.  See
-#' \code{\link{is_equivalent_to}}, \code{\link{equals}}, and
-#' \code{\link{is_identical_to}}, respectively.
-#' @param student_code  character string containing the student's code.
-#' @param solution_code  character string containing the sample solution code.
+#' comparison for each argument. See \code{\link{object}}
 #' @param not_called_msg  feedback message in case the student did not call the
 #' function at least as often as in the solution code.
 #' @param incorrect_msg  feedback message in case the student did not call the
@@ -44,8 +39,6 @@
 #' # To test this submission, provide the following in the sct
 #' test_function("mean", c("x", "na.rm"))
 #' }
-#'
-#' # Other examples: see SCT design guide
 #'
 #' @export
 test_function <- function(name, args = NULL, ignore = NULL,

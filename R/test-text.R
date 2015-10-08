@@ -1,8 +1,6 @@
-#' Test inline text and its formatting (R Markdown exercises)
+#' Test inline text and formatting (Markdown)
 #'
-#' Test inline text and its formatting (R Markdown exercises)
-#'
-#' This test is implemented using \code{\link{test_what}}. 
+#' Test inline text and its formatting for R Markdown exercises.
 #' This test can only be called inside a test_rmd_group() call!
 #'
 #' @param text  Text to match (can be a regular expression!)
@@ -15,7 +13,6 @@
 #' @param not_called_msg feedback message if the text was not there
 #' @param incorrect_msg  feedback message if the text was not properly formatted
 #'
-#' @import datacampAPI
 #' @export
 test_text <- function(text,
                       format = "any",

@@ -8,16 +8,12 @@
 #' @param name  name of the list or data frame to test.
 #' @param columns character vector or integer vector of list elements or 
 #' indices to test.
-#' @param eq_condition  character string indicating how to compare the
-#' objects. See \code{\link{test_object}}
-#' @param student_env environment in which the student's code was evaluated.
-#' @param solution_env environment in which the solution code was evaluated.
-#' evaluated.
 #' @param undefined_msg optional feedback message if list is not defined.
 #' @param undefined_cols_msg optional feedback message if not all specified elements 
 #' of the solution list were found in the student's list.
 #' @param incorrect_msg optional feedback message if not all specified elements of
 #' the solution list match those in the student list.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

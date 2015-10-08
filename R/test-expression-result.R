@@ -4,12 +4,9 @@
 #' the student and the solution environment.
 #' 
 #' @param expr The expression that is executed in both environments.
-#' @param eq_condition Character vector indicating how to perform the
-#' comparison of the results. See \code{\link{test_object}}.
-#' @param student_env environment in which the student's code was evaluated.
-#' @param solution_env environment in which the solution code was evaluated.
 #' @param incorrect_msg Optional feedback message in case the evaluation is not the
 #' same in both environments. Automatically generated if not specified.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

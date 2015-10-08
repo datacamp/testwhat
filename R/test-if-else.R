@@ -14,13 +14,12 @@
 #' of the control structure
 #' @param else_expr_test tests to perform in the else expression 
 #' part of the control structure
-#' @param student_code character string containing the student's code.
-#' @param solution_code character string containing the solution code.
 #' @param not_found_msg Message in case the control structure 
 #' (at given index) is not found.
 #' @param missing_else_msg Messing in case the else part of the 
 #' control structure should be there but is missing
 #' @param env  Environment in which to perform all these SCTs
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

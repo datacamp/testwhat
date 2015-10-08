@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-text.R
 \name{test_text}
 \alias{test_text}
-\title{Test inline text and its formatting (R Markdown exercises)}
+\title{Test inline text and formatting (Markdown)}
 \usage{
 test_text(text, format = "any", freq = 1,
   inline_number = get_inline_number(),
@@ -29,10 +29,7 @@ If none of the above, the format string is appended to text in front and in the 
 \item{incorrect_msg}{feedback message if the text was not properly formatted}
 }
 \description{
-Test inline text and its formatting (R Markdown exercises)
-}
-\details{
-This test is implemented using \code{\link{test_what}}.
+Test inline text and its formatting for R Markdown exercises.
 This test can only be called inside a test_rmd_group() call!
 }
 

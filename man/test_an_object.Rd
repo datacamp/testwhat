@@ -14,10 +14,12 @@ test_an_object(name, undefined_msg, eq_condition = "equivalent",
 an object that corresponds to the solution object. This argument should
 always be specified.}
 
-\item{eq_condition}{character string indicating how to compare the
-objects. See \code{\link{test_object}})}
+\item{eq_condition}{character string indicating how to compare. Possible values
+are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+See \code{\link{expect_equivalent}}, \code{\link{expect_equals}},
+and \code{\link{expect_identical}}, respectively.}
 
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
 \item{solution_env}{environment in which the solution code was evaluated.}
 }
