@@ -14,7 +14,7 @@
 #' tests were sucessful, and \code{feedback} that contains a feedback message.
 #'
 #' @export
-test_exercise <- function(code, report = c("first", "all", "challenge"), env = test_env()) {
+test_exercise <- function(code, report = c("first", "challenge"), env = test_env()) {
   # Parse code and ensure that feedback messages are reset
   code <- parse(text = code)
   report <- match.arg(report)
@@ -26,9 +26,7 @@ test_exercise <- function(code, report = c("first", "all", "challenge"), env = t
   with_reporter(reporter, .test_exercise(code, env))
 
   # Obtain feedback from DataCamp reporter and return it invidibly
-  failure_msg <- getOption("failure_msg", default = "Try again.")
-  success_msg <- getOption("success_msg", default = "Great job!")
-  feedback <- reporter$get_feedback(failure_msg, success_msg)
+  feedback <- reporter$get_feedback()
   invisible(feedback)
 }
 
