@@ -121,7 +121,10 @@ test_function <- function(name, args = NULL, ignore = NULL,
     
   ## If supplied, test arguments
   if (n_args > 0) {
-    
+    eq_fun <- lapply(eq_condition, function(cond) {
+      switch(cond, equivalent = .equivalent, equal = .equal,
+                        identical = identical, stop("invalid equality condition"))
+    })
     
     # Loop over the solution function calls:
     # Extract the specified arguments from current solution function call and
@@ -131,11 +134,11 @@ test_function <- function(name, args = NULL, ignore = NULL,
     }
     incorrect_msg <- rep(incorrect_msg, length.out = n_solution_calls)
     for (i in seq_len(n_solution_calls)) {
+      found_correct <- FALSE
       # Extract the specified arguments from current solution function call
       solution_args <- extract_arguments(solution_calls[[i]], args, eval,
                                          env = solution_env)
       
-      correct <- NULL
       
       # Loop over the student function calls:
       # Extract the specified arguments from current student function call
@@ -143,11 +146,10 @@ test_function <- function(name, args = NULL, ignore = NULL,
       for (j in seq_len(n_student_calls)) {
         student_args <- extract_arguments(student_calls[[j]], args, eval,
                                           env = student_env)
-        
         correct <- numeric(n_args)
         
         for (n in 1:n_args) {
-          correct[n] <- test_what(eq_fun[[n]](student_args,solution_args), incorrect_msg[[i]])
+          correct[n] <- eq_fun[[n]](student_args,solution_args)
         }
 
         correct <- all(correct)
@@ -155,9 +157,11 @@ test_function <- function(name, args = NULL, ignore = NULL,
         if (correct) {
           student_calls[[j]] <- NULL
           n_student_calls <- length(student_calls)
+          found_correct <- TRUE
           break
         }
       }
+      test_what(expect_true(found_correct), incorrect_msg[[i]])
     }
   }
 }

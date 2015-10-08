@@ -65,7 +65,8 @@ test_object <- function(name, eq_condition = "equivalent",
     incorrect_msg <- build_incorrect_object_msg(name)
   }
   
-  defined <- test_what(expect_true(exists(name, envir = student_env, inherits = FALSE)), undefined_msg)
+  defined <- exists(name, envir = student_env, inherits = FALSE)
+  test_what(expect_true(defined), undefined_msg)
   
   if (defined && eval) {
     student <- get(name, envir = student_env, inherits = FALSE)

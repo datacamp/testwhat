@@ -75,8 +75,9 @@ test_function_v2 <- function(name, args = NULL, ignore = NULL,
           not_called_msg <- build_not_called_msg(n_solution_calls = 1, name, arg_text, functioncalltext)
         }
         # Check if the function is called with the right arguments
-        args_ok <- test_what(
-          expect_true(have_arguments(student_calls, args, ignore, allow_extra)), 
+        args_ok <- have_arguments(student_calls, args, ignore, allow_extra)
+        test_what(
+          expect_true(args_ok), 
           not_called_msg
         )
       }
