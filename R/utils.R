@@ -115,7 +115,7 @@ unpipe <- function(expr) {
 
 #' build R markdown document structure, using knitr functions
 #' 
-#' @importFrom knitr pat_md
+#' @importFrom knitr pat_md knit_patterns
 #' @param text text representing an R Markdown document
 build_doc_structure <- function(text) {
   require(knitr)

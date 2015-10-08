@@ -9,13 +9,13 @@ Description: This package makes it easy for teachers to test students' code
 URL: www.DataCamp.com
 Depends: 
     R (>= 3.0.0),
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 Imports: 
     digest,
     methods,
-    datacampAPI,
-    knitr,
-    rmarkdown
+    datacampAPI
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
