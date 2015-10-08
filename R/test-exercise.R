@@ -36,7 +36,13 @@ test_exercise <- function(code, report = c("first", "all", "challenge"), env = t
   n <- length(code)
   if (n == 0L) return(invisible())
   # Try because if sct fails, execution is thrown back here.
-  try(eval(code, new.env(parent = parent_env)))
+  eval_fail <- try(eval(code, new.env(parent = parent_env)), silent = TRUE)
+  if (inherits(eval_fail, "try-error")) {
+    cond <- attr(eval_fail, "condition")$message
+    if (!identical(cond, sct_failed_msg)) {
+      stop(cond)
+    }
+  }
   end_context()
 }
 
