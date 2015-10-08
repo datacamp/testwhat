@@ -23,9 +23,13 @@
 #' @import testthat
 #' @export
 test_error <- function(incorrect_msg = NULL, error = get_student_error()) {
-  build_msg = sprintf("Your solution contains an error:<br><i>%s</i>%s", 
-                      error,
-                      ifelse(is.null(incorrect_msg), "", paste0("<br>",incorrect_msg)))
+  if(!is.null(error)) {
+    build_msg <- sprintf("Your solution contains an error:<br><i>%s</i>%s", 
+                         error,
+                         ifelse(is.null(incorrect_msg), "", paste0("<br>",incorrect_msg)))
+  } else {
+    build_msg <- "all good"
+  }
   
-  test_what(expect_null(error), build_msg)
+  test_what(expect_null(error), feedback_msg = build_msg)
 }

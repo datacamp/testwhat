@@ -11,4 +11,6 @@
 #' 
 #' @param msg The congratulatory message as a character string.
 #' @export
-success_msg <- function(msg) options(success_msg = msg)
+success_msg <- function(msg) {
+  get_reporter()$set_inh_success_msg(msg)
+}

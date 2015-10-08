@@ -4,8 +4,7 @@
 \alias{test_exercise}
 \title{Run all tests for an exercise}
 \usage{
-test_exercise(code, report = c("first", "all", "challenge"),
-  env = test_env())
+test_exercise(code, report = c("first", "challenge"), env = test_env())
 }
 \arguments{
 \item{code}{character string containing the tests to perform.}
