@@ -31,6 +31,7 @@ test_exercise <- function(code, report = c("first", "challenge"), env = test_env
 }
 
 .test_exercise <- function(code, parent_env) {
+  get_reporter()$start_reporter()
   n <- length(code)
   if (n == 0L) return(invisible())
   # Try because if sct fails, execution is thrown back here.

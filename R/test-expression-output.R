@@ -30,6 +30,9 @@ test_expression_output <- function(expr,
                                    incorrect_msg = NULL) {
   
   output_sol <- try(capture.output(try(eval(parse(text = expr), envir = solution_env), silent = TRUE)))
+  if (is.null(output_sol)) {
+    output_sol <- "NULL"
+  }
   
   if (inherits(output_sol, "try-error")) {
     stop("expr in test_output() results in an error in the solution environment")
@@ -42,6 +45,9 @@ test_expression_output <- function(expr,
   }
   
   output_stud <- try(capture.output(try(eval(parse(text = expr), envir = student_env), silent = TRUE)))
+  if (is.null(output_stud)) {
+    output_stud <- "NULL"
+  }
   
   if (inherits(output_stud, "try-error")) {
     test_what(fail(), 

@@ -26,6 +26,7 @@ DataCampReporter <- setRefClass(
     initialize = function(...) {
       report <<- "first"
       callSuper(...)
+      
     },
     start_reporter = function(...) {
       callSuper(...)

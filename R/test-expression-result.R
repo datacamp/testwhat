@@ -31,6 +31,9 @@ test_expression_result <- function(expr,
                                    incorrect_msg = NULL) {
   
   capture.output(result_sol <- try(eval(parse(text = expr), envir = solution_env), silent = TRUE))
+  if (is.null(result_sol)) {
+    result_sol <- "NULL"
+  }
   
   if (inherits(result_sol, "try-error")) {
     stop("expr in test_result() results in an error in the solution environment")
@@ -41,6 +44,9 @@ test_expression_result <- function(expr,
   }
   
   capture.output(result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE))
+  if (is.null(result_stud)) {
+    result_stud <- "NULL"
+  }
   
   if (inherits(result_stud, "try-error")) {
     test_what(fail(), 
@@ -53,7 +59,7 @@ test_expression_result <- function(expr,
                      equal = expect_equal,
                      identical = expect_identical,
                      stop("invalid equality condition"))
-    
+
     test_what(eq_fun(result_sol, result_stud),
               sprintf("%s<br>Instead, got: <code>%s</code>", 
                       incorrect_msg, 
