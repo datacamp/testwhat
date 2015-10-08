@@ -47,8 +47,9 @@ test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg 
   if(is.na(feedback_msgs[result])) {
     stop("There is no feedback message available for this user input! Make sure you define enough feedback messages")
   }
-
-  defined <- test_what(expect_true(exists("result")), no_selection_msg)
+  
+  defined <- exists("result")
+  test_what(expect_true(defined), no_selection_msg)
   if(defined) {
     if(!is.numeric(result)) {
       stop("There is something wrong with the result set by the backend.")

@@ -67,12 +67,13 @@ test_data_frame <- function(name, columns = NULL,
       incorrect_msg <- sprintf("It looks like you didn't correctly set one or more of the columns %s inside %s.", col_names, quoted_name)  
     }
   }
-  
-  defined <- test_what(expect_true(exists(name, envir = student_env, inherits = FALSE)), undefined_msg)
+  defined <- exists(name, envir = student_env, inherits = FALSE)
+  test_what(expect_true(defined), undefined_msg)
   if (defined) {
     student <- get(name, envir = student_env, inherits = FALSE)
     
-    columns_defined <- test_what(expect_true(all(columns %in% names(student))), undefined_cols_msg)
+    columns_defined <- all(columns %in% names(student))
+    test_what(expect_true(columns_defined), undefined_cols_msg)
     
     if (columns_defined) {
       eq_fun <- switch(eq_condition, 

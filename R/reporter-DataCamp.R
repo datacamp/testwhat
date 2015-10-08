@@ -79,6 +79,7 @@ DataCampReporter <- setRefClass(
     
     ## challenge methods
     set_instruction_index = function(index) {
+      failed <<- FALSE
       instruction_index <<- index
     },
     

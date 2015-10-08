@@ -62,7 +62,8 @@ test_function_definition <- function(name,
     incorrect_number_arguments_msg <- sprintf("Did you specify the correct number of arguments in the function <code>%s()</code>?", name)
   }
   
-  defined <- test_what(expect_true(exists(name, envir = student_env, inherits = FALSE)), undefined_msg)
+  defined <- exists(name, envir = student_env, inherits = FALSE)
+  test_what(expect_true(defined), undefined_msg)
   
   if (defined) {
     stud_function <- get(name, envir = student_env, inherits = FALSE)

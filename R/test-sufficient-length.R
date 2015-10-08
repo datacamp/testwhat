@@ -18,8 +18,10 @@ test_sufficient_length = function(stud,index,incorrect_number_of_calls_msg = NUL
     incorrect_number_of_calls_msg <- sprintf("The system wants to test if the %s command you entered is correct, but it hasn't found one. Add more code.", get_num(index))
   }
   
-  n_student_calls <- length(stud)
-  less_or_equal <- test_what(expect_less_than(index-1, n_student_calls), incorrect_number_of_calls_msg)
   
-  return(less_or_equal)
+  n_student_calls <- length(stud)
+  sufficient_length <- (index <= n_student_calls)
+  test_what(expect_true(sufficient_length), incorrect_number_of_calls_msg)
+  
+  return(sufficient_length)
 }

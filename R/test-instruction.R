@@ -12,5 +12,11 @@ test_instruction = function(index, code, env = parent.frame()) {
   if (is.character(code)) code <- parse(text = code)
   
   get_reporter()$set_instruction_index(as.integer(index))
-  eval(code, envir = env)
+  eval_fail <- try(eval(code, envir = env), silent = TRUE)
+  if (inherits(eval_fail, "try-error")) {
+    cond <- attr(eval_fail, "condition")$message
+    if (!identical(cond, sct_failed_msg)) {
+      stop(cond)
+    }
+  }
 }
