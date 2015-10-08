@@ -19,6 +19,8 @@
 #' test_error("Don't sum numerics and characters!")
 #' }
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_error <- function(incorrect_msg = NULL, error = get_student_error()) {
   build_msg = sprintf("Your solution contains an error:<br><i>%s</i>%s", 

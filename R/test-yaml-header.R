@@ -12,6 +12,8 @@
 #' @param not_called_msg feedback message if option was not specified (optional but recommended)
 #' @param incorrect_msg  feedback message if option was incorrectly set (optional but recommended)
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_yaml_header <- function(options = NULL,
                                check_equality = TRUE,

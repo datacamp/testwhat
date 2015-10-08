@@ -19,7 +19,7 @@
 #' @param missing_else_msg Messing in case the else part of the 
 #' control structure should be there but is missing
 #' @param env  Environment in which to perform all these SCTs
-#' @inheritParams test_object
+#' @inheritParams test_function
 #' 
 #' @examples
 #' \dontrun{
@@ -54,6 +54,8 @@
 #' })
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_if_else <- function(index = 1, 
                          if_cond_test = NULL, 

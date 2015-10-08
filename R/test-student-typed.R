@@ -11,7 +11,7 @@
 #' @param strings A set of strings, at least one of which must be in the student_code
 #' @param fixed exact string matching (TRUE) or use regex (FALSE)?
 #' @param not_typed_msg Feedback message in case the student did not type the string.
-#' @inheritParams test_object
+#' @inheritParams test_function
 #' 
 #' @examples
 #' \dontrun{
@@ -21,6 +21,8 @@
 #' test_student_typed(c("TRUE & FALSE", "FALSE & TRUE"))
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_student_typed <- function(strings,
                                student_code = get_student_code(),

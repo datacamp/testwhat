@@ -21,6 +21,12 @@ of the control structure}
 \item{else_expr_test}{tests to perform in the else expression
 part of the control structure}
 
+\item{student_code}{character string: (chunk of) student submission that is being tested.
+Do not set this manually.}
+
+\item{solution_code}{character string: (chunk of) solution code.
+Do not set this manually.}
+
 \item{not_found_msg}{Message in case the control structure
 (at given index) is not found.}
 

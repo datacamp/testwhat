@@ -12,7 +12,9 @@
 #' @param solution_chunk  character string containing the sample solution code.
 #' @param not_called_msg feedback message if option was not specified
 #' @param incorrect_msg  feedback message if option was incorrectly set
-#'
+#' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_chunk_options <- function(options = NULL,
                                allow_extra = TRUE,

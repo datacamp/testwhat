@@ -15,6 +15,12 @@ test_rmd_file(code, student_file = NULL, solution_file = NULL,
 
 \item{solution_file}{the name of the solution file to be tested}
 
+\item{student_code}{character string: (chunk of) student submission that is being tested.
+Do not set this manually.}
+
+\item{solution_code}{character string: (chunk of) solution code.
+Do not set this manually.}
+
 \item{env}{The environment in which the code should be tested.}
 }
 \description{

@@ -9,7 +9,6 @@
 #' reported. If \code{"all"}, feedback messages from all failed tests are
 #' collected.
 #' @param env  environment in which to execute tests.
-#' @param msg see \dQuote{Details}.
 #'
 #' @return A list with components \code{passed} that indicates whether all
 #' tests were sucessful, and \code{feedback} that contains a feedback message.

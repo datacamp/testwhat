@@ -37,11 +37,17 @@ If index is specified, it is checked whether solution and student contain
 the same amount of commands. index = NULL by default, i.e. the entire submission is checked.}
 
 \item{eq_condition}{character vector indicating how to perform the
-comparison for each argument. See \code{\link{object}}}
+comparison for each argument. See \code{\link{test_object}}}
 
-\item{student_env}{environment in which the student code was evaluated.}
+\item{student_code}{character string: (chunk of) student submission that is being tested.
+Do not set this manually.}
 
-\item{solution_env}{environment in which the solution code was evaluated.}
+\item{solution_code}{character string: (chunk of) solution code.
+Do not set this manually.}
+
+\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
+
+\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
 \item{not_called_msg}{feedback message in case the student did not call the
 function at least as often as in the solution code.}

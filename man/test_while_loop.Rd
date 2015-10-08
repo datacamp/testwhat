@@ -15,6 +15,12 @@ test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
 
 \item{expr_test}{SCT to perform on the expression part of the while loop}
 
+\item{student_code}{character string: (chunk of) student submission that is being tested.
+Do not set this manually.}
+
+\item{solution_code}{character string: (chunk of) solution code.
+Do not set this manually.}
+
 \item{not_found_msg}{Message in case the while loop (at given index) is not found.}
 
 \item{env}{Environment in which to perform all these SCTs}

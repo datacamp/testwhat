@@ -11,7 +11,8 @@
 #' function does not have the correct number of arguments.
 #' @param env Environment in which to perform the tests
 #' @inheritParams test_object
-#' 
+#' @inheritParams test_function
+
 #' @examples
 #' \dontrun{
 #' # Example 1 solution code:
@@ -26,6 +27,8 @@
 #' })
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_function_definition <- function(name, 
                                      function_test = NULL, 

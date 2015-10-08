@@ -1,3 +1,8 @@
+#' Overridden version of testthat's function for compatibility reasons
+#' 
+#' @param descr description
+#' @param code actual test code
+#' 
 #' @export
 test_that <- function(descr, code) {
   tree <- substitute(code)

@@ -4,37 +4,14 @@
 #' many times as in a sample solution. More details in vignette.
 #' 
 #' Only difference between V1 and V2 is how \code{index} is treated.
-#'
-#' @param name  name of the function to test.
-#' @param args  character vector of argument names that the student should have
-#' supplied in the function calls.  If no argument names are given, it is only
-#' tested whether the student called the function at least as many times as in
-#' the sample solution.
-#' @param ignore character vector of argument names that should not be tested
-#' (useful in combination with \code{allow_extra = FALSE} to allow certain
-#' arguments to be ignored, but not others).
-#' @param allow_extra  indicates whether extra arguments not specified by
-#' \code{args} or \code{ignore} are allowed in the student's function calls.
-#' @param eval  logical vector indicating whether the corresponding argument
-#' should be evaluated before testing.  Setting this to \code{FALSE} can be
-#' useful, e.g., to test whether the student supplied a large predefined
-#' object, as only the corresponding \code{\link{name}} is compared in this
-#' case (use with care!).
+#' 
 #' @param index  Which command to check on (both in solution and student).
 #' If index is specified, it is checked whether solution and student contain
 #' the same amount of function calls.
-#' @param eq_condition  character vector indicating how to perform the
-#' comparison for each argument. See \code{\link{object}}
-#' @param not_called_msg  feedback message in case the student did not call the
-#' function at least as often as in the solution code.
-#' @param incorrect_msg  feedback message in case the student did not call the
-#' function with the same argument values as in the sample solution.  If
-#' there are multiple function calls in the sample solution, a vector of
-#' feedback messages can be supplied.
-#' @param incorrect_number_of_calls_msg feedback message in case the number of commands
-#' in the solution does not correspond to the solution. (only used if index is not NULL.)
+#' @param index_not_called_msg feedback message in case the queried index wasn't found.
 #' @inheritParams test_object
-#'
+#' @inheritParams test_function
+
 #' @examples
 #' \dontrun{
 #' # Suppose the solution contains: mean(1:3, na.rm = TRUE)
@@ -42,6 +19,8 @@
 #' test_function("mean", c("x", "na.rm"))
 #' }
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_function_v2 <- function(name, args = NULL, ignore = NULL,
                              allow_extra = TRUE,

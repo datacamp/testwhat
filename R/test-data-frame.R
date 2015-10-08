@@ -4,7 +4,7 @@
 #' whether the elements of the list correspond to the ones in the solution.
 #' A data frame is also a list, so you can use this function to test the
 #' correspondence of data frame columns.
-#'
+#' 
 #' @param name  name of the list or data frame to test.
 #' @param columns character vector or integer vector of list elements or 
 #' indices to test.
@@ -27,6 +27,8 @@
 #' test_data_frame("df", columns = "b") 
 #' }
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_data_frame <- function(name, columns = NULL, 
                             eq_condition = "equivalent",
@@ -84,6 +86,3 @@ test_data_frame <- function(name, columns = NULL,
     }
   }
 }
-
-#' @export
-test_list_elements <- test_data_frame

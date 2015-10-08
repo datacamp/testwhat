@@ -11,9 +11,9 @@
 #' and \code{\link{expect_identical}}, respectively.
 #' @param eval Next to existence, check if the value of the object corresponds
 #' between student en solution environment.
-#' @param student_env environment in which the student code was evaluated.
-#' @param solution_env environment in which the solution code was evaluated.
-#' @param undefined_msg optional feedback message in case the student did not define
+#' @param student_env Environment in which the student code was evaluated. Do not set this manually.
+#' @param solution_env Environment in which the solution code was evaluated. Do not set this manually.
+#' @param undefined_msg Optional feedback message in case the student did not define
 #' the object. A meaningful message is automatically generated if not supplied.
 #' @param incorrect_msg optional feedback message in case the student's object is not
 #' the same as in the sample solution. Only used if \code{eval} is \code{TRUE}. 
@@ -43,6 +43,8 @@
 #' test_object(y, eq_condtion = "identical")
 #' }
 #'
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,

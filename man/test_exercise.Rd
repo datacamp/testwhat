@@ -16,8 +16,6 @@ reported. If \code{"all"}, feedback messages from all failed tests are
 collected.}
 
 \item{env}{environment in which to execute tests.}
-
-\item{msg}{see \dQuote{Details}.}
 }
 \value{
 A list with components \code{passed} that indicates whether all

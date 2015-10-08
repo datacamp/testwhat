@@ -11,6 +11,9 @@ test_library_function(package, student_code = get_student_code(),
 \item{package}{package name for which the library()
 function should've been called}
 
+\item{student_code}{character string: (chunk of) student submission that is being tested.
+Do not set this manually.}
+
 \item{not_called_msg}{optional feedback message in case the library
 function wasn't called a single time}
 

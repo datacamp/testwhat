@@ -19,7 +19,7 @@
 #' @param not_found_msg optional feedback message in case the for loop 
 #' (at given index) is not found.
 #' @param env Environment in which to run the additional testwhat tests.
-#' @inheritParams test_object
+#' @inheritParams test_function
 #' 
 #' @examples
 #' \dontrun{
@@ -38,6 +38,8 @@
 #' })
 #' }
 #' 
+#' @import datacampAPI
+#' @import testthat
 #' @export
 test_for_loop <- function(index = 1, 
                           cond_test = NULL,
