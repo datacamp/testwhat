@@ -3,3 +3,6 @@
 .RData
 results.log
 .DS_Store
+.tmp.RData
+*.html
+*.Rmd

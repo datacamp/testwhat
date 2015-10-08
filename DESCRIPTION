@@ -22,7 +22,6 @@ Authors@R: c(person("Andreas", "Alfons", role = "aut"),
     person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")))
 Collate: 
     'message-builder.R'
-    'expectations-testwhat.R'
     'reporter-DataCamp.R'
     'success-msg.R'
     'test-an-object.R'

@@ -70,10 +70,6 @@ scen <- list(
       )
     ),
     fail =  list(
-      test_not_inline = list(
-        long = "test fails if given group is not inline",
-        sct = "test_rmd_group(2, test_text(\"cars\"))"
-      ),
       test_text_fails_once = list(
         long = "test fails if text is not availble in given inline group",
         sct = "test_rmd_group(1, test_text(\"rest\", not_called_msg = \"not calllled\"))",

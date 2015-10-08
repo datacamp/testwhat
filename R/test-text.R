@@ -29,7 +29,6 @@ test_text <- function(text,
   }
   test_what(expect_equal(class(student_inline), "inline"), "The student rmd group is not inline!")
         
-  
   # Set up default messages
   # message if text was not found
   if(is.null(not_called_msg)) {
