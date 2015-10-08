@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-yaml-header.R
 \name{test_yaml_header}
 \alias{test_yaml_header}
-\title{Test whether the student specified the correct options in the yaml header (R Markdown)}
+\title{Test yaml header (Markdown)}
 \usage{
 test_yaml_header(options = NULL, check_equality = TRUE,
   allow_extra = TRUE, chunk_number = get_chunk_number(),
@@ -27,10 +27,7 @@ test_yaml_header(options = NULL, check_equality = TRUE,
 \item{incorrect_msg}{feedback message if option was incorrectly set (optional but recommended)}
 }
 \description{
-Test whether the student specified the correct options in the yaml header (R Markdown)
-}
-\details{
-This test is implemented using \code{\link{test_what}}.
-This test should be called outside an test_rmd_group call.
+Test whether the student specified the correct options in the yaml header (for
+R Markdown exercises). This test should be called outside an test_rmd_group call.
 }
 

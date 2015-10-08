@@ -1,12 +1,42 @@
-#' Check whether the student wrote a while loop correctly
+#' Test a while loop
+#' 
+#' Test whether a student correctly coded a while loop. The function parses
+#' the student and solution code and selects the first, second ... while loop in the
+#' code depending on the \code{index} argument, and then runs two chunks of tests:
+#' \itemize{
+#'  \item{\code{cond_test}: \code{testwhat} tests specifically for
+#'  the condition part of the while loop.}
+#'  \item{\code{expr_test}: \code{testwhat} tests for the code inside the while loop}
+#' }
+#' The tests for the conditional part and the expression part
+#' of the while loop can only be text-based. You cannot use functions such
+#' as \code{\link{test_object}} that also depend on the student and solution
+#' environment.
 #' 
 #' @param index  The index of the while loop to check.
 #' @param cond_test  SCT to perform on the condition part of the while loop
 #' @param expr_test  SCT to perform on the expression part of the while loop
-#' @param student_code  character string containing the student's code.
-#' @param solution_code  character string containing the sample solution code.
 #' @param not_found_msg  Message in case the while loop (at given index) is not found.
 #' @param env  Environment in which to perform all these SCTs
+#' @inheritParams test_object
+#' 
+#' 
+#' #' @examples
+#' \dontrun{
+#' # Example solution code:
+#' while(x < 18) {
+#'  x <- x + 5
+#'  print(x)
+#' }
+#' 
+#' # SCT to test this loop:
+#' test_while_loop({
+#'  test_student_typed(c("< 18", "18 >"))
+#' }, {
+#'  test_student_Typed(c("x + 5", "5 = x"))
+#'  test_function("print", eval = FALSE) # no actual value matching possible!!
+#' })
+#' }
 #' 
 #' @export
 test_while_loop <- function(index = 1, 

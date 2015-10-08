@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-sufficient-length.R
 \name{test_sufficient_length}
 \alias{test_sufficient_length}
-\title{Helper function to test if list has sufficient length}
+\title{Test sufficient list length.}
 \usage{
 test_sufficient_length(stud, index, incorrect_number_of_calls_msg = NULL)
 }
@@ -14,6 +14,7 @@ test_sufficient_length(stud, index, incorrect_number_of_calls_msg = NULL)
 \item{incorrect_number_of_calls_msg}{message in case the length of stud is not sufficient.}
 }
 \description{
-Helper function to test if list has sufficient length
+Is only used by additional addon testwhat packages; do not use this
+function inside an SCT.
 }
 

@@ -5,15 +5,12 @@
 #' (use \code{\link{test_expression_output}} and \code{\link{test_expression_result}}).
 #' @param body_test Additional tests to perform on the body of the function if the tests
 #' in \code{function_test} fail. Only able to test on strings here!
-#' @param student_env environment in which the student's code was evaluated.
-#' @param solution_env environment in which the solution code was evaluated.
-#' @param student_code character string containing the student's code.
-#' @param solution_code character string containing the solution code.
 #' @param undefined_msg Optional feedback message in case the specified 
 #' function was not defined
 #' @param incorrect_number_arguments_msg Optional feedback message in case the 
 #' function does not have the correct number of arguments.
 #' @param env Environment in which to perform the tests
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

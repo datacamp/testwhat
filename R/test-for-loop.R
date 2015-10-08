@@ -6,10 +6,9 @@
 #' \itemize{
 #'  \item{\code{cond_test}: \code{testwhat} tests specifically for
 #'  the iteration part of the for loop, inside the parentheses of \code{for}.}
-#'  \item{\code{expr_test}: \code{testwhat} tests to test the 
-#'  code inside the for loop itself.}
+#'  \item{\code{expr_test}: \code{testwhat} for the code inside the for loop itself.}
 #' }
-#' The tests for the conditional part and the expression part
+#' The tests for the iteration part and the expression part
 #' of the for loop can only be text-based. You cannot use functions such
 #' as \code{\link{test_object}} that also depend on the student and solution
 #' environment.
@@ -17,11 +16,10 @@
 #' @param index The index of the for loop to check.
 #' @param cond_test testwhat tests for the condition part of the for loop
 #' @param expr_test testwhat tests for the expression part of the for loop
-#' @param student_code character string containing the student's code.
-#' @param solution_code character string containing the solution code.
 #' @param not_found_msg optional feedback message in case the for loop 
 #' (at given index) is not found.
 #' @param env Environment in which to run the additional testwhat tests.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

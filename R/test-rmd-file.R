@@ -2,18 +2,21 @@
 #'
 #' Test a single R Markdown file
 #' 
-#' This test is implemented using \code{\link{test_what}}.
 #' This test should be called when there are multiple files in the submission.
 #' 
 #' @param code the SCT code for the file
 #' @param student_file the name of the student file to be tested
 #' @param solution_file the name of the solution file to be tested
-#' @param student_code the entire code that has been submitted by the student. 
-#' @param solution_code  the entire solution code.
 #' @param env The environment in which the code should be tested.
-#'
+#' @inheritParams test_object
+#' 
 #' @export
-test_rmd_file = function(code, student_file = NULL, solution_file = NULL, student_code = get_student_code(), solution_code = get_solution_code(), env = parent.frame()) {
+test_rmd_file = function(code, 
+                         student_file = NULL, 
+                         solution_file = NULL, 
+                         student_code = get_student_code(), 
+                         solution_code = get_solution_code(), 
+                         env = parent.frame()) {
   code <- substitute(code)
   if (is.character(code)) code <- parse(text = code)
   

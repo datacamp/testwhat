@@ -37,16 +37,9 @@ If index is specified, it is checked whether solution and student contain
 the same amount of commands. index = NULL by default, i.e. the entire submission is checked.}
 
 \item{eq_condition}{character vector indicating how to perform the
-comparison for each argument.  Possible values are \code{"equivalent"}
-(the default), \code{"equal"} and \code{"identical"}.  See
-\code{\link{is_equivalent_to}}, \code{\link{equals}}, and
-\code{\link{is_identical_to}}, respectively.}
+comparison for each argument. See \code{\link{object}}}
 
-\item{student_code}{character string containing the student's code.}
-
-\item{solution_code}{character string containing the sample solution code.}
-
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
 \item{solution_env}{environment in which the solution code was evaluated.}
 
@@ -71,7 +64,5 @@ many times as in a sample solution. More details in vignette.
 # To test this submission, provide the following in the sct
 test_function("mean", c("x", "na.rm"))
 }
-
-# Other examples: see SCT design guide
 }
 

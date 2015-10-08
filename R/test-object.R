@@ -5,13 +5,13 @@
 #' matches that of the solution.
 #'
 #' @param name name of the object to test.
-#' @param eq_condition character string indicating how to compare the
-#' objects. Possible values are \code{"equivalent"} (the default),
-#' \code{"equal"} and \code{"identical"}.  See \code{\link{expect_equivalent}},
-#' \code{\link{expect_equals}}, and \code{\link{expect_identical}}, respectively.
+#' @param eq_condition character string indicating how to compare. Possible values 
+#' are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+#' See \code{\link{expect_equivalent}}, \code{\link{expect_equals}}, 
+#' and \code{\link{expect_identical}}, respectively.
 #' @param eval Next to existence, check if the value of the object corresponds
 #' between student en solution environment.
-#' @param student_env environment in which the student's code was evaluated.
+#' @param student_env environment in which the student code was evaluated.
 #' @param solution_env environment in which the solution code was evaluated.
 #' @param undefined_msg optional feedback message in case the student did not define
 #' the object. A meaningful message is automatically generated if not supplied.

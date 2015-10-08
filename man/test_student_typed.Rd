@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-student-typed.R
 \name{test_student_typed}
 \alias{test_student_typed}
-\title{Test whether a student typed something}
+\title{Test student's submission as text}
 \usage{
 test_student_typed(strings, student_code = get_student_code(), fixed = TRUE,
   not_typed_msg = NULL)
@@ -10,16 +10,26 @@ test_student_typed(strings, student_code = get_student_code(), fixed = TRUE,
 \arguments{
 \item{strings}{A set of strings, at least one of which must be in the student_code}
 
-\item{student_code}{student submission as a string}
-
 \item{fixed}{exact string matching (TRUE) or use regex (FALSE)?}
 
 \item{not_typed_msg}{Feedback message in case the student did not type the string.}
 }
 \description{
-Test whether a student typed something.
+Test whether a student typed something in his submission.
 Some basic string formatting is performed to allow for different
 ways of saying the same things (removing spaces, changing single
-quotes to double quotes, changing TRUE to T ...)
+quotes to double quotes, changing TRUE to T ...).
+}
+\details{
+Using this function should be a last resort, as there are myriad ways of
+solving the same problems in R!
+}
+\examples{
+\dontrun{
+# Example solution code: TRUE & FALSE
+
+# SCT to test this as a string (both T & F and F & T should be accepted)
+test_student_typed(c("TRUE & FALSE", "FALSE & TRUE"))
+}
 }
 

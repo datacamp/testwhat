@@ -6,11 +6,11 @@
 #' 
 #' @param package package name for which the library()
 #' function should've been called
-#' @param student_code character string containing the student code.
 #' @param not_called_msg optional feedback message in case the library
 #' function wasn't called a single time
-#' @param incorrect_msg optinoal feedback message in case the library
+#' @param incorrect_msg optional feedback message in case the library
 #' function wasn't called for the specified package.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

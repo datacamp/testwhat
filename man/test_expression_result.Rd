@@ -11,10 +11,12 @@ test_expression_result(expr, eq_condition = "equivalent",
 \arguments{
 \item{expr}{The expression that is executed in both environments.}
 
-\item{eq_condition}{Character vector indicating how to perform the
-comparison of the results. See \code{\link{test_object}}.}
+\item{eq_condition}{character string indicating how to compare. Possible values
+are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+See \code{\link{expect_equivalent}}, \code{\link{expect_equals}},
+and \code{\link{expect_identical}}, respectively.}
 
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
 \item{solution_env}{environment in which the solution code was evaluated.}
 

@@ -10,10 +10,7 @@
 #' @param undefined_msg feedback message in case the student did not define 
 #' an object that corresponds to the solution object. This argument should 
 #' always be specified.
-#' @param eq_condition character string indicating how to compare the
-#' objects. See \code{\link{test_object}})
-#' @param student_env environment in which the student's code was evaluated.
-#' @param solution_env environment in which the solution code was evaluated.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

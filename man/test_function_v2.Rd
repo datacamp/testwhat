@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-function-v2.R
 \name{test_function_v2}
 \alias{test_function_v2}
-\title{Test whether a student correctly called a function (V2)}
+\title{Test whether a student correctly called a function (v2)}
 \usage{
 test_function_v2(name, args = NULL, ignore = NULL, allow_extra = TRUE,
   eval = TRUE, index = NULL, eq_condition = "equivalent",
@@ -34,19 +34,12 @@ case (use with care!).}
 
 \item{index}{Which command to check on (both in solution and student).
 If index is specified, it is checked whether solution and student contain
-the same amount of commands. index = NULL by default, i.e. the entire submission is checked.}
+the same amount of function calls.}
 
 \item{eq_condition}{character vector indicating how to perform the
-comparison for each argument.  Possible values are \code{"equivalent"}
-(the default), \code{"equal"} and \code{"identical"}.  See
-\code{\link{is_equivalent_to}}, \code{\link{equals}}, and
-\code{\link{is_identical_to}}, respectively.}
+comparison for each argument. See \code{\link{object}}}
 
-\item{student_code}{character string containing the student's code.}
-
-\item{solution_code}{character string containing the sample solution code.}
-
-\item{student_env}{environment in which the student's code was evaluated.}
+\item{student_env}{environment in which the student code was evaluated.}
 
 \item{solution_env}{environment in which the solution code was evaluated.}
 
@@ -60,20 +53,19 @@ feedback messages can be supplied.}
 
 \item{incorrect_number_of_calls_msg}{feedback message in case the number of commands
 in the solution does not correspond to the solution. (only used if index is not NULL.)}
-
-\item{index_not_called_msg}{feedback message in case the call was not done enough times.}
 }
 \description{
 Test whether a student called a function with certain arguments as least as
 many times as in a sample solution. More details in vignette.
 }
+\details{
+Only difference between V1 and V2 is how \code{index} is treated.
+}
 \examples{
 \dontrun{
-# Example solution code
-mean(1:3, na.rm = TRUE)
-
-# SCT to test this function:
-test_function_v2("mean", c("x", "na.rm"))
+# Suppose the solution contains: mean(1:3, na.rm = TRUE)
+# To test this submission, provide the following in the sct
+test_function("mean", c("x", "na.rm"))
 }
 }
 

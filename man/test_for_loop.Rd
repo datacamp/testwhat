@@ -15,10 +15,6 @@ test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
 
 \item{expr_test}{testwhat tests for the expression part of the for loop}
 
-\item{student_code}{character string containing the student's code.}
-
-\item{solution_code}{character string containing the solution code.}
-
 \item{not_found_msg}{optional feedback message in case the for loop
 (at given index) is not found.}
 
@@ -31,10 +27,9 @@ code depending on the \code{index} argument, and then runs two chunks of tests:
 \itemize{
  \item{\code{cond_test}: \code{testwhat} tests specifically for
  the iteration part of the for loop, inside the parentheses of \code{for}.}
- \item{\code{expr_test}: \code{testwhat} tests to test the
- code inside the for loop itself.}
+ \item{\code{expr_test}: \code{testwhat} for the code inside the for loop itself.}
 }
-The tests for the conditional part and the expression part
+The tests for the iteration part and the expression part
 of the for loop can only be text-based. You cannot use functions such
 as \code{\link{test_object}} that also depend on the student and solution
 environment.

@@ -11,12 +11,10 @@ test_library_function(package, student_code = get_student_code(),
 \item{package}{package name for which the library()
 function should've been called}
 
-\item{student_code}{character string containing the student code.}
-
 \item{not_called_msg}{optional feedback message in case the library
 function wasn't called a single time}
 
-\item{incorrect_msg}{optinoal feedback message in case the library
+\item{incorrect_msg}{optional feedback message in case the library
 function wasn't called for the specified package.}
 }
 \description{

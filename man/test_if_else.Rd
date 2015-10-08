@@ -21,10 +21,6 @@ of the control structure}
 \item{else_expr_test}{tests to perform in the else expression
 part of the control structure}
 
-\item{student_code}{character string containing the student's code.}
-
-\item{solution_code}{character string containing the solution code.}
-
 \item{not_found_msg}{Message in case the control structure
 (at given index) is not found.}
 

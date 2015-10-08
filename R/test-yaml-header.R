@@ -1,9 +1,7 @@
-#' Test whether the student specified the correct options in the yaml header (R Markdown)
+#' Test yaml header (Markdown)
 #'
-#' Test whether the student specified the correct options in the yaml header (R Markdown)
-#'
-#' This test is implemented using \code{\link{test_what}}.
-#' This test should be called outside an test_rmd_group call.
+#' Test whether the student specified the correct options in the yaml header (for 
+#' R Markdown exercises). This test should be called outside an test_rmd_group call.
 #'
 #' @param options  Set of options. Embedded options have to be specified using the dot notation.
 #' @param check_equality whether or not to actually check the value assigned to the option (default TRUE)
@@ -14,7 +12,6 @@
 #' @param not_called_msg feedback message if option was not specified (optional but recommended)
 #' @param incorrect_msg  feedback message if option was incorrectly set (optional but recommended)
 #'
-#' @import datacampAPI
 #' @export
 test_yaml_header <- function(options = NULL,
                                check_equality = TRUE,

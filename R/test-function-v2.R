@@ -1,7 +1,9 @@
-#' Test whether a student correctly called a function (V2)
+#' Test whether a student correctly called a function (v2)
 #'
 #' Test whether a student called a function with certain arguments as least as
 #' many times as in a sample solution. More details in vignette.
+#' 
+#' Only difference between V1 and V2 is how \code{index} is treated.
 #'
 #' @param name  name of the function to test.
 #' @param args  character vector of argument names that the student should have
@@ -20,14 +22,9 @@
 #' case (use with care!).
 #' @param index  Which command to check on (both in solution and student).
 #' If index is specified, it is checked whether solution and student contain
-#' the same amount of commands. index = NULL by default, i.e. the entire submission is checked.
+#' the same amount of function calls.
 #' @param eq_condition  character vector indicating how to perform the
-#' comparison for each argument.  Possible values are \code{"equivalent"}
-#' (the default), \code{"equal"} and \code{"identical"}.  See
-#' \code{\link{is_equivalent_to}}, \code{\link{equals}}, and
-#' \code{\link{is_identical_to}}, respectively.
-#' @param student_code  character string containing the student's code.
-#' @param solution_code  character string containing the sample solution code.
+#' comparison for each argument. See \code{\link{object}}
 #' @param not_called_msg  feedback message in case the student did not call the
 #' function at least as often as in the solution code.
 #' @param incorrect_msg  feedback message in case the student did not call the
@@ -36,16 +33,13 @@
 #' feedback messages can be supplied.
 #' @param incorrect_number_of_calls_msg feedback message in case the number of commands
 #' in the solution does not correspond to the solution. (only used if index is not NULL.)
-#' @param index_not_called_msg feedback message in case the call was not done enough times.
 #' @inheritParams test_object
 #'
 #' @examples
 #' \dontrun{
-#' # Example solution code
-#' mean(1:3, na.rm = TRUE)
-#' 
-#' # SCT to test this function:
-#' test_function_v2("mean", c("x", "na.rm"))
+#' # Suppose the solution contains: mean(1:3, na.rm = TRUE)
+#' # To test this submission, provide the following in the sct
+#' test_function("mean", c("x", "na.rm"))
 #' }
 #'
 #' @export

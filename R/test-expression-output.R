@@ -4,10 +4,9 @@
 #' the student and the solution environment.
 #' 
 #' @param expr The expression that is executed in both environments.
-#' @param student_env environment in which the student's code was evaluated.
-#' @param solution_env environment in which the solution code was evaluated.
 #' @param incorrect_msg Optional feedback message in case the evaluation is not the
 #' same in both environments. Automatically generated if not specified.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{
