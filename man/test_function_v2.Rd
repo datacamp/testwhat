@@ -62,7 +62,7 @@ in the solution does not correspond to the solution. (only used if index is not 
 }
 \description{
 Test whether a student called a function with certain arguments as least as
-many times as in a sample solution. More details in vignette.
+many times as in a sample solution.
 }
 \details{
 Only difference between V1 and V2 is how \code{index} is treated.

@@ -14,6 +14,6 @@ test_instruction(index, code, env = parent.frame())
 \item{env}{environment in which to execute tests.}
 }
 \description{
-See vignette for more information.
+Test a single instruction of the challenges interface
 }
 

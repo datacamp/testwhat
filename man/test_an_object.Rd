@@ -4,7 +4,7 @@
 \alias{test_an_object}
 \title{Check if the student defined an object, independent of the name}
 \usage{
-test_an_object(name, undefined_msg, eq_condition = "equivalent",
+test_an_object(name, undefined_msg = NULL, eq_condition = "equivalent",
   student_env = .GlobalEnv, solution_env = get_solution_env())
 }
 \arguments{

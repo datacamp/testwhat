@@ -1,7 +1,7 @@
 #' Test whether a student correctly called a function
 #'
 #' Test whether a student called a function with certain arguments as least as
-#' many times as in a sample solution. More details in vignette.
+#' many times as in a sample solution.
 #' 
 #' @param name  name of the function to test.
 #' @param args  character vector of argument names that the student should have
