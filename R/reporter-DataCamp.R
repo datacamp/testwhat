@@ -120,7 +120,7 @@ DataCampReporter <- setRefClass(
         return(list(passed = challenge_passed, 
                     feedback = ifelse(challenge_passed, inh_success_msg, "try again."), 
                     passed_steps = ifelse(challenge_passed, 
-                                          rep(TRUE, n_inst - 1),
+                                          rep(TRUE, n_inst),
                                           head(res_per_inst, n_inst - 1))))
       } else {
         stop("Unknown report type!")
