@@ -29,17 +29,19 @@
 #' @import datacampAPI
 #' @import testthat
 #' @export
-test_an_object <- function(name, undefined_msg,
-                        eq_condition = "equivalent",
-                        student_env = .GlobalEnv,
-                        solution_env = get_solution_env()) {
+test_an_object <- function(name, 
+                           undefined_msg = NULL,
+                           eq_condition = "equivalent",
+                           student_env = .GlobalEnv,
+                           solution_env = get_solution_env()) {
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")
   }
   
   if (is.null(undefined_msg)) {
-    stop("argument \"undefined\" is missing, with no default")
+    # Avoid returning this message, always set undefined_msg
+    undefined_msg <- "There is some object missing in your code."
   }
   
   if (!exists(name, solution_env)) {
