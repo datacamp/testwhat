@@ -115,8 +115,10 @@ DataCampReporter <- setRefClass(
           all(results_df$passed[results_df$instruction_index == x])
         })
         
-        return(list(passed = tail(res_per_inst, 1), 
-                    feedback = "try again.", 
+        challenge_passed <- tail(res_per_inst, 1)
+        
+        return(list(passed = challenge_passed, 
+                    feedback = ifelse(challenge_passed, inh_success_msg, "try again."), 
                     passed_steps = head(res_per_inst, n_inst - 1)))
       } else {
         stop("Unknown report type!")
