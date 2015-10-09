@@ -20,17 +20,17 @@
 #' @import datacampAPI
 #' @import testthat
 #' @export
-test_output_contains <- function(expr, times = 1, console_output = get_student_output(), incorrect_msg = NULL) {
+test_output_contains <- function(expr, times = 1, console_output = get_student_output(), incorrect_msg = NULL, env = .GlobalEnv) {
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
     if(is.null(incorrect_msg)) {
       incorrect_msg <- build_incorrect_output_msg(expr)
     }
-  test_what(expect_true(output_contains(expr,console_output = console_output) >= times),
+  test_what(expect_true(output_contains(expr,console_output = console_output, env) >= times),
             incorrect_msg)
 }
 
-output_contains = function(expr, console_output = get_student_output()) {
-  correct_output = try(capture.output(try(eval(parse(text=expr)))))
+output_contains = function(expr, console_output = get_student_output(), env = .GlobalEnv) {
+  correct_output = try(capture.output(try(eval(parse(text=expr), envir = env))))
 
   if (inherits(correct_output, "try-error")) {
     return(FALSE)
