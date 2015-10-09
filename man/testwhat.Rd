@@ -13,7 +13,7 @@ for R exercises, e.g., for interactive R courses on \url{www.DataCamp.com}.
 This package contains a bunch of high-level functions to test objects, function
 calls, output, function definition, control structures and many more.
 
-For more information, see the testwhat vignette.
+For more information, see \url{docs.datacamp.com/teach/sct-design-r.html}
 }
 \note{
 \pkg{testwhat} is a wrapper around \pkg{testthat} such that
