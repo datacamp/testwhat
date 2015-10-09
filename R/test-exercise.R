@@ -39,7 +39,7 @@ test_exercise <- function(code, report = c("first", "challenge"), env = test_env
   if (inherits(eval_fail, "try-error")) {
     cond <- attr(eval_fail, "condition")$message
     if (!identical(cond, sct_failed_msg)) {
-      stop(cond)
+      stop(attr(eval_fail, "condition"))
     }
   }
   end_context()

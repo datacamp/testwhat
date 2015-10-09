@@ -31,7 +31,7 @@ test_expression_result <- function(expr,
                                    incorrect_msg = NULL) {
   
   capture.output(result_sol <- try(eval(parse(text = expr), envir = solution_env), silent = TRUE))
-  if (is.null(result_sol)) {
+  if (length(result_sol) == 0) {
     result_sol <- "NULL"
   }
   
@@ -44,7 +44,7 @@ test_expression_result <- function(expr,
   }
   
   capture.output(result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE))
-  if (is.null(result_stud)) {
+  if (length(result_stud) == 0) {
     result_stud <- "NULL"
   }
   

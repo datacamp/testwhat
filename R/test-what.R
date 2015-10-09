@@ -11,6 +11,10 @@
 test_what <- function(code, feedback_msg) {
   rep <- get_reporter()
 
+  if (length(feedback_msg) == 0) {
+    grr <- TRUE
+  }
+  
   rep$set_inh_failure_msg(feedback_msg)
   eval(code)
   rep$clear_inh_failure_msg()
