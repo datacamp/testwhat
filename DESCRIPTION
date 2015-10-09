@@ -42,6 +42,7 @@ Collate:
     'test-library-function.R'
     'test-mc.R'
     'test-object.R'
+    'test-or.R'
     'test-output-contains.R'
     'test-output-regex.R'
     'test-rmd-file.R'
