@@ -14,7 +14,8 @@ Depends:
 Imports: 
     digest,
     methods,
-    datacampAPI
+    datacampAPI,
+    markdown
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
