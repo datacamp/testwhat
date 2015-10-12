@@ -52,7 +52,7 @@ test_expression_result <- function(expr,
     test_what(fail(), 
               sprintf("%s<br>Instead, it resulted in the following error: <i>%s</i>", 
                       incorrect_msg, 
-                      build_summary(attr(result_stud,"condition")$message)))
+                      build_summary(attr(result_stud,"condition")$message, output = TRUE)))
   } else {
     eq_fun <- switch(eq_condition,
                      equivalent = expect_equivalent,

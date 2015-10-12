@@ -134,7 +134,7 @@ build_incorrect_output_msg <- function(expr) {
 }
 
 
-build_summary <- function(x) UseMethod("build_summary")
+build_summary <- function(x, ...) UseMethod("build_summary")
 
 
 build_summary.default <- function(x) {
@@ -159,8 +159,12 @@ build_summary.data.frame <- function(x) {
   trunc_str(x,"data.frame")
 }
 
-build_summary.character <- function(x) {
-  shorten <- function(str) { paste0('"',substr(str, 1, 100), ifelse(nchar(str) > 100, "...", ""),'"') }
+build_summary.character <- function(x, ..., output = FALSE) {
+  if (output) {
+    shorten <- function(str) { paste0(substr(str, 1, 100), ifelse(nchar(str) > 100, "...", "")) }
+  } else {
+    shorten <- function(str) { paste0('"',substr(str, 1, 100), ifelse(nchar(str) > 100, "...", ""),'"') }
+  }
   if (length(x) > 1) {
     x <- lapply(x, shorten)
     trunc_str(x)
@@ -195,6 +199,6 @@ trunc_str <- function(x,start="c") {
 }
 
 #' @export
-test_summary <- function(x) {
-  build_summary(x)
+test_summary <- function(x,...) {
+  build_summary(x,...)
 }
