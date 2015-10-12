@@ -1,7 +1,7 @@
 #' Test whether a student correctly called a function (v2)
 #'
 #' Test whether a student called a function with certain arguments as least as
-#' many times as in a sample solution. More details in vignette.
+#' many times as in a sample solution.
 #' 
 #' Only difference between V1 and V2 is how \code{index} is treated.
 #' 

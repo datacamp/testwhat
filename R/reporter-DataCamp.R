@@ -34,7 +34,13 @@ DataCampReporter <- setRefClass(
       silent <<- FALSE
       instruction_index <<- 0
       inh_failure_msg <<- ""
-      inh_success_msg <<- sample(c("You rock!", "You are a coding rockstar!", "Keep up the good work.", "Great job!", "Woot!", "Way to go!", "Nice code."), 1)
+      inh_success_msg <<- sample(c("You rock!", 
+                                   "You are a coding rockstar!", 
+                                   "Keep up the good work.", 
+                                   "Great job!", 
+                                   "Woot!", 
+                                   "Way to go!", 
+                                   "Nice code."), 1)
     },
 
     set_inh_failure_msg = function(msg = "") {
@@ -90,9 +96,9 @@ DataCampReporter <- setRefClass(
         test_results <- results_df$passed
         if(!all(test_results)) {
           feedback <- results_df$failure_msg[which(!test_results)[1]]
-          return(list(passed = FALSE, feedback = feedback))
+          return(list(passed = FALSE, feedback = to_html(feedback)))
         } else {
-          return(list(passed = TRUE, feedback = inh_success_msg))
+          return(list(passed = TRUE, feedback = to_html(inh_success_msg)))
         }
       } else if (report == "challenge") {
         
@@ -122,7 +128,7 @@ DataCampReporter <- setRefClass(
         }
         
         return(list(passed = challenge_passed, 
-                    feedback = ifelse(challenge_passed, inh_success_msg, "try again."), 
+                    feedback = to_html(ifelse(challenge_passed, inh_success_msg, "try again.")), 
                     passed_steps = passed_steps))
       } else {
         stop("Unknown report type!")
@@ -130,3 +136,10 @@ DataCampReporter <- setRefClass(
     }
   )
 )
+
+
+#' @importFrom markdown markdownToHTML
+to_html <- function(x) {
+  html <- markdownToHTML(text = x, fragment.only = TRUE)
+  gsub("<p>(.*?)</p>", "\\1", html) #remove <p> tags, coded by front end.
+}
