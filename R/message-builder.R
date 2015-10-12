@@ -133,3 +133,43 @@ build_incorrect_output_msg <- function(expr) {
   sprintf(template, expr)
 }
 
+
+build_summary <- function(x) UseMethod("build_summary")
+
+
+build_summary.default <- function(x) {
+  print("Not found!")
+}
+
+
+build_summary.list <- function(x) {
+  paste0("list(",as.character(paste(x[1:min(5,length(x))], collapse = ", ")),ifelse(length(x) > 5, ", ...", ""), ")")
+}
+
+
+build_summary.character <- function(x) {
+  shorten <- function(str) { paste0('"',substr(str, 1, 100), ifelse(nchar(str) > 100, "...", ""),'"') }
+  if (length(x) > 1) {
+    x <- lapply(x, shorten)
+    paste0("c(",as.character(paste(x[1:min(5,length(x))], collapse = ", ")),ifelse(length(x) > 5, ", ...", ""), ")")
+  } else {
+    shorten(x)
+  }
+}
+
+build_summary.numeric <- function(x) {
+  if (length(x) > 1) {
+    paste0("c(",as.character(paste(x[1:min(5,length(x))], collapse = ", ")),ifelse(length(x) > 5, ", ...", ""), ")")
+  } else {
+    x
+  }
+}
+
+build_summary.factor <- function(x) {
+  paste0("factor(",build_summary.character(as.character(x)),")")
+}
+
+#' @export
+test_summary <- function(x) {
+  build_summary(x)
+}

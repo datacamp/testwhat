@@ -5,7 +5,7 @@
 \title{Check whether the student printed something to the console}
 \usage{
 test_output_contains(expr, times = 1, console_output = get_student_output(),
-  incorrect_msg = NULL)
+  incorrect_msg = NULL, env = .GlobalEnv)
 }
 \arguments{
 \item{expr}{The expression (as string) for which the output should be in the student's console output.}

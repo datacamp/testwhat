@@ -53,12 +53,12 @@ test_expression_output <- function(expr,
     test_what(fail(), 
               sprintf("%s<br>Instead, it resulted in the following error:<br><i>%s</i>", 
                       incorrect_msg, 
-                      attr(output_stud,"condition")$message))
+                      build_summary(attr(output_stud,"condition")$message)))
   } else {
     output_stud <- paste0(output_stud, collapse = "<br>")
     test_what(expect_equal(output_sol, output_stud),
               sprintf("%s<br>Instead, got:<br><code>%s</code>", 
                       incorrect_msg, 
-                      output_stud))
+                      build_summary(output_stud)))
   }
 }
