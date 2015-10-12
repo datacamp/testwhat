@@ -142,19 +142,23 @@ build_summary.default <- function(x) {
 }
 
 build_summary.list <- function(x) {
+  # Back up names, recursion will mess them up otherwise
+  tmp_names <- names(x)
   # Need to manually index using seq_along, doesn't work with element-wise lapply.
   x <- lapply(seq_along(x), function(i) { build_summary(x[[i]]) })
-  if (!is.null(names(x))) {
-    x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(names(x)[i]) != 0, paste0(names(x)[i], " = ", x[i]), paste0(x[i])) }))
+  if (!is.null(tmp_names)) {
+    x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(tmp_names[i]) != 0, paste0(tmp_names[i], " = ", x[i]), paste0(x[i])) }))
   }
   trunc_str(x,"list")
 }
 
 build_summary.data.frame <- function(x) {
+  # Back up names, recursion will mess them up otherwise
+  tmp_names <- names(x)
   # Need to manually index using seq_along, doesn't work with element-wise lapply.
   x <- lapply(seq_along(x), function(i) { build_summary(x[[i]]) })
-  if (!is.null(names(x))) {
-    x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(names(x)[i]) != 0, paste0(names(x)[i], " = ", x[i]), paste0(x[i])) }))
+  if (!is.null(tmp_names)) {
+    x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(tmp_names[i]) != 0, paste0(tmp_names[i], " = ", x[i]), paste0(x[i])) }))
   }
   trunc_str(x,"data.frame")
 }
