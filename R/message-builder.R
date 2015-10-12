@@ -133,3 +133,60 @@ build_incorrect_output_msg <- function(expr) {
   sprintf(template, expr)
 }
 
+
+build_summary <- function(x) UseMethod("build_summary")
+
+
+build_summary.default <- function(x) {
+  toString(x, width = 300)
+}
+
+build_summary.list <- function(x) {
+  x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(names(x)[i]) != 0, paste0(names(x)[i], " = ", x[i]), paste0(x[i])) }))
+  trunc_str(x,"list")
+}
+
+build_summary.data.frame <- function(x) {
+  x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(names(x)[i]) != 0, paste0(names(x)[i], " = ", x[i]), paste0(x[i])) }))
+  trunc_str(x,"data.frame")
+}
+
+build_summary.character <- function(x) {
+  shorten <- function(str) { paste0('"',substr(str, 1, 100), ifelse(nchar(str) > 100, "...", ""),'"') }
+  if (length(x) > 1) {
+    x <- lapply(x, shorten)
+    trunc_str(x)
+  } else {
+    shorten(x)
+  }
+}
+
+build_summary.numeric <- function(x) {
+  if (length(x) > 1) {
+    trunc_str(x)
+  } else {
+    x
+  }
+}
+
+build_summary.factor <- function(x) {
+  paste0("factor(",build_summary.character(as.character(x)),")")
+}
+
+trunc_str <- function(x,start="c") {
+  max_in <- 4
+  max_out <- 2
+  tot <- max_in + max_out
+  paste0(start,"(",
+         as.character(paste(x[1:min(max_in,length(x))], collapse = ", ")),
+         ifelse(length(x) > tot, ", ...", ""), 
+         ifelse(length(x) > max_in, 
+          paste0(", ",as.character(paste(x[(length(x)-(max_out - 1 - max(0,tot-length(x)))):length(x)], collapse = ", "))),
+          ""),
+         ")")
+}
+
+#' @export
+test_summary <- function(x) {
+  build_summary(x)
+}
