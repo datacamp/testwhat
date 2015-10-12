@@ -19,13 +19,13 @@ scen <- list(
     fail = list(
       test_student_typed_fail = list(
         long = "test fails if student didn't type the string",
-        sct = "test_student_typed(\"print('some wrong output')\", not_typed_msg = \"You didn't type it\")",
-        message = "You didn't type it"
+        sct = "test_student_typed(\"print('some wrong output')\", not_typed_msg = \"You didnt type it\")",
+        message = "You didnt type it"
       ),
       test_student_typed_fail_2_options = list(
         long = "test fails if student didn't type the string",
-        sct = "test_student_typed(c(\"print('some wrong output')\", \"not this\"), not_typed_msg = \"You didn't type anything\")",
-        message = "You didn't type anything"
+        sct = "test_student_typed(c(\"print('some wrong output')\", \"not this\"), not_typed_msg = \"You didnt type anything\")",
+        message = "You didnt type anything"
       ),
       test_student_typed_pattern_fails = list(
         long = "test succeeds if student didn't type the pattern",
