@@ -40,7 +40,7 @@ test_expression_result <- function(expr,
   }
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> results in <code>%s</code>.", expr, result_sol)
+    incorrect_msg <- sprintf("Make sure that running <code>%s</code> results in <code>%s</code>", expr, build_summary(result_sol))
   }
   
   capture.output(result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE))
@@ -52,7 +52,7 @@ test_expression_result <- function(expr,
     test_what(fail(), 
               sprintf("%s<br>Instead, it resulted in the following error: <i>%s</i>", 
                       incorrect_msg, 
-                      attr(result_stud,"condition")$message))
+                      build_summary(attr(result_stud,"condition")$message)))
   } else {
     eq_fun <- switch(eq_condition,
                      equivalent = expect_equivalent,
@@ -63,6 +63,6 @@ test_expression_result <- function(expr,
     test_what(eq_fun(result_sol, result_stud),
               sprintf("%s<br>Instead, got: <code>%s</code>", 
                       incorrect_msg, 
-                      result_stud))
+                      build_summary(result_stud)))
   }
 }
