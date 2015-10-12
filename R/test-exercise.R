@@ -27,6 +27,7 @@ test_exercise <- function(code, report = c("first", "challenge"), env = test_env
 
   # Obtain feedback from DataCamp reporter and return it invidibly
   feedback <- reporter$get_feedback()
+  
   invisible(feedback)
 }
 
