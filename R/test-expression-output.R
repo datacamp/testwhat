@@ -41,7 +41,7 @@ test_expression_output <- function(expr,
   output_sol <- paste0(output_sol, collapse = "<br>")
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs:<br><code>%s</code>.", expr, output_sol)
+    incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs:<br><code>%s</code>.", expr, build_summary(output_sol))
   }
   
   output_stud <- try(capture.output(try(eval(parse(text = expr), envir = student_env), silent = TRUE)))

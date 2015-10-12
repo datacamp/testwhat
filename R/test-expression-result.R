@@ -40,7 +40,7 @@ test_expression_result <- function(expr,
   }
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> results in <code>%s</code>.", expr, result_sol)
+    incorrect_msg <- sprintf("Make sure that running <code>%s</code> results in <code>%s</code>.", expr, build_summary(result_sol))
   }
   
   capture.output(result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE))
