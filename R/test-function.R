@@ -191,7 +191,9 @@ find_function_calls <- function(name, code, env = parent.frame()) {
   exprs <- parse(text = expr_strings)
 
   # Expand arguments of function calls
-  lapply(exprs, standardize_call, env = env)
+  mapply(function(x,y) {
+    standardize_call(x,y,env)
+    }, exprs, expr_strings)
 }
 
 # Check if function calls have (only) the specified arguments
@@ -217,10 +219,16 @@ is_equal <- function(x, y, condition = "equivalent") {
 .equal <- function(x, y) compare(x, y)$equal
 
 # Expand argument names of a function call
-standardize_call <- function (call, env = parent.frame()) {
+standardize_call <- function (call, call_string, env = parent.frame()) {
   stopifnot(is.call(call))
   
   f <- args(eval(call[[1]], env))
   
-  match.call(f, call)
+  e <- try(match.call(f, call), silent = TRUE)
+  if (inherits(e, "try-error")) {
+    test_what(fail(), 
+              sprintf("There is something wrong in the following function call **%s**: _%s_", 
+                     call_string,
+                     attr(e,"condition")$message))
+  }
 }
