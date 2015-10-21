@@ -230,5 +230,7 @@ standardize_call <- function (call, call_string, env = parent.frame()) {
               sprintf("There is something wrong in the following function call **%s**: _%s_", 
                      call_string,
                      attr(e,"condition")$message))
+  } else {
+    return(e)
   }
 }
