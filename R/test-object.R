@@ -73,6 +73,7 @@ test_object <- function(name, eq_condition = "equivalent",
     eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
                                    identical = expect_identical,
                                    equal = expect_equal,
+                                   like = expect_like,
                                    stop("invalid equality condition"))
     
     test_what(eq_fun(student, solution), incorrect_msg)
