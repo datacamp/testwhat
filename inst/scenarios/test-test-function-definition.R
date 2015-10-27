@@ -65,8 +65,8 @@ scen <- list(
         long = "test fails with correct feedback if result is not the same and not same n of arguments",
         sct = c(
           "test_function_definition(\"my_func\", function_test = {",
-          "  test_expression_output('my_func(3,3)')",
-          "  test_expression_output('my_func(1,2)')",
+          "  test_expression_result('my_func(3,3)')",
+          "  test_expression_result('my_func(1,2)')",
           "})"
         ),
         message = "number of arguments"
