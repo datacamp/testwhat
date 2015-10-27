@@ -15,7 +15,7 @@ scen <- list(
       test_result_equal = list(
         long = "test fails if result of expr are not equal",
         sct = "test_expression_result(\"func_not_eq(3)\")",
-        message = "Make sure that.*results in.*"
+        message = "Make sure that.*returns.*"
       )
     )
   ),
