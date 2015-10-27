@@ -10,7 +10,8 @@ Depends:
     R (>= 3.0.0),
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    stringdist
 Imports: 
     digest,
     methods,
@@ -21,6 +22,7 @@ LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
     person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")))
 Collate: 
+    'expectations-like.R'
     'message-builder.R'
     'reporter-DataCamp.R'
     'success-msg.R'

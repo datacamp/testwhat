@@ -66,4 +66,27 @@ scen <- list(
       pass = list(
         test_eval_pass_1 = list(
           long = "test on eval parameter - pass 1", 
-          sct = "test_object(\"var\", eval = FALSE)"))))
+          sct = "test_object(\"var\", eval = FALSE)"))),
+  list(
+    type = "NormalExercise", 
+    student = "var <- \"Filip stinkt\"\nvar2 <- \"Filip is leuk\"\n", 
+    solution = "var <- \"Filip drinkt\"\nvar2 <- \"Filip is stom\"\n", 
+    fail = list(
+      test_like_fail = list(
+        long = "test strings which are too different", 
+        sct = "test_object(\"var2\", eq_condition = \"like\")"
+      ),
+      test_like_fail_msg = list(
+        long = "test strings which are too different", 
+        sct = "test_object(\"var2\", eq_condition = \"like\", incorrect_msg = \"Too different\")",
+        message = "Too different"
+      )
+    ), 
+    pass = list(
+      test_like_pass = list(
+        long = "test strings which are alike", 
+        sct = "test_object(\"var\", eq_condition = \"like\")"
+      )
+    )
+  )
+)

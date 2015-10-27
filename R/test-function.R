@@ -70,6 +70,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
     switch(cond, equivalent = expect_equivalent,
                          identical = expect_identical,
                          equal = expect_equal,
+                         like = expect_like,
                          stop("invalid equality condition"))
   })
   
@@ -217,6 +218,8 @@ is_equal <- function(x, y, condition = "equivalent") {
 
 .equivalent <- function(x, y) compare(x, y, check.attributes = FALSE)$equal
 .equal <- function(x, y) compare(x, y)$equal
+#' @importFrom stringdist stringdist
+.like <- function(x, y, dist = round(nchar(y) * 0.2)) stringdist(x,y) <= dist
 
 # Expand argument names of a function call
 standardize_call <- function (call, call_string, env = parent.frame()) {
