@@ -76,9 +76,9 @@ test_if_else <- function(index = 1,
   else_expr_test <- substitute(else_expr_test)
   if (is.character(else_expr_test)) else_expr_test <- parse(text = else_expr_test)
   
-  stud_pd <- getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n")))
+  stud_pd <- getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE))
   student_structs <- extract_control_wrapper(0, stud_pd)
-  sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n")))
+  sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE))
   solution_structs <- extract_control_wrapper(0, sol_pd)
   
   if(is.null(not_found_msg)) {

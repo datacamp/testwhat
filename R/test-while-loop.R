@@ -54,9 +54,9 @@ test_while_loop <- function(index = 1,
   expr_test <- substitute(expr_test)
   if (is.character(expr_test)) expr_test <- parse(text = expr_test)
   
-  stud_pd <- getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n")))
+  stud_pd <- getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE))
   student_whiles <- extract_while_wrapper(0, stud_pd)
-  sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n")))
+  sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE))
   solution_whiles <- extract_while_wrapper(0, sol_pd)
   
   if(is.null(not_found_msg)) {
