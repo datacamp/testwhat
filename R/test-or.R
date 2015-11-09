@@ -1,7 +1,35 @@
+#' Test if one of the given sct parts are correct. 
+#' 
+#' Test if one of the given SCT code batteries are evaluated as being
+#' correct. If not, the feedback message of the first fail is standardly
+#' given. Can be used nested.
+#' 
+#' \itemize{
+#'  \item{\code{...}: an arbritrary amount of code blocks containing SCT 
+#'  code. \code{test_or} will check if one of the code blocks results in 
+#'  a successful SCT evaluation.}
+#' }
+
+#' @param ...
+#' @param incorrect_msg 
+#' @param choose_feedback
+#' @param subs
+#' @param env environment in which to execute tests.
+#' 
+#' @examples
+#' \dontrun{
+#'
+#' }
+#'
 #' @export
-test_or <- function(..., incorrect_msg = NULL, env = parent.frame()) {
-  input <- substitute(alist(...))
-  input[[1]] <- NULL
+test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1, 
+                    subs = TRUE, env = parent.frame()) {
+  if (subs) {
+    input <- substitute(alist(...))
+    input[[1]] <- NULL
+  } else {
+    input <- list(...)
+  }
   len <- length(input) 
   
   passes <- logical(len)
@@ -11,13 +39,14 @@ test_or <- function(..., incorrect_msg = NULL, env = parent.frame()) {
     code <- input[[i]]
     rep$be_silent()
     eval(code, envir = env)
+    passes[i] <- !rep$get_silent_fail()
     rep$be_loud()
-    passes[i] <- !rep$silent_fail
+    if (passes[i]) break
   }
   
   if (!any(passes)) {
     if (is.null(incorrect_msg)) {
-      first <- input[[1]]
+      first <- input[[choose_feedback]]
       eval(first, envir = env)
     } else {
       test_what(fail(), incorrect_msg)

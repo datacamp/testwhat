@@ -51,10 +51,11 @@ test_correct = function(check_code, diagnose_code, env = parent.frame()) {
   
   rep$be_silent()
   eval(check_code, envir = env)
+  fail <- rep$get_silent_fail()
   rep$be_loud()
   
   # If the check_code failed, do more tests
-  if(rep$silent_fail) {
+  if(fail) {
     eval(diagnose_code, envir = env)
     # test the check one more, now loudly
     eval(check_code, envir = env)
