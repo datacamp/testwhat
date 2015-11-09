@@ -79,6 +79,7 @@ test_if_else <- function(index = 1,
   stud_pd <- getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE))
   student_structs <- extract_control_wrapper(0, stud_pd)
   sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE))
+
   solution_structs <- extract_control_wrapper(0, sol_pd)
   
   if(is.null(not_found_msg)) {
