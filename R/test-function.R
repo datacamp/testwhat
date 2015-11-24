@@ -110,6 +110,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
   }
   
   n_student_calls <- length(student_calls)
+  real_n_student_calls <- n_student_calls
   n_solution_calls <- length(solution_calls)
     
   # Test if there are at least as many student function calls as solution
@@ -140,13 +141,17 @@ test_function <- function(name, args = NULL, ignore = NULL,
       solution_args <- extract_arguments(solution_calls[[i]], args, eval,
                                          env = solution_env)
       
-      
       # Loop over the student function calls:
       # Extract the specified arguments from current student function call
       # and test if they are the same as the values in the solution
       for (j in seq_len(n_student_calls)) {
-        student_args <- extract_arguments(student_calls[[j]], args, eval,
-                                          env = student_env)
+        student_args <- try(
+          extract_arguments(student_calls[[j]], args, eval, env = student_env),
+          silent = TRUE)
+        if (inherits(student_args, "try-error")) {
+          test_what(fail(),
+                    incorrect_msg[[i]])
+        }
         correct <- numeric(n_args)
         
         for (n in 1:n_args) {
@@ -162,6 +167,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
           break
         }
       }
+
       test_what(expect_true(found_correct), incorrect_msg[[i]])
     }
   }
@@ -225,9 +231,12 @@ is_equal <- function(x, y, condition = "equivalent") {
 standardize_call <- function (call, call_string, env = parent.frame()) {
   stopifnot(is.call(call))
   
-  f <- args(eval(call[[1]], env))
+  f <- args(get(as.character(call[[1]]), env))
   
   e <- try(match.call(f, call), silent = TRUE)
+  
+  e <- find_S3_call(e, env = env)
+  
   if (inherits(e, "try-error")) {
     test_what(fail(), 
               sprintf("There is something wrong in the following function call **%s**: _%s_", 
@@ -235,5 +244,42 @@ standardize_call <- function (call, call_string, env = parent.frame()) {
                      attr(e,"condition")$message))
   } else {
     return(e)
+  }
+}
+
+find_S3_call <- function (matched_call, env = parent.frame()) {
+  if (inherits(matched_call, "try-error")) {
+    return(matched_call)
+  }
+  call_method <- as.character(matched_call[[1]])
+  met <- try(methods(call_method), silent = TRUE)
+  if (inherits(met, "try-error")) {
+    return(matched_call)
+  } else if (length(met) == 0) {
+    return(matched_call)
+  } else {
+    call_class <- class(eval(matched_call[[2]], env))
+    call_dispatched <- paste(call_method,call_class, sep = ".")
+    find_call <- met==call_dispatched
+    if (!any(find_call)) {
+      call_dispatched <- paste(call_method, "default", sep = ".")
+      find_call <- met==call_dispatched
+      if (!any(find_call)) {
+        # At this point, we are almost certain the call is a primitive.
+        # Just ignore.
+        return(matched_call)
+      }
+    }
+    find_call <- which(find_call)
+    vis <- attr(met, "info")$visible[find_call]
+    if (vis) {
+      f <- args(get(call_dispatched, env))
+    } else {
+      f <- args(getAnywhere(call_dispatched)[1])
+    }
+    # Nothing is done with this structure yet
+    return(structure(try(match.call(f, matched_call), silent = TRUE),
+                     s3_class = call_class,
+                     s3_arg_name = as.character(names(matched_call)[[2]])))
   }
 }
