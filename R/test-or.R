@@ -38,7 +38,13 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1,
   for (i in 1:len) {
     code <- input[[i]]
     rep$be_silent()
-    eval(code, envir = env)
+    eval_fail <- try(eval(code, envir = env), silent = TRUE)
+    if (inherits(eval_fail, "try-error")) {
+      cond <- attr(eval_fail, "condition")$message
+      if (!identical(cond, sct_failed_msg)) {
+        stop(cond)
+      }
+    }
     passes[i] <- !rep$get_silent_fail()
     rep$be_loud()
     if (passes[i]) break
@@ -47,7 +53,13 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1,
   if (!any(passes)) {
     if (is.null(incorrect_msg)) {
       first <- input[[choose_feedback]]
-      eval(first, envir = env)
+      eval_fail <- try(eval(first, envir = env), silent = TRUE)
+      if (inherits(eval_fail, "try-error")) {
+        cond <- attr(eval_fail, "condition")$message
+        if (!identical(cond, sct_failed_msg)) {
+          stop(cond)
+        }
+      }
     } else {
       test_what(fail(), incorrect_msg)
     }
