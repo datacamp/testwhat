@@ -257,12 +257,18 @@ find_S3_call <- function (matched_call, env = parent.frame()) {
     return(matched_call)
   } else if (length(met) == 0) {
     return(matched_call)
+  } else if (length(matched_call) < 2) {
+    return(matched_call)
   } else {
-    call_class <- class(eval(matched_call[[2]], env))
+    call_class <- try(class(eval(matched_call[[2]], env)), silent = TRUE)
+    if (inherits(call_class, "try-error")) {
+      return(matched_call)
+    }
     call_dispatched <- paste(call_method,call_class, sep = ".")
     find_call <- met==call_dispatched
     if (!any(find_call)) {
       call_dispatched <- paste(call_method, "default", sep = ".")
+      cal_class <- "default"
       find_call <- met==call_dispatched
       if (!any(find_call)) {
         # At this point, we are almost certain the call is a primitive.
