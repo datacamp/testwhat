@@ -15,7 +15,7 @@ test_what <- function(code, feedback_msg) {
   eval(code)
   rep$clear_inh_failure_msg()
   
-  if (rep$failed && !rep$silent) {
+  if (rep$failed) {
     stop(sct_failed_msg)
   }
 }

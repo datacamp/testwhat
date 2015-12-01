@@ -70,11 +70,14 @@ test_function_definition <- function(name,
     stud_arguments <- as.list(formals(stud_function))
     sol_arguments <- as.list(formals(sol_function))
     
-    test_correct({
-      # Perform the tests on the function in the student environment
-      eval(function_test, envir = student_env)
-    }, {
-      # if not correct, go into more detail
+    rep <- get_reporter()
+    
+    rep$be_silent()
+    eval(function_test, envir = student_env)
+    fail <- rep$get_silent_fail()
+    rep$be_loud()
+    
+    if (fail) {
       test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
       
       if(!is.null(body_test)) {
@@ -84,6 +87,8 @@ test_function_definition <- function(name,
         set_student_code(student_code)
         set_solution_code(solution_code)  
       }
-    })
+      
+      eval(function_test, envir = student_env)
+    }
   }
 }

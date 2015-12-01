@@ -29,7 +29,11 @@ test_expression_output <- function(expr,
                                    solution_env = get_solution_env(),
                                    incorrect_msg = NULL) {
   
-  output_sol <- try(capture.output(try(eval(parse(text = expr), envir = solution_env), silent = TRUE)))
+  output_sol <- try(capture.output(
+    try(
+      invisible(eval(parse(text = expr), envir = solution_env)), 
+      silent = TRUE)))
+  
   if (length(output_sol) == 0) {
     output_sol <- "NULL"
   }
@@ -44,7 +48,11 @@ test_expression_output <- function(expr,
     incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs:<br><code>%s</code>", expr, build_summary(output_sol, output = TRUE))
   }
   
-  output_stud <- try(capture.output(try(eval(parse(text = expr), envir = student_env), silent = TRUE)))
+  output_stud <- try(capture.output(
+    try(
+      invisible(eval(parse(text = expr), envir = student_env)), 
+      silent = TRUE)))
+  
   if (length(output_stud) == 0) {
     output_stud <- "NULL"
   }

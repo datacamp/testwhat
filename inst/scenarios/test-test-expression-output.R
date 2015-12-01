@@ -4,7 +4,7 @@ scen <- list(
   list(
     type = "NormalExercise",
     student = "func <- function(x) { print(x) }\nfunc_not_eq <- function(x) { print(paste(\"Output:\",x)) }",
-    solution = "func <- function(x) { print(x) }\nfunc_not_eq <- function(x) { print(x) }",
+    solution = "func <- function(x) { print(x) }\nfunc_not_eq <- function(x) { print(x); x^2}",
     pass = list(
       test_output_equal = list(
         long = "test succeeds if output of expr are equal",
@@ -15,15 +15,15 @@ scen <- list(
       test_output_equal = list(
         long = "test fails if output of expr are not equal",
         sct = "test_expression_output(\"func_not_eq(3)\")",
-        message = "Make sure that.*outputs.*"
+        message = "Make sure that.*outputs.*\\[1\\] 3"
       )
     )
   ),
   list(
     type = "NormalExercise",
-    student = "func <- function(x) { x }",
-    solution = "func <- function(x) { x - 1 }",
-    fail = list(
+    student = "func <- function(x) { print(\"Test: \"); print(x); x }",
+    solution = "func <- function(x) { print(\"Test: \"); print(x); x - 1 }",
+    pass = list(
       test_output_not_equal_2 = list(
         long = "test fails if outputs of expr are not equal",
         sct = "test_expression_output(\"func(3)\")"

@@ -51,7 +51,7 @@ get_clean_lines <- function(code) {
   code = gsub("summarize","summarise",code)
   
   pd <- getParseData(parse(text = code, keep.source = TRUE))
-  exprids <- pd$id[pd$parent == 0 & pd$token != "COMMENT"]
+  exprids <- pd$id[pd$parent == 0 & pd$token != "COMMENT" & pd$token != "';'"]
   codelines <- sapply(exprids, function(x) getParseText(pd, id = x))
   
   cleanlines <- sapply(codelines, clean_unpipe, USE.NAMES = FALSE)

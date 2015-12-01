@@ -15,7 +15,7 @@ DataCampReporter <- setRefClass(
   fields = list(
     report = "character",
     results = "list",
-    silent = "logical",
+    silent = "numeric",
     silent_fail = "logical",
     instruction_index = "numeric",
     inh_failure_msg = "character",
@@ -31,7 +31,7 @@ DataCampReporter <- setRefClass(
     start_reporter = function(...) {
       callSuper(...)
       results <<- list()
-      silent <<- FALSE
+      silent <<- 0
       instruction_index <<- 0
       inh_failure_msg <<- ""
       inh_success_msg <<- sample(c("You rock!", 
@@ -61,7 +61,7 @@ DataCampReporter <- setRefClass(
       }
       if(silent) {
         if(!result$passed) {
-          silent_fail <<- TRUE
+          silent_fail[silent] <<- TRUE
         }
       } else {
         results <<- c(results, list(list(passed = result$passed, 
@@ -76,12 +76,16 @@ DataCampReporter <- setRefClass(
 
     ### new methods
     be_silent = function() {
-      silent <<- TRUE
-      silent_fail <<- FALSE
+      silent <<- silent + 1
+      silent_fail[silent] <<- FALSE
     },
 
     be_loud = function() {
-      silent <<- FALSE
+      silent <<- max(0, silent - 1)
+    },
+    
+    get_silent_fail = function() {
+      return(silent_fail[silent])
     },
     
     ## challenge methods

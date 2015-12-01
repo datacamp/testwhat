@@ -41,22 +41,18 @@
 #'
 #' @export
 test_correct = function(check_code, diagnose_code, env = parent.frame()) {
-  check_code <- substitute(check_code)
-  if (is.character(check_code)) check_code <- parse(text = check_code)
+  check_code <- as.character(substitute(check_code))[-1]
+  diagnose_code <- as.character(substitute(diagnose_code))[-1]
   
-  diagnose_code <- substitute(diagnose_code)
-  if (is.character(diagnose_code)) diagnose_code <- parse(text = diagnose_code)
+  check_diagnose_code <- parse(text=c(diagnose_code,check_code))
+  check_code <- parse(text=check_code)
   
-  rep <- get_reporter()
-  
-  rep$be_silent()
-  eval(check_code, envir = env)
-  rep$be_loud()
-  
-  # If the check_code failed, do more tests
-  if(rep$silent_fail) {
-    eval(diagnose_code, envir = env)
-    # test the check one more, now loudly
-    eval(check_code, envir = env)
-  }
+  test_or({
+    check_code
+  }, {
+    check_diagnose_code
+  },
+  subs = FALSE,
+  choose_feedback = 2,
+  env = env)
 }

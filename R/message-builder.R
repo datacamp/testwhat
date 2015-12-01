@@ -136,7 +136,6 @@ build_incorrect_output_msg <- function(expr) {
 
 build_summary <- function(x, ...) UseMethod("build_summary")
 
-
 build_summary.default <- function(x) {
   toString(x, width = 300)
 }
