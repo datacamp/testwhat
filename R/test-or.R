@@ -10,10 +10,10 @@
 #'  a successful SCT evaluation.}
 #' }
 
-#' @param ...
-#' @param incorrect_msg 
-#' @param choose_feedback
-#' @param subs
+#' @param ... one of these code blocks with tests should succeed 
+#' @param incorrect_msg msg displayed when none succeeds
+#' @param choose_feedback choose feedback of test with this index
+#' @param subs substitute content of ...
 #' @param env environment in which to execute tests.
 #' 
 #' @examples
