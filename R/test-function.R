@@ -265,7 +265,14 @@ find_S3_call <- function (matched_call, env = parent.frame()) {
       return(matched_call)
     }
     call_dispatched <- paste(call_method,call_class, sep = ".")
-    find_call <- met==call_dispatched
+    find_call <- rep(FALSE, length(met))
+    for (one_call in call_dispatched) {
+      find_call <- met==one_call
+      if (any(find_call)) {
+        call_dispatched <- one_call
+        break
+      }
+    }
     if (!any(find_call)) {
       call_dispatched <- paste(call_method, "default", sep = ".")
       cal_class <- "default"
@@ -285,7 +292,7 @@ find_S3_call <- function (matched_call, env = parent.frame()) {
     }
     # Nothing is done with this structure yet
     return(structure(try(match.call(f, matched_call), silent = TRUE),
-                     s3_class = call_class,
+                     s3_class = call_dispatched,
                      s3_arg_name = as.character(names(matched_call)[[2]])))
   }
 }
