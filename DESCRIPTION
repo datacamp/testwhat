@@ -40,6 +40,7 @@ Collate:
     'test-function-definition.R'
     'test-function-v2.R'
     'test-function.R'
+    'test-ggplot.R'
     'test-if-else.R'
     'test-instruction.R'
     'test-library-function.R'
