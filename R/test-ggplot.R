@@ -145,7 +145,7 @@ test_ggplot <- function(index = 1,
         } else {
           param_feedback <- param_strings
         }
-        feedback_msg <- c(paste0(geom_base_feedback, "?"),
+        feedback_msg <- c(paste0(geom_base_feedback, " with a `+` operator?"),
                           paste0(geom_base_feedback, " with ", param_feedback, "?"),
                           paste0(geom_base_feedback, " with ", param_feedback, "?", " It seems like you have defined too much attributes or aesthetics for this geom."))
         
