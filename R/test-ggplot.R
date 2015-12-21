@@ -74,6 +74,11 @@ test_ggplot <- function(index = 1,
     # Check the scale layer
     test_scale_layer(sol_selected_command, stud_selected_command, feedback, scale_fail_msg, exact_scale, student_env, solution_env)
   }
+  
+  if (check_coord) {
+    # Check the coord layer
+    test_coord_layer(sol_selected_command, stud_selected_command, feedback, coord_fail_msg, exact_coord, student_env, solution_env)
+  }
 }
 
 test_data_layer <- function(sol_data, stud_data, feedback, data_fail_msg) {
@@ -112,6 +117,10 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
   
   sol_geom_parts <- extract_parts(sol_command, "geom")
   stud_geom_parts <- extract_parts(stud_command, "geom")
+  
+  if (!(nb_sol_layers > 0)) {
+    return()
+  }
   
   for (i in 1:nb_sol_layers) {
     sol_layer <- sol_layers[[i]]
@@ -274,6 +283,10 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
   stud_parts <- extract_parts(stud_command, type)
   
   nb_sol_parts <- length(sol_parts)
+  
+  if (!(nb_sol_parts > 0)) {
+    return()
+  }
   
   exact <- rep_len(exact, nb_sol_parts)
   
