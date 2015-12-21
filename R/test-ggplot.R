@@ -7,16 +7,21 @@ test_ggplot <- function(index = 1,
                         check_data = TRUE, data_fail_msg = NULL,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
                         check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE,
-                        check_facet = TRUE, facet_fail_msg = NULL) {
-  solution_ggplot_objects <- get_ggplot_objects(solution_code, solution_env)
+                        check_facet = TRUE, facet_fail_msg = NULL,
+                        check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE) {
+  sol_ggplot_info <- get_ggplot_info(solution_code, solution_env)
+  sol_ggplot_objects <- sol_ggplot_info$objects
+  sol_ggplot_commands <- sol_ggplot_info$commands
   
-  sol_selected <- try(solution_ggplot_objects[[index]], silent = TRUE)
+  sol_selected <- try(sol_ggplot_objects[[index]], silent = TRUE)
   if (inherits(sol_selected, "try-error")) {
     stop(sprintf("Could not find ggplot command %d in your solution environment.", index))
   }
   
-  student_ggplot_objects <- get_ggplot_objects(student_code, student_env)
-  len <- length(student_ggplot_objects)
+  stud_ggplot_info <- get_ggplot_info(student_code, student_env)
+  stud_ggplot_objects <- stud_ggplot_info$objects
+  stud_ggplot_commands <- stud_ggplot_info$commands
+  len <- length(stud_ggplot_objects)
   
   if (len < index) {
     test_what(fail(), feedback_msg = "You didn't define enough `ggplot` commands.")
@@ -24,7 +29,7 @@ test_ggplot <- function(index = 1,
   
   feedback <- sprintf("In your %s `ggplot` command,", nd(index))
   
-  stud_selected <- student_ggplot_objects[[index]]
+  stud_selected <- stud_ggplot_objects[[index]]
   
   test_what(expect_false(inherits(stud_selected, "try-error")), feedback_msg = paste(feedback, "you got an error. Make sure you use the correct `ggplot` syntax. Have another look at the instructions."))
   
@@ -46,6 +51,14 @@ test_ggplot <- function(index = 1,
   if (check_facet) {
     # Check the facet layer
     test_facet_layer(sol_selected$facet, stud_selected$facet, feedback, facet_fail_msg)
+  }
+  
+  sol_selected_command <- sol_ggplot_commands[[index]]
+  stud_selected_command <- stud_ggplot_commands[[index]]
+  
+  if (check_scale) {
+    # Check the scale layer
+    test_scale_layer(sol_selected_command, stud_selected_command, feedback, scale_fail_msg, exact_scale, student_env, solution_env)
   }
 }
 
@@ -118,7 +131,7 @@ test_geom_layer <- function(sol_layers, stud_layers, feedback, geom_fail_msg, ex
               sol_value <- sol_params[[sol_param]]
               stud_value <- stud_params[[sol_param]]
               
-              if (!all(sol_value == stud_value)) {
+              if (!compare(sol_value, stud_value)$equal) {
                 found_params <- FALSE
                 break
               }
@@ -153,7 +166,7 @@ test_geom_layer <- function(sol_layers, stud_layers, feedback, geom_fail_msg, ex
       filtered_geom_params <- names(filter_standard_geom_params(sol_layer$geom$objname, sol_params))
       param_strings <- vapply(filtered_geom_params, 
                               function(x) paste0(ifelse(isTRUE(attr(sol_params[[x]], "aes")), "aesthetic ", ""), 
-                                                 "`", x, "` set to `", sol_params[[x]], "`"), character(1))
+                                                 "`", x, "` set to `", deparse(sol_params[[x]]), "`"), character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {
         param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])
@@ -222,11 +235,122 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
   }
 }
 
+# This is duplication. When refactoring see how this can merged with the logic for geom layer.
+test_scale_layer <- function(sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
+                             student_env, solution_env) {
+  sol_scale_parts <- extract_scale_parts(sol_command)
+  stud_scale_parts <- extract_scale_parts(stud_command)
+  
+  nb_sol_scale_parts <- length(sol_scale_parts)
+  
+  exact_scale <- rep_len(exact_scale, nb_sol_scale_parts)
+  
+  for (i in 1:nb_sol_scale_parts) {
+    sol_scale_part <- sol_scale_parts[[i]]
+    
+    found_scale_name <- FALSE
+    found_scale_with_params <- FALSE
+    found_scale_with_exact_params <- FALSE
+    
+    sol_params <- extract_params(sol_scale_part)
+    
+    nb_stud_scale_parts <- length(stud_scale_parts)
+    if (nb_stud_scale_parts > 0) {
+      for (j in 1:nb_stud_scale_parts) {
+        stud_scale_part <- stud_scale_parts[[j]]
+        if (stud_scale_part[[1]] == sol_scale_part[[1]]) {
+          found_scale_name <- TRUE
+          found_params <- TRUE
+          
+          stud_params <- extract_params(stud_scale_part)
+          
+          for (sol_param in names(sol_params)) {
+            if (!(sol_param %in% names(stud_params))) {
+              found_params <- FALSE
+              break
+            } else {
+              sol_value <- sol_params[[sol_param]]
+              stud_value <- stud_params[[sol_param]]
+              
+              eval_sol <- eval(sol_value, solution_env)
+              eval_stud <- try(eval(stud_value, student_env), silent = TRUE)
+              if (inherits(eval_stud, "try-error") ||
+                  !compare(eval_sol, eval_stud)$equal) {
+                found_params <- FALSE
+                break
+              }
+            }
+          }
+          
+          if (found_params) {
+            found_scale_with_params <- TRUE
+          }
+          
+          if (found_scale_with_params && (!exact_scale[i] || length(sol_params) == length(stud_params))) {
+            found_scale_with_exact_params <- TRUE
+          }
+          
+          if (found_scale_with_exact_params) {
+            stud_scale_parts[[j]] <- NULL
+            break
+          }
+        }
+        
+      }
+    }
+    
+    if (!is.null(scale_fail_msg)) {
+      feedback_msg <- rep_len(scale_fail_msg, 3)
+    } else {
+      scale_base_feedback <- paste0(feedback, " have you correctly added a `", sol_scale_part[[1]],"()` layer")
+      param_strings <- vapply(names(sol_params), 
+                              function(x) paste0("`", x, "` set to `", deparse(sol_params[[x]]), "`"), character(1))
+      nb_param_strings <- length(param_strings)
+      if (nb_param_strings > 1) {
+        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])
+      } else {
+        param_feedback <- param_strings
+      }
+      feedback_msg <- c(paste0(scale_base_feedback, " with a `+` operator?"),
+                        paste0(scale_base_feedback, " with ", param_feedback, "?"),
+                        paste0(scale_base_feedback, " with ", param_feedback, "?", " It seems like you have defined too much attributes for this scale."))
+      
+    }
+    
+    test_what(expect_true(found_scale_name), feedback_msg = feedback_msg[1])
+    test_what(expect_true(found_scale_with_params), feedback_msg = feedback_msg[2])
+    test_what(expect_true(found_scale_with_exact_params), feedback_msg = feedback_msg[3])
+  }
+}
+
 nd <- function(number) {
   switch(number, "1" = "first", "2" = "second", "3" = "third", 
                  "4" = "fourth", "5" = "fifth", "6" = "sixth", 
                  "7" = "seventh", "8" = "eighth", "9" = "ninth", 
                  "10" = "tenth")
+}
+
+extract_params <- function(command) {
+  func_def <- try(argsAnywhere(as.character(command[[1]])), silent = TRUE)
+  if (!inherits(func_def, "try-error")) {
+    return(as.list(match.call(func_def, command))[-1])
+  } else {
+    return(NULL)
+  }
+}
+
+extract_scale_parts <- function(command) {
+  if (command[[1]] == "+") {
+    return(c(extract_scale_parts(command[[2]]), extract_scale_parts(command[[3]])))
+  } else if (is.call(command)) {
+    if (grepl("^scale_", command[[1]])) {
+      return(list(command))
+    } else {
+      return(list())
+    }
+  } else {
+    return(list())
+  }
 }
 
 extract_position_type <- function(position) {
@@ -277,9 +401,11 @@ filter_standard_geom_params <- function(geom_call, params) {
   return(params)
 }
 
-get_ggplot_objects <- function(code, envir) {
+get_ggplot_info <- function(code, envir) { 
   ggplot_env <- new.env()
-  return(lapply(get_ggplot_commands(code, ggplot_env), function(x) try(eval(x, envir), silent = TRUE) ))
+  commands <- get_ggplot_commands(code, ggplot_env)
+  return(list(commands = commands,
+              objects = lapply(commands, function(x) try(eval(x, envir), silent = TRUE))))
 }
 
 get_ggplot_commands <- function(code, envir) {
