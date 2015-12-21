@@ -349,7 +349,14 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
     } else {
       base_feedback <- paste0(feedback, " have you correctly added a `", sol_part[[1]],"()` layer")
       param_strings <- vapply(names(sol_params), 
-                              function(x) paste0("`", x, "` set to `", deparse(sol_params[[x]]), "`"), character(1))
+                              function(x) {
+                                if (isTRUE(attr(sol_params[[x]], "dot"))) {
+                                  attr(sol_params[[x]], "dot") <- NULL
+                                  return(paste0("the ", x, " set to `", deparse(sol_params[[x]]), "`")) 
+                                } else {
+                                  return(paste0("`", x, "` set to `", deparse(sol_params[[x]]), "`"))
+                                }
+                              }, character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {
         param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])
@@ -378,7 +385,26 @@ nd <- function(number) {
 extract_params <- function(command) {
   func_def <- try(argsAnywhere(as.character(command[[1]])), silent = TRUE)
   if (!inherits(func_def, "try-error")) {
-    return(as.list(match.call(func_def, command))[-1])
+    param_list <- as.list(match.call(func_def, command))[-1]
+    if (!length(param_list) > 0) {
+      return(NULL)
+    }
+    param_names <- names(param_list)
+    if (is.null(param_names)) {
+      for (i in 1:length(param_list)) {
+        attr(param_list[[i]], "dot") <- TRUE
+        param_names[i] <- paste(nd(i), "argument")
+      }
+    } else {
+      for (i in 1:length(param_names)) {
+        if (compare(param_names[i], "")$equal) {
+          attr(param_list[[i]], "dot") <- TRUE
+          param_names[i] <- paste(nd(i), "argument")
+        }
+      }
+    }
+    names(param_list) <- param_names
+    return(param_list)
   } else {
     return(NULL)
   }
