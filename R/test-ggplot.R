@@ -385,7 +385,9 @@ extract_params <- function(command) {
 }
 
 extract_parts <- function(command, type) {
-  if (command[[1]] == "+") {
+  if (is.name(command)) {
+    return(list())
+  } else if (command[[1]] == "+") {
     return(c(extract_parts(command[[2]], type), extract_parts(command[[3]], type)))
   } else if (is.call(command)) {
     if (grepl(paste0("^", type, "_"), command[[1]])) {
@@ -434,9 +436,9 @@ filter_standard_geom_params <- function(geom_call, params) {
   standard_layer <- eval(call(geom_call))
   standard_params <- get_geom_params(standard_layer)
   ov <- intersect(names(params), names(standard_params))
-  eq <- mapply('==', standard_params[ov], params[ov])
+  eq <- mapply(function(x,y) compare(x,y)$equal, standard_params[ov], params[ov])
   if (any(eq)) {
-    params[[names(eq[eq])]] <- NULL
+    params[names(eq[eq])] <- NULL
   } 
   return(params)
 }
@@ -524,7 +526,9 @@ replace_saved_ggplot_commands <- function(code, envir) {
   len <- length(code)
   if (len > 1) {
     for (i in 1:len) {
-      if (exists(as.character(code[[i]]), envir = envir, inherits = FALSE)) {
+      if (length(code[[i]]) > 1 && code[[i]][[1]] == "+") {
+        code[[i]] = replace_saved_ggplot_commands(code[[i]], envir)
+      } else if (exists(as.character(code[[i]]), envir = envir, inherits = FALSE)) {
         code[[i]] = get(as.character(code[[i]]), envir = envir, inherits = FALSE)  
       }
     }
