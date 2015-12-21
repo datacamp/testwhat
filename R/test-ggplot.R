@@ -8,17 +8,31 @@ test_ggplot <- function(index = 1,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
                         check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE,
                         check_facet = TRUE, facet_fail_msg = NULL,
-                        check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE) {
-  sol_ggplot_info <- get_ggplot_info(solution_code, solution_env)
+                        check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
+                        check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
+                        check = NULL) {
+  layers <- c("data", "aes", "geom", "facet", "scale", "coord")
+  
+  sol_ggplot_info <- get_ggplot_solution_info(solution_code, solution_env)
   sol_ggplot_objects <- sol_ggplot_info$objects
   sol_ggplot_commands <- sol_ggplot_info$commands
+  
+  if (!is.null(check)) {
+    for (layer in layers) {
+      if (layer %in% check) {
+        assign(paste0("check_", layer), TRUE)
+      } else {
+        assign(paste0("check_", layer), FALSE)
+      }
+    }
+  }
   
   sol_selected <- try(sol_ggplot_objects[[index]], silent = TRUE)
   if (inherits(sol_selected, "try-error")) {
     stop(sprintf("Could not find ggplot command %d in your solution environment.", index))
   }
   
-  stud_ggplot_info <- get_ggplot_info(student_code, student_env)
+  stud_ggplot_info <- get_ggplot_student_info(student_code, student_env)
   stud_ggplot_objects <- stud_ggplot_info$objects
   stud_ggplot_commands <- stud_ggplot_info$commands
   len <- length(stud_ggplot_objects)
@@ -33,6 +47,9 @@ test_ggplot <- function(index = 1,
   
   test_what(expect_false(inherits(stud_selected, "try-error")), feedback_msg = paste(feedback, "you got an error. Make sure you use the correct `ggplot` syntax. Have another look at the instructions."))
   
+  sol_selected_command <- sol_ggplot_commands[[index]]
+  stud_selected_command <- stud_ggplot_commands[[index]]
+  
   if (check_data) {
     # Check the data
     test_data_layer(list(base = sol_selected$data), list(base = stud_selected$data), feedback, data_fail_msg)
@@ -45,16 +62,13 @@ test_ggplot <- function(index = 1,
   
   if (check_geom) {
     # Check the geom layer
-    test_geom_layer(sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom)
+    test_geom_layer(sol_selected_command, stud_selected_command, sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom)
   }
   
   if (check_facet) {
     # Check the facet layer
     test_facet_layer(sol_selected$facet, stud_selected$facet, feedback, facet_fail_msg)
   }
-  
-  sol_selected_command <- sol_ggplot_commands[[index]]
-  stud_selected_command <- stud_ggplot_commands[[index]]
   
   if (check_scale) {
     # Check the scale layer
@@ -90,38 +104,44 @@ test_aes_layer <- function(sol_mapping, stud_mapping, feedback, aes_fail_msg, ex
   }
 }
 
-test_geom_layer <- function(sol_layers, stud_layers, feedback, geom_fail_msg, exact_geom) {
+
+test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, feedback, geom_fail_msg, exact_geom) {
   nb_sol_layers <- length(sol_layers)
   
   exact_geom <- rep_len(exact_geom, nb_sol_layers)
   
+  sol_geom_parts <- extract_parts(sol_command, "geom")
+  stud_geom_parts <- extract_parts(stud_command, "geom")
+  
   for (i in 1:nb_sol_layers) {
     sol_layer <- sol_layers[[i]]
+    sol_geom_part <- sol_geom_parts[[i]]
     
     found_geom_name <- FALSE
     found_geom_with_params <- FALSE
     found_geom_with_exact_params <- FALSE
     found_geom_with_correct_position <- FALSE
     
-    sol_params <- sol_layer$geom_params
-    sol_params <- c(sol_params, sol_layer$stat_params)
-    sol_params <- c(sol_params, lapply(sol_layer$mapping, function(x) structure(x, aes = TRUE)))
+    sol_params <- get_geom_params(sol_layer)
     
-    sol_position <- extract_position_type(sol_layer$position)
+    sol_position <- extract_type_from_object(sol_layer$position)
+    
     
     nb_stud_layers <- length(stud_layers)
     if (nb_stud_layers > 0) {
       for (j in 1:nb_stud_layers) {
         stud_layer <- stud_layers[[j]]
-        if (stud_layer$geom$objname == sol_layer$geom$objname) {
+        stud_geom_part <- stud_geom_parts[[j]]
+        
+        sol_geom_type <- extract_type_from_object(sol_layer$geom)
+        stud_geom_type <- extract_type_from_object(stud_layer$geom)
+        if (sol_geom_type == stud_geom_type) {
           found_geom_name <- TRUE
           found_params <- TRUE
           
-          stud_params <- stud_layer$geom_params
-          stud_params <- c(stud_params, stud_layer$stat_params)
-          stud_params <- c(stud_params, lapply(stud_layer$mapping, function(x) structure(x, aes = TRUE)))
+          stud_params <- get_geom_params(stud_layer)
           
-          stud_position <- extract_position_type(stud_layer$position)
+          stud_position <- extract_type_from_object(stud_layer$position)
           
           for (sol_param in names(sol_params)) {
             if (!(sol_param %in% names(stud_params))) {
@@ -152,6 +172,7 @@ test_geom_layer <- function(sol_layers, stud_layers, feedback, geom_fail_msg, ex
           
           if (found_geom_with_correct_position) {
             stud_layers[[j]] <- NULL
+            stud_geom_parts[[j]] <- NULL
             break
           }
         }
@@ -162,8 +183,8 @@ test_geom_layer <- function(sol_layers, stud_layers, feedback, geom_fail_msg, ex
     if (!is.null(geom_fail_msg)) {
       feedback_msg <- rep_len(geom_fail_msg, 4)
     } else {
-      geom_base_feedback <- paste0(feedback, " have you correctly added a `geom_", sol_layer$geom$objname,"()` layer")
-      filtered_geom_params <- names(filter_standard_geom_params(sol_layer$geom$objname, sol_params))
+      geom_base_feedback <- paste0(feedback, " have you correctly added a `", as.character(sol_geom_part[[1]]),"()` layer")
+      filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
       param_strings <- vapply(filtered_geom_params, 
                               function(x) paste0(ifelse(isTRUE(attr(sol_params[[x]], "aes")), "aesthetic ", ""), 
                                                  "`", x, "` set to `", deparse(sol_params[[x]]), "`"), character(1))
@@ -235,34 +256,45 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
   }
 }
 
-# This is duplication. When refactoring see how this can merged with the logic for geom layer.
 test_scale_layer <- function(sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
                              student_env, solution_env) {
-  sol_scale_parts <- extract_scale_parts(sol_command)
-  stud_scale_parts <- extract_scale_parts(stud_command)
+  test_generic_part(type = "scale", sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
+                    student_env, solution_env)
+}
+
+test_coord_layer <- function(sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
+                             student_env, solution_env) {
+  test_generic_part(type = "coord", sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
+                    student_env, solution_env)
+}
+
+test_generic_part <- function(type, sol_command, stud_command, feedback, fail_msg, exact,
+                              student_env, solution_env) {
+  sol_parts <- extract_parts(sol_command, type)
+  stud_parts <- extract_parts(stud_command, type)
   
-  nb_sol_scale_parts <- length(sol_scale_parts)
+  nb_sol_parts <- length(sol_parts)
   
-  exact_scale <- rep_len(exact_scale, nb_sol_scale_parts)
+  exact <- rep_len(exact, nb_sol_parts)
   
-  for (i in 1:nb_sol_scale_parts) {
-    sol_scale_part <- sol_scale_parts[[i]]
+  for (i in 1:nb_sol_parts) {
+    sol_part <- sol_parts[[i]]
     
-    found_scale_name <- FALSE
-    found_scale_with_params <- FALSE
-    found_scale_with_exact_params <- FALSE
+    found_name <- FALSE
+    found_with_params <- FALSE
+    found_with_exact_params <- FALSE
     
-    sol_params <- extract_params(sol_scale_part)
+    sol_params <- extract_params(sol_part)
     
-    nb_stud_scale_parts <- length(stud_scale_parts)
-    if (nb_stud_scale_parts > 0) {
-      for (j in 1:nb_stud_scale_parts) {
-        stud_scale_part <- stud_scale_parts[[j]]
-        if (stud_scale_part[[1]] == sol_scale_part[[1]]) {
-          found_scale_name <- TRUE
+    nb_stud_parts <- length(stud_parts)
+    if (nb_stud_parts > 0) {
+      for (j in 1:nb_stud_parts) {
+        stud_part <- stud_parts[[j]]
+        if (stud_part[[1]] == sol_part[[1]]) {
+          found_name <- TRUE
           found_params <- TRUE
           
-          stud_params <- extract_params(stud_scale_part)
+          stud_params <- extract_params(stud_part)
           
           for (sol_param in names(sol_params)) {
             if (!(sol_param %in% names(stud_params))) {
@@ -283,15 +315,15 @@ test_scale_layer <- function(sol_command, stud_command, feedback, scale_fail_msg
           }
           
           if (found_params) {
-            found_scale_with_params <- TRUE
+            found_with_params <- TRUE
           }
           
-          if (found_scale_with_params && (!exact_scale[i] || length(sol_params) == length(stud_params))) {
-            found_scale_with_exact_params <- TRUE
+          if (found_with_params && (!exact[i] || length(sol_params) == length(stud_params))) {
+            found_with_exact_params <- TRUE
           }
           
-          if (found_scale_with_exact_params) {
-            stud_scale_parts[[j]] <- NULL
+          if (found_with_exact_params) {
+            stud_parts[[j]] <- NULL
             break
           }
         }
@@ -299,10 +331,10 @@ test_scale_layer <- function(sol_command, stud_command, feedback, scale_fail_msg
       }
     }
     
-    if (!is.null(scale_fail_msg)) {
-      feedback_msg <- rep_len(scale_fail_msg, 3)
+    if (!is.null(fail_msg)) {
+      feedback_msg <- rep_len(fail_msg, 3)
     } else {
-      scale_base_feedback <- paste0(feedback, " have you correctly added a `", sol_scale_part[[1]],"()` layer")
+      base_feedback <- paste0(feedback, " have you correctly added a `", sol_part[[1]],"()` layer")
       param_strings <- vapply(names(sol_params), 
                               function(x) paste0("`", x, "` set to `", deparse(sol_params[[x]]), "`"), character(1))
       nb_param_strings <- length(param_strings)
@@ -311,15 +343,15 @@ test_scale_layer <- function(sol_command, stud_command, feedback, scale_fail_msg
       } else {
         param_feedback <- param_strings
       }
-      feedback_msg <- c(paste0(scale_base_feedback, " with a `+` operator?"),
-                        paste0(scale_base_feedback, " with ", param_feedback, "?"),
-                        paste0(scale_base_feedback, " with ", param_feedback, "?", " It seems like you have defined too much attributes for this scale."))
+      feedback_msg <- c(paste0(base_feedback, " with a `+` operator?"),
+                        paste0(base_feedback, " with ", param_feedback, "?"),
+                        paste0(base_feedback, " with ", param_feedback, "?", " It seems like you have defined too much attributes."))
       
     }
     
-    test_what(expect_true(found_scale_name), feedback_msg = feedback_msg[1])
-    test_what(expect_true(found_scale_with_params), feedback_msg = feedback_msg[2])
-    test_what(expect_true(found_scale_with_exact_params), feedback_msg = feedback_msg[3])
+    test_what(expect_true(found_name), feedback_msg = feedback_msg[1])
+    test_what(expect_true(found_with_params), feedback_msg = feedback_msg[2])
+    test_what(expect_true(found_with_exact_params), feedback_msg = feedback_msg[3])
   }
 }
 
@@ -339,11 +371,11 @@ extract_params <- function(command) {
   }
 }
 
-extract_scale_parts <- function(command) {
+extract_parts <- function(command, type) {
   if (command[[1]] == "+") {
-    return(c(extract_scale_parts(command[[2]]), extract_scale_parts(command[[3]])))
+    return(c(extract_parts(command[[2]], type), extract_parts(command[[3]], type)))
   } else if (is.call(command)) {
-    if (grepl("^scale_", command[[1]])) {
+    if (grepl(paste0("^", type, "_"), command[[1]])) {
       return(list(command))
     } else {
       return(list())
@@ -353,29 +385,15 @@ extract_scale_parts <- function(command) {
   }
 }
 
-extract_position_type <- function(position) {
-  capt <- capture.output(position)
-  type <- gsub("^position_(.*?): \\(.*?\\)$", "\\1",  capt)
-  return(type)
-}
-
-extract_position_params <- function(position) {
-  params <- ls(position)
-  
+extract_type_from_object <- function(object) {
+  return(sub("^_", "", tolower(gsub("([A-Z])", "_\\1", class(object)[1]))))
 }
 
 compare_positions <- function(sol_layer, stud_layer) {
-  sol_position <- sol_layer$position
-  stud_position <- stud_layer$position
-  
-  if (extract_position_type(sol_position) != extract_position_type(stud_position)) {
-    return(FALSE)
-  }
-  
-  sol_params <- ls(sol_position)
-  stud_params <- ls(stud_position)
-  params <- intersect(sol_params, stud_params)
-  return(all(vapply(params, function(x) almost_equal(sol_position[[x]], stud_position[[x]]), logical(1))))
+   sol_position <- sol_layer$position
+   stud_position <- stud_layer$position
+
+   return(compare(sol_position, stud_position)$equal)
 }
 
 almost_equal <- function(value1, value2) {
@@ -388,17 +406,64 @@ almost_equal <- function(value1, value2) {
   }
 }
 
+get_geom_params <- function(geom_layer) {
+  params <- geom_layer$geom_params
+  stat_params <- geom_layer$stat_params
+  params[names(stat_params)] <- stat_params
+  mapping_params <- lapply(geom_layer$mapping, function(x) structure(x, aes = TRUE))
+  params[names(mapping_params)] <- mapping_params
+  aes_params <- geom_layer$aes_params
+  params[names(aes_params)] <- aes_params
+  return(params)
+}
+
 filter_standard_geom_params <- function(geom_call, params) {
-  standard_layer <- eval(call(paste0("geom_",geom_call)))
-  standard_params <- standard_layer$geom_params
-  standard_params <- c(standard_params, standard_layer$stat_params)
-  standard_params <- c(standard_params, lapply(standard_layer$mapping,function(x) structure(x, aes = TRUE)))
+  standard_layer <- eval(call(geom_call))
+  standard_params <- get_geom_params(standard_layer)
   ov <- intersect(names(params), names(standard_params))
   eq <- mapply('==', standard_params[ov], params[ov])
   if (any(eq)) {
     params[[names(eq[eq])]] <- NULL
   } 
   return(params)
+}
+
+get_ggplot_solution_info <- function(code, envir) { 
+  if (exists("saved_solution_code", envir = get_sct_env(), inherits = FALSE)) {
+    saved_solution_code <- get("saved_solution_code", envir = get_sct_env(), inherits = FALSE)
+  } else {
+    saved_solution_code <- ""
+  }
+  if (exists("saved_solution_code", envir = get_sct_env(), inherits = FALSE)) {
+    saved_solution_ggplot_info <- get("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)
+  } else {
+    saved_solution_ggplot_info <- NULL
+  }
+  if (code != saved_solution_code || !exists("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
+    ggplot_info <- get_ggplot_info(code, envir)
+    assign("saved_solution_code", code, envir = get_sct_env())
+    assign("saved_solution_ggplot_info", ggplot_info, envir = get_sct_env())
+  }
+  return(get("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE))
+}
+
+get_ggplot_student_info <- function(code, envir) { 
+  if (exists("saved_student_code", envir = get_sct_env(), inherits = FALSE)) {
+    saved_student_code <- get("saved_student_code", envir = get_sct_env(), inherits = FALSE)
+  } else {
+    saved_student_code <- ""
+  }
+  if (exists("saved_student_code", envir = get_sct_env(), inherits = FALSE)) {
+    saved_student_ggplot_info <- get("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)
+  } else {
+    saved_student_ggplot_info <- NULL
+  }
+  if (code != saved_student_code || !exists("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
+    ggplot_info <- get_ggplot_info(code, envir)
+    assign("saved_student_code", code, envir = get_sct_env())
+    assign("saved_student_ggplot_info", ggplot_info, envir = get_sct_env())
+  }
+  return(get("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE))
 }
 
 get_ggplot_info <- function(code, envir) { 
