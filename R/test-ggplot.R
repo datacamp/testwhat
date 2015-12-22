@@ -122,6 +122,10 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
     return()
   }
   
+  if (!is.null(geom_fail_msg)) {
+    geom_fail_msg <- rep_len(geom_fail_msg, 5)
+  }
+  
   for (i in 1:nb_sol_layers) {
     sol_layer <- sol_layers[[i]]
     sol_geom_part <- sol_geom_parts[[i]]
@@ -190,7 +194,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
     }
     
     if (!is.null(geom_fail_msg)) {
-      feedback_msg <- rep_len(geom_fail_msg, 4)
+      feedback_msg <- geom_fail_msg
     } else {
       geom_base_feedback <- paste0(feedback, " have you correctly added a `", as.character(sol_geom_part[[1]]),"()` layer")
       filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
@@ -214,6 +218,15 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
     test_what(expect_true(found_geom_with_params), feedback_msg = feedback_msg[2])
     test_what(expect_true(found_geom_with_exact_params), feedback_msg = feedback_msg[3])
     test_what(expect_true(found_geom_with_correct_position), feedback_msg = feedback_msg[4])
+  }
+  
+  if (isTRUE(exact_geom)) {
+    if (!is.null(geom_fail_msg)) {
+      feedback_msg <- geom_fail_msg[5]
+    } else {
+      feedback_msg <- paste0(feedback, " have you added only the geom layers that are asked for? Nothing more.")
+    }
+    test_what(expect_equal(length(stud_layers), 0), feedback_msg = feedback_msg)
   }
 }
 
