@@ -199,8 +199,14 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
       geom_base_feedback <- paste0(feedback, " have you correctly added a `", as.character(sol_geom_part[[1]]),"()` layer")
       filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
       param_strings <- vapply(filtered_geom_params, 
-                              function(x) paste0(ifelse(isTRUE(attr(sol_params[[x]], "aes")), "aesthetic ", ""), 
-                                                 "`", x, "` set to `", deparse(sol_params[[x]]), "`"), character(1))
+                              function(x) {
+                                gen_fb <- ""
+                                if (isTRUE(attr(sol_params[[x]], "aes"))) {
+                                  attr(sol_params[[x]], "aes") <- NULL
+                                  gen_fb <- "aestehtic "
+                                }
+                                return(paste0(gen_fb,"`", x, "` set to `", deparse(sol_params[[x]]), "`"))
+                              }, character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {
         param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])

@@ -41,7 +41,7 @@ cyl.am +
     cyl.am + 
     geom_bar()
     
-    # Stack - default
+    # Stack - default 
     cyl.am + 
     geom_bar(position = "stack")
     
@@ -55,7 +55,7 @@ cyl.am +
     
     # Clean up the axes with Scale functions:
     cyl.am +
-    geom_bar(position = "dodge") +
+    geom_bar(aes(group = 1),position = "dodge") +
     scale_fill_manual("Transmission", 
     values = c("#E41A1C", "#377EB8"),
     labels = c("Manual", "Automatic")) +
@@ -73,7 +73,7 @@ test_ggplot(2, check = "geom")
 test_ggplot(3, check = "geom")
 test_ggplot(4, check = "geom")
 test_ggplot(5, check = "geom")
-test_ggplot(6, check = c("geom", "scale"))
+test_ggplot(6, check = c("geom", "scale"), exact_geom = TRUE)
 success_msg("Great")
         '
       )
