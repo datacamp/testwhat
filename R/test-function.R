@@ -178,7 +178,10 @@ extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
   mapply(function(arg, eval) {
     object <- call[[arg]]
     if (eval && (is.name(object) || is.call(object) || is.expression(object))) {
-      object <- eval(object, envir = env)
+      object <- try(eval(object, envir = env), silent = TRUE)
+      if (inherits(object, "try-error")) {
+        return(NULL)
+      }
     }
     object
   }, args, eval, SIMPLIFY = FALSE)
