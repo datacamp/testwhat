@@ -203,7 +203,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
                                 gen_fb <- ""
                                 if (isTRUE(attr(sol_params[[x]], "aes"))) {
                                   attr(sol_params[[x]], "aes") <- NULL
-                                  gen_fb <- "aestehtic "
+                                  gen_fb <- "aesthetic "
                                 }
                                 return(paste0(gen_fb,"`", x, "` set to `", deparse(sol_params[[x]]), "`"))
                               }, character(1))
@@ -336,8 +336,8 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
               sol_value <- sol_params[[sol_param]]
               stud_value <- stud_params[[sol_param]]
               
-              eval_sol <- eval(sol_value, solution_env)
-              eval_stud <- try(eval(stud_value, student_env), silent = TRUE)
+              eval_sol <- without_args(eval(sol_value, solution_env))
+              eval_stud <- without_args(try(eval(stud_value, student_env), silent = TRUE))
               if (inherits(eval_stud, "try-error") ||
                   !compare(eval_sol, eval_stud)$equal) {
                 found_params <- FALSE
@@ -392,6 +392,14 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
     test_what(expect_true(found_with_params), feedback_msg = feedback_msg[2])
     test_what(expect_true(found_with_exact_params), feedback_msg = feedback_msg[3])
   }
+}
+
+without_args <- function(x) {
+  copy <- x
+  for (a in names(attributes(copy))) {
+    attr(copy, a) <- NULL
+  }
+  return(copy)
 }
 
 nd <- function(number) {
