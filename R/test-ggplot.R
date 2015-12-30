@@ -10,6 +10,8 @@ test_ggplot <- function(index = 1,
                         check_facet = TRUE, facet_fail_msg = NULL,
                         check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
                         check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
+                        check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
+                        check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
   layers <- c("data", "aes", "geom", "facet", "scale", "coord")
   
@@ -79,6 +81,33 @@ test_ggplot <- function(index = 1,
     # Check the coord layer
     test_coord_layer(sol_selected_command, stud_selected_command, feedback, coord_fail_msg, exact_coord, student_env, solution_env)
   }
+  
+  if (check_stat) {
+    # Check the stat layer
+    test_stat_layer(sol_selected_command, stud_selected_command, feedback, stat_fail_msg, exact_coord, student_env, solution_env)
+  }
+  
+  if (!is.null(check_extra)) {
+    # Check extra layers
+    for (i in 1:length(check_extra)) {
+      extra <- check_extra[i]
+      
+      fail_msg <- try(extra_fail_msg[[i]], silent = TRUE)
+      if (inherits(fail_msg, "try-error")) {
+        fail_msg <- NULL
+      }
+      
+      exact <- try(exact_extra[i], silent = TRUE)
+      if (inherits(exact, "try-error")) {
+        exact <- FALSE
+      } else if (!is.logical(exact)) {
+        exact <- FALSE
+      }
+      
+      test_generic_part(type = extra, sol_selected_command, stud_selected_command, feedback, fail_msg, exact,
+                        student_env, solution_env)
+    }
+  }
 }
 
 test_data_layer <- function(sol_data, stud_data, feedback, data_fail_msg) {
@@ -115,8 +144,8 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
   
   exact_geom <- rep_len(exact_geom, nb_sol_layers)
   
-  sol_geom_parts <- extract_parts(sol_command, "geom")
-  stud_geom_parts <- extract_parts(stud_command, "geom")
+  sol_geom_parts <- extract_parts(sol_command, "stat|geom_")
+  stud_geom_parts <- extract_parts(stud_command, "stat|geom_")
   
   if (!(nb_sol_layers > 0)) {
     return()
@@ -286,13 +315,19 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
 
 test_scale_layer <- function(sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
                              student_env, solution_env) {
-  test_generic_part(type = "scale", sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
+  test_generic_part(type = "scale_", sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
                     student_env, solution_env)
 }
 
 test_coord_layer <- function(sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
                              student_env, solution_env) {
-  test_generic_part(type = "coord", sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
+  test_generic_part(type = "coord_", sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
+                    student_env, solution_env)
+}
+
+test_stat_layer <- function(sol_command, stud_command, feedback, stat_fail_msg, exact_stat,
+                            student_env, solution_env) {
+  test_generic_part(type = "stat_", sol_command, stud_command, feedback, stat_fail_msg, exact_stat,
                     student_env, solution_env)
 }
 
@@ -435,7 +470,7 @@ extract_parts <- function(command, type) {
   } else if (command[[1]] == "+") {
     return(c(extract_parts(command[[2]], type), extract_parts(command[[3]], type)))
   } else if (is.call(command)) {
-    if (grepl(paste0("^", type, "_"), command[[1]])) {
+    if (grepl(paste0("^", type), command[[1]])) {
       return(list(command))
     } else {
       return(list())

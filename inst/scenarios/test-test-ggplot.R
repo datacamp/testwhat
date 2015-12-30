@@ -31,7 +31,7 @@ cyl.am +
                     values = c("#E41A1C", "#377EB8"),
                     labels = c("Manual", "Automatic")) +
   scale_y_continuous("Number") +
-  scale_x_discrete("Cylinders")
+  scale_x_discrete("Cylinders") + stat_smooth(method = "lm") + xlab("t")
         ',
     solution = '
 # base layers
@@ -54,13 +54,15 @@ cyl.am +
     geom_bar(position = "dodge") 
     
     # Clean up the axes with Scale functions:
+a = 1
     cyl.am +
-    geom_bar(aes(group = 1),position = "dodge") +
+    geom_bar(position = "dodge") +
     scale_fill_manual("Transmission", 
     values = c("#E41A1C", "#377EB8"),
     labels = c("Manual", "Automatic")) +
     scale_y_continuous("Number") +
-    scale_x_discrete("Cylinders")
+    scale_x_discrete("Cylinders") +
+    stat_smooth(method = "lm") + xlab("test")
     ',
     pass = list(
       test_correct_data = list(
@@ -68,12 +70,8 @@ cyl.am +
         sct = '
 test_error()
 
-test_ggplot(1)
-test_ggplot(2, check = "geom")
-test_ggplot(3, check = "geom")
-test_ggplot(4, check = "geom")
-test_ggplot(5, check = "geom")
-test_ggplot(6, check = c("geom", "scale"), exact_geom = TRUE)
+
+test_ggplot(6, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab", extra_fail_msg = "Wrong x-label")
 success_msg("Great")
         '
       )
