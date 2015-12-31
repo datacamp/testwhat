@@ -70,14 +70,14 @@ test_ggplot <- function(index = 1,
     test_aes_layer(list(base = sol_selected$mapping), list(base = stud_selected$mapping), feedback, aes_fail_msg, exact_aes)
   }
   
-  if (check_stat) {
-    # Check the stat layer
-    test_stat_layer(sol_selected_command, stud_selected_command, feedback, stat_fail_msg, exact_coord, student_env, solution_env)
-  }
-  
   if (check_geom) {
     # Check the geom layer
     test_geom_layer(sol_selected_command, stud_selected_command, sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom)
+  }
+  
+  if (check_stat) {
+    # Check the stat layer
+    test_stat_layer(sol_selected_command, stud_selected_command, feedback, stat_fail_msg, exact_coord, student_env, solution_env)
   }
   
   if (check_facet) {
