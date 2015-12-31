@@ -7,7 +7,7 @@ test_ggplot <- function(index = 1,
                         all_fail_msg = NULL,
                         check_data = TRUE, data_fail_msg = NULL,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
-                        check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE,
+                        check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE, check_geom_params = NULL,
                         check_facet = TRUE, facet_fail_msg = NULL,
                         check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
                         check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
@@ -72,7 +72,7 @@ test_ggplot <- function(index = 1,
   
   if (check_geom) {
     # Check the geom layer
-    test_geom_layer(sol_selected_command, stud_selected_command, sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom)
+    test_geom_layer(sol_selected_command, stud_selected_command, sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom, check_geom_params)
   }
   
   if (check_stat) {
@@ -147,7 +147,7 @@ test_aes_layer <- function(sol_mapping, stud_mapping, feedback, aes_fail_msg, ex
 }
 
 
-test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, feedback, geom_fail_msg, exact_geom) {
+test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, feedback, geom_fail_msg, exact_geom, check_geom_params) {
   nb_sol_layers <- length(sol_layers)
   
   exact_geom <- rep_len(exact_geom, nb_sol_layers)
@@ -173,6 +173,10 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
     found_geom_with_correct_position <- FALSE
     
     sol_params <- get_geom_params(sol_layer)
+    if (!is.null(check_geom_params)) {
+      sol_params <- sol_params[check_geom_params]
+      sol_params <- sol_params[na.omit(names(sol_params))]
+    }
     
     sol_position <- extract_type_from_object(sol_layer$position)
     
@@ -190,6 +194,10 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
           found_params <- TRUE
           
           stud_params <- get_geom_params(stud_layer)
+          if (!is.null(check_geom_params)) {
+            stud_params <- stud_params[check_geom_params]
+            stud_params <- stud_params[na.omit(names(stud_params))]
+          }
           
           stud_position <- extract_type_from_object(stud_layer$position)
           
@@ -234,7 +242,11 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
       feedback_msg <- geom_fail_msg
     } else {
       geom_base_feedback <- paste0(feedback, " have you correctly added a `", as.character(sol_geom_part[[1]]),"()` layer")
-      filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
+      if (!is.null(check_geom_params)) {
+        filtered_geom_params <- check_geom_params
+      } else {
+        filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
+      }
       param_strings <- vapply(filtered_geom_params, 
                               function(x) {
                                 gen_fb <- ""

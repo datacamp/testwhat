@@ -31,7 +31,7 @@ cyl.am +
                     values = c("#E41A1C", "#377EB8"),
                     labels = c("Manual", "Automatic")) +
   scale_y_continuous("Number") +
-  scale_x_discrete("Cylinders") + stat_smooth(method = "lm") + xlab("t")
+  scale_x_discrete("Cylinders") + stat_smooth(method = "lm") + xlab("test")
         ',
     solution = '
 # base layers
@@ -71,8 +71,32 @@ a = 1
 test_error()
 
 
-test_ggplot(6, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab", extra_fail_msg = "Wrong x-label")
+test_ggplot(6, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab", extra_fail_msg = "Wrong x-label", all_fail_msg = "Everything goes wrong")
 success_msg("Great")
+        '
+      )
+    )
+  ),
+  list(
+    type = "NormalExercise",
+    pre_exercise_code = "library(ggplot2)",
+    student = '
+# The previous plot, without points:
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+    geom_smooth(se = F)
+    ',
+    solution = '
+ # The previous plot, without points:
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  stat_smooth(method = "auto",se = F)
+    ',
+    pass = list(
+      test_correct_data = list(
+        long = "test succeeds if command has the correct data",
+        sct = '
+        test_ggplot(1, check = "geom", check_geom_params = "method")
+        test_ggplot(1, check = "geom", check_geom_params = "se")      
+        success_msg("Great")
         '
       )
     )
