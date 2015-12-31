@@ -4,6 +4,7 @@ test_ggplot <- function(index = 1,
                         solution_code = get_solution_code(),
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env(),
+                        all_fail_msg = NULL,
                         check_data = TRUE, data_fail_msg = NULL,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
                         check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE,
@@ -13,7 +14,7 @@ test_ggplot <- function(index = 1,
                         check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
                         check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
-  layers <- c("data", "aes", "geom", "facet", "scale", "coord")
+  layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   
   sol_ggplot_info <- get_ggplot_solution_info(solution_code, solution_env)
   sol_ggplot_objects <- sol_ggplot_info$objects
@@ -27,6 +28,13 @@ test_ggplot <- function(index = 1,
         assign(paste0("check_", layer), FALSE)
       }
     }
+  }
+  
+  if (!is.null(all_fail_msg)) {
+    for (layer in layers) {
+      assign(paste0(layer, "_fail_msg"), all_fail_msg)
+    }
+    extra_fail_msg = all_fail_msg
   }
   
   sol_selected <- try(sol_ggplot_objects[[index]], silent = TRUE)
@@ -62,6 +70,11 @@ test_ggplot <- function(index = 1,
     test_aes_layer(list(base = sol_selected$mapping), list(base = stud_selected$mapping), feedback, aes_fail_msg, exact_aes)
   }
   
+  if (check_stat) {
+    # Check the stat layer
+    test_stat_layer(sol_selected_command, stud_selected_command, feedback, stat_fail_msg, exact_coord, student_env, solution_env)
+  }
+  
   if (check_geom) {
     # Check the geom layer
     test_geom_layer(sol_selected_command, stud_selected_command, sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom)
@@ -81,12 +94,7 @@ test_ggplot <- function(index = 1,
     # Check the coord layer
     test_coord_layer(sol_selected_command, stud_selected_command, feedback, coord_fail_msg, exact_coord, student_env, solution_env)
   }
-  
-  if (check_stat) {
-    # Check the stat layer
-    test_stat_layer(sol_selected_command, stud_selected_command, feedback, stat_fail_msg, exact_coord, student_env, solution_env)
-  }
-  
+
   if (!is.null(check_extra)) {
     # Check extra layers
     for (i in 1:length(check_extra)) {
