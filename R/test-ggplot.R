@@ -243,7 +243,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
     } else {
       geom_base_feedback <- paste0(feedback, " have you correctly added a `", as.character(sol_geom_part[[1]]),"()` layer")
       if (!is.null(check_geom_params)) {
-        filtered_geom_params <- check_geom_params
+        filtered_geom_params <- sol_params
       } else {
         filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
       }
