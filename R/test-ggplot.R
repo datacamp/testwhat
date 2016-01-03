@@ -2,6 +2,7 @@
 test_ggplot <- function(index = 1,
                         student_code = get_student_code(),
                         solution_code = get_solution_code(),
+                        predefined_code = get_pec_code(),
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env(),
                         all_fail_msg = NULL,
@@ -16,7 +17,7 @@ test_ggplot <- function(index = 1,
                         check = NULL) {
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   
-  sol_ggplot_info <- get_ggplot_solution_info(solution_code, solution_env)
+  sol_ggplot_info <- get_ggplot_solution_info(solution_code, predefined_code, solution_env)
   sol_ggplot_objects <- sol_ggplot_info$objects
   sol_ggplot_commands <- sol_ggplot_info$commands
   
@@ -42,7 +43,7 @@ test_ggplot <- function(index = 1,
     stop(sprintf("Could not find ggplot command %d in your solution environment.", index))
   }
   
-  stud_ggplot_info <- get_ggplot_student_info(student_code, student_env)
+  stud_ggplot_info <- get_ggplot_student_info(student_code, predefined_code, student_env)
   stud_ggplot_objects <- stud_ggplot_info$objects
   stud_ggplot_commands <- stud_ggplot_info$commands
   len <- length(stud_ggplot_objects)
@@ -543,7 +544,7 @@ filter_standard_geom_params <- function(geom_call, params) {
   return(params)
 }
 
-get_ggplot_solution_info <- function(code, envir) { 
+get_ggplot_solution_info <- function(code, predefined_code, envir) { 
   if (exists("saved_solution_code", envir = get_sct_env(), inherits = FALSE)) {
     saved_solution_code <- get("saved_solution_code", envir = get_sct_env(), inherits = FALSE)
   } else {
@@ -555,14 +556,14 @@ get_ggplot_solution_info <- function(code, envir) {
     saved_solution_ggplot_info <- NULL
   }
   if (code != saved_solution_code || !exists("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
-    ggplot_info <- get_ggplot_info(code, envir)
+    ggplot_info <- get_ggplot_info(code, predefined_code, envir)
     assign("saved_solution_code", code, envir = get_sct_env())
     assign("saved_solution_ggplot_info", ggplot_info, envir = get_sct_env())
   }
   return(get("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE))
 }
 
-get_ggplot_student_info <- function(code, envir) { 
+get_ggplot_student_info <- function(code, predefined_code, envir) { 
   if (exists("saved_student_code", envir = get_sct_env(), inherits = FALSE)) {
     saved_student_code <- get("saved_student_code", envir = get_sct_env(), inherits = FALSE)
   } else {
@@ -574,26 +575,29 @@ get_ggplot_student_info <- function(code, envir) {
     saved_student_ggplot_info <- NULL
   }
   if (code != saved_student_code || !exists("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
-    ggplot_info <- get_ggplot_info(code, envir)
+    ggplot_info <- get_ggplot_info(code, predefined_code, envir)
     assign("saved_student_code", code, envir = get_sct_env())
     assign("saved_student_ggplot_info", ggplot_info, envir = get_sct_env())
   }
   return(get("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE))
 }
 
-get_ggplot_info <- function(code, envir) { 
+get_ggplot_info <- function(code, predefined_code, envir) { 
   ggplot_env <- new.env()
-  commands <- get_ggplot_commands(code, ggplot_env)
+  commands <- get_ggplot_commands(code, predefined_code, ggplot_env)
   return(list(commands = commands,
               objects = lapply(commands, function(x) try(eval(x, envir), silent = TRUE))))
 }
 
-get_ggplot_commands <- function(code, envir) {
+get_ggplot_commands <- function(code, predefined_code, envir) {
+  pre_parsed <- try(parse(text = predefined_code), silent = TRUE)
   parsed <- try(parse(text = code), silent = TRUE)
   
-  if (inherits(parsed, "try-error")) {
+  if (inherits(pre_parsed, "try-error") || inherits(parsed, "try-error")) {
     return(list())
   }
+  
+  lapply(pre_parsed, extract_ggplot_command, envir = envir)
   
   extracted <- lapply(parsed, extract_ggplot_command, envir = envir)
   return(extracted[!as.logical(vapply(extracted, is.null, logical(1)))])
