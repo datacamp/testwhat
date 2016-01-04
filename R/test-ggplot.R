@@ -367,6 +367,11 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
   
   for (i in 1:nb_sol_parts) {
     sol_part <- sol_parts[[i]]
+    if (is.call(sol_part)) {
+      sol_func_name = sol_part[[1]]
+    } else {
+      sol_func_name = sol_part
+    }
     
     found_name <- FALSE
     found_with_params <- FALSE
@@ -378,7 +383,13 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
     if (nb_stud_parts > 0) {
       for (j in 1:nb_stud_parts) {
         stud_part <- stud_parts[[j]]
-        if (stud_part[[1]] == sol_part[[1]]) {
+        if (is.call(stud_part)) {
+          stud_func_name = stud_part[[1]]
+        } else {
+          stud_func_name = stud_part
+        }
+        
+        if (stud_func_name == sol_func_name) {
           found_name <- TRUE
           found_params <- TRUE
           
@@ -422,7 +433,7 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
     if (!is.null(fail_msg)) {
       feedback_msg <- rep_len(fail_msg, 3)
     } else {
-      base_feedback <- paste0(feedback, " have you correctly added a `", sol_part[[1]],"()` layer")
+      base_feedback <- paste0(feedback, " have you correctly added a `", sol_func_name,"()` layer")
       param_strings <- vapply(names(sol_params), 
                               function(x) {
                                 if (isTRUE(attr(sol_params[[x]], "dot"))) {
@@ -458,6 +469,9 @@ nd <- function(number) {
 }
 
 extract_params <- function(command) {
+  if (!is.call(command)) {
+    return(NULL)
+  }
   func_def <- try(argsAnywhere(as.character(command[[1]])), silent = TRUE)
   if (!inherits(func_def, "try-error")) {
     param_list <- as.list(match.call(func_def, command))[-1]
@@ -487,7 +501,11 @@ extract_params <- function(command) {
 
 extract_parts <- function(command, type) {
   if (is.name(command)) {
-    return(list())
+    if (grepl(paste0("^", type), command)) {
+      return(list(command))
+    } else {
+      return(list())
+    }
   } else if (command[[1]] == "+") {
     return(c(extract_parts(command[[2]], type), extract_parts(command[[3]], type)))
   } else if (is.call(command)) {
