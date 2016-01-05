@@ -2,18 +2,22 @@
 test_ggplot <- function(index = 1,
                         student_code = get_student_code(),
                         solution_code = get_solution_code(),
+                        predefined_code = get_pec_code(),
                         student_env = .GlobalEnv,
                         solution_env = get_solution_env(),
+                        all_fail_msg = NULL,
                         check_data = TRUE, data_fail_msg = NULL,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
-                        check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE,
+                        check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE, check_geom_params = NULL,
                         check_facet = TRUE, facet_fail_msg = NULL,
                         check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
                         check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
+                        check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
+                        check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
-  layers <- c("data", "aes", "geom", "facet", "scale", "coord")
+  layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   
-  sol_ggplot_info <- get_ggplot_solution_info(solution_code, solution_env)
+  sol_ggplot_info <- get_ggplot_solution_info(solution_code, predefined_code, solution_env)
   sol_ggplot_objects <- sol_ggplot_info$objects
   sol_ggplot_commands <- sol_ggplot_info$commands
   
@@ -27,12 +31,19 @@ test_ggplot <- function(index = 1,
     }
   }
   
+  if (!is.null(all_fail_msg)) {
+    for (layer in layers) {
+      assign(paste0(layer, "_fail_msg"), all_fail_msg)
+    }
+    extra_fail_msg = all_fail_msg
+  }
+  
   sol_selected <- try(sol_ggplot_objects[[index]], silent = TRUE)
   if (inherits(sol_selected, "try-error")) {
     stop(sprintf("Could not find ggplot command %d in your solution environment.", index))
   }
   
-  stud_ggplot_info <- get_ggplot_student_info(student_code, student_env)
+  stud_ggplot_info <- get_ggplot_student_info(student_code, predefined_code, student_env)
   stud_ggplot_objects <- stud_ggplot_info$objects
   stud_ggplot_commands <- stud_ggplot_info$commands
   len <- length(stud_ggplot_objects)
@@ -62,7 +73,12 @@ test_ggplot <- function(index = 1,
   
   if (check_geom) {
     # Check the geom layer
-    test_geom_layer(sol_selected_command, stud_selected_command, sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom)
+    test_geom_layer(sol_selected_command, stud_selected_command, sol_selected$layers, stud_selected$layers, feedback, geom_fail_msg, exact_geom, check_geom_params)
+  }
+  
+  if (check_stat) {
+    # Check the stat layer
+    test_stat_layer(sol_selected_command, stud_selected_command, feedback, stat_fail_msg, exact_coord, student_env, solution_env)
   }
   
   if (check_facet) {
@@ -78,6 +94,28 @@ test_ggplot <- function(index = 1,
   if (check_coord) {
     # Check the coord layer
     test_coord_layer(sol_selected_command, stud_selected_command, feedback, coord_fail_msg, exact_coord, student_env, solution_env)
+  }
+
+  if (!is.null(check_extra)) {
+    # Check extra layers
+    for (i in 1:length(check_extra)) {
+      extra <- check_extra[i]
+      
+      fail_msg <- try(extra_fail_msg[[i]], silent = TRUE)
+      if (inherits(fail_msg, "try-error")) {
+        fail_msg <- NULL
+      }
+      
+      exact <- try(exact_extra[i], silent = TRUE)
+      if (inherits(exact, "try-error")) {
+        exact <- FALSE
+      } else if (!is.logical(exact)) {
+        exact <- FALSE
+      }
+      
+      test_generic_part(type = extra, sol_selected_command, stud_selected_command, feedback, fail_msg, exact,
+                        student_env, solution_env)
+    }
   }
 }
 
@@ -110,13 +148,13 @@ test_aes_layer <- function(sol_mapping, stud_mapping, feedback, aes_fail_msg, ex
 }
 
 
-test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, feedback, geom_fail_msg, exact_geom) {
+test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, feedback, geom_fail_msg, exact_geom, check_geom_params) {
   nb_sol_layers <- length(sol_layers)
   
   exact_geom <- rep_len(exact_geom, nb_sol_layers)
   
-  sol_geom_parts <- extract_parts(sol_command, "geom")
-  stud_geom_parts <- extract_parts(stud_command, "geom")
+  sol_geom_parts <- extract_parts(sol_command, "stat|geom_")
+  stud_geom_parts <- extract_parts(stud_command, "stat|geom_")
   
   if (!(nb_sol_layers > 0)) {
     return()
@@ -136,6 +174,10 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
     found_geom_with_correct_position <- FALSE
     
     sol_params <- get_geom_params(sol_layer)
+    if (!is.null(check_geom_params)) {
+      sol_params <- sol_params[check_geom_params]
+      sol_params <- sol_params[na.omit(names(sol_params))]
+    }
     
     sol_position <- extract_type_from_object(sol_layer$position)
     
@@ -153,6 +195,10 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
           found_params <- TRUE
           
           stud_params <- get_geom_params(stud_layer)
+          if (!is.null(check_geom_params)) {
+            stud_params <- stud_params[check_geom_params]
+            stud_params <- stud_params[na.omit(names(stud_params))]
+          }
           
           stud_position <- extract_type_from_object(stud_layer$position)
           
@@ -197,7 +243,11 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
       feedback_msg <- geom_fail_msg
     } else {
       geom_base_feedback <- paste0(feedback, " have you correctly added a `", as.character(sol_geom_part[[1]]),"()` layer")
-      filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
+      if (!is.null(check_geom_params)) {
+        filtered_geom_params <- names(sol_params)
+      } else {
+        filtered_geom_params <- names(filter_standard_geom_params(as.character(sol_geom_part[[1]]), sol_params))
+      }
       param_strings <- vapply(filtered_geom_params, 
                               function(x) {
                                 gen_fb <- ""
@@ -286,13 +336,19 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
 
 test_scale_layer <- function(sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
                              student_env, solution_env) {
-  test_generic_part(type = "scale", sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
+  test_generic_part(type = "scale_", sol_command, stud_command, feedback, scale_fail_msg, exact_scale,
                     student_env, solution_env)
 }
 
 test_coord_layer <- function(sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
                              student_env, solution_env) {
-  test_generic_part(type = "coord", sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
+  test_generic_part(type = "coord_", sol_command, stud_command, feedback, coord_fail_msg, exact_coord,
+                    student_env, solution_env)
+}
+
+test_stat_layer <- function(sol_command, stud_command, feedback, stat_fail_msg, exact_stat,
+                            student_env, solution_env) {
+  test_generic_part(type = "stat_", sol_command, stud_command, feedback, stat_fail_msg, exact_stat,
                     student_env, solution_env)
 }
 
@@ -311,6 +367,11 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
   
   for (i in 1:nb_sol_parts) {
     sol_part <- sol_parts[[i]]
+    if (is.call(sol_part)) {
+      sol_func_name = sol_part[[1]]
+    } else {
+      sol_func_name = sol_part
+    }
     
     found_name <- FALSE
     found_with_params <- FALSE
@@ -322,7 +383,13 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
     if (nb_stud_parts > 0) {
       for (j in 1:nb_stud_parts) {
         stud_part <- stud_parts[[j]]
-        if (stud_part[[1]] == sol_part[[1]]) {
+        if (is.call(stud_part)) {
+          stud_func_name = stud_part[[1]]
+        } else {
+          stud_func_name = stud_part
+        }
+        
+        if (stud_func_name == sol_func_name) {
           found_name <- TRUE
           found_params <- TRUE
           
@@ -366,7 +433,7 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
     if (!is.null(fail_msg)) {
       feedback_msg <- rep_len(fail_msg, 3)
     } else {
-      base_feedback <- paste0(feedback, " have you correctly added a `", sol_part[[1]],"()` layer")
+      base_feedback <- paste0(feedback, " have you correctly added a `", sol_func_name,"()` layer")
       param_strings <- vapply(names(sol_params), 
                               function(x) {
                                 if (isTRUE(attr(sol_params[[x]], "dot"))) {
@@ -410,6 +477,9 @@ nd <- function(number) {
 }
 
 extract_params <- function(command) {
+  if (!is.call(command)) {
+    return(NULL)
+  }
   func_def <- try(argsAnywhere(as.character(command[[1]])), silent = TRUE)
   if (!inherits(func_def, "try-error")) {
     param_list <- as.list(match.call(func_def, command))[-1]
@@ -439,11 +509,15 @@ extract_params <- function(command) {
 
 extract_parts <- function(command, type) {
   if (is.name(command)) {
-    return(list())
+    if (grepl(paste0("^", type), command)) {
+      return(list(command))
+    } else {
+      return(list())
+    }
   } else if (command[[1]] == "+") {
     return(c(extract_parts(command[[2]], type), extract_parts(command[[3]], type)))
   } else if (is.call(command)) {
-    if (grepl(paste0("^", type, "_"), command[[1]])) {
+    if (grepl(paste0("^", type), command[[1]])) {
       return(list(command))
     } else {
       return(list())
@@ -496,7 +570,7 @@ filter_standard_geom_params <- function(geom_call, params) {
   return(params)
 }
 
-get_ggplot_solution_info <- function(code, envir) { 
+get_ggplot_solution_info <- function(code, predefined_code, envir) { 
   if (exists("saved_solution_code", envir = get_sct_env(), inherits = FALSE)) {
     saved_solution_code <- get("saved_solution_code", envir = get_sct_env(), inherits = FALSE)
   } else {
@@ -508,14 +582,14 @@ get_ggplot_solution_info <- function(code, envir) {
     saved_solution_ggplot_info <- NULL
   }
   if (code != saved_solution_code || !exists("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
-    ggplot_info <- get_ggplot_info(code, envir)
+    ggplot_info <- get_ggplot_info(code, predefined_code, envir)
     assign("saved_solution_code", code, envir = get_sct_env())
     assign("saved_solution_ggplot_info", ggplot_info, envir = get_sct_env())
   }
   return(get("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE))
 }
 
-get_ggplot_student_info <- function(code, envir) { 
+get_ggplot_student_info <- function(code, predefined_code, envir) { 
   if (exists("saved_student_code", envir = get_sct_env(), inherits = FALSE)) {
     saved_student_code <- get("saved_student_code", envir = get_sct_env(), inherits = FALSE)
   } else {
@@ -527,26 +601,29 @@ get_ggplot_student_info <- function(code, envir) {
     saved_student_ggplot_info <- NULL
   }
   if (code != saved_student_code || !exists("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
-    ggplot_info <- get_ggplot_info(code, envir)
+    ggplot_info <- get_ggplot_info(code, predefined_code, envir)
     assign("saved_student_code", code, envir = get_sct_env())
     assign("saved_student_ggplot_info", ggplot_info, envir = get_sct_env())
   }
   return(get("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE))
 }
 
-get_ggplot_info <- function(code, envir) { 
+get_ggplot_info <- function(code, predefined_code, envir) { 
   ggplot_env <- new.env()
-  commands <- get_ggplot_commands(code, ggplot_env)
+  commands <- get_ggplot_commands(code, predefined_code, ggplot_env)
   return(list(commands = commands,
               objects = lapply(commands, function(x) try(eval(x, envir), silent = TRUE))))
 }
 
-get_ggplot_commands <- function(code, envir) {
+get_ggplot_commands <- function(code, predefined_code, envir) {
+  pre_parsed <- try(parse(text = predefined_code), silent = TRUE)
   parsed <- try(parse(text = code), silent = TRUE)
   
-  if (inherits(parsed, "try-error")) {
+  if (inherits(pre_parsed, "try-error") || inherits(parsed, "try-error")) {
     return(list())
   }
+  
+  lapply(pre_parsed, extract_ggplot_command, envir = envir)
   
   extracted <- lapply(parsed, extract_ggplot_command, envir = envir)
   return(extracted[!as.logical(vapply(extracted, is.null, logical(1)))])
@@ -594,7 +671,9 @@ replace_saved_ggplot_commands <- function(code, envir) {
 }
 
 is_ggplot_command <- function(code, envir) {
-  if (is.name(code)) {
+  if (is.null(code)) {
+    return(FALSE)
+  } else if (is.name(code)) {
     get_command <- try(get(as.character(code), envir = envir, inherits = FALSE))
     return(ifelse(inherits(get_command, "try-error"), FALSE, is_ggplot_command(get_command, envir)))
   } else if (code[[1]] == "ggplot") {
