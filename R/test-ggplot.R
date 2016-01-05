@@ -663,7 +663,9 @@ replace_saved_ggplot_commands <- function(code, envir) {
 }
 
 is_ggplot_command <- function(code, envir) {
-  if (is.name(code)) {
+  if (is.null(code)) {
+    return(FALSE)
+  } else if (is.name(code)) {
     get_command <- try(get(as.character(code), envir = envir, inherits = FALSE))
     return(ifelse(inherits(get_command, "try-error"), FALSE, is_ggplot_command(get_command, envir)))
   } else if (code[[1]] == "ggplot") {
