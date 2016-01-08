@@ -27,8 +27,8 @@ test_rmd_group = function(group_number, code, env = parent.frame()) {
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
     # TODO REMOVE THIS?
-    remove_student_pd()
-    remove_solution_pd()
+    tw$set(student_pd = NULL)
+    tw$set(solution_pd = NULL)
   })
   
   passed <- parse_docs()

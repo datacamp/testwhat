@@ -26,10 +26,10 @@ test_exercise <- function(code,
   # Store everything that's needed locally
   tw$initialize(pec = pec,
                 student_code = student_code,
-                student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
+                # student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
                 student_env = globalenv(),
                 solution_code = solution_code,
-                solution_pd = getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE)),
+                # solution_pd = getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE)),
                 solution_env = solution_env,
                 output_list = output_list)
   

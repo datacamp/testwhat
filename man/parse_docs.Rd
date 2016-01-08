@@ -4,8 +4,7 @@
 \alias{parse_docs}
 \title{Parse both the student and solution document}
 \usage{
-parse_docs(student_code = get_student_code(),
-  solution_code = get_solution_code())
+parse_docs()
 }
 \description{
 Parse both the student and solution document

@@ -5,24 +5,22 @@
 \title{Test whether the student defined the correct chunk options (R Markdown exercises)}
 \usage{
 test_chunk_options(options = NULL, allow_extra = TRUE,
-  chunk_number = get_chunk_number(), student_chunk = get_student_ds_part(),
-  solution_chunk = get_solution_ds_part(), not_called_msg = NULL,
-  incorrect_msg = NULL)
+  not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
 \item{options}{Set of options}
 
 \item{allow_extra}{whether or not the definition of additional options is accepted (default TRUE)}
 
+\item{not_called_msg}{feedback message if option was not specified}
+
+\item{incorrect_msg}{feedback message if option was incorrectly set}
+
 \item{chunk_number}{number of the chunk that is being tested}
 
 \item{student_chunk}{character string containing the student's code.}
 
 \item{solution_chunk}{character string containing the sample solution code.}
-
-\item{not_called_msg}{feedback message if option was not specified}
-
-\item{incorrect_msg}{feedback message if option was incorrectly set}
 }
 \description{
 Test whether the student defined the correct chunk options in an R Markdown exercise

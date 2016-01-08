@@ -204,13 +204,15 @@ build_doc_structure <- function(text) {
 #' 
 #' @import datacampAPI
 #' @import testthat
-parse_docs <- function(student_code = get_student_code(), solution_code = get_solution_code()) {
-  if(exists_student_ds() & exists_solution_ds()) {
+parse_docs <- function() {
+  student_code = tw$get("student_code")
+  solution_code = tw$get("solution_code")
+  student_ds = tw$get("student_ds")
+  solution_ds = tw$get("solution_ds")
+  
+  if(!is.null(student_ds) && !is.null(solution_ds)) {
     # Both variables exist already
     return(TRUE)
-  }
-  if(is.null(student_code) || is.null(solution_code)) {
-    stop("The 'student_code' and/or 'solution_code' argument(s) can not be empty")
   }
   
   student_ds = build_doc_structure(student_code) #list(list(input = ""))

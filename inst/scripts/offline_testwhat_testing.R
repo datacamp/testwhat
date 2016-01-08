@@ -52,19 +52,19 @@ success_msg("Perfect! Know that there are many more functions to create the plot
 '
 
 ###################################
-eval(parse(text = pre_exercise_code), envir = globalenv())
-res = try(eval(parse(text = get_student_code()), envir = globalenv()))
-if(inherits(res, "try-error")) {
-  set_student_error("there was an error")
-} else {
-  set_student_error(NULL)
-}
-set_student_output(get_output(get_student_code()))
-eval(parse(text = pre_exercise_code),envir = get_solution_env())
-eval(parse(text = get_solution_code()), envir = get_solution_env())
-
-result = test_exercise(sct)
-print(result)
+# eval(parse(text = pre_exercise_code), envir = globalenv())
+# res = try(eval(parse(text = get_student_code()), envir = globalenv()))
+# if(inherits(res, "try-error")) {
+#   set_student_error("there was an error")
+# } else {
+#   set_student_error(NULL)
+# }
+# set_student_output(get_output(get_student_code()))
+# eval(parse(text = pre_exercise_code),envir = get_solution_env())
+# eval(parse(text = get_solution_code()), envir = get_solution_env())
+# 
+# result = test_exercise(sct)
+# print(result)
 ###################################
 
 
