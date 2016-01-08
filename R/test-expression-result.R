@@ -6,7 +6,6 @@
 #' @param expr The expression that is executed in both environments.
 #' @param incorrect_msg Optional feedback message in case the evaluation is not the
 #' same in both environments. Automatically generated if not specified.
-#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{
@@ -26,9 +25,11 @@
 #' @export 
 test_expression_result <- function(expr, 
                                    eq_condition = "equivalent",
-                                   student_env = .GlobalEnv,
-                                   solution_env = get_solution_env(),
                                    incorrect_msg = NULL) {
+  
+  # Get needed elements from tw
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
   
   capture.output(result_sol <- try(eval(parse(text = expr), envir = solution_env), silent = TRUE))
   if (length(result_sol) == 0) {

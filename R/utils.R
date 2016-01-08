@@ -1,3 +1,48 @@
+tw_accessors <- function() {
+  tw_data <- list()
+  
+  get = function(name) {
+    if(missing(name)) {
+      tw_data
+    } else {
+      tw_data[[name]]
+    }
+  }
+  
+  get_with_default = function(name, default) {
+    val <- tw_data[[name]]
+    if(is.null(val)) default else val
+  }
+  
+  set = function(...) {
+    dots = list(...)
+    tw_data <<- merge(dots)
+    invisible(NULL)
+  }
+  
+  clear = function() {
+    tw_data <<- list()
+    invisible(NULL)
+  }
+  
+  initialize = function(data) {
+    tw_data <<- data
+    invisible(NULL)
+  }
+  
+  merge = function(values) merge_list(tw_data, values)
+  list(get = get, get_with_default = get_with_default, set = set, clear = clear, initialize = initialize)
+}
+
+merge_list <- function(x, y) {
+  x[names(y)] = y
+  x
+}
+
+#' @export
+tw <- tw_accessors()
+
+
 # Find expression that created a variable
 find_expr <- function(name, env = parent.frame()) {
   subs <- do.call("substitute", list(as.name(name), env))
@@ -196,7 +241,7 @@ parse_docs <- function(student_code = get_student_code(), solution_code = get_so
   if(n_block_student != n_block_solution) return(FALSE)
   if(!isTRUE(all.equal(sapply(student_ds, class), sapply(solution_ds, class)))) return(FALSE)
   
-  set_student_ds(student_ds)
-  set_solution_ds(solution_ds)
+  tw$set(student_ds = student_ds)
+  tw$set(solution_ds = solution_ds)
   return(TRUE)
 }

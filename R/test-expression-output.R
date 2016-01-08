@@ -6,7 +6,6 @@
 #' @param expr The expression that is executed in both environments.
 #' @param incorrect_msg Optional feedback message in case the evaluation is not the
 #' same in both environments. Automatically generated if not specified.
-#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{
@@ -24,10 +23,11 @@
 #' @import datacampAPI
 #' @import testthat
 #' @export 
-test_expression_output <- function(expr, 
-                                   student_env = .GlobalEnv,
-                                   solution_env = get_solution_env(),
-                                   incorrect_msg = NULL) {
+test_expression_output <- function(expr, incorrect_msg = NULL) {
+  
+  # Get needed elements from tw
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
   
   output_sol <- try(capture.output(
     try(

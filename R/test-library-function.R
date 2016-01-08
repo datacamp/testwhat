@@ -27,9 +27,10 @@
 #' @import testthat
 #' @export
 test_library_function <- function(package,
-                          student_code = get_student_code(),
                           not_called_msg = NULL, 
                           incorrect_msg = NULL) {
+  
+  student_code <- tw$get("student_code")
   
   if(is.null(not_called_msg)) {
     not_called_msg <- sprintf("Make sure to call the <code>library()</code> function to load the <code>%s</code> package", package)

@@ -11,15 +11,22 @@
 #'
 #' @import datacampAPI
 #' @export
-test_rmd_group = function(group_number, code, student_code = get_student_code(), solution_code = get_solution_code(), env = parent.frame()) {
+test_rmd_group = function(group_number, code, env = parent.frame()) {
+  
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  solution_ds <- tw$get("solution_ds")
+  student_ds <- tw$get("student_ds")
+  
   code <- substitute(code)
   if (is.character(code)) code <- parse(text = code)
 
   # get the entire student code and solution code and reset it on exit.
   # also remove the parse data that might have been saved to the sct env.
   on.exit({ 
-    set_student_code(student_code)
-    set_solution_code(solution_code)
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
+    # TODO REMOVE THIS?
     remove_student_pd()
     remove_solution_pd()
   })
@@ -29,21 +36,23 @@ test_rmd_group = function(group_number, code, student_code = get_student_code(),
     return(FALSE)
   }
 
-  if(group_number > length(get_solution_ds())) {
+  if(group_number > length(solution_ds)) {
     stop(sprintf("Invalid group_number (%s), while solution contains only %s parts",
-                 group_number,length(get_solution_ds())))
+                 group_number,length(solution_ds)))
   }
   
-  set_student_ds_part(get_student_ds()[[group_number]])
-  set_solution_ds_part(get_solution_ds()[[group_number]])
-  set_student_code(get_student_ds_part()$input)  
-  set_solution_code(get_solution_ds_part()$input)
+  student_ds_part = student_ds[[group_number]]
+  solution_ds_part = solution_ds[[group_number]]
+  tw$set(student_ds_part = student_ds_part)
+  tw$set(solution_ds_part = solution_ds_part)
+  tw$set(student_code = student_ds_part$input)
+  tw$set(solution_code = solution_ds_part$input)
   
   # set numbers, to be used in default messages of tests
-  if(class(get_student_ds_part()) == "block") {
-    set_chunk_number(group_number - sum(sapply(get_student_ds()[1:group_number],class) == "inline"))
-  } else if(class(get_student_ds_part()) == "inline") {
-    set_inline_number(group_number - sum(sapply(get_student_ds()[1:group_number],class) == "block"))
+  if(class(student_ds_part) == "block") {
+    tw$set(chunk_number = group_number - sum(sapply(student_ds()[1:group_number],class) == "inline"))
+  } else if(class(student_ds_part) == "inline") {
+    tw$set(inline_number = group_number - sum(sapply(student_ds()[1:group_number],class) == "block"))
   }
   
   eval(code, envir = env)

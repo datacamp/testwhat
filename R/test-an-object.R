@@ -10,7 +10,6 @@
 #' @param undefined_msg feedback message in case the student did not define 
 #' an object that corresponds to the solution object. This argument should 
 #' always be specified.
-#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{
@@ -31,9 +30,11 @@
 #' @export
 test_an_object <- function(name, 
                            undefined_msg = NULL,
-                           eq_condition = "equivalent",
-                           student_env = .GlobalEnv,
-                           solution_env = get_solution_env()) {
+                           eq_condition = "equivalent") {
+  
+  # Get needed elements from tw
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

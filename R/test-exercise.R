@@ -14,7 +14,25 @@
 #' tests were sucessful, and \code{feedback} that contains a feedback message.
 #'
 #' @export
-test_exercise <- function(code, report = c("first", "challenge"), env = test_env()) {
+test_exercise <- function(code, 
+                          report = c("first", "challenge"), 
+                          pec,
+                          student_code,
+                          solution_code,
+                          solution_env,
+                          output_list,
+                          env = test_env()) {
+  
+  # Store everything that's needed locally
+  tw$initialize(pec = pec,
+                student_code = student_code,
+                student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
+                student_env = globalenv(),
+                solution_code = solution_code,
+                solution_pd = getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE)),
+                solution_env = solution_env,
+                output_list = output_list)
+  
   # Parse code and ensure that feedback messages are reset
   code <- parse(text = code)
   report <- match.arg(report)

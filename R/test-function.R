@@ -23,10 +23,6 @@
 #' the same amount of commands. index = NULL by default, i.e. the entire submission is checked.
 #' @param eq_condition  character vector indicating how to perform the
 #' comparison for each argument. See \code{\link{test_object}}
-#' @param student_code character string: (chunk of) student submission that is being tested.
-#' Do not set this manually.
-#' @param solution_code character string: (chunk of) solution code.
-#' Do not set this manually.
 #' @param not_called_msg  feedback message in case the student did not call the
 #' function at least as often as in the solution code.
 #' @param incorrect_msg  feedback message in case the student did not call the
@@ -35,7 +31,6 @@
 #' feedback messages can be supplied.
 #' @param incorrect_number_of_calls_msg feedback message in case the number of commands
 #' in the solution does not correspond to the solution. (only used if index is not NULL.)
-#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{
@@ -52,12 +47,14 @@ test_function <- function(name, args = NULL, ignore = NULL,
                           eval = TRUE,
                           index = NULL,
                           eq_condition = "equivalent",
-                          student_code = get_student_code(),
-                          solution_code = get_solution_code(),
-                          student_env = .GlobalEnv,
-                          solution_env = get_solution_env(),
                           not_called_msg = NULL, incorrect_msg = NULL,
                           incorrect_number_of_calls_msg = NULL) {
+  
+  student_env = dc$get("student_env")
+  solution_env = dc$get("solution_env")
+  student_code = dc$get("student_code")
+  solution_code = dc$get("solution_code")
+  
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")
   }

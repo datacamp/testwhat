@@ -5,7 +5,6 @@
 #' There is need to define the success_msg seperately, since it is defined inside the function.
 #'
 #' @param correct number of the correct answer
-#' @param result The result that is set by the DataCamp front-end when the student submits a multiple choice exercise.
 #' @param no_selection_msg feedback message in case the student did not select an answer.
 #' @param feedback_msgs vector of feedback messages for both the incorrect exercises as the correct exercise.
 #' Order the messages according to how they are listed in the instructions. For example, if there are four options,
@@ -29,7 +28,10 @@
 #' @import datacampAPI
 #' @import testthat
 #' @export
-test_mc <- function(correct = NULL, result = get_sct_result(), no_selection_msg = NULL, feedback_msgs = NULL) {
+test_mc <- function(correct = NULL, no_selection_msg = NULL, feedback_msgs = NULL) {
+  
+  result = get("DM.result", env = globalenv())
+  
   if(is.null(correct)) {
     stop("argument 'correct' can not be empty")
   }

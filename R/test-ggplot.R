@@ -1,10 +1,6 @@
 #' @export
 test_ggplot <- function(index = 1,
-                        student_code = get_student_code(),
-                        solution_code = get_solution_code(),
-                        predefined_code = get_pec_code(),
-                        student_env = .GlobalEnv,
-                        solution_env = get_solution_env(),
+                        
                         all_fail_msg = NULL,
                         check_data = TRUE, data_fail_msg = NULL,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
@@ -15,6 +11,13 @@ test_ggplot <- function(index = 1,
                         check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
                         check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
+  
+  student_env = dc$get("student_env")
+  solution_env = dc$get("solution_env")
+  student_code = dc$get("student_code")
+  solution_code = dc$get("solution_code")
+  predefined_code = dc$get("pec")
+  
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   
   sol_ggplot_info <- get_ggplot_solution_info(solution_code, predefined_code, solution_env)

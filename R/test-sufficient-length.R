@@ -9,7 +9,7 @@
 #' 
 #' @import testthat
 #' @export
-test_sufficient_length = function(stud,index,incorrect_number_of_calls_msg = NULL) {
+test_sufficient_length = function(stud, index, incorrect_number_of_calls_msg = NULL) {
   if(index < 1) {
     stop("The index argument must be positive!")
   }

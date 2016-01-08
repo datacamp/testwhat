@@ -13,7 +13,6 @@
 #' of the solution list were found in the student's list.
 #' @param incorrect_msg optional feedback message if not all specified elements of
 #' the solution list match those in the student list.
-#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{
@@ -32,11 +31,13 @@
 #' @export
 test_data_frame <- function(name, columns = NULL, 
                             eq_condition = "equivalent",
-                            student_env = .GlobalEnv,
-                            solution_env = get_solution_env(),
                             undefined_msg = NULL, 
                             undefined_cols_msg = NULL, 
                             incorrect_msg = NULL) {
+  
+  # Get needed elements from tw
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

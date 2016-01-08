@@ -7,9 +7,6 @@
 #' @param format  the format of the text that the text should be in ("any", "italics", "bold", "code", "inline_code", "brackets", "parentheses", "list"). 
 #' If none of the above, the format string is appended to text in front and in the back and used as a regexp.
 #' @param freq How often the text should appear with this formatting
-#' @param inline_number number of the inline number that is being tested
-#' @param student_inline  character string containing the student's inline text.
-#' @param solution_inline  character string containing the solution's inline text.
 #' @param not_called_msg feedback message if the text was not there
 #' @param incorrect_msg  feedback message if the text was not properly formatted
 #'
@@ -19,12 +16,13 @@
 test_text <- function(text,
                       format = "any",
                       freq = 1,
-                      inline_number = get_inline_number(),
-                      student_inline = get_student_ds_part(),
-                      solution_inline = get_solution_ds_part(),
                       not_called_msg = NULL,
                       incorrect_msg = NULL) {
 
+  inline_number = tw$get("inline_number")
+  student_inline = tw$get("student_ds_part")
+  solution_inline = tw$get("solution_ds_part")
+  
   # First, check if both student and solution chunk are 'inline' class
   if(class(solution_inline) != "inline") {
     stop("The specified rmd group is not of 'inline' class.")

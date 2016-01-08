@@ -10,8 +10,6 @@
 #' @param incorrect_number_arguments_msg Optional feedback message in case the 
 #' function does not have the correct number of arguments.
 #' @param env Environment in which to perform the tests
-#' @inheritParams test_object
-#' @inheritParams test_function
 
 #' @examples
 #' \dontrun{
@@ -33,13 +31,14 @@
 test_function_definition <- function(name, 
                                      function_test = NULL, 
                                      body_test = NULL,
-                                     student_env = .GlobalEnv,
-                                     solution_env = get_solution_env(),
-                                     student_code = get_student_code(), 
-                                     solution_code = get_solution_code(),
                                      undefined_msg = NULL, 
                                      incorrect_number_arguments_msg = NULL,
                                      env = parent.frame()) {
+  
+  student_env = dc$get("student_env")
+  solution_env = dc$get("solution_env")
+  student_code = dc$get("student_code")
+  solution_code = dc$get("solution_code")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")
@@ -81,11 +80,11 @@ test_function_definition <- function(name,
       test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
       
       if(!is.null(body_test)) {
-        set_student_code(paste(deparse(stud_function), collapse = "\n"))
-        set_solution_code(paste(deparse(sol_function), collapse = "\n"))
+        tw$set(student_code = paste(deparse(stud_function), collapse = "\n"))
+        tw$set(solution_code = paste(deparse(sol_function), collapse = "\n"))
         eval(body_test, envir = env)
-        set_student_code(student_code)
-        set_solution_code(solution_code)  
+        tw$set(student_code = student_code)
+        tw$set(solution_code = solution_code)  
       }
       
       eval(function_test, envir = student_env)

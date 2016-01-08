@@ -20,7 +20,10 @@
 #' @import datacampAPI
 #' @import testthat
 #' @export
-test_output_contains <- function(expr, times = 1, console_output = get_student_output(), incorrect_msg = NULL, env = .GlobalEnv) {
+test_output_contains <- function(expr, times = 1, incorrect_msg = NULL, env = globalenv()) {
+  
+  console_output = get("DM.console.output", env = globalenv())
+  
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
     if(is.null(incorrect_msg)) {
       incorrect_msg <- build_incorrect_output_msg(expr)
@@ -29,7 +32,7 @@ test_output_contains <- function(expr, times = 1, console_output = get_student_o
             incorrect_msg)
 }
 
-output_contains = function(expr, console_output = get_student_output(), env = .GlobalEnv) {
+output_contains = function(expr, console_output = get_student_output(), env = globalenv()) {
   correct_output = try(capture.output(try(eval(parse(text=expr), envir = env))))
 
   if (inherits(correct_output, "try-error")) {

@@ -18,7 +18,6 @@
 #' @param expr_test  SCT to perform on the expression part of the while loop
 #' @param not_found_msg  Message in case the while loop (at given index) is not found.
 #' @param env  Environment in which to perform all these SCTs
-#' @inheritParams test_function
 #' 
 #' @examples
 #' \dontrun{
@@ -43,10 +42,11 @@
 test_while_loop <- function(index = 1, 
                             cond_test = NULL, 
                             expr_test = NULL,                          
-                            student_code = get_student_code(), 
-                            solution_code = get_solution_code(),
                             not_found_msg = NULL,
                             env = parent.frame()) {
+  
+  student_code = tw$get("student_code")
+  solution_code = tw$get("solution_code")
   
   cond_test <- substitute(cond_test)
   if (is.character(cond_test)) code <- parse(text = cond_test)
@@ -76,23 +76,23 @@ test_while_loop <- function(index = 1,
   }
   
   on.exit({
-    set_student_code(student_code)
-    set_solution_code(solution_code)
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
   })
   
   # WHILE condition part should always be there
   test_what(expect_false(is.null(stud_while$while_cond)), sprintf("The <code>condition</code> part%s is missing.", additionaltext))
   if(!is.null(cond_test) && !is.null(stud_while$while_cond) && !is.null(sol_while$while_cond)) {
-    set_student_code(stud_while$while_cond)
-    set_solution_code(sol_while$while_cond)
+    tw$set(student_code = stud_while$while_cond)
+    tw$set(solution_code = sol_while$while_cond)
     eval(cond_test, envir = env)
   }
   
   # IF expression part should always be available.
   test_what(expect_false(is.null(stud_while$while_expr)), sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
   if(!is.null(expr_test) && !is.null(stud_while$while_expr) && !is.null(sol_while$while_expr)) {
-    set_student_code(stud_while$while_expr)
-    set_solution_code(sol_while$while_expr)
+    tw$set(student_code = stud_while$while_expr)
+    tw$set(solution_code = sol_while$while_expr)
     eval(expr_test, envir = env)
   }
 }

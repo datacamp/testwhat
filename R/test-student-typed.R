@@ -25,9 +25,10 @@
 #' @import testthat
 #' @export
 test_student_typed <- function(strings,
-                               student_code = get_student_code(),
                                fixed = TRUE,
                                not_typed_msg = NULL) {
+  
+  student_code = tw$get("student_code")
   
   if(is.null(not_typed_msg)) {
     not_typed_msg <- sprintf("The solution expects you to type %s at the appropriate location%s.", 

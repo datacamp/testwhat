@@ -6,9 +6,6 @@
 #' @param options  Set of options. Embedded options have to be specified using the dot notation.
 #' @param check_equality whether or not to actually check the value assigned to the option (default TRUE)
 #' @param allow_extra  whether or not the definition of additional options is accepted (default TRUE)
-#' @param chunk_number The chunk number being treated (set automatically)
-#' @param student_code character string containing the entire student code (set automatically)
-#' @param solution_code  character string containing the entire solution code (set automatically)
 #' @param not_called_msg feedback message if option was not specified (optional but recommended)
 #' @param incorrect_msg  feedback message if option was incorrectly set (optional but recommended)
 #'
@@ -18,11 +15,13 @@
 test_yaml_header <- function(options = NULL,
                                check_equality = TRUE,
                                allow_extra = TRUE,
-                               chunk_number = get_chunk_number(),
-                               student_code = get_student_code(),
-                               solution_code = get_solution_code(),
                                not_called_msg = NULL,
                                incorrect_msg = NULL) {
+  
+  chunk_number = tw$get("chunk_number")
+  student_code = tw$get("student_code")
+  solution_code = tw$get("solution_code")
+  
   require(rmarkdown)
     
   yaml_solution <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(solution_code, split = "\n")[[1]])))
