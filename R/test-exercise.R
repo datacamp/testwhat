@@ -25,10 +25,8 @@ test_exercise <- function(code, report = c("first", "challenge"), env = test_env
   reporter <- DataCampReporter$new(report=report)
   with_reporter(reporter, .test_exercise(code, env))
 
-  # Obtain feedback from DataCamp reporter and return it invidibly
-  feedback <- reporter$get_feedback()
-  
-  invisible(feedback)
+  # Obtain feedback from DataCamp reporter and return it invisibly
+  reporter$get_feedback()
 }
 
 .test_exercise <- function(code, parent_env) {
@@ -43,13 +41,4 @@ test_exercise <- function(code, report = c("first", "challenge"), env = test_env
       stop(attr(eval_fail, "condition"))
     }
   }
-  end_context()
-}
-
-end_context <- function() {
-  rep <- get_reporter()
-  if (!rep$context_open) return(invisible())
-  rep$end_context()
-  rep$context_open <- FALSE
-  invisible()
 }
