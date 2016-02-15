@@ -4,10 +4,7 @@
 #' This function is run by R Backend and should not be used by course creators.
 #'
 #' @param code character string containing the tests to perform.
-#' @param report specifies how to report feedback in case of failed tests.  If
-#' \code{"first"}, only the feedback message from the first failed test is
-#' reported. If \code{"all"}, feedback messages from all failed tests are
-#' collected.
+#' @param type the type of the exercise.
 #' @param env  environment in which to execute tests.
 #'
 #' @return A list with components \code{passed} that indicates whether all
@@ -15,7 +12,7 @@
 #'
 #' @export
 test_exercise <- function(code, 
-                          report = c("first", "challenge"), 
+                          ex_type, 
                           pec,
                           student_code,
                           solution_code,
@@ -24,23 +21,22 @@ test_exercise <- function(code,
                           env = test_env()) {
   
   # Store everything that's needed locally
-  tw$initialize(pec = pec,
-                student_code = student_code,
-                # student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
-                student_env = globalenv(),
-                solution_code = solution_code,
-                # solution_pd = getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE)),
-                solution_env = solution_env,
-                output_list = output_list)
+  tw$initialize(list(pec = pec,
+                     student_code = student_code,
+                     # student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
+                     student_env = globalenv(),
+                     solution_code = solution_code,
+                     # solution_pd = getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE)),
+                     solution_env = solution_env,
+                     output_list = output_list))
   
   # Parse code and ensure that feedback messages are reset
   code <- parse(text = code)
-  report <- match.arg(report)
   feedback_msg <- options(failure_msg = NULL, success_msg = NULL)
   on.exit(options(feedback_msg))
 
   # Execute code with the DataCamp reporter such that it collects test results
-  reporter <- DataCampReporter$new(report=report)
+  reporter <- DataCampReporter$new(ex_type=ex_type)
   with_reporter(reporter, .test_exercise(code, env))
 
   # Obtain feedback from DataCamp reporter and return it invisibly

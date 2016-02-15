@@ -12,11 +12,11 @@ test_ggplot <- function(index = 1,
                         check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
   
-  student_env = dc$get("student_env")
-  solution_env = dc$get("solution_env")
-  student_code = dc$get("student_code")
-  solution_code = dc$get("solution_code")
-  predefined_code = dc$get("pec")
+  student_env = tw$get("student_env")
+  solution_env = tw$get("solution_env")
+  student_code = tw$get("student_code")
+  solution_code = tw$get("solution_code")
+  predefined_code = tw$get("pec")
   
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   

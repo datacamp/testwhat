@@ -48,8 +48,8 @@ test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
                         undefined_msg = NULL, incorrect_msg = NULL) {
   
-  student_env = dc$get("student_env")
-  solution_env = dc$get("solution_env")
+  student_env = tw$get("student_env")
+  solution_env = tw$get("solution_env")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

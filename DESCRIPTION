@@ -60,4 +60,4 @@ Collate:
     'test-yaml-header.R'
     'testwhat.R'
     'utils.R'
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

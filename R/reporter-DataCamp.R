@@ -13,7 +13,7 @@ setOldClass('proc_time')
 DataCampReporter <- setRefClass(
   "DataCampReporter", contains = "Reporter",
   fields = list(
-    report = "character",
+    ex_type = "character",
     results = "list",
     silent = "numeric",
     silent_fail = "logical",
@@ -23,11 +23,6 @@ DataCampReporter <- setRefClass(
 
   methods = list(
     ### overriden methods from Reporter
-    initialize = function(...) {
-      report <<- "first"
-      callSuper(...)
-      
-    },
     start_reporter = function(...) {
       callSuper(...)
       results <<- list()
@@ -96,16 +91,7 @@ DataCampReporter <- setRefClass(
     
     get_feedback = function() {
       results_df <- do.call("rbind", lapply(results, data.frame, stringsAsFactors = FALSE))
-      if (report == "first") {
-        test_results <- results_df$passed
-        if(!all(test_results)) {
-          feedback <- results_df$failure_msg[which(!test_results)[1]]
-          return(list(passed = FALSE, feedback = to_html(feedback)))
-        } else {
-          return(list(passed = TRUE, feedback = to_html(inh_success_msg)))
-        }
-      } else if (report == "challenge") {
-        
+      if (ex_type == "ChallengeExercise") {
         if(length(results_df) == 0) {
           stop("No tests written for challenge!")
         }
@@ -131,11 +117,17 @@ DataCampReporter <- setRefClass(
           passed_steps <- rep(TRUE, n_inst - 1)
         }
         
-        return(list(passed = challenge_passed, 
-                    feedback = to_html(ifelse(challenge_passed, inh_success_msg, "try again.")), 
-                    passed_steps = passed_steps))
+        return(list(correct = challenge_passed, 
+                    message = to_html(ifelse(challenge_passed, inh_success_msg, "try again.")), 
+                    steps_correct = passed_steps))
       } else {
-        stop("Unknown report type!")
+        test_results <- results_df$passed
+        if(!all(test_results)) {
+          feedback <- results_df$failure_msg[which(!test_results)[1]]
+          return(list(correct = FALSE, message = to_html(feedback)))
+        } else {
+          return(list(correct = TRUE, message = to_html(inh_success_msg)))
+        }
       }
     }
   )

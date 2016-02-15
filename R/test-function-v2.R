@@ -31,10 +31,10 @@ test_function_v2 <- function(name, args = NULL, ignore = NULL,
                              incorrect_number_of_calls_msg = NULL,
                              index_not_called_msg = NULL) {
   
-  student_env = dc$get("student_env")
-  solution_env = dc$get("solution_env")
-  student_code = dc$get("student_code")
-  solution_code = dc$get("solution_code")
+  student_env = tw$get("student_env")
+  solution_env = tw$get("solution_env")
+  student_code = tw$get("student_code")
+  solution_code = tw$get("solution_code")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")
