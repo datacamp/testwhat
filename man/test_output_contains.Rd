@@ -17,6 +17,8 @@ The default is DM.console.output which is set on the DataCamp server (automagica
 This means you don't have to specify this argument when writing SCTs for DataCamp.com.}
 
 \item{incorrect_msg}{feeback message in case the output did not contain the expression}
+
+\item{env}{environment where the code in expr exectued.}
 }
 \description{
 Function checks whether the student's console contains the output one gets by

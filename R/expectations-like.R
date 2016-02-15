@@ -1,4 +1,3 @@
-#' @export
 expect_like <- function(object, expected, dist = NULL, method = "osa",
                         info = NULL, label = NULL, 
                         expected_label = NULL) {
@@ -14,7 +13,6 @@ expect_like <- function(object, expected, dist = NULL, method = "osa",
               info = info, label = label)
 }
 
-#' @export
 #' @importFrom stringdist stringdist
 is_like <- function(expected, dist = NULL, method = "osa", label = NULL) {
   if (is.null(dist)) {

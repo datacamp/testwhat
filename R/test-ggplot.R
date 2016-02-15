@@ -1,3 +1,46 @@
+#' Test ggplot call
+#' 
+#' @param index which call to check
+#' @param student_code code of student
+#' @param solution_code correct code
+#' @param predefined_code pre exercise code
+#' @param student_env environment of student
+#' @param solution_env environment of solution
+#' @param all_fail_msg Message if all fails
+#' 
+#' @param check_data Whether or not to check data latyer
+#' @param data_fail_msg Message in case data layer fails
+#' 
+#' @param check_aes Whether or not to check aes latyer
+#' @param aes_fail_msg Message in case aes layer fails
+#' @param exact_aes Should the aesthetics be exact?
+#' 
+#' @param check_geom Whether or not to check geom layer
+#' @param geom_fail_msg Message in case geom layer fails
+#' @param exact_geom Should the geoms be exact?
+#' @param check_geom_params Should the geom parameters be checked?
+#' 
+#' @param check_facet Whether or not to check facet latyer
+#' @param facet_fail_msg Message in case facet layer fails
+#' @param check_scale Whether or not to check scale latyer
+#' 
+#' @param scale_fail_msg Message in case scale layer fails
+#' @param exact_scale Whether or not scales should be defined exactly
+#' 
+#' @param check_coord Whether or not to check coord latyer
+#' @param coord_fail_msg Message in case coord layer fails
+#' @param exact_coord Whether or not coords should be defined exactly
+#' 
+#' @param check_stat Whether or not to check stat latyer
+#' @param stat_fail_msg Message in case stat layer fails
+#' @param exact_stat Whether or not stats should be defined exactly
+#' 
+#' @param check_extra Whether to check extra stuff
+#' @param extra_fail_msg Message in case extra stuff fails
+#' @param exact_extra Whether or not extra info should be exactly specified.
+#' 
+#' @param check Which layers to check
+#' 
 #' @export
 test_ggplot <- function(index = 1,
                         student_code = get_student_code(),

@@ -10,7 +10,8 @@
 #' The default is DM.console.output which is set on the DataCamp server (automagically).
 #' This means you don't have to specify this argument when writing SCTs for DataCamp.com.
 #' @param incorrect_msg feeback message in case the output did not contain the expression
-#'
+#' @param env environment where the code in expr exectued.
+#' 
 #' @examples
 #' \dontrun{
 #' # SCT to test whether student printed numbers 1 to 10
