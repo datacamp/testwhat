@@ -576,7 +576,7 @@ get_ggplot_solution_info <- function(code, predefined_code, envir) {
   } else {
     saved_solution_code <- ""
   }
-  if (exists("saved_solution_code", envir = get_sct_env(), inherits = FALSE)) {
+  if (exists("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
     saved_solution_ggplot_info <- get("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)
   } else {
     saved_solution_ggplot_info <- NULL
@@ -595,7 +595,7 @@ get_ggplot_student_info <- function(code, predefined_code, envir) {
   } else {
     saved_student_code <- ""
   }
-  if (exists("saved_student_code", envir = get_sct_env(), inherits = FALSE)) {
+  if (exists("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
     saved_student_ggplot_info <- get("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)
   } else {
     saved_student_ggplot_info <- NULL
