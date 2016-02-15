@@ -29,13 +29,9 @@ DataCampReporter <- setRefClass(
       silent <<- 0
       instruction_index <<- 0
       inh_failure_msg <<- ""
-      inh_success_msg <<- sample(c("You rock!", 
-                                   "You are a coding rockstar!", 
-                                   "Keep up the good work.", 
-                                   "Great job!", 
-                                   "Woot!", 
-                                   "Way to go!", 
-                                   "Nice code."), 1)
+      inh_success_msg <<- sample(c("Good Job!", 
+                                   "Well done!", 
+                                   "Great work!"), 1)
     },
 
     set_inh_failure_msg = function(msg = "") {
