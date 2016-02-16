@@ -578,7 +578,7 @@ get_ggplot_solution_info <- function(code, predefined_code, envir) {
   if(is.null(saved_solution_code)) saved_solution_code <- ""
   saved_solution_ggplot_info <- tw$get("saved_solution_ggplot_info")
   
-  if (code != saved_solution_code || is.null(saved_ggplot_info)) {
+  if (code != saved_solution_code || is.null(saved_solution_ggplot_info)) {
     ggplot_info <- get_ggplot_info(code, predefined_code, envir)
     tw$set(saved_solution_code = code)
     tw$set(saved_solution_ggplot_info = ggplot_info)
@@ -591,7 +591,7 @@ get_ggplot_student_info <- function(code, predefined_code, envir) {
   if(is.null(saved_student_code)) saved_student_code <- ""
   saved_student_ggplot_info <- tw$get("saved_student_ggplot_info")
   
-  if (code != saved_student_code || is.null(saved_ggplot_info)) {
+  if (code != saved_student_code || is.null(saved_student_ggplot_info)) {
     ggplot_info <- get_ggplot_info(code, predefined_code, envir)
     tw$set(saved_student_code = code)
     tw$set(saved_student_ggplot_info = ggplot_info)

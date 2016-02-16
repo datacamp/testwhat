@@ -6,15 +6,16 @@ test_everything <- function() {
   for (filename in dir("scenarios/")) {
     if (substring(filename, 1, 5) == "test-" && 
         substring(filename, nchar(filename)-1) == ".R") {
-      print(filename)
+      cat(sprintf("Running scenarios in %s ... ", filename))
       source(file.path("scenarios/",filename))
       write(paste0(">> ", filename), file = log_path, append = TRUE)
       output <- test_all_scenarios(scen)
       write(paste(output,collapse="\n"), file = log_path, append = TRUE)
+      cat("Done.", sep = "\n")
     }
   }
   
-  # message("The results of the tests can be found here:\n", log_path)
+  message("The results of the tests can be found here:\n", log_path)
   setwd(oldwd)  
 }
 
