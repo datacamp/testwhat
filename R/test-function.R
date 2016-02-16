@@ -149,7 +149,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
           test_what(fail(),
                     incorrect_msg[[i]])
         }
-        correct <- numeric(n_args)
+        correct <- logical(n_args)
         
         for (n in 1:n_args) {
           correct[n] <- eq_fun[[n]](student_args,solution_args)
