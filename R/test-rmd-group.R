@@ -36,6 +36,9 @@ test_rmd_group = function(group_number, code, env = parent.frame()) {
     return(FALSE)
   }
 
+  solution_ds <- tw$get("solution_ds")
+  student_ds <- tw$get("student_ds")
+  
   if(group_number > length(solution_ds)) {
     stop(sprintf("Invalid group_number (%s), while solution contains only %s parts",
                  group_number,length(solution_ds)))
@@ -50,9 +53,9 @@ test_rmd_group = function(group_number, code, env = parent.frame()) {
   
   # set numbers, to be used in default messages of tests
   if(class(student_ds_part) == "block") {
-    tw$set(chunk_number = group_number - sum(sapply(student_ds()[1:group_number],class) == "inline"))
+    tw$set(chunk_number = group_number - sum(sapply(student_ds[1:group_number],class) == "inline"))
   } else if(class(student_ds_part) == "inline") {
-    tw$set(inline_number = group_number - sum(sapply(student_ds()[1:group_number],class) == "block"))
+    tw$set(inline_number = group_number - sum(sapply(student_ds[1:group_number],class) == "block"))
   }
   
   eval(code, envir = env)

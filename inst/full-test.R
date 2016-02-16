@@ -6,6 +6,7 @@ test_everything <- function() {
   for (filename in dir("scenarios/")) {
     if (substring(filename, 1, 5) == "test-" && 
         substring(filename, nchar(filename)-1) == ".R") {
+      print(filename)
       source(file.path("scenarios/",filename))
       write(paste0(">> ", filename), file = log_path, append = TRUE)
       output <- test_all_scenarios(scen)
