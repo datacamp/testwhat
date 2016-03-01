@@ -8,7 +8,7 @@ test_everything <- function() {
         substring(filename, nchar(filename)-1) == ".R") {
       cat(sprintf("Running scenarios in %s ... ", filename))
       source(file.path("scenarios/",filename))
-      write(paste0(">> ", filename), file = log_path, append = TRUE)
+      write(paste(">>>", filename, "<<<"), file = log_path, append = TRUE)
       output <- test_all_scenarios(scen)
       write(paste(output,collapse="\n"), file = log_path, append = TRUE)
       cat("Done.", sep = "\n")

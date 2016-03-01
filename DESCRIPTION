@@ -15,7 +15,6 @@ Depends:
 Imports:
     digest,
     methods,
-    datacampAPI,
     markdown,
     stringdist
 License: MIT + file LICENSE
