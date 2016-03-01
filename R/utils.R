@@ -41,10 +41,12 @@ merge_list <- function(x, y) {
 #' @export
 tw <- tw_accessors()
 
+#' @export
 init_tags <- function(...) {
   tw$set(tags = list(...))
 }
 
+#' @export
 set_tags <- function(...) {
   tw$set(tags = merge_list(tw$get("tags"), list(...)))
 }
