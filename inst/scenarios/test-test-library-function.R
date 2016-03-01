@@ -29,7 +29,7 @@ scen <- list(
     ),
     fail = list(
       test_incorrect_library = list(
-        long = "test fails when the incorrectcorrect library function is called",
+        long = "test fails when the incorrect library function is called",
         sct = "test_library_function(\"ggvis\")"
       ),
       test_incorrect_library_with_msg = list(

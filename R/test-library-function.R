@@ -41,5 +41,5 @@ test_library_function <- function(package,
   }
   
   test_what(expect_true(grepl("library\\(", student_code)), not_called_msg)
-  test_what(expect_true(grepl(sprintf("(library)|(require)\\([\"']*%s[\"']*\\)",package), student_code)), incorrect_msg)
+  test_what(expect_true(grepl(sprintf("(library|require)\\s*\\(\\s*[\"']?%s[\"']?\\s*\\)",package), student_code)), incorrect_msg)
 }
