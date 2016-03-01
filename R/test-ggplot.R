@@ -17,7 +17,7 @@ test_ggplot <- function(index = 1,
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
   predefined_code <- tw$get("pec")
-  init_tags()
+  init_tags(fun = "test_ggplot")
   
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   

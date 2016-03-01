@@ -47,7 +47,7 @@ test_while_loop <- function(index = 1,
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
-  init_tags()
+  init_tags(fun = "test_while_loop")
   
   cond_test <- substitute(cond_test)
   if (is.character(cond_test)) code <- parse(text = cond_test)

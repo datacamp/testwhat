@@ -19,7 +19,7 @@ test_rmd_file = function(code,
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
-  init_tags()
+  init_tags(fun = "test_rmd_file")
   
   code <- substitute(code)
   if (is.character(code)) code <- parse(text = code)

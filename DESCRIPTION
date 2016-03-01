@@ -11,15 +11,16 @@ Depends:
     R (>= 3.0.0),
     testthat,
     knitr,
-    rmarkdown,
-    stringdist
+    rmarkdown
 Imports:
     digest,
     methods,
     datacampAPI,
-    markdown
+    markdown,
+    stringdist
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
-    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")))
+    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")),
+    person("Vincent", "Vankrunkelsven", email = "vincent@datacamp.com", role = c("aut")))
 RoxygenNote: 5.0.1

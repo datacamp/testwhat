@@ -38,7 +38,7 @@ test_data_frame <- function(name, columns = NULL,
   # Get needed elements from tw
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
-  init_tags()
+  init_tags(fun = "test_data_frame")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

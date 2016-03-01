@@ -21,7 +21,7 @@ test_yaml_header <- function(options = NULL,
   chunk_number <- tw$get("chunk_number")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
-  init_tags()
+  init_tags(fun = "test_yaml_header")
   
   require(rmarkdown)
     
