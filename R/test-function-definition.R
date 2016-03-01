@@ -35,10 +35,11 @@ test_function_definition <- function(name,
                                      incorrect_number_arguments_msg = NULL,
                                      env = parent.frame()) {
   
-  student_env = tw$get("student_env")
-  solution_env = tw$get("solution_env")
-  student_code = tw$get("student_code")
-  solution_code = tw$get("solution_code")
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  init_tags()
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

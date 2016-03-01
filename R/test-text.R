@@ -19,9 +19,10 @@ test_text <- function(text,
                       not_called_msg = NULL,
                       incorrect_msg = NULL) {
 
-  inline_number = tw$get("inline_number")
-  student_inline = tw$get("student_ds_part")
-  solution_inline = tw$get("solution_ds_part")
+  inline_number <- tw$get("inline_number")
+  student_inline <- tw$get("student_ds_part")
+  solution_inline <- tw$get("solution_ds_part")
+  init_tags()
   
   # First, check if both student and solution chunk are 'inline' class
   if(class(solution_inline) != "inline") {

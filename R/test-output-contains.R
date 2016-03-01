@@ -21,6 +21,7 @@
 #' @import testthat
 #' @export
 test_output_contains <- function(expr, times = 1, incorrect_msg = NULL, env = globalenv()) {
+  init_tags()
   
   console_output = get("DM.console.output", env = globalenv())
   

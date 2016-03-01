@@ -53,6 +53,8 @@ test_exercise <- function(code,
     cond <- attr(eval_fail, "condition")$message
     if (!identical(cond, sct_failed_msg)) {
       stop(attr(eval_fail, "condition"))
+    } else {
+      return(invisible())
     }
   }
 }

@@ -8,6 +8,7 @@
 # #' @import testthat
 # #' @export
 # test_output_regex <- function(pattern, console_output = get_student_output(), incorrect_msg = NULL) {
+#   init_tags()
 #   if(is.null(incorrect_msg)) {
 #     incorrect_msg <- "The output you generated doesn't contain the pattern we're looking for."
 #   }

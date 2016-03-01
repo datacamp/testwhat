@@ -28,7 +28,8 @@ test_student_typed <- function(strings,
                                fixed = TRUE,
                                not_typed_msg = NULL) {
   
-  student_code = tw$get("student_code")
+  student_code <- tw$get("student_code")
+  init_tags()
   
   if(is.null(not_typed_msg)) {
     not_typed_msg <- sprintf("The solution expects you to type %s at the appropriate location%s.", 

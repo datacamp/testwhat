@@ -1,13 +1,4 @@
 
-get_language <- function() {
-  lang <- getOption("lang")
-  if(is.null(lang)) {
-    "en"
-  } else {
-    lang 
-  }
-}
-
 no_msg <- "No message for the specified language."
 
 # TEST_FUNCTION
@@ -188,20 +179,3 @@ build_summary.factor <- function(x) {
   paste0("factor(",build_summary.character(as.character(x)),")")
 }
 
-trunc_str <- function(x,start="c") {
-  max_in <- 4
-  max_out <- 2
-  tot <- max_in + max_out
-  paste0(start,"(",
-         as.character(paste(x[1:min(max_in,length(x))], collapse = ", ")),
-         ifelse(length(x) > tot, ", ...", ""), 
-         ifelse(length(x) > max_in, 
-          paste0(", ",as.character(paste(x[(length(x)-(max_out - 1 - max(0,tot-length(x)))):length(x)], collapse = ", "))),
-          ""),
-         ")")
-}
-
-#' @export
-test_summary <- function(x,...) {
-  build_summary(x,...)
-}

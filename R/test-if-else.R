@@ -66,6 +66,7 @@ test_if_else <- function(index = 1,
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  init_tags()
   
   if_cond_test <- substitute(if_cond_test)
   if (is.character(if_cond_test)) code <- parse(text = if_cond_test)

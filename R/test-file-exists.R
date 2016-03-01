@@ -15,6 +15,8 @@
 #' @import testthat
 #' @export
 test_file_exists <- function(path, incorrect_msg = NULL) {
+  init_tags()
+  
   if(is.null(incorrect_msg)) {
     incorrect_msg <- sprintf("The file <code>%s</code> does not appear to be in your working directory; make sure you don't delete it!", path)
   }

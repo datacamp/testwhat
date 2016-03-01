@@ -31,6 +31,7 @@ test_library_function <- function(package,
                           incorrect_msg = NULL) {
   
   student_code <- tw$get("student_code")
+  init_tags()
   
   if(is.null(not_called_msg)) {
     not_called_msg <- sprintf("Make sure to call the <code>library()</code> function to load the <code>%s</code> package", package)

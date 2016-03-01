@@ -50,10 +50,11 @@ test_function <- function(name, args = NULL, ignore = NULL,
                           not_called_msg = NULL, incorrect_msg = NULL,
                           incorrect_number_of_calls_msg = NULL) {
   
-  student_env = tw$get("student_env")
-  solution_env = tw$get("solution_env")
-  student_code = tw$get("student_code")
-  solution_code = tw$get("solution_code")
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  init_tags()
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

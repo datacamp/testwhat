@@ -22,6 +22,8 @@
 #' @export
 test_error <- function(incorrect_msg = NULL) {
   output_list <- tw$get("output_list")
+  init_tags()
+  
   errors =  sapply(output_list, function(x) { if(x$type == "r-error") return(x$payload) })
   errors[sapply(errors, is.null)] <- NULL
   if(length(errors) == 0) {

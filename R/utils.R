@@ -15,8 +15,7 @@ tw_accessors <- function() {
   }
   
   set = function(...) {
-    dots = list(...)
-    tw_data <<- merge(dots)
+    tw_data <<- merge(list(...))
     invisible(NULL)
   }
   
@@ -42,6 +41,13 @@ merge_list <- function(x, y) {
 #' @export
 tw <- tw_accessors()
 
+init_tags <- function(...) {
+  tw$set(tags = list(...))
+}
+
+set_tags <- function(...) {
+  tw$set(tags = merge_list(tw$get("tags"), list(...)))
+}
 
 # Find expression that created a variable
 find_expr <- function(name, env = parent.frame()) {
@@ -52,39 +58,7 @@ find_expr <- function(name, env = parent.frame()) {
 # A version of grepl that's vectorised along pattern, not x
 grepl2 <- function(pattern, x, ...) {
   stopifnot(length(x) == 1)
-  
   vapply(pattern, grepl, x, ..., FUN.VALUE = logical(1), USE.NAMES = FALSE)
-}
-
-# Nicely collapse a character vector
-collapse <- function(x, conn = " and ") {
-  if (length(x) > 1) {
-    n <- length(x)
-    last <- c(n-1, n)
-    collapsed <- paste(x[last], collapse = conn)
-    collapsed <- paste(c(x[-last], collapsed), collapse = ", ")
-  } else collapsed <- x
-  collapsed
-}
-
-collapse_args <- function(x, conn = " and ") {
-  collapse(paste0("<code>",x,"</code>"), conn)
-}
-
-collapse_props <- function(x, conn = " and ") {
-  collapse(paste0("<code>",x,"</code>"), conn)
-}
-
-collapse_funs <- function(x, conn = " and ") {
-  collapse(paste0("<code>",x,"()</code>"), conn)
-}
-
-get_num <- function(index) {
-  switch(index, 
-         "1" = "first", "2" = "second", 
-         "3" = "third", "4" = "fourth", 
-         "5" = "fifth", "6" = "sixth", 
-         "7" = "seventh", sprintf("%ith", index))
 }
 
 #' convert student/solution code to vector of clean strings with the pipe operator removed.
@@ -205,10 +179,10 @@ build_doc_structure <- function(text) {
 #' @import datacampAPI
 #' @import testthat
 parse_docs <- function() {
-  student_code = tw$get("student_code")
-  solution_code = tw$get("solution_code")
-  student_ds = tw$get("student_ds")
-  solution_ds = tw$get("solution_ds")
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  student_ds <- tw$get("student_ds")
+  solution_ds <- tw$get("solution_ds")
   
   if(!is.null(student_ds) && !is.null(solution_ds)) {
     # Both variables exist already

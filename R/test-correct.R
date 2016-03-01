@@ -34,8 +34,7 @@
 #' }, {
 #'  # this code only is run if test_object("x") fails
 #'  test_function("mean", "x")
-#'  # if test_function passes, test_object("x") is 
-#'  # automatically run again to generate a fail.
+#'  # test_object("x") is automatically run again to generate a fail if test_function passed.
 #' })
 #' }
 #'

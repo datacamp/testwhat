@@ -25,9 +25,9 @@
 #' @export 
 test_expression_output <- function(expr, incorrect_msg = NULL) {
   
-  # Get needed elements from tw
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
+  init_tags()
   
   output_sol <- try(capture.output(
     try(

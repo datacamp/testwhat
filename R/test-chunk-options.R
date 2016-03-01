@@ -21,9 +21,10 @@ test_chunk_options <- function(options = NULL,
                                not_called_msg = NULL,
                                incorrect_msg = NULL) {
     
-  chunk_number = tw$get("chunk_number")
-  student_chunk = tw$get("student_ds_part")
-  solution_chunk = tw$get("solution_ds_part")
+  chunk_number <- tw$get("chunk_number")
+  student_chunk <- tw$get("student_ds_part")
+  solution_chunk <- tw$get("solution_ds_part")
+  init_tags()
   
   # First, check if both student and solution chunk are 'block' class (i.e. code chunks)
   if(class(solution_chunk) != "block") {

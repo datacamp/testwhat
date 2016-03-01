@@ -35,6 +35,7 @@ test_an_object <- function(name,
   # Get needed elements from tw
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
+  init_tags()
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

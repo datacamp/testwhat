@@ -49,6 +49,7 @@ test_for_loop <- function(index = 1,
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  init_tags()
   
   var_test <- substitute(var_test)
   if (is.character(var_test)) code <- parse(text = var_test)

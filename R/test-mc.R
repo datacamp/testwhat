@@ -31,6 +31,7 @@
 test_mc <- function(correct = NULL, no_selection_msg = NULL, feedback_msgs = NULL) {
   
   result = get("DM.result", env = globalenv())
+  init_tags()
   
   if(is.null(correct)) {
     stop("argument 'correct' can not be empty")

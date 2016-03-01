@@ -17,6 +17,7 @@ test_rmd_group = function(group_number, code, env = parent.frame()) {
   solution_code <- tw$get("solution_code")
   solution_ds <- tw$get("solution_ds")
   student_ds <- tw$get("student_ds")
+  init_tags()
   
   code <- substitute(code)
   if (is.character(code)) code <- parse(text = code)

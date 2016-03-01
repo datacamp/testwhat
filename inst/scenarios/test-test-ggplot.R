@@ -63,7 +63,7 @@ a = 1
     stat_smooth(method = "lm") + xlab("test")
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_1 = list(
         long = "test succeeds if command has the correct data",
         sct = '
 test_error()
@@ -89,7 +89,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
   stat_smooth(method = "auto",se = F)
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_2 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         test_ggplot(1, check = "geom", check_geom_params = "method")
@@ -163,7 +163,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     stat_smooth(method = "lm") + xlab("test")
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_3 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         test_error()
@@ -198,7 +198,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
     scale_color_manual("Cylinders", values = myColors)
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_4 = list(
         long = "test succeeds if command has the correct data",
         sct = '
 
@@ -274,7 +274,7 @@ test_ggplot(1, check = "scale")
     stat_smooth(method = "lm") + xlab("test")
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_5 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         test_error()
@@ -309,7 +309,7 @@ test_ggplot(1, check = "scale")
     scale_color_manual("Cylinders", values = myColors)
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_6 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         
