@@ -120,7 +120,8 @@ DataCampReporter <- setRefClass(
                       message = to_html(results[[selector]]$failure_msg), 
                       tags = results[[selector]]$tags))
         } else {
-          return(list(correct = TRUE, message = to_html(success_msg)))
+          return(list(correct = TRUE, 
+                      message = to_html(success_msg)))
         }
       }
     }

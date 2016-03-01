@@ -59,7 +59,7 @@ test_object <- function(name, eq_condition = "equivalent",
   stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
-  set_tags(automated_message = is.null(undefined_msg))
+  set_tags(auto_feedback = is.null(undefined_msg))
   if (is.null(undefined_msg)) {
     undefined_msg <- build_undefined_object_msg(name)
   }
@@ -77,7 +77,7 @@ test_object <- function(name, eq_condition = "equivalent",
                                    like = expect_like,
                                    stop("invalid equality condition"))
     
-    set_tags(automated_message = is.null(incorrect_msg))
+    set_tags(auto_feedback = is.null(incorrect_msg))
     if (is.null(incorrect_msg)) {
       incorrect_msg <- build_incorrect_object_msg(name)
     }
