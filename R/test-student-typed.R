@@ -21,8 +21,6 @@
 #' test_student_typed(c("TRUE & FALSE", "FALSE & TRUE"))
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_student_typed <- function(strings,
                                fixed = TRUE,

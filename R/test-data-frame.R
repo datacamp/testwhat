@@ -26,8 +26,6 @@
 #' test_data_frame("df", columns = "b") 
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_data_frame <- function(name, columns = NULL, 
                             eq_condition = "equivalent",

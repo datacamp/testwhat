@@ -23,8 +23,6 @@
 #' test_library_function("dplyr")
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_library_function <- function(package,
                           not_called_msg = NULL, 

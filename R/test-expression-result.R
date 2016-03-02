@@ -20,8 +20,6 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export 
 test_expression_result <- function(expr, 
                                    eq_condition = "equivalent",

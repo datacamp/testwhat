@@ -19,8 +19,6 @@
 #' test_function("mean", c("x", "na.rm"))
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_function_v2 <- function(name, args = NULL, ignore = NULL,
                              allow_extra = TRUE,

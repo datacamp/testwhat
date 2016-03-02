@@ -53,8 +53,6 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_if_else <- function(index = 1, 
                          if_cond_test = NULL, 

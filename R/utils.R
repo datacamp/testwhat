@@ -177,9 +177,6 @@ build_doc_structure <- function(text) {
 #' Parse both the student and solution document
 #' 
 #' @inheritParams test_function
-#' 
-#' @import datacampAPI
-#' @import testthat
 parse_docs <- function() {
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")

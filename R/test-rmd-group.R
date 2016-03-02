@@ -9,7 +9,6 @@
 #' @param solution_code  the entire solution code.
 #' @param env The environment in which the code should be tested.
 #'
-#' @import datacampAPI
 #' @export
 test_rmd_group = function(group_number, code, env = parent.frame()) {
   

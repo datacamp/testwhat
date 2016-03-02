@@ -38,8 +38,6 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_for_loop <- function(index = 1, 
                           cond_test = NULL,

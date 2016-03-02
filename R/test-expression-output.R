@@ -20,8 +20,6 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export 
 test_expression_output <- function(expr, incorrect_msg = NULL) {
   

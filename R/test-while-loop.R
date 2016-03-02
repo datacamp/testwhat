@@ -36,8 +36,6 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_while_loop <- function(index = 1, 
                             cond_test = NULL, 

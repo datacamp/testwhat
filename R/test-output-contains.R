@@ -17,8 +17,6 @@
 #' test_output_contains("for(i in 1:10) print(i)")
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_output_contains <- function(expr, times = 1, incorrect_msg = NULL, env = globalenv()) {
   init_tags(fun = "test_output_contains")

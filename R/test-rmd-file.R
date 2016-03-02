@@ -10,7 +10,6 @@
 #' @param env The environment in which the code should be tested.
 #' @inheritParams test_function
 #' 
-#' @import datacampAPI
 #' @export
 test_rmd_file = function(code, 
                          student_file = NULL, 

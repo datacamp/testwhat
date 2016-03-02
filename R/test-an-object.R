@@ -25,8 +25,6 @@
 #' # z <- 4 + 1 + 1e-8
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_an_object <- function(name, 
                            undefined_msg = NULL,

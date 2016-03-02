@@ -25,8 +25,6 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_function_definition <- function(name, 
                                      function_test = NULL, 

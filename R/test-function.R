@@ -38,9 +38,7 @@
 #' # To test this submission, provide the following in the sct
 #' test_function("mean", c("x", "na.rm"))
 #' }
-#'
-#' @import datacampAPI
-#' @import testthat
+#' 
 #' @export
 test_function <- function(name, args = NULL, ignore = NULL,
                           allow_extra = TRUE,

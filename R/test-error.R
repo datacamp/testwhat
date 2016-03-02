@@ -17,8 +17,6 @@
 #' test_error("Don't sum numerics and characters!")
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_error <- function(incorrect_msg = NULL) {
   output_list <- tw$get("output_list")

@@ -41,8 +41,6 @@
 #' test_object(y, eq_condtion = "identical")
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
