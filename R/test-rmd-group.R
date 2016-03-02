@@ -5,8 +5,6 @@
 #'
 #' @param group_number  Number of the group.
 #' @param code  SCT code to test the group (in curly braces)
-#' @param student_code the entire code that has been submitted by the student. 
-#' @param solution_code  the entire solution code.
 #' @param env The environment in which the code should be tested.
 #'
 #' @export

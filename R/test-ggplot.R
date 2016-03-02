@@ -1,11 +1,6 @@
 #' Test ggplot call
 #' 
 #' @param index which call to check
-#' @param student_code code of student
-#' @param solution_code correct code
-#' @param predefined_code pre exercise code
-#' @param student_env environment of student
-#' @param solution_env environment of solution
 #' @param all_fail_msg Message if all fails
 #' 
 #' @param check_data Whether or not to check data latyer
@@ -43,7 +38,6 @@
 #' 
 #' @export
 test_ggplot <- function(index = 1,
-                        
                         all_fail_msg = NULL,
                         check_data = TRUE, data_fail_msg = NULL,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,

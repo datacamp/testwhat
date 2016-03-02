@@ -12,10 +12,6 @@ test_rmd_group(group_number, code, env = parent.frame())
 \item{code}{SCT code to test the group (in curly braces)}
 
 \item{env}{The environment in which the code should be tested.}
-
-\item{student_code}{the entire code that has been submitted by the student.}
-
-\item{solution_code}{the entire solution code.}
 }
 \description{
 Test a single R Markdown file group (R Markdown exercises) with arbitrary testwhat functions.

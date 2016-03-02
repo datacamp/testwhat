@@ -13,6 +13,11 @@ test_data_frame(name, columns = NULL, eq_condition = "equivalent",
 \item{columns}{character vector or integer vector of list elements or 
 indices to test.}
 
+\item{eq_condition}{character string indicating how to compare. Possible values 
+are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
+and \code{\link{expect_identical}}, respectively.}
+
 \item{undefined_msg}{optional feedback message if list is not defined.}
 
 \item{undefined_cols_msg}{optional feedback message if not all specified elements 

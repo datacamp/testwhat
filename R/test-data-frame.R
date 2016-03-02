@@ -13,6 +13,7 @@
 #' of the solution list were found in the student's list.
 #' @param incorrect_msg optional feedback message if not all specified elements of
 #' the solution list match those in the student list.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

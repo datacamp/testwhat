@@ -66,16 +66,6 @@ test_ggplot(index = 1, all_fail_msg = NULL, check_data = TRUE,
 \item{exact_extra}{Whether or not extra info should be exactly specified.}
 
 \item{check}{Which layers to check}
-
-\item{student_code}{code of student}
-
-\item{solution_code}{correct code}
-
-\item{predefined_code}{pre exercise code}
-
-\item{student_env}{environment of student}
-
-\item{solution_env}{environment of solution}
 }
 \description{
 Test ggplot call

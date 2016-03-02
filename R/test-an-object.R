@@ -10,6 +10,7 @@
 #' @param undefined_msg feedback message in case the student did not define 
 #' an object that corresponds to the solution object. This argument should 
 #' always be specified.
+#' @inheritParams test_object
 #' 
 #' @examples
 #' \dontrun{

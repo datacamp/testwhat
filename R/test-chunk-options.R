@@ -7,9 +7,6 @@
 #'
 #' @param options  Set of options
 #' @param allow_extra  whether or not the definition of additional options is accepted (default TRUE)
-#' @param chunk_number number of the chunk that is being tested
-#' @param student_chunk  character string containing the student's code.
-#' @param solution_chunk  character string containing the sample solution code.
 #' @param not_called_msg feedback message if option was not specified
 #' @param incorrect_msg  feedback message if option was incorrectly set
 #' 

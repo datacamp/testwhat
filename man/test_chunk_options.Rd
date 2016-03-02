@@ -15,12 +15,6 @@ test_chunk_options(options = NULL, allow_extra = TRUE,
 \item{not_called_msg}{feedback message if option was not specified}
 
 \item{incorrect_msg}{feedback message if option was incorrectly set}
-
-\item{chunk_number}{number of the chunk that is being tested}
-
-\item{student_chunk}{character string containing the student's code.}
-
-\item{solution_chunk}{character string containing the sample solution code.}
 }
 \description{
 Test whether the student defined the correct chunk options in an R Markdown exercise

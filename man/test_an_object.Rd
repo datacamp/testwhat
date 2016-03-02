@@ -12,6 +12,11 @@ test_an_object(name, undefined_msg = NULL, eq_condition = "equivalent")
 \item{undefined_msg}{feedback message in case the student did not define 
 an object that corresponds to the solution object. This argument should 
 always be specified.}
+
+\item{eq_condition}{character string indicating how to compare. Possible values 
+are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
+See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
+and \code{\link{expect_identical}}, respectively.}
 }
 \description{
 This function is an adaption of \code{\link{test_object}}. The function will
