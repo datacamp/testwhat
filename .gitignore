@@ -5,3 +5,4 @@ results.log
 .DS_Store
 .tmp.RData
 inst/doc
+inst/messing.R

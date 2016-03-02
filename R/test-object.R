@@ -59,30 +59,30 @@ test_object <- function(name, eq_condition = "equivalent",
   stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
-  set_tags(auto_feedback = is.null(undefined_msg))
+  #set_tags(auto_feedback = is.null(undefined_msg))
   if (is.null(undefined_msg)) {
     undefined_msg <- build_undefined_object_msg(name)
   }
 
   defined <- exists(name, envir = student_env, inherits = FALSE)
-  set_tags(test = "defined")
+  #set_tags(test = "defined")
   test_what(expect_true(defined), undefined_msg)
   
   if (defined && eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
-    set_tags(eq_condition = eq_condition)
+    # set_tags(eq_condition = eq_condition)
     eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
                                    identical = expect_identical,
                                    equal = expect_equal,
                                    like = expect_like,
                                    stop("invalid equality condition"))
     
-    set_tags(auto_feedback = is.null(incorrect_msg))
+    # set_tags(auto_feedback = is.null(incorrect_msg))
     if (is.null(incorrect_msg)) {
       incorrect_msg <- build_incorrect_object_msg(name)
     }
     
-    set_tags(test = "correct")
+    # set_tags(test = "correct")
     test_what(eq_fun(student, solution), incorrect_msg)
   }
 }
