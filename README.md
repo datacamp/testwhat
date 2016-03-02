@@ -1,4 +1,4 @@
-# testwhat
+![banner](https://s3.amazonaws.com/assets.datacamp.com/img/github/content-engineering-repos/testwhat_banner.png)
 
 [![Build Status](https://api.travis-ci.org/datacamp/testwhat.svg?branch=master)](https://travis-ci.org/datacamp/testwhat)
 
@@ -14,8 +14,4 @@ library("devtools")
 install_github("Data-Camp/testwhat")
 ```
 
-For more details, questions and suggestions, you can contact <b>support@datacamp.com</b>.
-
-<p align="center">
-<img src="https://s3.amazonaws.com/assets.datacamp.com/img/logo/logo_blue_full.svg" width="250">
-</p>
+For more details, questions and suggestions, you can contact <b>content-engineering@datacamp.com</b>.

@@ -14,6 +14,8 @@ test_output_contains(expr, times = 1, incorrect_msg = NULL,
 
 \item{incorrect_msg}{feeback message in case the output did not contain the expression}
 
+\item{env}{environment where the code in expr exectued.}
+
 \item{console_output}{The string containing the output printed to the student's console.
 The default is DM.console.output which is set on the DataCamp server (automagically).
 This means you don't have to specify this argument when writing SCTs for DataCamp.com.}
