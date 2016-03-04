@@ -3,7 +3,7 @@
 #' Run all tests for an exercise and report the results (including feedback).
 #' This function is run by R Backend and should not be used by course creators.
 #'
-#' @param code character string containing the tests to perform.
+#' @param sct Submission correctness tests as a character string.
 #' @param ex_type Type of the exercise
 #' @param pec pre-exercise-code
 #' @param student_code character string representing the student code
@@ -16,7 +16,7 @@
 #' tests were sucessful, and \code{feedback} that contains a feedback message.
 #'
 #' @export
-test_exercise <- function(code, 
+test_exercise <- function(sct, 
                           ex_type, 
                           pec,
                           student_code,
@@ -28,17 +28,15 @@ test_exercise <- function(code,
   # Store everything that's needed locally
   tw$initialize(list(pec = pec,
                      student_code = student_code,
-                     # student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
+                     student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
                      student_env = globalenv(),
                      solution_code = solution_code,
                      # solution_pd = getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE)),
                      solution_env = solution_env,
                      output_list = output_list))
   
-  # Parse code and ensure that feedback messages are reset
-  code <- parse(text = code)
-  feedback_msg <- options(failure_msg = NULL, success_msg = NULL)
-  on.exit(options(feedback_msg))
+  # Parse SCT
+  code <- parse(text = sct)
 
   # Execute code with the DataCamp reporter such that it collects test results
   reporter <- DataCampReporter$new(ex_type=ex_type)
@@ -57,6 +55,7 @@ test_exercise <- function(code,
   if (inherits(eval_fail, "try-error")) {
     cond <- attr(eval_fail, "condition")$message
     if (!identical(cond, sct_failed_msg)) {
+      # Something actually went wrong, not an SCT that failed
       stop(attr(eval_fail, "condition"))
     } else {
       return(invisible())

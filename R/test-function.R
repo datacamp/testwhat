@@ -55,7 +55,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
   init_tags(test = "test_function")
   
   if (is.null(name)) {
-    stop("argument \"name\" is missing, with no default")
+    stop("Argument \"name\" is missing, with no default")
   }
   
   n_args <- length(args)

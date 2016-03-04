@@ -32,6 +32,7 @@ DataCampReporter <- setRefClass(
       success_msg <<- sample(c("Good Job!", 
                                "Well done!", 
                                "Great work!"), 1)
+      failure_msg <<- ""
     },
 
     set_data = function(msg, tags) {

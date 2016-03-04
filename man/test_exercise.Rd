@@ -4,11 +4,11 @@
 \alias{test_exercise}
 \title{Run all tests for an exercise}
 \usage{
-test_exercise(code, ex_type, pec, student_code, solution_code, solution_env,
+test_exercise(sct, ex_type, pec, student_code, solution_code, solution_env,
   output_list, env = test_env())
 }
 \arguments{
-\item{code}{character string containing the tests to perform.}
+\item{sct}{Submission correctness tests as a character string.}
 
 \item{ex_type}{Type of the exercise}
 
