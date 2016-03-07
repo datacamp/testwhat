@@ -43,6 +43,8 @@ test_while_loop <- function(index = 1,
                             not_found_msg = NULL,
                             env = parent.frame()) {
   
+  student_pd <- tw$get("student_pd")
+  solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
   init_tags(fun = "test_while_loop")
@@ -53,45 +55,36 @@ test_while_loop <- function(index = 1,
   expr_test <- substitute(expr_test)
   if (is.character(expr_test)) expr_test <- parse(text = expr_test)
   
-  stud_pd <- getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE))
-  student_whiles <- extract_while_wrapper(0, stud_pd)
-  sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE))
-  solution_whiles <- extract_while_wrapper(0, sol_pd)
+  student_whiles <- extract_while(student_pd)
+  solution_whiles <- extract_while(solution_pd)
   
   if(is.null(not_found_msg)) {
     not_found_msg <- sprintf(paste("The system wants to test if the %s <code>while</code> loop",
                                    "you coded is correct, but it hasn't found it. Add more code."), 
                              get_num(index))
   }
+  test_what(expect_true(length(student_whiles) >= index), feedback = list(message = not_found_msg))
   
-  ok = test_sufficient_length(student_whiles, index, 
-                              incorrect_number_of_calls_msg = not_found_msg)
-  if(isTRUE(ok)) {
-    stud_while <- student_whiles[[index]]
-    sol_while <- solution_whiles[[index]]
-    additionaltext <- sprintf(" in the %s <code>while</code> loop of your submission", get_num(index))
-  } else {
-    return(FALSE)
-  }
+  stud_while <- student_whiles[[index]]
+  sol_while <- solution_whiles[[index]]
+  additionaltext <- sprintf(" in the %s <code>while</code> loop of your submission", get_num(index))
   
   on.exit({
+    tw$set(student_pd = student_pd)
+    tw$set(solution_pd = solution_pd)
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
   })
   
   # WHILE condition part should always be there
-  test_what(expect_false(is.null(stud_while$while_cond)), sprintf("The <code>condition</code> part%s is missing.", additionaltext))
-  if(!is.null(cond_test) && !is.null(stud_while$while_cond) && !is.null(sol_while$while_cond)) {
-    tw$set(student_code = stud_while$while_cond)
-    tw$set(solution_code = sol_while$while_cond)
+  if(!is.null(cond_test)) {
+    prepare_tw(stud_while, stud_while, "cond_part")
     eval(cond_test, envir = env)
   }
   
   # IF expression part should always be available.
-  test_what(expect_false(is.null(stud_while$while_expr)), sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
-  if(!is.null(expr_test) && !is.null(stud_while$while_expr) && !is.null(sol_while$while_expr)) {
-    tw$set(student_code = stud_while$while_expr)
-    tw$set(solution_code = sol_while$while_expr)
+  if(!is.null(expr_test)) {
+    prepare_tw(stud_while, stud_while, "expr_part")
     eval(expr_test, envir = env)
   }
 }

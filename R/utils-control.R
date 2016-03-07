@@ -1,6 +1,9 @@
 extract_control <- function(pd, keyword, elnames) {
   if(any(pd$token == keyword)) {
-    ids <- pd$parent[pd$token == keyword]
+    # Intersection of:
+    # - parent of ids with the correct keyword
+    # - ids that are top-level (whose parent is not in pd)
+    ids <- intersect(pd$parent[pd$token == keyword & pd$id], pd$id[!(pd$parent %in% pd$id)])
     
     get_sub_pd <- function(id) {
       all_childs <- c()
@@ -40,4 +43,11 @@ extract_for <- function(pd) {
 
 extract_while <- function(pd) {
   extract_control(pd, keyword = "WHILE", elnames = c("cond_part", "expr_part"))
+}
+
+prepare_tw <- function(stud, sol, part) {
+  tw$set(student_pd = stud[[part]][["pd"]])
+  tw$set(solution_pd = sol[[part]][["pd"]])
+  tw$set(student_code = stud[[part]][["code"]])
+  tw$set(solution_code = sol[[part]][["code"]])
 }

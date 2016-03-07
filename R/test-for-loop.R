@@ -60,8 +60,8 @@ test_for_loop <- function(index = 1,
   expr_test <- substitute(expr_test)
   if (is.character(expr_test)) expr_test <- parse(text = expr_test)
   
-  student_fors <- extract_for_wrapper(0, stud_pd)
-  solution_fors <- extract_for_wrapper(0, sol_pd)
+  student_fors <- extract_for(student_pd)
+  solution_fors <- extract_for(solution_pd)
   
   if(is.null(not_found_msg)) {
     not_found_msg <- sprintf(paste("The system wants to test if the %s <code>for</code> loop",
@@ -69,50 +69,28 @@ test_for_loop <- function(index = 1,
                              get_num(index))
   }
   
-  ok = test_sufficient_length(student_fors, index, 
-                              incorrect_number_of_calls_msg = not_found_msg)
-  if(isTRUE(ok)) {
-    stud_for <- student_fors[[index]]
-    sol_for <- solution_fors[[index]]
-    additionaltext <- sprintf(" in the %s <code>for</code> loop of your submission", get_num(index))
-  } else {
-    return(FALSE)
-  }
+  test_what(expect_true(length(student_fors) >= index), feedback = list(message = not_found_msg))
+
+  stud_for <- student_fors[[index]]
+  sol_for <- solution_fors[[index]]
+  additionaltext <- sprintf(" in the %s <code>for</code> loop of your submission", get_num(index))
   
   on.exit({
+    tw$set(student_pd = student_pd)
+    tw$set(solution_pd = solution_pd)
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
   })
   
   # for var part should always be there
-  test_what(expect_false(is.null(stud_for$for_cond)), sprintf("The <code>condition</code> part%s is missing.", additionaltext))
-  if(!is.null(cond_test) && !is.null(stud_for$for_cond) && !is.null(sol_for$for_cond)) {
-    tw$set(student_code = stud_for$for_cond)
-    tw$set(solution_code = sol_for$for_cond)
+  if(!is.null(cond_test)) {
+    prepare_tw(stud_for, sol_for, "cond_part")
     eval(cond_test, envir = env)
   }
 
-  # IF expression part should always be available.
-  test_what(expect_false(is.null(stud_for$for_expr)), sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
-
-  if(!is.null(expr_test) && !is.null(stud_for$for_expr) && !is.null(sol_for$for_expr)) {
-    tw$set(student_code = stud_for$for_expr)
-    tw$set(solution_code = sol_for$for_expr)
+  # for expression part should always be available.
+  if(!is.null(expr_test)) {
+    prepare_tw(stud_for, sol_for, "expr_part")
     eval(expr_test, envir = env)
-  }
-}
-
-extract_for_wrapper <- function(parent_id, pd) {
-  if(any(pd$token == "FOR")) {
-    top_ids <- pd$id[pd$parent == parent_id]
-    structs <- lapply(top_ids, extract_for, pd)
-    structs <- structs[!sapply(structs, is.null)]  
-    if(length(structs) == 0) {
-      return(unlist(lapply(top_ids, extract_for, pd), recursive = FALSE))
-    } else {
-      return(structs)
-    }
-  } else {
-    return(list())
   }
 }

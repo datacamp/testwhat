@@ -73,6 +73,10 @@ grepl2 <- function(pattern, x, ...) {
   vapply(pattern, grepl, x, ..., FUN.VALUE = logical(1), USE.NAMES = FALSE)
 }
 
+build_pd <- function(x) {
+  getParseData(parse(text = x, keep.source = TRUE), includeText = TRUE)  
+}
+
 #' convert student/solution code to vector of clean strings with the pipe operator removed.
 #' 
 #' @param code the code to convert to a vector of unpiped clean strings 

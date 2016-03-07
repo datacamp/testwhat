@@ -95,17 +95,19 @@ test_if_else <- function(index = 1,
 
   on.exit({
     tw$set(student_pd = student_pd)
-    tw$set(student_pd = student_pd)
+    tw$set(solution_pd = solution_pd)
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
   })
   
   # IF condition part should always be there
-  if(!is.null(if_cond_test) && !is.null(stud_str$if_cond) && !is.null(sol_str$if_cond)) {
+  if(!is.null(if_cond_test)) {
     prepare_tw(stud_str, sol_str, "cond_part")
     eval(if_cond_test, envir = env)
   }
       
   # IF expression part should always be available.
-  if(!is.null(if_expr_test) && !is.null(stud_str$if_expr) && !is.null(sol_str$if_expr)) {
+  if(!is.null(if_expr_test)) {
     prepare_tw(stud_str, sol_str, "if_part")
     eval(if_expr_test, envir = env)
   }
@@ -123,12 +125,4 @@ test_if_else <- function(index = 1,
   }
 }
 
-
-
-prepare_tw <- function(stud, sol, part) {
-  tw$set(student_pd = stud[[part]][["pd"]])
-  tw$set(solution_pd = sol[[part]][["pd"]])
-  tw$set(student_code = stud[[part]][["code"]])
-  tw$set(solution_code = sol[[part]][["code"]])
-}
 

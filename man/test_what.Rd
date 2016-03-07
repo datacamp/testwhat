@@ -4,7 +4,7 @@
 \alias{test_what}
 \title{Expectation wrapper}
 \usage{
-test_what(code, feedback)
+test_what(code, feedback, feedback_msg)
 }
 \arguments{
 \item{code}{The expectation that should be wrapped}

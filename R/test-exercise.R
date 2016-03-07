@@ -28,10 +28,10 @@ test_exercise <- function(sct,
   # Store everything that's needed locally (initialize does a full reset)
   tw$initialize(list(pec = pec,
                      student_code = student_code,
-                     student_pd = try(getParseData(parse(text = student_code, keep.source = TRUE), includeText = TRUE)),
+                     student_pd = if(ex_type == "MarkdownExercise") NULL else build_pd(student_code),
                      student_env = globalenv(),
                      solution_code = solution_code,
-                     solution_pd = try(getParseData(parse(text = solution_code, keep.source = TRUE), includeText = TRUE)),
+                     solution_pd = if(ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
                      solution_env = solution_env,
                      output_list = output_list))
   

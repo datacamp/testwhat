@@ -9,6 +9,7 @@ scen <- list(
         sct = "test_for_loop()"))), 
     list(
       type = "NormalExercise", 
+      student = "",
       solution = "\n  for (i in 1:3) {\n    rnorm(10,i)\n  }", 
       fail = list(
         test_basic_check_fails_fail_1 = 

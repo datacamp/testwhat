@@ -23,6 +23,8 @@ test_rmd_group = function(group_number, code, env = parent.frame()) {
   on.exit({ 
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
+    tw$set(student_pd = NULL)
+    tw$set(solution_pd = NULL)
   })
   
   passed <- parse_docs()
@@ -48,6 +50,8 @@ test_rmd_group = function(group_number, code, env = parent.frame()) {
   # set numbers, to be used in default messages of tests
   if(class(student_ds_part) == "block") {
     tw$set(chunk_number = group_number - sum(sapply(student_ds[1:group_number],class) == "inline"))
+    tw$set(student_pd = build_pd(student_ds_part$input))
+    tw$set(solution_pd = build_pd(solution_ds_part$input))
   } else if(class(student_ds_part) == "inline") {
     tw$set(inline_number = group_number - sum(sapply(student_ds[1:group_number],class) == "block"))
   }

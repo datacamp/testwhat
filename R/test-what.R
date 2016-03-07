@@ -9,8 +9,12 @@
 #' 
 #' @import testthat
 #' @export
-test_what <- function(code, feedback) {
-  rep <- get_reporter()
+test_what <- function(code, feedback, feedback_msg) {
+  
+  # ensure backwards compatibility
+  if (!missing(feedback_msg) && missing(feedback)) {
+    feedback <- list(message = feedback_msg)
+  }
 
   # feedback can be a character string.
   if(is.character(feedback)) {
@@ -24,10 +28,11 @@ test_what <- function(code, feedback) {
     stop(paste("the feedback object passed to test_what() isn't in the correct format;",
                "make sure it's a list that contains at least an element named 'message'"))
   }
-  
+
   # add tags
   feedback <- c(feedback, list(tags = tw$get("tags")))
   
+  rep <- get_reporter()
   rep$set_data(feedback)
   eval(code)
   

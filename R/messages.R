@@ -1,36 +1,3 @@
-# TEST_FUNCTION
-build_arg_text <- function(n_args, args) {
-  ifelse(n_args == 0, "", sprintf(" with %s %s", if (n_args == 1) "argument" else "arguments", collapse_args(args)))
-}
-
-build_function_call_text <- function(index) {
-  sprintf(", in the %s call of the function", ifelse(get_language() == "en", get_num(index), index))
-}
-
-build_additional_text <- function(index) {
-  sprintf(" in command %i of your solution", index)
-}
-
-build_not_enough_calls_text <- function(name, index) {
-  sprintf("You are missing the %s call of <code>%s()</code>.", get_num(index), name)
-}
-
-build_not_called_msg <- function(n_solution_calls, name, arg_text, additionaltext) {
-  if (n_solution_calls <= 1) n_text <- ""
-  else if (n_solution_calls == 2) n_text <- " twice"
-  else n_text <- sprintf(" %d times", n_solution_calls)
-  sprintf("Did you call function <code>%s()</code>%s%s%s?",
-          name, n_text, arg_text, additionaltext)  
-}
-
-build_incorrect_msg <- function(n_solution_calls, n_args, arg_text, name, additionaltext) {
-  lang <- get_language()
-  insert <- if (n_solution_calls == 1) "" else " always"
-  val_text <- if (n_args == 1) "value" else "values"
-  arg_text <- gsub(" with", "for", arg_text)  # whitespace is important
-  sprintf("It looks like you didn't%s set the correct %s %s in function <code>%s()</code>%s.",
-          insert, val_text, arg_text, name, additionaltext)
-}
 
 # TEST_OBJECT
 build_undefined_object_msg <- function(name) {

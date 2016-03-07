@@ -54,7 +54,6 @@ test_function <- function(name,
   n_args <- length(args)
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
-  arg_text <- build_arg_text(n_args, args)
   
   # Find all function calls in the student and solution code
   student_calls <- find_function_calls(name, student_pd, student_env)
@@ -64,7 +63,7 @@ test_function <- function(name,
 
   # Check if index exists in solution
   if(index > length(solution_calls)) {
-    stop("There aren't %s calls of `%s()` available in the solution.", index, name)
+    stop(sprintf("There aren't %s calls of `%s()` available in the solution.", index, name))
   }
   solution_call <- solution_calls[[index]]
   
