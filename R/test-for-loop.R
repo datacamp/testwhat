@@ -45,6 +45,8 @@ test_for_loop <- function(index = 1,
                           not_found_msg = NULL,
                           env = parent.frame()) {
   
+  student_pd <- tw$get("student_pd")
+  solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
   init_tags(fun = "test_for_loop")
@@ -58,9 +60,7 @@ test_for_loop <- function(index = 1,
   expr_test <- substitute(expr_test)
   if (is.character(expr_test)) expr_test <- parse(text = expr_test)
   
-  stud_pd <- getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE))
   student_fors <- extract_for_wrapper(0, stud_pd)
-  sol_pd <- getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE))
   solution_fors <- extract_for_wrapper(0, sol_pd)
   
   if(is.null(not_found_msg)) {
@@ -115,17 +115,4 @@ extract_for_wrapper <- function(parent_id, pd) {
   } else {
     return(list())
   }
-}
-
-extract_for <- function(parent_id, pd) {
-  if(length(pd$id[pd$token == "FOR" & pd$parent == parent_id]) == 0) {
-    return(NULL)
-  }
-  
-  for_parts <- pd$id[(pd$token == "expr" | pd$token == "forcond") & pd$parent == parent_id]
-  
-  for_cond <- getParseText(pd, for_parts[1])
-  for_expr <- getParseText(pd, for_parts[2])  
-  
-  return(list(for_cond = for_cond, for_expr = for_expr))
 }

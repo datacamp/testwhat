@@ -95,31 +95,3 @@ test_while_loop <- function(index = 1,
     eval(expr_test, envir = env)
   }
 }
-
-extract_while_wrapper <- function(parent_id, pd) {
-  if(any(pd$token == "WHILE")) {
-    top_ids <- pd$id[pd$parent == parent_id]
-    structs <- lapply(top_ids, extract_while, pd)
-    structs <- structs[!sapply(structs, is.null)]  
-    if(length(structs) == 0) {
-      return(unlist(lapply(top_ids, extract_while, pd), recursive = FALSE))
-    } else {
-      return(structs)
-    }
-  } else {
-    return(list())
-  }
-}
-
-extract_while <- function(parent_id, pd) {
-  if(length(pd$id[pd$token == "WHILE" & pd$parent == parent_id]) == 0) {
-    return(NULL)
-  }
-  
-  while_parts <- pd$id[pd$token == "expr" & pd$parent == parent_id]
-  
-  while_cond <- getParseText(pd, while_parts[1])
-  while_expr <- getParseText(pd, while_parts[2])
-  
-  return(list(while_cond = while_cond, while_expr = while_expr))
-}
