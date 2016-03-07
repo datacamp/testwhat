@@ -23,7 +23,7 @@ extract_control <- function(pd, keyword, elnames) {
       sub_codes <- lapply(expr_ids, getParseText, parseData = pd)
       sub_pds <- lapply(expr_ids, get_sub_pd)
       out <- mapply(function(code, pd) list(code = code, pd = pd), sub_codes, sub_pds, SIMPLIFY = FALSE)
-      names(out) <- c("cond_part", "if_part", "else_part")[1:length(out)]
+      names(out) <- elnames[1:length(out)]
       out
     }
     

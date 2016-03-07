@@ -35,8 +35,8 @@
 #'
 #' @export
 test_function <- function(name, 
-                          index = 1,
                           args = NULL, 
+                          index = 1,
                           ignore = NULL,
                           allow_extra = TRUE,
                           eval = TRUE,

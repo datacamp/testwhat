@@ -4,7 +4,7 @@
 \alias{test_function}
 \title{Test whether a student correctly called a function}
 \usage{
-test_function(name, index = 1, args = NULL, ignore = NULL,
+test_function(name, args = NULL, index = 1, ignore = NULL,
   allow_extra = TRUE, eval = TRUE, eq_condition = "equivalent",
   not_called_msg = NULL, args_not_specified_msg = NULL,
   incorrect_msg = NULL)
