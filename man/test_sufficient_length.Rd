@@ -4,7 +4,7 @@
 \alias{test_sufficient_length}
 \title{Test sufficient list length.}
 \usage{
-test_sufficient_length(stud, index, incorrect_number_of_calls_msg = NULL)
+test_sufficient_length(stud, index)
 }
 \arguments{
 \item{stud}{list of student commands}

@@ -18,9 +18,6 @@
 #' useful, e.g., to test whether the student supplied a large predefined
 #' object, as only the corresponding \code{\link{name}} is compared in this
 #' case (use with care!).
-#' @param index  Which command to check on (both in solution and student).
-#' If index is specified, it is checked whether solution and student contain
-#' the same amount of commands. index = NULL by default, i.e. the entire submission is checked.
 #' @param eq_condition  character vector indicating how to perform the
 #' comparison for each argument. See \code{\link{test_object}}
 #' @param not_called_msg  feedback message in case the student did not call the
@@ -29,8 +26,6 @@
 #' function with the same argument values as in the sample solution.  If
 #' there are multiple function calls in the sample solution, a vector of
 #' feedback messages can be supplied.
-#' @param incorrect_number_of_calls_msg feedback message in case the number of commands
-#' in the solution does not correspond to the solution. (only used if index is not NULL.)
 #' 
 #' @examples
 #' \dontrun{
@@ -40,18 +35,17 @@
 #' }
 #' 
 #' @export
-test_function <- function(name, args = NULL, ignore = NULL,
+test_function <- function(name, args = NULL, 
+                          ignore = NULL,
                           allow_extra = TRUE,
                           eval = TRUE,
-                          index = NULL,
                           eq_condition = "equivalent",
-                          not_called_msg = NULL, incorrect_msg = NULL,
-                          incorrect_number_of_calls_msg = NULL) {
+                          not_called_msg = NULL, incorrect_msg = NULL) {
   
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
+  student_pd <- tw$get("student_pd")
+  solution_pd <- tw$get("solution_pd")
   init_tags(test = "test_function")
   
   if (is.null(name)) {
@@ -64,38 +58,17 @@ test_function <- function(name, args = NULL, ignore = NULL,
   
   eq_fun <- lapply(eq_condition, function(cond) {
     switch(cond, equivalent = expect_equivalent,
-                         identical = expect_identical,
-                         equal = expect_equal,
-                         like = expect_like,
-                         stop("invalid equality condition"))
+                 identical = expect_identical,
+                 equal = expect_equal,
+                 like = expect_like,
+                 stop("invalid equality condition"))
   })
   
   arg_text <- build_arg_text(n_args, args)
-
-  # remove the pipe operator from the calls, if present.
-  student_code_parts <- get_clean_lines(code = student_code)
-  solution_code_parts <- get_clean_lines(code = solution_code)
-  
-  if(is.null(index)) {
-    # paste together again, all code is considered
-    student_code <- paste0(student_code_parts, separator = "\n", collapse = "")
-    solution_code <- paste0(solution_code_parts, separator = "\n", collapse = "")
-    additionaltext <- ""
-  } else {
-    # check if equal number of commands and select parts of code
-    ok <- test_sufficient_length(student_code_parts, index, incorrect_number_of_calls_msg)
-    if(isTRUE(ok)) {
-      student_code <- student_code_parts[index]
-      solution_code <- solution_code_parts[index]
-      additionaltext <- build_additional_text(index)
-    } else {
-      return(FALSE)
-    }
-  }
   
   # Find all function calls in the student and solution code
-  student_calls <- find_function_calls(name, student_code, student_env)
-  solution_calls <- find_function_calls(name, solution_code, solution_env)
+  student_calls <- find_function_calls(name, student_pd, student_env)
+  solution_calls <- find_function_calls(name, solution_pd, solution_env)
   
   if (n_args > 0) {
     # Only use function calls with the specified arguments
@@ -184,16 +157,13 @@ extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
 }
 
 # Find all calls to a given function within a piece of code
-find_function_calls <- function(name, code, env = parent.frame()) {
-  # Parse user code and get parse information (keep.source = TRUE
-  # is important, otherwise it doesn't work within knitr)
-  parseData <- getParseData(parse(text = code, keep.source = TRUE))
+find_function_calls <- function(name, pd, env = parent.frame()) {
 
   # Retrieve all function calls from parse information
-  called <- parseData$text == name & parseData$token == "SYMBOL_FUNCTION_CALL"
-  fun_ids <- parseData$parent[called]
-  expr_ids <- parseData$parent[parseData$id %in% fun_ids]
-  expr_strings <- getParseText(parseData, expr_ids)
+  called <- pd$text == name & pd$token == "SYMBOL_FUNCTION_CALL"
+  fun_ids <- pd$parent[called]
+  expr_ids <- pd$parent[pd$id %in% fun_ids]
+  expr_strings <- getParseText(pd, expr_ids)
   exprs <- parse(text = expr_strings)
 
   # Expand arguments of function calls
@@ -213,6 +183,7 @@ have_arguments <- function(calls, args, ignore = NULL, allow_extra = TRUE) {
   }
   vapply(calls, fun, logical(1))
 }
+
 
 # Check equality with a specified equality condition
 is_equal <- function(x, y, condition = "equivalent") {

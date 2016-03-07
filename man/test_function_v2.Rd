@@ -5,9 +5,8 @@
 \title{Test whether a student correctly called a function (v2)}
 \usage{
 test_function_v2(name, args = NULL, ignore = NULL, allow_extra = TRUE,
-  eval = TRUE, index = NULL, eq_condition = "equivalent",
-  not_called_msg = NULL, incorrect_msg = NULL,
-  incorrect_number_of_calls_msg = NULL, index_not_called_msg = NULL)
+  eval = TRUE, index = 1, eq_condition = "equivalent",
+  not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
 \item{name}{name of the object to test.}
@@ -42,9 +41,6 @@ function at least as often as in the solution code.}
 \item{incorrect_msg}{optional feedback message in case the student's object is not
 the same as in the sample solution. Only used if \code{eval} is \code{TRUE}. 
 A meaningful message is automatically generated if not supplied.}
-
-\item{incorrect_number_of_calls_msg}{feedback message in case the number of commands
-in the solution does not correspond to the solution. (only used if index is not NULL.)}
 
 \item{index_not_called_msg}{feedback message in case the queried index wasn't found.}
 }

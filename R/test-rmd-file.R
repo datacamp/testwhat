@@ -24,14 +24,11 @@ test_rmd_file = function(code,
   if (is.character(code)) code <- parse(text = code)
   
   # get the entire student code and solution code and reset it on exit.
-  # also remove the document structure and parse data that might have been saved to the sct env.
   on.exit({ 
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
     tw$set(student_ds = NULL)
     tw$set(solution_ds = NULL)
-    tw$set(student_pd = NULL)
-    tw$set(solution_pd = NULL)
   })
   
   if(is.null(student_file)) {

@@ -5,9 +5,8 @@
 \title{Test whether a student correctly called a function}
 \usage{
 test_function(name, args = NULL, ignore = NULL, allow_extra = TRUE,
-  eval = TRUE, index = NULL, eq_condition = "equivalent",
-  not_called_msg = NULL, incorrect_msg = NULL,
-  incorrect_number_of_calls_msg = NULL)
+  eval = TRUE, eq_condition = "equivalent", not_called_msg = NULL,
+  incorrect_msg = NULL)
 }
 \arguments{
 \item{name}{name of the function to test.}
@@ -30,10 +29,6 @@ useful, e.g., to test whether the student supplied a large predefined
 object, as only the corresponding \code{\link{name}} is compared in this
 case (use with care!).}
 
-\item{index}{Which command to check on (both in solution and student).
-If index is specified, it is checked whether solution and student contain
-the same amount of commands. index = NULL by default, i.e. the entire submission is checked.}
-
 \item{eq_condition}{character vector indicating how to perform the
 comparison for each argument. See \code{\link{test_object}}}
 
@@ -44,9 +39,6 @@ function at least as often as in the solution code.}
 function with the same argument values as in the sample solution.  If
 there are multiple function calls in the sample solution, a vector of
 feedback messages can be supplied.}
-
-\item{incorrect_number_of_calls_msg}{feedback message in case the number of commands
-in the solution does not correspond to the solution. (only used if index is not NULL.)}
 }
 \description{
 Test whether a student called a function with certain arguments as least as

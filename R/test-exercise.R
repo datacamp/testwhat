@@ -28,19 +28,16 @@ test_exercise <- function(sct,
   # Store everything that's needed locally
   tw$initialize(list(pec = pec,
                      student_code = student_code,
-                     student_pd = getParseData(parse(text = paste(get_clean_lines(student_code), collapse = "\n"), keep.source = TRUE)),
+                     student_pd = try(getParseData(parse(text = student_code, keep.source = TRUE), includeText = TRUE)),
                      student_env = globalenv(),
                      solution_code = solution_code,
-                     # solution_pd = getParseData(parse(text = paste(get_clean_lines(solution_code), collapse = "\n"), keep.source = TRUE)),
+                     solution_pd = try(getParseData(parse(text = student_code, keep.source = TRUE), includeText = TRUE)),
                      solution_env = solution_env,
                      output_list = output_list))
   
-  # Parse SCT
-  code <- parse(text = sct)
-
-  # Execute code with the DataCamp reporter such that it collects test results
+  # Execute sct with the DataCamp reporter such that it collects test results
   reporter <- DataCampReporter$new(ex_type=ex_type)
-  with_reporter(reporter, .test_exercise(code, env))
+  with_reporter(reporter, .test_exercise(parse(text = sct), env))
 
   # Obtain feedback from DataCamp reporter and return it invisibly
   reporter$get_feedback()
@@ -50,15 +47,22 @@ test_exercise <- function(sct,
   get_reporter()$start_reporter()
   n <- length(code)
   if (n == 0L) return(invisible())
-  # Try because if sct fails, execution is thrown back here.
-  eval_fail <- try(eval(code, new.env(parent = parent_env)), silent = TRUE)
+  run_until_fail(code, parent_env)
+}
+
+run_until_fail <- function(code, env) {
+  eval_fail <- try(eval(code, envir = env), silent = TRUE)
   if (inherits(eval_fail, "try-error")) {
     cond <- attr(eval_fail, "condition")$message
-    if (!identical(cond, sct_failed_msg)) {
+    if (identical(cond, sct_failed_msg)) {
+      # The SCT failed
+      return(invisible())
+    } else {
       # Something actually went wrong, not an SCT that failed
       stop(attr(eval_fail, "condition"))
-    } else {
-      return(invisible())
     }
+  } else {
+    # The SCT passed
+    return(invisible())
   }
 }

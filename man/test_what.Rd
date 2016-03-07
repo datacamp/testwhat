@@ -4,12 +4,13 @@
 \alias{test_what}
 \title{Expectation wrapper}
 \usage{
-test_what(code, feedback_msg)
+test_what(code, feedback)
 }
 \arguments{
 \item{code}{The expectation that should be wrapped}
 
-\item{feedback_msg}{The feedback message that results when the expectation is not met}
+\item{feedback}{A character string with feedback when the expection is not met 
+OR a list object, containing multiple pieces of information.}
 }
 \description{
 This function wraps around an expect_... function. When the expectation fails to be

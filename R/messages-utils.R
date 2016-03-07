@@ -1,12 +1,3 @@
-get_language <- function() {
-  lang <- getOption("lang")
-  if(is.null(lang)) {
-    "en"
-  } else {
-    lang 
-  }
-}
-
 # Nicely collapse a character vector
 collapse <- function(x, conn = " and ") {
   if (length(x) > 1) {

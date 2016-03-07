@@ -18,7 +18,7 @@ DataCampReporter <- setRefClass(
     silent = "numeric",
     silent_fail = "logical",
     instruction_index = "numeric",
-    failure_msg = "character",
+    feedback = "list",
     success_msg = "character",
     tags = "list"),
 
@@ -32,12 +32,11 @@ DataCampReporter <- setRefClass(
       success_msg <<- sample(c("Good Job!", 
                                "Well done!", 
                                "Great work!"), 1)
-      failure_msg <<- ""
+      feedback <<- list()
     },
 
-    set_data = function(msg, tags) {
-      failure_msg <<- msg
-      tags <<- tags
+    set_data = function(feedback) {
+      feedback <<- feedback
     },
     
     set_success_msg = function(msg = "") {
@@ -45,17 +44,13 @@ DataCampReporter <- setRefClass(
     },
     
     add_result = function(result) {
-      if(nchar(failure_msg) == 0) {
-        stop("No failure message defined. Use test_what around expect_ function.")
-      }
       if(silent) {
         if(!result$passed) {
           silent_fail[silent] <<- TRUE
         }
       } else {
         results <<- c(results, list(list(passed = result$passed,
-                                         failure_msg = failure_msg, 
-                                         tags = tags,
+                                         feedback = feedback,
                                          instruction_index = instruction_index)))
         if(!result$passed) {
           failed <<- TRUE
@@ -117,9 +112,8 @@ DataCampReporter <- setRefClass(
         test_results <- select_info(results, "passed")
         if(!all(test_results)) {
           selector <- which(!test_results)[1]
-          return(list(correct = FALSE, 
-                      message = to_html(results[[selector]]$failure_msg), 
-                      tags = results[[selector]]$tags))
+          return(c(list(correct = FALSE),
+                   results[[selector]]$feedback))
         } else {
           return(list(correct = TRUE, 
                       message = to_html(success_msg)))
