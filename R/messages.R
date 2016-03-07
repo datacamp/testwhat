@@ -3,7 +3,6 @@ build_arg_text <- function(n_args, args) {
   ifelse(n_args == 0, "", sprintf(" with %s %s", if (n_args == 1) "argument" else "arguments", collapse_args(args)))
 }
 
-# TODO: REVIEW LANGUAGE
 build_function_call_text <- function(index) {
   sprintf(", in the %s call of the function", ifelse(get_language() == "en", get_num(index), index))
 }
@@ -12,7 +11,6 @@ build_additional_text <- function(index) {
   sprintf(" in command %i of your solution", index)
 }
 
-# TODO: REVIEW LANGUAGE
 build_not_enough_calls_text <- function(name, index) {
   sprintf("You are missing the %s call of <code>%s()</code>.", get_num(index), name)
 }

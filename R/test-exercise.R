@@ -25,13 +25,13 @@ test_exercise <- function(sct,
                           output_list,
                           env = test_env()) {
   
-  # Store everything that's needed locally
+  # Store everything that's needed locally (initialize does a full reset)
   tw$initialize(list(pec = pec,
                      student_code = student_code,
                      student_pd = try(getParseData(parse(text = student_code, keep.source = TRUE), includeText = TRUE)),
                      student_env = globalenv(),
                      solution_code = solution_code,
-                     solution_pd = try(getParseData(parse(text = student_code, keep.source = TRUE), includeText = TRUE)),
+                     solution_pd = try(getParseData(parse(text = solution_code, keep.source = TRUE), includeText = TRUE)),
                      solution_env = solution_env,
                      output_list = output_list))
   

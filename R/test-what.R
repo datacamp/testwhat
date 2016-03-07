@@ -21,8 +21,8 @@ test_what <- function(code, feedback) {
   }
   
   if(!is.list(feedback) || !("message" %in% names(feedback))) {
-    stop(paste("feedback isn't in the correct format;",
-               "make sure it's a list that contains at least an element named message"))
+    stop(paste("the feedback object passed to test_what() isn't in the correct format;",
+               "make sure it's a list that contains at least an element named 'message'"))
   }
   
   # add tags
