@@ -28,7 +28,7 @@
 #' @export
 test_mc <- function(correct = NULL, no_selection_msg = NULL, feedback_msgs = NULL) {
   
-  result = get("DM.result", env = globalenv())
+  result = get("DM.result", envir = globalenv())
   init_tags(fun = "test_mc")
   
   if(is.null(correct)) {

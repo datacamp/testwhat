@@ -11,6 +11,8 @@ test_what(code, feedback, feedback_msg)
 
 \item{feedback}{A character string with feedback when the expection is not met 
 OR a list object, containing multiple pieces of information.}
+
+\item{feedback_msg}{deprecated argument, for backwards compatibility}
 }
 \description{
 This function wraps around an expect_... function. When the expectation fails to be

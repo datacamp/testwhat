@@ -47,6 +47,7 @@ test_while_loop <- function(index = 1,
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  blacklist <- tw$get("blacklist")
   init_tags(fun = "test_while_loop")
   
   cond_test <- substitute(cond_test)
@@ -65,8 +66,8 @@ test_while_loop <- function(index = 1,
   }
   test_what(expect_true(length(student_whiles) >= index), feedback = list(message = not_found_msg))
   
-  stud_while <- student_whiles[[index]]
-  sol_while <- solution_whiles[[index]]
+  student_while <- student_whiles[[index]]
+  solution_while <- solution_whiles[[index]]
   additionaltext <- sprintf(" in the %s <code>while</code> loop of your submission", get_num(index))
   
   on.exit({
@@ -74,17 +75,18 @@ test_while_loop <- function(index = 1,
     tw$set(solution_pd = solution_pd)
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
+    tw$set(blacklist = blacklist)
   })
   
   # WHILE condition part should always be there
   if(!is.null(cond_test)) {
-    prepare_tw(stud_while, stud_while, "cond_part")
+    prepare_tw(student_while, solution_while, "cond_part")
     eval(cond_test, envir = env)
   }
   
   # IF expression part should always be available.
   if(!is.null(expr_test)) {
-    prepare_tw(stud_while, stud_while, "expr_part")
+    prepare_tw(student_while, solution_while, "expr_part")
     eval(expr_test, envir = env)
   }
 }

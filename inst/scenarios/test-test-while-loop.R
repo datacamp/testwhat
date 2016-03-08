@@ -68,7 +68,8 @@ scen <- list(
                                                     "})"))), 
        fail = list(test_index_fail_1 = list(long = "check if index is checked correctly - fail 1", 
                                             sct = c("test_while_loop(1, expr_test = {", 
-                                                    "    test_function(\"rpois\", c(\"n\", \"lambda\"))", "})")), 
+                                                    "    test_function(\"rpois\", c(\"n\", \"lambda\"))", 
+                                                    "})")), 
                    test_not_found_msg_fail_1 = list(long = "check if not_found_msg is displayed correctly - fail 1", 
                                                     sct = "test_while_loop(3, not_found_msg = \"Too much looooooops\")",
                                                     message = "Too much looooooops"))))

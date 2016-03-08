@@ -5,6 +5,8 @@
 #' @param name  name of the function to test.
 #' @param args  character vector of argument names that the student should have
 #' supplied in the function calls.
+#' @param index  integer that specifies which call of \code{name} in the solution 
+#' code will be checked.
 #' @param ignore character vector of argument names that should not be tested
 #' (useful in combination with \code{allow_extra = FALSE} to allow certain
 #' arguments to be ignored, but not others).
@@ -145,10 +147,9 @@ test_function <- function(name,
   }
 }
 
+#' @rdname test_function
 #' @export
-test_function_v2 <- function(...) {
-  test_function(...)
-}
+test_function_v2 <- test_function
   
 has_arguments <- function(call, args, ignore = NULL, allow_extra = TRUE) {
   if (allow_extra) 

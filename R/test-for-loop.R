@@ -49,6 +49,7 @@ test_for_loop <- function(index = 1,
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  blacklist <- tw$get("blacklist")
   init_tags(fun = "test_for_loop")
   
   var_test <- substitute(var_test)
@@ -71,8 +72,8 @@ test_for_loop <- function(index = 1,
   
   test_what(expect_true(length(student_fors) >= index), feedback = list(message = not_found_msg))
 
-  stud_for <- student_fors[[index]]
-  sol_for <- solution_fors[[index]]
+  student_for <- student_fors[[index]]
+  solution_for <- solution_fors[[index]]
   additionaltext <- sprintf(" in the %s <code>for</code> loop of your submission", get_num(index))
   
   on.exit({
@@ -80,17 +81,18 @@ test_for_loop <- function(index = 1,
     tw$set(solution_pd = solution_pd)
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
+    tw$set(blacklist = blacklist)
   })
   
   # for var part should always be there
   if(!is.null(cond_test)) {
-    prepare_tw(stud_for, sol_for, "cond_part")
+    prepare_tw(student_for, solution_for, "cond_part")
     eval(cond_test, envir = env)
   }
 
   # for expression part should always be available.
   if(!is.null(expr_test)) {
-    prepare_tw(stud_for, sol_for, "expr_part")
+    prepare_tw(student_for, solution_for, "expr_part")
     eval(expr_test, envir = env)
   }
 }

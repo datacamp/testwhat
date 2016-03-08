@@ -66,6 +66,7 @@ test_if_else <- function(index = 1,
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  blacklist <- tw$get("blacklist")
   init_tags(fun = "test_if_else")
   
   if_cond_test <- substitute(if_cond_test)
@@ -98,6 +99,7 @@ test_if_else <- function(index = 1,
     tw$set(solution_pd = solution_pd)
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
+    tw$set(blacklist = blacklist)
   })
   
   # IF condition part should always be there
@@ -112,16 +114,14 @@ test_if_else <- function(index = 1,
     eval(if_expr_test, envir = env)
   }
       
-  
+  # ELSE expression part is not always be available.
   if(!is.null(else_expr_test)) {
     if(is.null(missing_else_msg)) {
       missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
     }
     test_what(expect_false(is.null(stud_str[["else_part"]])), missing_else_msg)
-    if(!is.null(stud_str$else_expr)) {
-      prepare_tw(stud_str, sol_str, "else_part")
-      eval(else_expr_test, envir = env)
-    }
+    prepare_tw(stud_str, sol_str, "else_part")
+    eval(else_expr_test, envir = env)
   }
 }
 

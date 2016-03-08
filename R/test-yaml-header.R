@@ -20,9 +20,7 @@ test_yaml_header <- function(options = NULL,
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
   init_tags(fun = "test_yaml_header")
-  
-  require(rmarkdown)
-    
+
   yaml_solution <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(solution_code, split = "\n")[[1]])))
   if(inherits(yaml_solution, "try-error")) {
     stop("Something wrong with yaml header of solution code!")

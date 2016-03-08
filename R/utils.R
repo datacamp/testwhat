@@ -151,8 +151,7 @@ unpipe <- function(expr) {
 #' @importFrom knitr pat_md knit_patterns
 #' @param text text representing an R Markdown document
 build_doc_structure <- function(text) {
-  require(knitr)
-  
+
   # Fix markdown format
   old.format <- knitr:::opts_knit$get()
   knitr:::opts_knit$set(out.format = "markdown")

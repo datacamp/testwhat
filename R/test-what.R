@@ -6,6 +6,7 @@
 #' @param code The expectation that should be wrapped
 #' @param feedback A character string with feedback when the expection is not met 
 #' OR a list object, containing multiple pieces of information.
+#' @param feedback_msg deprecated argument, for backwards compatibility
 #' 
 #' @import testthat
 #' @export

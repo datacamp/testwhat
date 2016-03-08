@@ -3,24 +3,25 @@ extract_control <- function(pd, keyword, elnames) {
     # Intersection of:
     # - parent of ids with the correct keyword
     # - ids that are top-level (whose parent is not in pd)
-    ids <- intersect(pd$parent[pd$token == keyword & pd$id], pd$id[!(pd$parent %in% pd$id)])
-    
-    get_sub_pd <- function(id) {
-      all_childs <- c()
-      childs <- function(index){
-        kids <- pd$id[ pd$parent %in% index ]
-        if( length(kids) ){
-          all_childs <<- c(all_childs, kids )
-          childs( kids )
-        }
-      }
-      childs(id)
-      pd[pd$id %in% all_childs, ]
-    }
+    ids <- intersect(pd$parent[pd$token == keyword], pd$id[!(pd$parent %in% pd$id)])
     
     chop_up_pd <- function(id, elnames) {
       expr_ids <- pd$id[pd$parent == id & pd$token %in% c("expr", "forcond")]
       sub_codes <- lapply(expr_ids, getParseText, parseData = pd)
+      
+      get_sub_pd <- function(id) {
+        all_childs <- c()
+        childs <- function(index){
+          kids <- pd$id[ pd$parent %in% index ]
+          if( length(kids) ){
+            all_childs <<- c(all_childs, kids )
+            childs( kids )
+          }
+        }
+        childs(id)
+        pd[pd$id %in% c(all_childs, id), ]
+      }
+      
       sub_pds <- lapply(expr_ids, get_sub_pd)
       out <- mapply(function(code, pd) list(code = code, pd = pd), sub_codes, sub_pds, SIMPLIFY = FALSE)
       names(out) <- elnames[1:length(out)]
@@ -50,4 +51,5 @@ prepare_tw <- function(stud, sol, part) {
   tw$set(solution_pd = sol[[part]][["pd"]])
   tw$set(student_code = stud[[part]][["code"]])
   tw$set(solution_code = sol[[part]][["code"]])
+  tw$set(blacklist = NULL)
 }
