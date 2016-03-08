@@ -13,7 +13,6 @@ Depends:
     knitr,
     rmarkdown
 Imports:
-    digest,
     methods,
     markdown,
     stringdist
