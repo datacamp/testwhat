@@ -9,11 +9,6 @@ tw_accessors <- function() {
     }
   }
   
-  get_with_default = function(name, default) {
-    val <- tw_data[[name]]
-    if(is.null(val)) default else val
-  }
-  
   set = function(...) {
     tw_data <<- merge(list(...))
     invisible(NULL)
@@ -30,7 +25,7 @@ tw_accessors <- function() {
   }
   
   merge = function(values) merge_list(tw_data, values)
-  list(get = get, get_with_default = get_with_default, set = set, clear = clear, initialize = initialize)
+  list(get = get, set = set, clear = clear, initialize = initialize)
 }
 
 merge_list <- function(x, y) {

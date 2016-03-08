@@ -4,7 +4,7 @@
 \name{tw}
 \alias{tw}
 \title{"singleton" object to access all information needed by \code{\link{test_what}} functions.}
-\format{An object of class \code{list} of length 5.}
+\format{An object of class \code{list} of length 4.}
 \usage{
 tw
 }
