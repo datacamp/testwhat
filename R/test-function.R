@@ -117,7 +117,7 @@ test_function <- function(name,
           if(is.null(incorrect_msg)) {
             incorrect_args <- args[!args_correct_vec]
             incorrect_msg <- sprintf("Did you correctly specify the argument%s %s in your call of `%s()`?", 
-                                     ifelse(incorrect_args > 1, "s", ""), collapse_args(incorrect_args), name)
+                                     ifelse(length(incorrect_args) > 1, "s", ""), collapse_args(incorrect_args), name)
           }
           args_correct_feedback <- list(message = incorrect_msg,
                                         line_start = student_call$line1,
