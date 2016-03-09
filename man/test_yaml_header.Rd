@@ -5,9 +5,7 @@
 \title{Test yaml header (Markdown)}
 \usage{
 test_yaml_header(options = NULL, check_equality = TRUE,
-  allow_extra = TRUE, chunk_number = get_chunk_number(),
-  student_code = get_student_code(), solution_code = get_solution_code(),
-  not_called_msg = NULL, incorrect_msg = NULL)
+  allow_extra = TRUE, not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
 \item{options}{Set of options. Embedded options have to be specified using the dot notation.}
@@ -15,12 +13,6 @@ test_yaml_header(options = NULL, check_equality = TRUE,
 \item{check_equality}{whether or not to actually check the value assigned to the option (default TRUE)}
 
 \item{allow_extra}{whether or not the definition of additional options is accepted (default TRUE)}
-
-\item{chunk_number}{The chunk number being treated (set automatically)}
-
-\item{student_code}{character string containing the entire student code (set automatically)}
-
-\item{solution_code}{character string containing the entire solution code (set automatically)}
 
 \item{not_called_msg}{feedback message if option was not specified (optional but recommended)}
 

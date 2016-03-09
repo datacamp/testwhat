@@ -1,11 +1,6 @@
 #' Test ggplot call
 #' 
 #' @param index which call to check
-#' @param student_code code of student
-#' @param solution_code correct code
-#' @param predefined_code pre exercise code
-#' @param student_env environment of student
-#' @param solution_env environment of solution
 #' @param all_fail_msg Message if all fails
 #' 
 #' @param check_data Whether or not to check data latyer
@@ -43,11 +38,6 @@
 #' 
 #' @export
 test_ggplot <- function(index = 1,
-                        student_code = get_student_code(),
-                        solution_code = get_solution_code(),
-                        predefined_code = get_pec_code(),
-                        student_env = .GlobalEnv,
-                        solution_env = get_solution_env(),
                         all_fail_msg = NULL,
                         check_data = TRUE, data_fail_msg = NULL,
                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
@@ -58,6 +48,14 @@ test_ggplot <- function(index = 1,
                         check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
                         check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
+  
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  predefined_code <- tw$get("pec")
+  init_tags(fun = "test_ggplot")
+  
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   
   sol_ggplot_info <- get_ggplot_solution_info(solution_code, predefined_code, solution_env)
@@ -614,41 +612,29 @@ filter_standard_geom_params <- function(geom_call, params) {
 }
 
 get_ggplot_solution_info <- function(code, predefined_code, envir) { 
-  if (exists("saved_solution_code", envir = get_sct_env(), inherits = FALSE)) {
-    saved_solution_code <- get("saved_solution_code", envir = get_sct_env(), inherits = FALSE)
-  } else {
-    saved_solution_code <- ""
-  }
-  if (exists("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
-    saved_solution_ggplot_info <- get("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)
-  } else {
-    saved_solution_ggplot_info <- NULL
-  }
-  if (code != saved_solution_code || !exists("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
+  saved_solution_code <- tw$get("saved_solution_code")
+  if(is.null(saved_solution_code)) saved_solution_code <- ""
+  saved_solution_ggplot_info <- tw$get("saved_solution_ggplot_info")
+  
+  if (code != saved_solution_code || is.null(saved_solution_ggplot_info)) {
     ggplot_info <- get_ggplot_info(code, predefined_code, envir)
-    assign("saved_solution_code", code, envir = get_sct_env())
-    assign("saved_solution_ggplot_info", ggplot_info, envir = get_sct_env())
+    tw$set(saved_solution_code = code)
+    tw$set(saved_solution_ggplot_info = ggplot_info)
   }
-  return(get("saved_solution_ggplot_info", envir = get_sct_env(), inherits = FALSE))
+  return(tw$get("saved_solution_ggplot_info"))
 }
 
-get_ggplot_student_info <- function(code, predefined_code, envir) { 
-  if (exists("saved_student_code", envir = get_sct_env(), inherits = FALSE)) {
-    saved_student_code <- get("saved_student_code", envir = get_sct_env(), inherits = FALSE)
-  } else {
-    saved_student_code <- ""
-  }
-  if (exists("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
-    saved_student_ggplot_info <- get("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)
-  } else {
-    saved_student_ggplot_info <- NULL
-  }
-  if (code != saved_student_code || !exists("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE)) {
+get_ggplot_student_info <- function(code, predefined_code, envir) {
+  saved_student_code <- tw$get("saved_student_code")
+  if(is.null(saved_student_code)) saved_student_code <- ""
+  saved_student_ggplot_info <- tw$get("saved_student_ggplot_info")
+  
+  if (code != saved_student_code || is.null(saved_student_ggplot_info)) {
     ggplot_info <- get_ggplot_info(code, predefined_code, envir)
-    assign("saved_student_code", code, envir = get_sct_env())
-    assign("saved_student_ggplot_info", ggplot_info, envir = get_sct_env())
+    tw$set(saved_student_code = code)
+    tw$set(saved_student_ggplot_info = ggplot_info)
   }
-  return(get("saved_student_ggplot_info", envir = get_sct_env(), inherits = FALSE))
+  return(tw$get("saved_student_ggplot_info"))
 }
 
 get_ggplot_info <- function(code, predefined_code, envir) { 

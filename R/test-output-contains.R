@@ -6,9 +6,6 @@
 #'
 #' @param expr The expression (as string) for which the output should be in the student's console output.
 #' @param times How often the expression's output should occur in the student's console
-#' @param console_output The string containing the output printed to the student's console.
-#' The default is DM.console.output which is set on the DataCamp server (automagically).
-#' This means you don't have to specify this argument when writing SCTs for DataCamp.com.
 #' @param incorrect_msg feeback message in case the output did not contain the expression
 #' @param env environment where the code in expr exectued.
 #' 
@@ -18,10 +15,12 @@
 #' test_output_contains("for(i in 1:10) print(i)")
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
-test_output_contains <- function(expr, times = 1, console_output = get_student_output(), incorrect_msg = NULL, env = .GlobalEnv) {
+test_output_contains <- function(expr, times = 1, incorrect_msg = NULL, env = globalenv()) {
+  init_tags(fun = "test_output_contains")
+  
+  console_output = get("DM.console.output", envir = globalenv())
+  
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
     if(is.null(incorrect_msg)) {
       incorrect_msg <- build_incorrect_output_msg(expr)
@@ -30,7 +29,7 @@ test_output_contains <- function(expr, times = 1, console_output = get_student_o
             incorrect_msg)
 }
 
-output_contains = function(expr, console_output = get_student_output(), env = .GlobalEnv) {
+output_contains = function(expr, console_output = get_student_output(), env = globalenv()) {
   correct_output = try(capture.output(try(eval(parse(text=expr), envir = env))))
 
   if (inherits(correct_output, "try-error")) {

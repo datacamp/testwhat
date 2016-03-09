@@ -11,8 +11,6 @@
 #' and \code{\link{expect_identical}}, respectively.
 #' @param eval Next to existence, check if the value of the object corresponds
 #' between student en solution environment.
-#' @param student_env Environment in which the student code was evaluated. Do not set this manually.
-#' @param solution_env Environment in which the solution code was evaluated. Do not set this manually.
 #' @param undefined_msg Optional feedback message in case the student did not define
 #' the object. A meaningful message is automatically generated if not supplied.
 #' @param incorrect_msg optional feedback message in case the student's object is not
@@ -43,14 +41,15 @@
 #' test_object(y, eq_condtion = "identical")
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
-                        student_env = .GlobalEnv,
-                        solution_env = get_solution_env(),
                         undefined_msg = NULL, incorrect_msg = NULL) {
+  
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  init_tags(fun = "test_object")
+  
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")
   }
@@ -58,24 +57,30 @@ test_object <- function(name, eq_condition = "equivalent",
   stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
+  #set_tags(auto_feedback = is.null(undefined_msg))
   if (is.null(undefined_msg)) {
     undefined_msg <- build_undefined_object_msg(name)
   }
-  if (is.null(incorrect_msg)) {
-    incorrect_msg <- build_incorrect_object_msg(name)
-  }
-  
+
   defined <- exists(name, envir = student_env, inherits = FALSE)
+  #set_tags(test = "defined")
   test_what(expect_true(defined), undefined_msg)
   
   if (defined && eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
+    # set_tags(eq_condition = eq_condition)
     eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
                                    identical = expect_identical,
                                    equal = expect_equal,
                                    like = expect_like,
                                    stop("invalid equality condition"))
     
+    # set_tags(auto_feedback = is.null(incorrect_msg))
+    if (is.null(incorrect_msg)) {
+      incorrect_msg <- build_incorrect_object_msg(name)
+    }
+    
+    # set_tags(test = "correct")
     test_what(eq_fun(student, solution), incorrect_msg)
   }
 }

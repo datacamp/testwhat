@@ -21,14 +21,14 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export 
 test_expression_result <- function(expr, 
                                    eq_condition = "equivalent",
-                                   student_env = .GlobalEnv,
-                                   solution_env = get_solution_env(),
                                    incorrect_msg = NULL) {
+  
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  init_tags(fun = "test_expression_result")
   
   capture.output(result_sol <- try(eval(parse(text = expr), envir = solution_env), silent = TRUE))
   if (length(result_sol) == 0) {

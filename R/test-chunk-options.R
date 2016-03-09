@@ -7,23 +7,20 @@
 #'
 #' @param options  Set of options
 #' @param allow_extra  whether or not the definition of additional options is accepted (default TRUE)
-#' @param chunk_number number of the chunk that is being tested
-#' @param student_chunk  character string containing the student's code.
-#' @param solution_chunk  character string containing the sample solution code.
 #' @param not_called_msg feedback message if option was not specified
 #' @param incorrect_msg  feedback message if option was incorrectly set
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_chunk_options <- function(options = NULL,
                                allow_extra = TRUE,
-                               chunk_number = get_chunk_number(),
-                               student_chunk = get_student_ds_part(),
-                               solution_chunk = get_solution_ds_part(),
                                not_called_msg = NULL,
                                incorrect_msg = NULL) {
     
+  chunk_number <- tw$get("chunk_number")
+  student_chunk <- tw$get("student_ds_part")
+  solution_chunk <- tw$get("solution_ds_part")
+  init_tags(fun = "test_chunk_options")
+  
   # First, check if both student and solution chunk are 'block' class (i.e. code chunks)
   if(class(solution_chunk) != "block") {
     stop("The specified rmd group is not of 'block' class.")

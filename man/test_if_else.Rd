@@ -5,9 +5,8 @@
 \title{Test a conditional statement}
 \usage{
 test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
-  else_expr_test = NULL, student_code = get_student_code(),
-  solution_code = get_solution_code(), not_found_msg = NULL,
-  missing_else_msg = NULL, env = parent.frame())
+  else_expr_test = NULL, not_found_msg = NULL, missing_else_msg = NULL,
+  env = parent.frame())
 }
 \arguments{
 \item{index}{The index of the control structure to check.}
@@ -20,12 +19,6 @@ of the control structure}
 
 \item{else_expr_test}{tests to perform in the else expression 
 part of the control structure}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
-
-\item{solution_code}{character string: (chunk of) solution code.
-Do not set this manually.}
 
 \item{not_found_msg}{Message in case the control structure 
 (at given index) is not found.}

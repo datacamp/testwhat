@@ -26,14 +26,17 @@
 #' # z <- 4 + 1 + 1e-8
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_an_object <- function(name, 
                            undefined_msg = NULL,
-                           eq_condition = "equivalent",
-                           student_env = .GlobalEnv,
-                           solution_env = get_solution_env()) {
+                           eq_condition = "equivalent") {
+  
+  # Get needed elements from tw
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  init_tags(fun = "test_an_object", 
+            auto_feedback = is.null(undefined_msg), 
+            eq_condition = eq_condition)
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

@@ -38,16 +38,16 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_for_loop <- function(index = 1, 
                           cond_test = NULL,
-                          expr_test = NULL,                          
-                          student_code = get_student_code(), 
-                          solution_code = get_solution_code(),
+                          expr_test = NULL,
                           not_found_msg = NULL,
                           env = parent.frame()) {
+  
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  init_tags(fun = "test_for_loop")
   
   var_test <- substitute(var_test)
   if (is.character(var_test)) code <- parse(text = var_test)
@@ -80,15 +80,15 @@ test_for_loop <- function(index = 1,
   }
   
   on.exit({
-    set_student_code(student_code)
-    set_solution_code(solution_code)
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
   })
   
   # for var part should always be there
   test_what(expect_false(is.null(stud_for$for_cond)), sprintf("The <code>condition</code> part%s is missing.", additionaltext))
   if(!is.null(cond_test) && !is.null(stud_for$for_cond) && !is.null(sol_for$for_cond)) {
-    set_student_code(stud_for$for_cond)
-    set_solution_code(sol_for$for_cond)
+    tw$set(student_code = stud_for$for_cond)
+    tw$set(solution_code = sol_for$for_cond)
     eval(cond_test, envir = env)
   }
 
@@ -96,8 +96,8 @@ test_for_loop <- function(index = 1,
   test_what(expect_false(is.null(stud_for$for_expr)), sprintf("The <code>expr</code> part%s is missing.", additionaltext))  
 
   if(!is.null(expr_test) && !is.null(stud_for$for_expr) && !is.null(sol_for$for_expr)) {
-    set_student_code(stud_for$for_expr)
-    set_solution_code(sol_for$for_expr)
+    tw$set(student_code = stud_for$for_expr)
+    tw$set(solution_code = sol_for$for_expr)
     eval(expr_test, envir = env)
   }
 }

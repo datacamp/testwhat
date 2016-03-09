@@ -4,10 +4,7 @@
 \alias{test_text}
 \title{Test inline text and formatting (Markdown)}
 \usage{
-test_text(text, format = "any", freq = 1,
-  inline_number = get_inline_number(),
-  student_inline = get_student_ds_part(),
-  solution_inline = get_solution_ds_part(), not_called_msg = NULL,
+test_text(text, format = "any", freq = 1, not_called_msg = NULL,
   incorrect_msg = NULL)
 }
 \arguments{
@@ -17,12 +14,6 @@ test_text(text, format = "any", freq = 1,
 If none of the above, the format string is appended to text in front and in the back and used as a regexp.}
 
 \item{freq}{How often the text should appear with this formatting}
-
-\item{inline_number}{number of the inline number that is being tested}
-
-\item{student_inline}{character string containing the student's inline text.}
-
-\item{solution_inline}{character string containing the solution's inline text.}
 
 \item{not_called_msg}{feedback message if the text was not there}
 

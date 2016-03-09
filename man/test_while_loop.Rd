@@ -5,7 +5,6 @@
 \title{Test a while loop}
 \usage{
 test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
-  student_code = get_student_code(), solution_code = get_solution_code(),
   not_found_msg = NULL, env = parent.frame())
 }
 \arguments{
@@ -14,12 +13,6 @@ test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
 \item{cond_test}{SCT to perform on the condition part of the while loop}
 
 \item{expr_test}{SCT to perform on the expression part of the while loop}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
-
-\item{solution_code}{character string: (chunk of) solution code.
-Do not set this manually.}
 
 \item{not_found_msg}{Message in case the while loop (at given index) is not found.}
 

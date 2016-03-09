@@ -4,17 +4,12 @@
 \alias{test_rmd_group}
 \title{Test a single R Markdown file group (R Markdown exercises)}
 \usage{
-test_rmd_group(group_number, code, student_code = get_student_code(),
-  solution_code = get_solution_code(), env = parent.frame())
+test_rmd_group(group_number, code, env = parent.frame())
 }
 \arguments{
 \item{group_number}{Number of the group.}
 
 \item{code}{SCT code to test the group (in curly braces)}
-
-\item{student_code}{the entire code that has been submitted by the student.}
-
-\item{solution_code}{the entire solution code.}
 
 \item{env}{The environment in which the code should be tested.}
 }

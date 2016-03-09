@@ -4,8 +4,7 @@
 \alias{test_an_object}
 \title{Check if the student defined an object, independent of the name}
 \usage{
-test_an_object(name, undefined_msg = NULL, eq_condition = "equivalent",
-  student_env = .GlobalEnv, solution_env = get_solution_env())
+test_an_object(name, undefined_msg = NULL, eq_condition = "equivalent")
 }
 \arguments{
 \item{name}{name of object in solution to test.}
@@ -18,10 +17,6 @@ always be specified.}
 are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
 See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
 and \code{\link{expect_identical}}, respectively.}
-
-\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
-
-\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 }
 \description{
 This function is an adaption of \code{\link{test_object}}. The function will

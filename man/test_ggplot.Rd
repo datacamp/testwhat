@@ -4,31 +4,18 @@
 \alias{test_ggplot}
 \title{Test ggplot call}
 \usage{
-test_ggplot(index = 1, student_code = get_student_code(),
-  solution_code = get_solution_code(), predefined_code = get_pec_code(),
-  student_env = .GlobalEnv, solution_env = get_solution_env(),
-  all_fail_msg = NULL, check_data = TRUE, data_fail_msg = NULL,
-  check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
-  check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE,
-  check_geom_params = NULL, check_facet = TRUE, facet_fail_msg = NULL,
-  check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
-  check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
-  check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
-  check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
-  check = NULL)
+test_ggplot(index = 1, all_fail_msg = NULL, check_data = TRUE,
+  data_fail_msg = NULL, check_aes = TRUE, aes_fail_msg = NULL,
+  exact_aes = FALSE, check_geom = TRUE, geom_fail_msg = NULL,
+  exact_geom = FALSE, check_geom_params = NULL, check_facet = TRUE,
+  facet_fail_msg = NULL, check_scale = TRUE, scale_fail_msg = NULL,
+  exact_scale = FALSE, check_coord = TRUE, coord_fail_msg = NULL,
+  exact_coord = FALSE, check_stat = TRUE, stat_fail_msg = NULL,
+  exact_stat = FALSE, check_extra = NULL, extra_fail_msg = NULL,
+  exact_extra = NULL, check = NULL)
 }
 \arguments{
 \item{index}{which call to check}
-
-\item{student_code}{code of student}
-
-\item{solution_code}{correct code}
-
-\item{predefined_code}{pre exercise code}
-
-\item{student_env}{environment of student}
-
-\item{solution_env}{environment of solution}
 
 \item{all_fail_msg}{Message if all fails}
 

@@ -9,54 +9,43 @@ setOldClass('proc_time')
 #' @export
 #' @export DataCampReporter
 #' @aliases DataCampReporter
+#' @importFrom methods setRefClass
 #' @keywords debugging
 DataCampReporter <- setRefClass(
   "DataCampReporter", contains = "Reporter",
   fields = list(
-    report = "character",
+    ex_type = "character",
     results = "list",
     silent = "numeric",
     silent_fail = "logical",
     instruction_index = "numeric",
-    inh_failure_msg = "character",
-    inh_success_msg = "character"),
+    failure_msg = "character",
+    success_msg = "character",
+    tags = "list"),
 
   methods = list(
     ### overriden methods from Reporter
-    initialize = function(...) {
-      report <<- "first"
-      callSuper(...)
-      
-    },
     start_reporter = function(...) {
       callSuper(...)
       results <<- list()
       silent <<- 0
       instruction_index <<- 0
-      inh_failure_msg <<- ""
-      inh_success_msg <<- sample(c("You rock!", 
-                                   "You are a coding rockstar!", 
-                                   "Keep up the good work.", 
-                                   "Great job!", 
-                                   "Woot!", 
-                                   "Way to go!", 
-                                   "Nice code."), 1)
+      success_msg <<- sample(c("Good Job!", 
+                               "Well done!", 
+                               "Great work!"), 1)
     },
 
-    set_inh_failure_msg = function(msg = "") {
-      inh_failure_msg <<- msg
+    set_data = function(msg, tags) {
+      failure_msg <<- msg
+      tags <<- tags
     },
     
-    clear_inh_failure_msg = function() {
-      inh_failure_msg <<- ""
-    },
-    
-    set_inh_success_msg = function(msg = "") {
-      inh_success_msg <<- msg
+    set_success_msg = function(msg = "") {
+      success_msg <<- msg
     },
     
     add_result = function(result) {
-      if(nchar(inh_failure_msg) == 0) {
+      if(nchar(failure_msg) == 0) {
         stop("No failure message defined. Use test_what around expect_ function.")
       }
       if(silent) {
@@ -64,9 +53,9 @@ DataCampReporter <- setRefClass(
           silent_fail[silent] <<- TRUE
         }
       } else {
-        results <<- c(results, list(list(passed = result$passed, 
-                                         success_msg = result$success_msg,
-                                         failure_msg = inh_failure_msg, 
+        results <<- c(results, list(list(passed = result$passed,
+                                         failure_msg = failure_msg, 
+                                         tags = tags,
                                          instruction_index = instruction_index)))
         if(!result$passed) {
           failed <<- TRUE
@@ -95,34 +84,24 @@ DataCampReporter <- setRefClass(
     },
     
     get_feedback = function() {
-      results_df <- do.call("rbind", lapply(results, data.frame, stringsAsFactors = FALSE))
-      if (report == "first") {
-        test_results <- results_df$passed
-        if(!all(test_results)) {
-          feedback <- results_df$failure_msg[which(!test_results)[1]]
-          return(list(passed = FALSE, feedback = to_html(feedback)))
-        } else {
-          return(list(passed = TRUE, feedback = to_html(inh_success_msg)))
-        }
-      } else if (report == "challenge") {
-        
-        if(length(results_df) == 0) {
+      if (ex_type == "ChallengeExercise") {
+        if(length(results) == 0) {
           stop("No tests written for challenge!")
         }
         
-        instruction_indices <- unique(results_df$instruction_index)
-        n_inst <- length(unique(instruction_indices))
+        instruction_indices <- unique(select_info(results, "instruction_index"))
+        n_inst <- length(instruction_indices)
         
         if(n_inst < 2) {
           stop("Make sure to have at least two instructions, i.e. 1 step and the goal.")
         }
         
         if(max(instruction_indices) != n_inst) {
-          stop("Make sure to write at least one test for each challenge step!")
+          stop("Make sure to write at least one test for each challenge step.")
         }
         
         res_per_inst <- sapply(1:n_inst, function(x) {
-          all(results_df$passed[results_df$instruction_index == x])
+          all(select_info(results, "passed")[select_info(results, "instruction_index") == x])
         })
         
         challenge_passed <- tail(res_per_inst, 1)
@@ -131,11 +110,20 @@ DataCampReporter <- setRefClass(
           passed_steps <- rep(TRUE, n_inst - 1)
         }
         
-        return(list(passed = challenge_passed, 
-                    feedback = to_html(ifelse(challenge_passed, inh_success_msg, "try again.")), 
-                    passed_steps = passed_steps))
+        return(list(correct = challenge_passed, 
+                    message = to_html(ifelse(challenge_passed, success_msg, "try again.")), 
+                    steps_correct = passed_steps))
       } else {
-        stop("Unknown report type!")
+        test_results <- select_info(results, "passed")
+        if(!all(test_results)) {
+          selector <- which(!test_results)[1]
+          return(list(correct = FALSE, 
+                      message = to_html(results[[selector]]$failure_msg), 
+                      tags = results[[selector]]$tags))
+        } else {
+          return(list(correct = TRUE, 
+                      message = to_html(success_msg)))
+        }
       }
     }
   )
@@ -146,4 +134,8 @@ DataCampReporter <- setRefClass(
 to_html <- function(x) {
   html <- markdownToHTML(text = x, fragment.only = TRUE)
   gsub("<p>(.*?)</p>", "\\1", html) #remove <p> tags, coded by front end.
+}
+
+select_info <- function(x, col) {
+  sapply(x, `[[`, col)
 }

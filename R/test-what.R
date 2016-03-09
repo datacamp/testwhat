@@ -11,9 +11,8 @@
 test_what <- function(code, feedback_msg) {
   rep <- get_reporter()
 
-  rep$set_inh_failure_msg(feedback_msg)
+  rep$set_data(feedback_msg, tags = tw$get("tags"))
   eval(code)
-  rep$clear_inh_failure_msg()
   
   if (rep$failed) {
     stop(sct_failed_msg)

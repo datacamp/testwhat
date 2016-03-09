@@ -5,7 +5,6 @@
 \title{Test a for loop}
 \usage{
 test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
-  student_code = get_student_code(), solution_code = get_solution_code(),
   not_found_msg = NULL, env = parent.frame())
 }
 \arguments{
@@ -14,12 +13,6 @@ test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
 \item{cond_test}{testwhat tests for the condition part of the for loop}
 
 \item{expr_test}{testwhat tests for the expression part of the for loop}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
-
-\item{solution_code}{character string: (chunk of) solution code.
-Do not set this manually.}
 
 \item{not_found_msg}{optional feedback message in case the for loop 
 (at given index) is not found.}

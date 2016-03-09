@@ -23,13 +23,13 @@
 #' test_library_function("dplyr")
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_library_function <- function(package,
-                          student_code = get_student_code(),
                           not_called_msg = NULL, 
                           incorrect_msg = NULL) {
+  
+  student_code <- tw$get("student_code")
+  init_tags(fun = "test_library_function")
   
   if(is.null(not_called_msg)) {
     not_called_msg <- sprintf("Make sure to call the <code>library()</code> function to load the <code>%s</code> package", package)
@@ -39,6 +39,5 @@ test_library_function <- function(package,
   }
   
   test_what(expect_true(grepl("library\\(", student_code)), not_called_msg)
-  test_what(expect_true(grepl(sprintf("library\\(%s\\)|library\\(\"%s\"\\)|library\\('%s'\\)",package,package,package), student_code)), 
-            incorrect_msg)
+  test_what(expect_true(grepl(sprintf("(library|require)\\s*\\(\\s*[\"']?%s[\"']?\\s*\\)",package), student_code)), incorrect_msg)
 }

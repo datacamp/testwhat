@@ -10,24 +10,28 @@
 #' @param env The environment in which the code should be tested.
 #' @inheritParams test_function
 #' 
-#' @import datacampAPI
 #' @export
 test_rmd_file = function(code, 
                          student_file = NULL, 
                          solution_file = NULL, 
-                         student_code = get_student_code(), 
-                         solution_code = get_solution_code(), 
                          env = parent.frame()) {
+  
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  init_tags(fun = "test_rmd_file")
+  
   code <- substitute(code)
   if (is.character(code)) code <- parse(text = code)
   
   # get the entire student code and solution code and reset it on exit.
-  # also remove the parse data that might have been saved to the sct env.
+  # also remove the document structure and parse data that might have been saved to the sct env.
   on.exit({ 
-    set_student_code(student_code)
-    set_solution_code(solution_code)
-    remove_student_ds()
-    remove_solution_ds()
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
+    tw$set(student_ds = NULL)
+    tw$set(solution_ds = NULL)
+    tw$set(student_pd = NULL)
+    tw$set(solution_pd = NULL)
   })
   
   if(is.null(student_file)) {
@@ -50,8 +54,8 @@ test_rmd_file = function(code,
     stop("solution file name was not found in solution code")
   }
   
-  set_student_code(student_code[student_file])
-  set_solution_code(solution_code[solution_file])
+  tw$set(student_code = student_code[student_file])
+  tw$set(solution_code = solution_code[solution_file])
   
   eval(code, envir = env)
 }

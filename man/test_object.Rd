@@ -5,7 +5,6 @@
 \title{Test R object existence and value}
 \usage{
 test_object(name, eq_condition = "equivalent", eval = TRUE,
-  student_env = .GlobalEnv, solution_env = get_solution_env(),
   undefined_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
@@ -18,10 +17,6 @@ and \code{\link{expect_identical}}, respectively.}
 
 \item{eval}{Next to existence, check if the value of the object corresponds
 between student en solution environment.}
-
-\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
-
-\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
 \item{undefined_msg}{Optional feedback message in case the student did not define
 the object. A meaningful message is automatically generated if not supplied.}

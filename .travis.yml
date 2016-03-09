@@ -1,6 +1,2 @@
 language: r
 sudo: required
-
-r_github_packages:
- - data-camp/datacampAPI
- - hadley/testthat

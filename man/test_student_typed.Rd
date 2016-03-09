@@ -4,14 +4,10 @@
 \alias{test_student_typed}
 \title{Test student's submission as text}
 \usage{
-test_student_typed(strings, student_code = get_student_code(), fixed = TRUE,
-  not_typed_msg = NULL)
+test_student_typed(strings, fixed = TRUE, not_typed_msg = NULL)
 }
 \arguments{
 \item{strings}{A set of strings, at least one of which must be in the student_code}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
 
 \item{fixed}{exact string matching (TRUE) or use regex (FALSE)?}
 

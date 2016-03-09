@@ -27,16 +27,17 @@
 #' test_data_frame("df", columns = "b") 
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_data_frame <- function(name, columns = NULL, 
                             eq_condition = "equivalent",
-                            student_env = .GlobalEnv,
-                            solution_env = get_solution_env(),
                             undefined_msg = NULL, 
                             undefined_cols_msg = NULL, 
                             incorrect_msg = NULL) {
+  
+  # Get needed elements from tw
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  init_tags(fun = "test_data_frame")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

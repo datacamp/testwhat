@@ -4,13 +4,10 @@
 \alias{test_mc}
 \title{Test a multiple choice exercise}
 \usage{
-test_mc(correct = NULL, result = get_sct_result(),
-  no_selection_msg = NULL, feedback_msgs = NULL)
+test_mc(correct = NULL, no_selection_msg = NULL, feedback_msgs = NULL)
 }
 \arguments{
 \item{correct}{number of the correct answer}
-
-\item{result}{The result that is set by the DataCamp front-end when the student submits a multiple choice exercise.}
 
 \item{no_selection_msg}{feedback message in case the student did not select an answer.}
 

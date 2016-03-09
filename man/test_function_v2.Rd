@@ -6,8 +6,6 @@
 \usage{
 test_function_v2(name, args = NULL, ignore = NULL, allow_extra = TRUE,
   eval = TRUE, index = NULL, eq_condition = "equivalent",
-  student_code = get_student_code(), solution_code = get_solution_code(),
-  student_env = .GlobalEnv, solution_env = get_solution_env(),
   not_called_msg = NULL, incorrect_msg = NULL,
   incorrect_number_of_calls_msg = NULL, index_not_called_msg = NULL)
 }
@@ -37,16 +35,6 @@ the same amount of function calls.}
 are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
 See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
 and \code{\link{expect_identical}}, respectively.}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
-
-\item{solution_code}{character string: (chunk of) solution code.
-Do not set this manually.}
-
-\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
-
-\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
 \item{not_called_msg}{feedback message in case the student did not call the
 function at least as often as in the solution code.}

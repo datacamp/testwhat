@@ -1,3 +1,73 @@
+# Backwards compatibility (remove over time)
+
+get_solution_env <- function() { tw$get("solution_env") }
+get_student_code <- function() { tw$get("student_code") }
+get_solution_code <- function() { tw$get("solution_code") }
+get_student_output <- function() { get(DM.console.output, envir = globalenv()) }
+
+tw_accessors <- function() {
+  tw_data <- list()
+  
+  get = function(name) {
+    if(missing(name)) {
+      tw_data
+    } else {
+      tw_data[[name]]
+    }
+  }
+  
+  get_with_default = function(name, default) {
+    val <- tw_data[[name]]
+    if(is.null(val)) default else val
+  }
+  
+  set = function(...) {
+    tw_data <<- merge(list(...))
+    invisible(NULL)
+  }
+  
+  clear = function() {
+    tw_data <<- list()
+    invisible(NULL)
+  }
+  
+  initialize = function(data) {
+    tw_data <<- data
+    invisible(NULL)
+  }
+  
+  merge = function(values) merge_list(tw_data, values)
+  list(get = get, get_with_default = get_with_default, set = set, clear = clear, initialize = initialize)
+}
+
+merge_list <- function(x, y) {
+  x[names(y)] = y
+  x
+}
+
+#' "singleton" object to access all information needed by \code{\link{test_what}} functions.
+#' 
+#' @export
+tw <- tw_accessors()
+
+#' (re)initialize the tags for logging
+#'
+#' All previous tags that have been set previously will be cleared.
+#' 
+#' @param ... The tags you want to set, e.g. \code{fun = "test_object"}
+#' @export
+init_tags <- function(...) {
+  tw$set(tags = list(...))
+}
+
+#' Set the tags for logging
+#'
+#' @param ... The tags you want to set, e.g. \code{fun = "test_object"}
+#' @export
+set_tags <- function(...) {
+  tw$set(tags = merge_list(tw$get("tags"), list(...)))
+}
+
 # Find expression that created a variable
 find_expr <- function(name, env = parent.frame()) {
   subs <- do.call("substitute", list(as.name(name), env))
@@ -7,39 +77,7 @@ find_expr <- function(name, env = parent.frame()) {
 # A version of grepl that's vectorised along pattern, not x
 grepl2 <- function(pattern, x, ...) {
   stopifnot(length(x) == 1)
-  
   vapply(pattern, grepl, x, ..., FUN.VALUE = logical(1), USE.NAMES = FALSE)
-}
-
-# Nicely collapse a character vector
-collapse <- function(x, conn = " and ") {
-  if (length(x) > 1) {
-    n <- length(x)
-    last <- c(n-1, n)
-    collapsed <- paste(x[last], collapse = conn)
-    collapsed <- paste(c(x[-last], collapsed), collapse = ", ")
-  } else collapsed <- x
-  collapsed
-}
-
-collapse_args <- function(x, conn = " and ") {
-  collapse(paste0("<code>",x,"</code>"), conn)
-}
-
-collapse_props <- function(x, conn = " and ") {
-  collapse(paste0("<code>",x,"</code>"), conn)
-}
-
-collapse_funs <- function(x, conn = " and ") {
-  collapse(paste0("<code>",x,"()</code>"), conn)
-}
-
-get_num <- function(index) {
-  switch(index, 
-         "1" = "first", "2" = "second", 
-         "3" = "third", "4" = "fourth", 
-         "5" = "fifth", "6" = "sixth", 
-         "7" = "seventh", sprintf("%ith", index))
 }
 
 #' convert student/solution code to vector of clean strings with the pipe operator removed.
@@ -115,14 +153,13 @@ unpipe <- function(expr) {
 
 #' build R markdown document structure, using knitr functions
 #' 
-#' @importFrom knitr pat_md knit_patterns
+#' @importFrom knitr pat_md knit_patterns opts_knit
 #' @param text text representing an R Markdown document
 build_doc_structure <- function(text) {
-  require(knitr)
-  
+
   # Fix markdown format
-  old.format <- knitr:::opts_knit$get()
-  knitr:::opts_knit$set(out.format = "markdown")
+  old.format <- knitr::opts_knit$get()
+  knitr::opts_knit$set(out.format = "markdown")
   
   # Fix pattern business
   apat = knitr::all_patterns; opat = knit_patterns$get()
@@ -130,7 +167,7 @@ build_doc_structure <- function(text) {
     knit_patterns$restore(opat)
     knitr:::chunk_counter(reset = TRUE)
     knitr:::knit_code$restore(list())
-    knitr:::opts_knit$set(old.format)
+    knitr::opts_knit$set(old.format)
   })
   pat_md()
   
@@ -156,16 +193,15 @@ build_doc_structure <- function(text) {
 #' Parse both the student and solution document
 #' 
 #' @inheritParams test_function
-#' 
-#' @import datacampAPI
-#' @import testthat
-parse_docs <- function(student_code = get_student_code(), solution_code = get_solution_code()) {
-  if(exists_student_ds() & exists_solution_ds()) {
+parse_docs <- function() {
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  student_ds <- tw$get("student_ds")
+  solution_ds <- tw$get("solution_ds")
+  
+  if(!is.null(student_ds) && !is.null(solution_ds)) {
     # Both variables exist already
     return(TRUE)
-  }
-  if(is.null(student_code) || is.null(solution_code)) {
-    stop("The 'student_code' and/or 'solution_code' argument(s) can not be empty")
   }
   
   student_ds = build_doc_structure(student_code) #list(list(input = ""))
@@ -196,7 +232,7 @@ parse_docs <- function(student_code = get_student_code(), solution_code = get_so
   if(n_block_student != n_block_solution) return(FALSE)
   if(!isTRUE(all.equal(sapply(student_ds, class), sapply(solution_ds, class)))) return(FALSE)
   
-  set_student_ds(student_ds)
-  set_solution_ds(solution_ds)
+  tw$set(student_ds = student_ds)
+  tw$set(solution_ds = solution_ds)
   return(TRUE)
 }

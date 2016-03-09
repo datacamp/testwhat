@@ -19,21 +19,21 @@
 #' test_function("mean", c("x", "na.rm"))
 #' }
 #'
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_function_v2 <- function(name, args = NULL, ignore = NULL,
                              allow_extra = TRUE,
                              eval = TRUE,
                              index = NULL,
                              eq_condition = "equivalent",
-                             student_code = get_student_code(),
-                             solution_code = get_solution_code(),
-                             student_env = .GlobalEnv,
-                             solution_env = get_solution_env(),
                              not_called_msg = NULL, incorrect_msg = NULL,
                              incorrect_number_of_calls_msg = NULL,
                              index_not_called_msg = NULL) {
+  
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  init_tags(fun = "test_function_v2")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")

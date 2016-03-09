@@ -4,15 +4,7 @@
 \alias{parse_docs}
 \title{Parse both the student and solution document}
 \usage{
-parse_docs(student_code = get_student_code(),
-  solution_code = get_solution_code())
-}
-\arguments{
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
-
-\item{solution_code}{character string: (chunk of) solution code.
-Do not set this manually.}
+parse_docs()
 }
 \description{
 Parse both the student and solution document

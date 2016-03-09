@@ -19,7 +19,6 @@
 #' @param missing_else_msg Messing in case the else part of the 
 #' control structure should be there but is missing
 #' @param env  Environment in which to perform all these SCTs
-#' @inheritParams test_function
 #' 
 #' @examples
 #' \dontrun{
@@ -54,18 +53,18 @@
 #' })
 #' }
 #' 
-#' @import datacampAPI
-#' @import testthat
 #' @export
 test_if_else <- function(index = 1, 
                          if_cond_test = NULL, 
                          if_expr_test = NULL, 
                          else_expr_test = NULL,
-                         student_code = get_student_code(), 
-                         solution_code = get_solution_code(),
                          not_found_msg = NULL,
                          missing_else_msg = NULL,
                          env = parent.frame()) {
+  
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  init_tags(fun = "test_if_else")
   
   if_cond_test <- substitute(if_cond_test)
   if (is.character(if_cond_test)) code <- parse(text = if_cond_test)
@@ -99,21 +98,21 @@ test_if_else <- function(index = 1,
   }
 
   on.exit({
-    set_student_code(student_code)
-    set_solution_code(solution_code)
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
   })
   
   # IF condition part should always be there
   if(!is.null(if_cond_test) && !is.null(stud_str$if_cond) && !is.null(sol_str$if_cond)) {
-    set_student_code(stud_str$if_cond)
-    set_solution_code(sol_str$if_cond)
+    tw$set(student_code = stud_str$if_cond)
+    tw$set(solution_code = sol_str$if_cond)
     eval(if_cond_test, envir = env)
   }
       
   # IF expression part should always be available.
   if(!is.null(if_expr_test) && !is.null(stud_str$if_expr) && !is.null(sol_str$if_expr)) {
-    set_student_code(stud_str$if_expr)
-    set_solution_code(sol_str$if_expr)
+    tw$set(student_code = stud_str$if_expr)
+    tw$set(solution_code = sol_str$if_expr)
     eval(if_expr_test, envir = env)
   }
       
@@ -124,8 +123,8 @@ test_if_else <- function(index = 1,
     }
     test_what(expect_false(is.null(stud_str$else_expr)), missing_else_msg)
     if(!is.null(stud_str$else_expr)) {
-      set_student_code(stud_str$else_expr)
-      set_solution_code(sol_str$else_expr)
+      tw$set(student_code = stud_str$else_expr)
+      tw$set(solution_code = sol_str$else_expr)
       eval(else_expr_test, envir = env)
     }
   }

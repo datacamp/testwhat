@@ -34,8 +34,7 @@
 #' }, {
 #'  # this code only is run if test_object("x") fails
 #'  test_function("mean", "x")
-#'  # if test_function passes, test_object("x") is 
-#'  # automatically run again to generate a fail.
+#'  # test_object("x") is automatically run again to generate a fail if test_function passed.
 #' })
 #' }
 #'
@@ -44,8 +43,8 @@ test_correct = function(check_code, diagnose_code, env = parent.frame()) {
   check_code <- as.character(substitute(check_code))[-1]
   diagnose_code <- as.character(substitute(diagnose_code))[-1]
   
-  check_diagnose_code <- parse(text=c(diagnose_code,check_code))
-  check_code <- parse(text=check_code)
+  check_diagnose_code <- parse(text = c(diagnose_code,check_code))
+  check_code <- parse(text = check_code)
   
   test_or({
     check_code

@@ -5,8 +5,6 @@
 \title{Check whether the student defined a function correctly}
 \usage{
 test_function_definition(name, function_test = NULL, body_test = NULL,
-  student_env = .GlobalEnv, solution_env = get_solution_env(),
-  student_code = get_student_code(), solution_code = get_solution_code(),
   undefined_msg = NULL, incorrect_number_arguments_msg = NULL,
   env = parent.frame())
 }
@@ -18,16 +16,6 @@ test_function_definition(name, function_test = NULL, body_test = NULL,
 
 \item{body_test}{Additional tests to perform on the body of the function if the tests
 in \code{function_test} fail. Only able to test on strings here!}
-
-\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
-
-\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
-
-\item{solution_code}{character string: (chunk of) solution code.
-Do not set this manually.}
 
 \item{undefined_msg}{Optional feedback message in case the specified 
 function was not defined}

@@ -1,5 +1,3 @@
-library(RAutomatedTesting)
-
 scen <- list(
   list(
     type = "NormalExercise",
@@ -65,7 +63,7 @@ a = 1
     stat_smooth(method = "lm") + xlab("test")
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_1 = list(
         long = "test succeeds if command has the correct data",
         sct = '
 test_error()
@@ -91,7 +89,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
   stat_smooth(method = "auto",se = F)
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_2 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         test_ggplot(1, check = "geom", check_geom_params = "method")
@@ -165,7 +163,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
     stat_smooth(method = "lm") + xlab("test")
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_3 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         test_error()
@@ -183,12 +181,11 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 library(RColorBrewer)
     library(car)",
     student = '
-# Case 4: Add scale_color_manual to change the colors
 myColors <- c(brewer.pal(3, "Dark2"), "black")
-    ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
+ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
     geom_point() +
     stat_smooth(method = "lm", se = F) +
-    stat_smooth(se = F, span = 0.7, aes(group = 1, col = "All")) +
+    stat_smooth(method = "lm", se = F, span = 0.7, aes(group = 2, col = "All")) +
     scale_color_manual("Cylinders", values = myColors)
     ',
     solution = '
@@ -200,7 +197,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
     scale_color_manual("Cylinders", values = myColors)
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_4 = list(
         long = "test succeeds if command has the correct data",
         sct = '
 
@@ -276,7 +273,7 @@ test_ggplot(1, check = "scale")
     stat_smooth(method = "lm") + xlab("test")
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_5 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         test_error()
@@ -299,7 +296,7 @@ test_ggplot(1, check = "scale")
     ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
     geom_point() +
     stat_smooth(method = "lm", se = F) +
-    stat_smooth(se = F, span = 0.7, aes(group = 1, col = "All")) +
+    stat_smooth(method = "lm", se = F, span = 0.7, aes(group = 2, col = "All")) +
     scale_color_manual("Cylinders", values = myColors)
     ',
     solution = '
@@ -311,7 +308,7 @@ test_ggplot(1, check = "scale")
     scale_color_manual("Cylinders", values = myColors)
     ',
     pass = list(
-      test_correct_data = list(
+      test_correct_data_6 = list(
         long = "test succeeds if command has the correct data",
         sct = '
         
@@ -361,5 +358,3 @@ test_ggplot(1, check = "scale")
     )
   )
 )
-
-test_all_scenarios(scen)

@@ -6,8 +6,6 @@
 \usage{
 test_function(name, args = NULL, ignore = NULL, allow_extra = TRUE,
   eval = TRUE, index = NULL, eq_condition = "equivalent",
-  student_code = get_student_code(), solution_code = get_solution_code(),
-  student_env = .GlobalEnv, solution_env = get_solution_env(),
   not_called_msg = NULL, incorrect_msg = NULL,
   incorrect_number_of_calls_msg = NULL)
 }
@@ -38,16 +36,6 @@ the same amount of commands. index = NULL by default, i.e. the entire submission
 
 \item{eq_condition}{character vector indicating how to perform the
 comparison for each argument. See \code{\link{test_object}}}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
-
-\item{solution_code}{character string: (chunk of) solution code.
-Do not set this manually.}
-
-\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
-
-\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
 \item{not_called_msg}{feedback message in case the student did not call the
 function at least as often as in the solution code.}

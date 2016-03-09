@@ -4,15 +4,11 @@
 \alias{test_library_function}
 \title{Test whether the library function was called correctly}
 \usage{
-test_library_function(package, student_code = get_student_code(),
-  not_called_msg = NULL, incorrect_msg = NULL)
+test_library_function(package, not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
 \item{package}{package name for which the library()
 function should've been called}
-
-\item{student_code}{character string: (chunk of) student submission that is being tested.
-Do not set this manually.}
 
 \item{not_called_msg}{optional feedback message in case the library
 function wasn't called a single time}

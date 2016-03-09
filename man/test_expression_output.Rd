@@ -4,15 +4,10 @@
 \alias{test_expression_output}
 \title{Test output of expression}
 \usage{
-test_expression_output(expr, student_env = .GlobalEnv,
-  solution_env = get_solution_env(), incorrect_msg = NULL)
+test_expression_output(expr, incorrect_msg = NULL)
 }
 \arguments{
 \item{expr}{The expression that is executed in both environments.}
-
-\item{student_env}{Environment in which the student code was evaluated. Do not set this manually.}
-
-\item{solution_env}{Environment in which the solution code was evaluated. Do not set this manually.}
 
 \item{incorrect_msg}{Optional feedback message in case the evaluation is not the
 same in both environments. Automatically generated if not specified.}
