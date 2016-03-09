@@ -1,8 +1,17 @@
-# Backwards compatibility (remove over time)
-
+#' Get solution environment (backwards comp)
+#' @export
 get_solution_env <- function() { tw$get("solution_env") }
+
+#' Get solution environment (backwards comp)
+#' @export
 get_student_code <- function() { tw$get("student_code") }
+
+#' Get solution environment (backwards comp)
+#' @export
 get_solution_code <- function() { tw$get("solution_code") }
+
+#' Get solution environment (backwards comp)
+#' @export
 get_student_output <- function() { get(DM.console.output, envir = globalenv()) }
 
 tw_accessors <- function() {

@@ -2,6 +2,10 @@
 
 export(DataCampReporter)
 export(get_clean_lines)
+export(get_solution_code)
+export(get_solution_env)
+export(get_student_code)
+export(get_student_output)
 export(init_tags)
 export(set_tags)
 export(success_msg)
