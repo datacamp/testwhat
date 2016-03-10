@@ -1,4 +1,3 @@
-init_tags(fun = "test_axis")
 #' Test whether a student used the pipe operator sufficiently (ggvis and dplyr exercises)
 #'
 #' Test whether a student used the pipe sufficiently. By default, the function only checks if
@@ -11,7 +10,6 @@ init_tags(fun = "test_axis")
 #' @param absent_msg feedback message in case the student did not use a single pipe.
 #' @param insuf_msg feeback message in case the student did not use the pipe operator sufficiently.
 #'
-#' @import datacampAPI
 #' @export
 test_pipe <- function(num = 1, absent_msg = NULL, insuf_msg = NULL) {
 

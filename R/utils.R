@@ -49,25 +49,12 @@ merge_list <- function(x, y) {
   x
 }
 
-#' "singleton" object to access all information needed by \code{\link{test_what}} functions.
-#' 
-#' @export
 tw <- tw_accessors()
 
-#' (re)initialize the tags for logging
-#'
-#' All previous tags that have been set previously will be cleared.
-#' 
-#' @param ... The tags you want to set, e.g. \code{fun = "test_object"}
-#' @export
 init_tags <- function(...) {
   tw$set(tags = list(...))
 }
 
-#' Set the tags for logging
-#'
-#' @param ... The tags you want to set, e.g. \code{fun = "test_object"}
-#' @export
 set_tags <- function(...) {
   tw$set(tags = merge_list(tw$get("tags"), list(...)))
 }
