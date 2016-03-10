@@ -160,37 +160,6 @@ has_arguments <- function(call, args, ignore = NULL, allow_extra = TRUE) {
   }
 }
 
-# Extract specified arguments from a function call and evaluate if necessary
-extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
-  mapply(function(arg, eval) {
-    object <- call[[arg]]
-    if (eval && (is.name(object) || is.call(object) || is.expression(object))) {
-      object <- try(eval(object, envir = env), silent = TRUE)
-      if (inherits(object, "try-error")) {
-        return(NULL)
-      }
-    }
-    object
-  }, args, eval, SIMPLIFY = FALSE)
-}
-
-# Find all calls to a given function within a piece of code
-find_function_calls <- function(name, pd, env = parent.frame()) {
-  
-  # Retrieve all function calls from parse information
-  called <- pd$text == name & pd$token == "SYMBOL_FUNCTION_CALL"
-  fun_ids <- pd$parent[called]
-  expr_ids <- pd$parent[pd$id %in% fun_ids]
-  expr_strings <- getParseText(pd, expr_ids)
-  exprs <- parse(text = expr_strings)
-  
-  # Expand arguments of function calls
-  mapply(function(expr,expr_string,expr_id) {
-    call <- standardize_call(expr,expr_string,env)
-    c(list(call = call), as.list(pd[pd$id == expr_id, c("line1", "col1", "line2", "col2")]))
-  }, exprs, expr_strings, expr_ids, SIMPLIFY = FALSE)
-}
-
 # Check equality with a specified equality condition
 is_equal <- function(x, y, condition = "equivalent") {
   eq_fun <- switch(condition, equivalent = .equivalent, equal = .equal,
@@ -203,75 +172,18 @@ is_equal <- function(x, y, condition = "equivalent") {
 #' @importFrom stringdist stringdist
 .like <- function(x, y, dist = round(nchar(y) * 0.2)) stringdist(x,y) <= dist
 
-# Expand argument names of a function call
-standardize_call <- function (call, call_string, env = parent.frame()) {
-  stopifnot(is.call(call))
-  
-  f <- args(get(as.character(call[[1]]), env))
-  
-  e <- try(match.call(f, call), silent = TRUE)
-  
-  e <- find_S3_call(e, env = env)
-  
-  if (inherits(e, "try-error")) {
-    test_what(fail(), 
-              sprintf("There is something wrong in the following function call **%s**: _%s_", 
-                      call_string,
-                      attr(e,"condition")$message))
-  } else {
-    return(e)
-  }
-}
-
-find_S3_call <- function (matched_call, env = parent.frame()) {
-  if (inherits(matched_call, "try-error")) {
-    return(matched_call)
-  }
-  call_method <- as.character(matched_call[[1]])
-  met <- try(methods(call_method), silent = TRUE)
-  if (inherits(met, "try-error")) {
-    return(matched_call)
-  } else if (length(met) == 0) {
-    return(matched_call)
-  } else if (length(matched_call) < 2) {
-    return(matched_call)
-  } else {
-    call_class <- try(class(eval(matched_call[[2]], env)), silent = TRUE)
-    if (inherits(call_class, "try-error")) {
-      return(matched_call)
-    }
-    call_dispatched <- paste(call_method,call_class, sep = ".")
-    find_call <- rep(FALSE, length(met))
-    for (one_call in call_dispatched) {
-      find_call <- met==one_call
-      if (any(find_call)) {
-        call_dispatched <- one_call
-        break
+# Extract specified arguments from a function call and evaluate if necessary
+extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
+  mapply(function(arg, eval) {
+    object <- call[[arg]]
+    if (eval && (is.name(object) || is.call(object) || is.expression(object))) {
+      object <- try(eval(object, envir = env), silent = TRUE)
+      if (inherits(object, "try-error")) {
+        return(NULL)
       }
     }
-    if (!any(find_call)) {
-      call_dispatched <- paste(call_method, "default", sep = ".")
-      cal_class <- "default"
-      find_call <- met==call_dispatched
-      if (!any(find_call)) {
-        # At this point, we are almost certain the call is a primitive.
-        # Just ignore.
-        return(matched_call)
-      }
-    }
-    find_call <- which(find_call)
-    vis <- attr(met, "info")$visible[find_call]
-    if (vis) {
-      f <- args(get(call_dispatched, env))
-    } else {
-      f <- args(getAnywhere(call_dispatched)[1])
-    }
-    # Nothing is done with this structure yet
-    return(try(match.call(f, matched_call), silent = TRUE))
-#     return(structure(try(match.call(f, matched_call), silent = TRUE),
-#                      s3_class = call_dispatched,
-#                      s3_arg_name = as.character(names(matched_call)[[2]])))
-  }
+    object
+  }, args, eval, SIMPLIFY = FALSE)
 }
 
 blacklist <- function(name, index) {
