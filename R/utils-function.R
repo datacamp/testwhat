@@ -8,8 +8,10 @@ find_function_calls <- function(name, pd, env = parent.frame()) {
   for(fun_id in fun_ids) {
     expr_id <- pd$parent[pd$id == fun_id] 
     
-    if("%>%" %in% pd$text[pd$parent == pd$parent[pd$id == expr_id]]) {
-      # go one level up, normalize call, and return string
+    # if parent expression contains %>% on left hand side ...
+    siblings <- pd$id[pd$parent == pd$parent[pd$id == expr_id]]
+    if("%>%" %in% pd$text[pd$id %in% siblings] && pd$id[pd$text == "%>%" & pd$id %in% siblings] < expr_id) {
+      # ... go one level up, normalize call, and return string
       expr_id <- pd$parent[pd$id == expr_id]
       expr_string <- deparse(unpipe(as.call(parse(text = getParseText(pd, expr_id)))[[1]]))
     } else {
