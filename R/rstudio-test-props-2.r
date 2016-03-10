@@ -22,7 +22,7 @@
 #'
 #' @import datacampAPI
 #' @export
-test_props <- function(index = 1,
+test_props_2 <- function(index = 1,
                     funs = "ggvis",
                     props = NULL,
                     allow_extra = TRUE,
@@ -37,7 +37,7 @@ test_props <- function(index = 1,
   student_pd = tw$get("student_pd")
   solution_pd = tw$get("solution_pd")
   init_tags(fun = "test_props")
-  
+
   # get the properties defined in the solution
   solution_calls <- find_function_calls(name = funs[1], pd = solution_pd, env = solution_env)
   
@@ -50,7 +50,7 @@ test_props <- function(index = 1,
   sol_props <- get_all_props(funs[1], deparse(solution_call$call))
 
   if(is.null(props)) {
-    props = names(sol_props)
+    props <- names(sol_props)
   } else {
     # select from sol_props the ones to check on
     sol_props = sol_props[props]
@@ -82,7 +82,7 @@ test_props <- function(index = 1,
   pass <- FALSE
   keeptrying <- TRUE
   for(i in 1:length(funs)) {
-    # stud_exprs <- find_function_calls(name = funs[i], pd = student_pd, env = solution_env)
+    stud_exprs = get_expressions_for_function_call(funs[i], pd_stud)
     test_what(expect_that(length(stud_exprs) > 0, is_true()), feedback_msg = not_called_msg)
 
     if(pass) # if passed already, only check on the function being present, so next loop not needed anymore
@@ -139,3 +139,20 @@ test_props <- function(index = 1,
   test_what(expect_true(pass), feedback_msg = incorrect_msg)
 }
 
+# get all properties (uses ggvis function ggvis:::props!)
+get_all_props = function(fun, expression) {
+  extractor <- function(data, ...) {
+    return(ggvis:::props(...))
+  }
+  
+  expression = gsub(fun, "extractor", expression)
+  out = try(eval(parse(text = expression)))
+  if(inherits(out, "try-error")) {
+    return(NULL)
+  }
+  else {
+    # tidy up names and return
+    names(out) = gsub(".update","",names(out))
+    return(out)
+  }
+}

@@ -31,8 +31,12 @@ test_tree_contains <- function(index = 1, fun = NULL, queries = NULL,
                                absent_msg = NULL,
                                incorrect_number_of_calls_msg = NULL) {
   
-  student_code = tw$get("student_code")
-  solution_code = tw$get("solution_code")
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
+  student_pd <- tw$get("student_pd")
+  solution_pd <- tw$get("solution_pd")
   init_tags(fun = "test_tree_contains")
   
   if(is.null(queries)) {
@@ -45,25 +49,16 @@ test_tree_contains <- function(index = 1, fun = NULL, queries = NULL,
     stop("times and queries do not have the same length!")
   }
 
-  # If necessary, build parse calls for both student code and solution code.
-  pd_stud <- get_single_pd(index = index, pd = create_student_pd(student_code = student_code), incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
-  if(is.null(pd_stud)) {
-    return(FALSE)
-  }
-
-  funstr <- if(is.null(fun)) "the entire command" else sprintf("<code>%s()</code>",fun)
-  
-  expressions = get_expressions_for_function_call(fun = fun, pd = pd_stud)
+  student_calls <- find_function_calls(name = fun, pd = student_pd, env = student_env)
+  n_student_calls <- length(student_calls)
 
   if(is.null(not_called_msg)) {
-    not_called_msg = sprintf("Function <code>%s()</code> was not called in command %i of your solution.", fun, index);
+    sprintf("You are missing the %s call of `%s()`.", get_num(index), fun)
   }
   
-  if (!is.null(fun)) {
-    test_what(expect_true(length(expressions) > 0), feedback_msg = not_called_msg)
-  }
-
-  result = sapply(expressions, expression_contains, queries, times, contain_all, fixed_order)
+  test_what(expect_true(n_student_calls >= index), list(message = not_called_msg))
+  
+  result <- expression_contains(student_calls[[index]]$call, queries, times, contain_all, fixed_order)
 
   # set up default absent_msg if not present
   if(is.null(absent_msg)) {
@@ -81,7 +76,7 @@ test_tree_contains <- function(index = 1, fun = NULL, queries = NULL,
                            index, testwhat:::collapse_props(queries), funtext)
     }
   }
-  test_what(expect_true(any(result)), feedback_msg = absent_msg)
+  test_what(expect_true(result), feedback_msg = absent_msg)
 }
 
 expression_contains = function(expression, queries, times, contain_all, fixed_order) {

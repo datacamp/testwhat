@@ -13,7 +13,7 @@
 #' @export
 test_pipe <- function(num = 1, absent_msg = NULL, insuf_msg = NULL) {
 
-  student_code = tw$get("student_code")
+  student_code <- tw$get("student_code")
   init_tags(fun = "test_pipe")
 
   where.is.regex = gregexpr(pattern = '%>%', text = student_code, fixed = TRUE)
