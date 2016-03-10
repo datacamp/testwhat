@@ -1,3 +1,19 @@
+#' Get solution environment (backwards comp)
+#' @export
+get_solution_env <- function() { tw$get("solution_env") }
+
+#' Get solution environment (backwards comp)
+#' @export
+get_student_code <- function() { tw$get("student_code") }
+
+#' Get solution environment (backwards comp)
+#' @export
+get_solution_code <- function() { tw$get("solution_code") }
+
+#' Get solution environment (backwards comp)
+#' @export
+get_student_output <- function() { get(DM.console.output, envir = globalenv()) }
+
 tw_accessors <- function() {
   tw_data <- list()
   
@@ -78,13 +94,13 @@ build_pd <- function(code) {
 
 #' build R markdown document structure, using knitr functions
 #' 
-#' @importFrom knitr pat_md knit_patterns
+#' @importFrom knitr pat_md knit_patterns opts_knit
 #' @param text text representing an R Markdown document
 build_doc_structure <- function(text) {
 
   # Fix markdown format
-  old.format <- knitr:::opts_knit$get()
-  knitr:::opts_knit$set(out.format = "markdown")
+  old.format <- knitr::opts_knit$get()
+  knitr::opts_knit$set(out.format = "markdown")
   
   # Fix pattern business
   apat = knitr::all_patterns; opat = knit_patterns$get()
@@ -92,7 +108,7 @@ build_doc_structure <- function(text) {
     knit_patterns$restore(opat)
     knitr:::chunk_counter(reset = TRUE)
     knitr:::knit_code$restore(list())
-    knitr:::opts_knit$set(old.format)
+    knitr::opts_knit$set(old.format)
   })
   pat_md()
   

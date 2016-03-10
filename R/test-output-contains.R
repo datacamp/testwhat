@@ -19,7 +19,7 @@
 test_output_contains <- function(expr, times = 1, incorrect_msg = NULL, env = globalenv()) {
   init_tags(fun = "test_output_contains")
   
-  console_output = get("DM.console.output", env = globalenv())
+  console_output = get("DM.console.output", envir = globalenv())
   
     # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
     if(is.null(incorrect_msg)) {

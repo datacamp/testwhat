@@ -18,7 +18,8 @@
 #' 
 #' @examples
 #' \dontrun{
-#'
+#'   # test if either the object a or the object b is correct
+#'   test_or(test_object("a"), test_object("b"))
 #' }
 #'
 #' @export

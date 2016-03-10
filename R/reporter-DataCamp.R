@@ -9,6 +9,7 @@ setOldClass('proc_time')
 #' @export
 #' @export DataCampReporter
 #' @aliases DataCampReporter
+#' @importFrom methods setRefClass
 #' @keywords debugging
 DataCampReporter <- setRefClass(
   "DataCampReporter", contains = "Reporter",
