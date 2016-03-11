@@ -4,7 +4,9 @@
 
 The `testwhat` package provides rich functionality to write Submission Correctness Tests for interactive R exercises on the DataCamp platform. The package is a wrapper around [Hadley Wickham's `testthat` package](https://github.com/hadley/testthat), the standard for unit testing in R.
 
-Want to learn more about course creation for DataCamp and writing SCTs in particular? Visit our [Teach Documentation](http://docs.datacamp.com/teach).
+For a detailed guide on how to use `testwhat`, head over to the [wiki](https://github.com/datacamp/testwhat/wiki).
+
+To learn more about course creation for DataCamp, visit our [Teach Documentation](http://docs.datacamp.com/teach).
 
 ## Installation
 
