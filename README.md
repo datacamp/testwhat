@@ -13,7 +13,7 @@ To learn more about course creation for DataCamp, visit our [Teach Documentation
 ```
 install.packages("devtools")
 library("devtools")
-install_github("Data-Camp/testwhat")
+install_github("datacamp/testwhat")
 ```
 
 For more details, questions and suggestions, you can contact <b>content-engineering@datacamp.com</b>.
