@@ -52,7 +52,7 @@ test_function <- function(name, args = NULL, ignore = NULL,
   solution_env <- tw$get("solution_env")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
-  init_tags(test = "test_function")
+  init_tags(fun = "test_function")
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")
