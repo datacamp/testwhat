@@ -34,7 +34,7 @@ Check whether the student defined a function correctly
 # my_fun <- function(a, b) { a + b }
 
 # SCT testing both result and printouts:
-test_function_defintion({
+test_function_definition({
  test_expression_result(my_fun(1,2))
  test_expression_output(my_fun(1,2))
 }, {

@@ -52,7 +52,7 @@ test_function <- function(name,
   student_pd <- tw$get("student_pd")
   solution_pd <- tw$get("solution_pd")
   init_tags(fun = "test_function")
-  
+
   n_args <- length(args)
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)

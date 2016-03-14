@@ -34,13 +34,6 @@ test_function('predict')
 
         "
       )  
-    ),
-    fail = list(
-      test_simple_fail = list(
-        long = "tests whether a simple S3 function can fail",
-        sct = "",
-        message = ""
-      )
     )
   )
 )
