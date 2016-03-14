@@ -14,7 +14,7 @@
 #' 
 #' # Test whether my_fun(1,2) and my_fun(1,2)
 #' # give same _output_
-#' test_function_defintion({
+#' test_function_definition({
 #'  test_expression_output(my_fun(1,2))
 #'  test_expression_output(my_fun(-1,-2))
 #' })
