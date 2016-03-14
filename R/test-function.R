@@ -85,7 +85,7 @@ test_function <- function(name,
     }
     
     # iterate over all student calls, except the ones that are blacklisted
-    seq <- setdiff(1:n_student_calls, get_blacklist(name))
+    # seq <- setdiff(1:n_student_calls, get_blacklist(name))
     for(i in seq) {
       student_call <- student_calls[[i]]
       
@@ -131,7 +131,7 @@ test_function <- function(name,
       } else {
         args_correct_passed <- TRUE
         # we have a winner. Blacklist this student call!
-        blacklist(name, index = i)
+        # blacklist(name, index = i)
         break
       }
     }
@@ -186,23 +186,23 @@ extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
   }, args, eval, SIMPLIFY = FALSE)
 }
 
-blacklist <- function(name, index) {
-  bl <- tw$get("blacklist")
-  if(is.null(bl) || is.null(bl[[name]])) {
-    # no blacklist yet or none for function yet
-    tw$set(blacklist = c(bl, structure(list(index), names = name)))
-  } else {
-    # blacklist available, and previous calls blacklisted for function
-    bl[[name]] <- append(bl[[name]], index)
-    tw$set(blacklist = bl)
-  }
-}
-
-get_blacklist <- function(name) {
-  bl <- tw$get("blacklist")
-  if(is.null(bl)) {
-    return(NULL)
-  } else {
-    return(bl[[name]])
-  }
-}
+# blacklist <- function(name, index) {
+#   bl <- tw$get("blacklist")
+#   if(is.null(bl) || is.null(bl[[name]])) {
+#     # no blacklist yet or none for function yet
+#     tw$set(blacklist = c(bl, structure(list(index), names = name)))
+#   } else {
+#     # blacklist available, and previous calls blacklisted for function
+#     bl[[name]] <- append(bl[[name]], index)
+#     tw$set(blacklist = bl)
+#   }
+# }
+# 
+# get_blacklist <- function(name) {
+#   bl <- tw$get("blacklist")
+#   if(is.null(bl)) {
+#     return(NULL)
+#   } else {
+#     return(bl[[name]])
+#   }
+# }

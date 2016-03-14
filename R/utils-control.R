@@ -51,5 +51,5 @@ prepare_tw <- function(stud, sol, part) {
   tw$set(solution_pd = sol[[part]][["pd"]])
   tw$set(student_code = stud[[part]][["code"]])
   tw$set(solution_code = sol[[part]][["code"]])
-  tw$set(blacklist = NULL)
+  # tw$set(blacklist = NULL)
 }
