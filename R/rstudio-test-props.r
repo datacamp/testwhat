@@ -30,25 +30,23 @@ test_props <- function(index = 1,
                     incorrect_msg = NULL,
                     incorrect_number_of_calls_msg = NULL) {
 
-  student_code = tw$get("student_code")
-  solution_code = tw$get("solution_code")
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  student_pd = tw$get("student_pd")
-  solution_pd = tw$get("solution_pd")
+  student_code <- tw$get("student_code")
+  solution_code <- tw$get("solution_code")
   init_tags(fun = "test_props")
   
-  # get the properties defined in the solution
-  solution_calls <- find_function_calls(name = funs[1], pd = solution_pd, env = solution_env)
-  
-  # Check if index exists in solution
-  if(index > length(solution_calls)) {
-    stop(sprintf("There aren't %s calls of `%s()` available in the solution.", index, funs[1]))
+  pd_stud <- get_single_pd(index = index, pd = create_student_pd(student_code = student_code), incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
+  pd_sol <- get_single_pd(index = index, pd = create_solution_pd(solution_code = solution_code), incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
+  if(is.null(pd_stud) || is.null(pd_sol)) {
+    return(FALSE)
   }
-  solution_call <- solution_calls[[index]]
   
-  sol_props <- get_all_props(funs[1], deparse(solution_call$call))
-
+  # get the properties defined in the solution
+  sol_exprs = get_expressions_for_function_call(funs[1], pd_sol)
+  if(length(sol_exprs) != 1) {
+    stop(sprintf("Function %s should only occur exactly once in command %i.", funs[1], index))
+  }
+  sol_props = get_all_props(funs[1], sol_exprs[[1]])
+  
   if(is.null(props)) {
     props = names(sol_props)
   } else {
@@ -58,7 +56,7 @@ test_props <- function(index = 1,
       stop(sprintf("You defined properties that are not in %s() in command %i of the solution code", funs[1], index))
     }
   }
-
+  
   # Set up default messages
   # message if specified function was not called
   if(is.null(not_called_msg)) {
@@ -78,20 +76,20 @@ test_props <- function(index = 1,
       incorrect_msg = sprintf("In command %i of your solution, make sure that you do not define any properties inside %s.",
                               index, testwhat:::collapse_funs(funs))
   }
-
+  
   pass <- FALSE
   keeptrying <- TRUE
   for(i in 1:length(funs)) {
-    # stud_exprs <- find_function_calls(name = funs[i], pd = student_pd, env = solution_env)
+    stud_exprs = get_expressions_for_function_call(funs[i], pd_stud)
     test_what(expect_that(length(stud_exprs) > 0, is_true()), feedback_msg = not_called_msg)
-
+    
     if(pass) # if passed already, only check on the function being present, so next loop not needed anymore
       next
-
+    
     # possibly more expressions are available
     for(j in 1:length(stud_exprs)) {
       stud_props = get_all_props(funs[i], stud_exprs[[j]])
-
+      
       if(length(props) != length(stud_props) & !allow_extra) {
         # number of props specified does not correspond to function.
         # no extras were allowed ->  fail, and stop trying.
@@ -99,19 +97,19 @@ test_props <- function(index = 1,
         keeptrying <- FALSE
         break
       }
-
+      
       if(length(props) == 0) {
         # if no props specified, we're ok.
         pass <- TRUE
         break
       }
-
+      
       stud_props <- stud_props[props]
       if(any(is.na(names(stud_props)))) {
         # not all properties in props are found in expression
         break
       }
-
+      
       # check if property values correspond
       correct_val <- mapply(function(x,y) (x$value == y$value), x = sol_props, y = stud_props)
       # check if both properties were mapped or set!
@@ -125,14 +123,14 @@ test_props <- function(index = 1,
           else
             return(x$scale == y$scale)
         }}, x = sol_props, y = stud_props)
-
+      
       # if all passed, it's a pass
       if(all(correct_val) && all(correct_mapset)) {
         pass <- TRUE
         break
       }
     }
-
+    
     if(!keeptrying) # if one expression contained more props, fail, and stop trying
       break
   }
