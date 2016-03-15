@@ -24,6 +24,10 @@ test_axis <- function(index = 1,
   
   student_code = tw$get("student_code")
   solution_code = tw$get("solution_code")
+  on.exit({
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
+  })
   init_tags(fun = "test_axis")
 
   if(is.null(type)) {
@@ -57,6 +61,8 @@ test_axis <- function(index = 1,
     if(is.null(incorrect_msg)) {
       incorrect_msg <- sprintf("In command %i of your solution, the %s property of the %s axis is not correct.", index, props[p], type)
     }
+    tw$set(student_code = stud_expr)
+    tw$set(solution_code = sol_expr)
     test_function("add_axis", args = props[p],
                   student_code = stud_expr, solution_code = sol_expr, 
                   incorrect_msg = incorrect_msg)
@@ -66,11 +72,20 @@ test_axis <- function(index = 1,
 get_expression_by_type = function(expressions, type) {
   expr = NULL
   for(i in 1:length(expressions)) {
-    args = datacampSCT:::arguments_for_expression(expressions[i], "add_axis")
+    args <- arguments_for_expression(expressions[i], "add_axis")
     if(args["type"] == type) {
       expr = expressions[i]
       break
     }
   }
   return(expr)
+}
+
+arguments_for_expression <- function(expression, fun) {
+  arguments = match.call(get(fun), call = parse(text = expression))[-1]
+  arguments_list = as.list(arguments)
+  names = names(arguments_list)
+  arguments_list = as.character(arguments_list)
+  names(arguments_list) = names
+  return(arguments_list)
 }

@@ -6,6 +6,7 @@
 #' @param index Ordinal number of the solution call you want to check
 #' @param not_called_msg feedback message in case the function is not retrieved.
 #' @param incorrect_msg  feedback message in case the evaluation was not the same as in the solution
+#' @inheritParams test_function
 #'
 #' @export
 test_function_result <- function(name = NULL,
