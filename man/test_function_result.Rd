@@ -2,30 +2,21 @@
 % Please edit documentation in R/rstudio-test-function-result.R
 \name{test_function_result}
 \alias{test_function_result}
-\title{Test whether a student called a subexpression correctly. (dplyr and ggvis exercises)}
+\title{Check the result of a function call}
 \usage{
 test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
   not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
-\item{index}{exercise to be checked (solution and student code should have same number of calls!)}
+\item{name}{name of the function whose output you would like to check.}
+
+\item{index}{Ordinal number of the solution call you want to check}
 
 \item{not_called_msg}{feedback message in case the function is not retrieved.}
 
 \item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution}
-
-\item{fun}{name of the function to be checked. if fun = NULL, check the entire command.}
-
-\item{incorrect_number_of_calls_msg}{feedback message in case the student did
-enter the same amount of commands as the solution did.}
 }
 \description{
-Test whether a student called a(n) (sub)expression. If yes, test for this function call
-if the result corresponds to the subexpression called in the solution.
-}
-\details{
-This test is implemented using \code{\link{test_that}}.  When testing
-whether the resut is the same, small numeric differences or
-differences in attributes are allowed.
+TODO More information here.
 }
 
