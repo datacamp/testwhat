@@ -70,7 +70,7 @@ test_function <- function(name,
   solution_call <- solution_calls[[index]]
   
   if(is.null(not_called_msg)) {
-    sprintf("You are missing the %s call of `%s()`.", get_num(index), name)
+    sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", get_num(index), name)
   }
   test_what(expect_true(n_student_calls >= index), list(message = not_called_msg))
   
@@ -84,9 +84,7 @@ test_function <- function(name,
       stop("The solution call doesn't have the listed arguments itself.")  
     }
     
-    # iterate over all student calls, except the ones that are blacklisted
-    # seq <- setdiff(1:n_student_calls, get_blacklist(name))
-    seq <- 1:n_student_calls
+    seq <- get_seq(name, stud_indices = 1:n_student_calls, sol_index = index)
     for(i in seq) {
       student_call <- student_calls[[i]]
       
@@ -116,7 +114,8 @@ test_function <- function(name,
       args_correct_vec <- mapply(is_equal, student_args, solution_args, eq_condition)
       args_correct <- all(args_correct_vec)
       if(!args_correct) {
-        if(is.null(args_correct_feedback)) {
+        score <- sum(args_correct_vec)
+        if(is.null(args_correct_feedback) || args_correct_feedback$score < score) {
           if(is.null(incorrect_msg)) {
             incorrect_args <- args[!args_correct_vec]
             incorrect_msg <- sprintf("Did you correctly specify the argument%s %s in your call of `%s()`?", 
@@ -126,13 +125,14 @@ test_function <- function(name,
                                         line_start = student_call$line1,
                                         line_end = student_call$line2,
                                         column_start = student_call$col1,
-                                        column_end = student_call$col2)
+                                        column_end = student_call$col2,
+                                        score = score)
         }
         next
       } else {
         args_correct_passed <- TRUE
-        # we have a winner. Blacklist this student call!
-        # blacklist(name, index = i)
+        # We have a winner.
+        set_used(name, stud_index = i, sol_index = index)
         break
       }
     }
@@ -187,23 +187,23 @@ extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
   }, args, eval, SIMPLIFY = FALSE)
 }
 
-# blacklist <- function(name, index) {
-#   bl <- tw$get("blacklist")
-#   if(is.null(bl) || is.null(bl[[name]])) {
-#     # no blacklist yet or none for function yet
-#     tw$set(blacklist = c(bl, structure(list(index), names = name)))
-#   } else {
-#     # blacklist available, and previous calls blacklisted for function
-#     bl[[name]] <- append(bl[[name]], index)
-#     tw$set(blacklist = bl)
-#   }
-# }
-# 
-# get_blacklist <- function(name) {
-#   bl <- tw$get("blacklist")
-#   if(is.null(bl)) {
-#     return(NULL)
-#   } else {
-#     return(bl[[name]])
-#   }
-# }
+set_used <- function(name, stud_index, sol_index) {
+  tw$set(fun_usage = c(tw$get("fun_usage"), 
+                       list(list(name = name, 
+                                 stud_index = stud_index, 
+                                 sol_index = sol_index))))
+}
+
+get_seq <- function(name, stud_indices, sol_index) {
+  fu <- tw$get("fun_usage")
+  name_hits <- sapply(fu, `[[`, "name") == name
+  fu <- fu[name_hits]
+  sol_index_hits <- sapply(fu, `[[`, "sol_index") == sol_index
+  if(any(sol_index_hits)) {
+    fu <- fu[sol_index_hits]
+    stopifnot(length(fu) == 1)
+    fu[[1]]$stud_index
+  } else {
+    setdiff(stud_indices, sapply(fu, `[[`, "stud_index"))
+  }
+}

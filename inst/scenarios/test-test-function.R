@@ -114,16 +114,35 @@ scen <- list(
             
                                              sct = "test_function(\"mean\", \"x\", allow_extra = FALSE, ignore = \"na.rm\")"))), 
   
-  list(type = "NormalExercise", 
-       student = "\n  a <- \"test\"\n  mean(1:10, trim = 0.9, na.rm = FALSE)\n  mean(1:5, trim = 0.8)\n  mean(1:10, trim = 0.9)", 
-       solution = "\n  a <- \"test\"\n  mean(1:10, trim = 0.9)\n  mean(1:9)\n  mean(1:10)", 
-       pass = list(test_index_old_pass_1 = list(long = "checks whether the index argument works properly - pass 1", 
-                                                sct = "test_function(\"mean\", \"x\", index = 1)"), 
-                   test_index_old_pass_2 = list(long = "checks whether the index argument works properly - pass 2", 
-                                                sct = "test_function(\"mean\", c(\"x\", \"trim\"))")), 
-       fail = list(test_index_old_fail_1 = list(long = "checks whether the index argument works properly - fail 1", 
-                                                sct = "test_function(\"mean\", \"x\", index = 2)"), 
-                   test_index_old_fail_2 = list(long = "checks whether the index argument works properly - fail 2", 
-                                                sct = "test_function(\"mean\", c(\"x\", \"trim\"), allow_extra = FALSE, index = 2)"), 
-                   test_index_old_fail_3 = list(long = "checks whether the index argument works properly - fail 3", 
-                                                sct = "test_function(\"mean\", \"x\", allow_extra = FALSE, index = 3)"))))
+  list(type = "NormalExercise",
+       student = "a <- \"test\"\n  mean(1:10, trim = 0.9, na.rm = FALSE)\n  mean(1:5, trim = 0.8)\n  mean(1:10, trim = 0.9)", 
+       solution = "a <- \"test\"\n  mean(1:10, trim = 0.9)\n  mean(1:9)\n  mean(1:10)", 
+       pass = list(test_index_pass_1 = list(long = "checks whether the index argument works properly - pass 1", 
+                                            sct = "test_function(\"mean\", \"x\", index = 1)"), 
+                   test_index_pass_2 = list(long = "checks whether the index argument works properly - pass 2", 
+                                            sct = "test_function(\"mean\", c(\"x\", \"trim\"))")), 
+       fail = list(test_index_fail_1 = list(long = "checks whether the index argument works properly - fail 1", 
+                                            sct = "test_function(\"mean\", \"x\", index = 2)"), 
+                   test_index_fail_2 = list(long = "checks whether the index argument works properly - fail 2", 
+                                            sct = "test_function(\"mean\", c(\"x\", \"trim\"), allow_extra = FALSE, index = 2)"), 
+                   test_index_fail_3 = list(long = "checks whether the index argument works properly - fail 3", 
+                                            sct = "test_function(\"mean\", \"x\", allow_extra = FALSE, index = 3)"))),
+  
+  list(type = "NormalExercise",
+       solution = "mean(1:10, trim = 0.1)\nmean(1:10, na.rm = FALSE)",
+       student = "mean(1:10, na.rm = FALSE)\nmean(1:10, trim = 0.1)",
+       pass = list(test_indexing_pass_1 = list(long = "single argument should work for both calls",
+                                               sct = "test_function('mean', args = 'x', index = 1)\ntest_function('mean', args = 'x', index = 2)"),
+                   test_indexing_pass_2 = list(long =  "two arguments should work as well",
+                                               sct = "test_function('mean', args = c('x', 'trim'), index = 1)\ntest_function('mean', args = c('x', 'na.rm'), index = 2)"),
+                   test_indexing_pass_3 = list(long = "multiple test_function calls should work too",
+                                               sct = paste0("test_function('mean', args = 'x', index = 2)\n",
+                                                            "test_function('mean', args = 'na.rm', index = 2)"))),
+       fail = list(test_indexing_fail_1 = list(long = "once a function is said to pass one test_function, it can't change anymore",
+                                               sct = paste0("test_function('mean', args = 'x', index = 1)\n",
+                                                            "test_function('mean', args = 'trim', index = 1)")),
+                   test_incorrect_args_fail = list(long = "You can't mention the incorrect arguments; should throw error.",
+                                                   sct = paste("test_function('mean', args = c('x', 'na.rm'), index = 1)"))))
+  
+  
+  )
