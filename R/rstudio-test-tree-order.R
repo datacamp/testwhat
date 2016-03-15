@@ -17,7 +17,6 @@
 #' @param incorrect_number_of_calls_msg  feedback message in case the student did
 #' enter the same amount of commands as the solution did.
 #'
-#' @import datacampAPI
 #' @export
 test_tree_order <- function(index = 1,
                             custom_orders = NULL,

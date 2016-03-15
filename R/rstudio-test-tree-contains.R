@@ -23,7 +23,6 @@
 #' @param incorrect_number_of_calls_msg  feedback message in case the student did
 #' enter the same amount of commands as the solution did.
 #'
-#' @import datacampAPI
 #' @export
 test_tree_contains <- function(index = 1, fun = NULL, queries = NULL,
                                times = NULL, contain_all = TRUE, fixed_order = FALSE,

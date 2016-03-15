@@ -14,18 +14,15 @@
 #' @param allow_extra  whether or not the definition of additional properties is accepted (default TRUE)
 #' @param not_called_msg feedback message in case the specified function(s) was/were not found.
 #' @param incorrect_msg  feedback message in case the student specified properties do not correspond with the ones in the solution.
-#' @param incorrect_number_of_calls_msg  feedback message in case the student did
-#' enter the same amount of commands as the solution did.
 #'
 #' @export
-test_props <- function(index = 1,
-                    funs = "ggvis",
-                    props = NULL,
-                    allow_extra = TRUE,
-                    not_called_msg = NULL,
-                    incorrect_msg = NULL,
-                    incorrect_number_of_calls_msg = NULL) {
-
+test_ggvis_props <- function(funs = "ggvis",
+                             index = 1,
+                             props = NULL,
+                             allow_extra = TRUE,
+                             not_called_msg = NULL,
+                             incorrect_msg = NULL) {
+  
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
   init_tags(fun = "test_props")

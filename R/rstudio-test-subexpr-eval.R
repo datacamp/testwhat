@@ -14,7 +14,6 @@
 #' @param incorrect_number_of_calls_msg  feedback message in case the student did
 #' enter the same amount of commands as the solution did.
 #'
-#' @import datacampAPI
 #' @export
 test_subexpr_eval <- function(index = 1, fun = NULL,
                               not_called_msg = NULL,

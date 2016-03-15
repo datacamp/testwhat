@@ -11,7 +11,7 @@ extract_control <- function(pd, keyword, elnames) {
       
       get_sub_pd <- function(id) {
         children <- get_children(pd, id)
-        pd[pd$id %in% c(all_childs, id), ]
+        pd[pd$id %in% c(children, id), ]
       }
       
       sub_pds <- lapply(expr_ids, get_sub_pd)

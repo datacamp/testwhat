@@ -86,6 +86,7 @@ test_function <- function(name,
     
     # iterate over all student calls, except the ones that are blacklisted
     # seq <- setdiff(1:n_student_calls, get_blacklist(name))
+    seq <- 1:n_student_calls
     for(i in seq) {
       student_call <- student_calls[[i]]
       
