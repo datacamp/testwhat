@@ -71,9 +71,4 @@ grepl2 <- function(pattern, x, ...) {
   vapply(pattern, grepl, x, ..., FUN.VALUE = logical(1), USE.NAMES = FALSE)
 }
 
-build_pd <- function(code) {
-  if(is.null(code)) {
-    stop("code can't be NULL if you want to parse it")
-  }
-  getParseData(parse(text = code, keep.source = TRUE), includeText = TRUE)  
-}
+

@@ -48,6 +48,7 @@ test_object <- function(name, eq_condition = "equivalent",
   
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
+  student_pd <- tw$get("student_pd")
   init_tags(fun = "test_object")
   
   if (is.null(name)) {
@@ -57,18 +58,16 @@ test_object <- function(name, eq_condition = "equivalent",
   stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
-  #set_tags(auto_feedback = is.null(undefined_msg))
   if (is.null(undefined_msg)) {
     undefined_msg <- build_undefined_object_msg(name)
   }
 
+  line_info <- get_assignment(name, student_pd)
   defined <- exists(name, envir = student_env, inherits = FALSE)
-  #set_tags(test = "defined")
-  test_what(expect_true(defined), undefined_msg)
+  test_what(expect_true(defined), c(list(message = undefined_msg), line_info))
   
   if (defined && eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
-    # set_tags(eq_condition = eq_condition)
     eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
                                    identical = expect_identical,
                                    equal = expect_equal,
@@ -81,6 +80,39 @@ test_object <- function(name, eq_condition = "equivalent",
     }
     
     # set_tags(test = "correct")
-    test_what(eq_fun(student, solution), incorrect_msg)
+    test_what(eq_fun(student, solution), c(list(message = incorrect_msg), line_info))
   }
+}
+
+get_assignment <- function(name, pd) {
+  symbols <- pd[pd$token == "SYMBOL" & pd$text == name, ]
+  assigns <- pd[pd$token %in% c("LEFT_ASSIGN", "RIGHT_ASSIGN"), ]
+  
+  assign_calls <- list()
+  for(i in 1:nrow(assigns)) {
+    assign <- assigns[i, ]
+    children <- get_children(pd, assign$parent)
+    hit <- intersect(children, symbols$id)
+    if(length(hit) != 1) {
+      next
+    } else {
+      comp <- switch(assign$token, LEFT_ASSIGN = `<`, RIGHT_ASSIGN = `>`)
+      if(comp(hit, assign$id)) {
+        parent <- pd[pd$id == assign$parent, ]
+        line_info <- as.list(parent[c("line1", "col1", "line2", "col2")])
+        names(line_info) <- c("line_start", "column_start", "line_end", "column_end")
+        assign_calls <- c(assign_calls, list(line_info))
+      } else {
+        next
+      }
+    }
+  }
+  
+  # for now, only pass line info if there's only assignment
+  if(length(assign_calls) == 1) {
+    return(assign_calls[[1]])
+  } else {
+    return(NULL)
+  }
+  return(assign_calls)
 }

@@ -10,15 +10,7 @@ extract_control <- function(pd, keyword, elnames) {
       sub_codes <- lapply(expr_ids, getParseText, parseData = pd)
       
       get_sub_pd <- function(id) {
-        all_childs <- c()
-        childs <- function(index){
-          kids <- pd$id[ pd$parent %in% index ]
-          if( length(kids) ){
-            all_childs <<- c(all_childs, kids )
-            childs( kids )
-          }
-        }
-        childs(id)
+        children <- get_children(pd, id)
         pd[pd$id %in% c(all_childs, id), ]
       }
       
@@ -53,3 +45,6 @@ prepare_tw <- function(stud, sol, part) {
   tw$set(solution_code = sol[[part]][["code"]])
   # tw$set(blacklist = NULL)
 }
+
+
+

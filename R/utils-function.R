@@ -20,6 +20,7 @@ find_function_calls <- function(name, pd, env = parent.frame()) {
     expr <- parse(text = expr_string)
     call <- standardize_call(as.call(expr)[[1]],expr_string,env)
     line_info <- as.list(pd[pd$id == expr_id, c("line1", "col1", "line2", "col2")])
+    names(line_info) <- c("line_start", "column_start", "line_end", "column_end")
     output <- c(output, list(c(call = call, line_info)))
   }
   return(output)
