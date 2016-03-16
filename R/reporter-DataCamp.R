@@ -51,7 +51,7 @@ DataCampReporter <- setRefClass(
         }
       } else {
         results <<- c(results, list(list(passed = result$passed,
-                                         feedback = feedback,
+                                         feedback = to_html(feedback),
                                          instruction_index = instruction_index)))
         if(!result$passed) {
           failed <<- TRUE
