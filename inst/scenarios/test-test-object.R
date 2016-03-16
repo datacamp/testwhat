@@ -1,3 +1,5 @@
+# ALREADY COVERED INSIDE TEST2 - REMOVE SOON
+
 scen <- list(
   list(
     type = "NormalExercise", 

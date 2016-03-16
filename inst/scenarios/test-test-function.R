@@ -39,7 +39,10 @@ scen <- list(
                    test_equal_fail_2 = list(long = "difference between equal and equivalent for arguments - fail 2", 
                                             sct = "test_function(\"var\", \"x\", eq_condition = \"equal\")"), 
                    test_equal_fail_3 = list(long = "difference between equal and equivalent for arguments - fail 3", 
-                                            sct = "test_function(\"lm\", \"formula\", eq_condition = \"equal\")"))), 
+                                            sct = "test_function(\"lm\", \"formula\", eq_condition = \"equal\")"))),
+  
+  ## UNTIL HERE PUT INTO TESTS2
+
   list(type = "NormalExercise", 
        student = "\n  df.equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  var(df.equiv)\n  df.not_equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  lm(df.not_equiv)", 
        solution = "\n  df.equiv <- data.frame(c = c(1, 2, 3), d = c(4, 5, 6))\n  var(df.equiv)\n  df.not_equiv <- data.frame(c = c(7, 8, 9), d = c(4, 5, 6))\n  lm(df.not_equiv)", 
