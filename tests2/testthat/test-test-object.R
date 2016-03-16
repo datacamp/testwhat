@@ -122,3 +122,38 @@ test_that("test_object passes along correct line numbers", {
   fails(output)
   line_info(output, NULL, NULL)
 })
+
+test_that("test_object with line numbers - 2", {
+  lst <- list()
+  lst$DC_CODE <- "5 -> x"
+  lst$DC_SOLUTION <- "x <- 4"
+  lst$DC_SCT <- "test_object('x')"
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 1, 1)
+  
+  lst <- list()
+  lst$DC_CODE <- "x <<- 5"
+  lst$DC_SOLUTION <- "x <- 4"
+  lst$DC_SCT <- "test_object('x')"
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 1, 1)
+  
+  lst <- list()
+  lst$DC_CODE <- "5 ->> x"
+  lst$DC_SOLUTION <- "x <- 4"
+  lst$DC_SCT <- "test_object('x')"
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 1, 1)
+  
+  # use of equality sign doesn't show yet!
+  lst <- list()
+  lst$DC_CODE <- "x = 5"
+  lst$DC_SOLUTION <- "x <- 4"
+  lst$DC_SCT <- "test_object('x')"
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, NULL, NULL)
+})
