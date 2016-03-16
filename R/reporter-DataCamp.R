@@ -51,7 +51,7 @@ DataCampReporter <- setRefClass(
         }
       } else {
         results <<- c(results, list(list(passed = result$passed,
-                                         feedback = to_html(feedback),
+                                         feedback = feedback,
                                          instruction_index = instruction_index)))
         if(!result$passed) {
           failed <<- TRUE
@@ -79,7 +79,7 @@ DataCampReporter <- setRefClass(
       instruction_index <<- index
     },
     
-    get_feedback = function() {
+    get_outcome = function() {
       if (ex_type == "ChallengeExercise") {
         if(length(results) == 0) {
           stop("No tests written for challenge!")
@@ -113,8 +113,9 @@ DataCampReporter <- setRefClass(
         test_results <- select_info(results, "passed")
         if(!all(test_results)) {
           selector <- which(!test_results)[1]
-          return(c(list(correct = FALSE),
-                   results[[selector]]$feedback))
+          fb <- results[[selector]]$feedback
+          fb$message <- to_html(fb$message)
+          return(c(list(correct = FALSE), fb))
         } else {
           return(list(correct = TRUE, 
                       message = to_html(success_msg)))

@@ -36,11 +36,12 @@ test_exercise <- function(sct,
                      output_list = output_list))
   
   # Execute sct with the DataCamp reporter such that it collects test results
-  reporter <- DataCampReporter$new(ex_type=ex_type)
+  reporter <- DataCampReporter$new(ex_type = ex_type)
+  on.exit(reporter$end_reporter())
   with_reporter(reporter, .test_exercise(parse(text = sct), env))
 
   # Obtain feedback from DataCamp reporter and return it invisibly
-  reporter$get_feedback()
+  reporter$get_outcome()
 }
 
 .test_exercise <- function(code, parent_env) {

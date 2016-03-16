@@ -70,7 +70,7 @@ test_function <- function(name,
   solution_call <- solution_calls[[index]]
   
   if(is.null(not_called_msg)) {
-    sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", get_num(index), name)
+    not_called_msg <- sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", get_num(index), name)
   }
   test_what(expect_true(n_student_calls >= index), list(message = not_called_msg))
   
@@ -201,7 +201,6 @@ get_seq <- function(name, stud_indices, sol_index) {
   sol_index_hits <- sapply(fu, `[[`, "sol_index") == sol_index
   if(any(sol_index_hits)) {
     fu <- fu[sol_index_hits]
-    stopifnot(length(fu) == 1)
     fu[[1]]$stud_index
   } else {
     setdiff(stud_indices, sapply(fu, `[[`, "stud_index"))

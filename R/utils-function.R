@@ -50,7 +50,7 @@ find_S3_call <- function (matched_call, env = parent.frame()) {
     return(matched_call)
   }
   call_method <- as.character(matched_call[[1]])
-  met <- try(methods(call_method), silent = TRUE)
+  met <- try(suppressWarnings(methods(call_method)), silent = TRUE)
   if (inherits(met, "try-error")) {
     return(matched_call)
   } else if (length(met) == 0) {

@@ -75,6 +75,22 @@ test_that("test_function, eq_condition", {
   fails(output)
 })
 
+test_that("test_function works with function_usage bookkeeping", {
+  lst <- list()
+  lst$DC_PEC <- 'emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org", 
+            "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")'
+  lst$DC_CODE <- 'sub("edu", "edu", emails)\nsub("edu", "edu", emails)'
+  lst$DC_SOLUTION <- lst$DC_CODE
+  lst$DC_SCT <- paste('test_function("sub", "pattern", index = 1)\n',
+                      'test_function("sub", "replacement", index = 1)\n',
+                      'test_function("sub", "x", index = 1)\n',
+                      'test_function("sub", "pattern", index = 2)\n',
+                      'test_function("sub", "replacement", index = 2)\n',
+                      'test_function("sub", "x", index = 2)')
+  output <- test_it(lst)
+  passes(output)
+})
+
 test_that("test_function passes along correct line numbers", {
   lst <- list()
   lst$DC_CODE <- "mean(1:20)"

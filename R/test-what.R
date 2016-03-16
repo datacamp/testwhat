@@ -25,9 +25,9 @@ test_what <- function(code, feedback, feedback_msg) {
     feedback <- list(message = feedback)
   }
   
-  if(!is.list(feedback) || !("message" %in% names(feedback))) {
+  if(!is.list(feedback) || !("message" %in% names(feedback)) || is.null(feedback$message)) {
     stop(paste("the feedback object passed to test_what() isn't in the correct format;",
-               "make sure it's a list that contains at least an element named 'message'"))
+               "make sure it's a list that contains at least a non-NULL element named 'message'."))
   }
 
   # add tags
