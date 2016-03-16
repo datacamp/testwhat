@@ -47,7 +47,7 @@ test_while_loop <- function(index = 1,
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
-  # blacklist <- tw$get("blacklist")
+  fun_usage <- tw$get("fun_usage")
   init_tags(fun = "test_while_loop")
   
   cond_test <- substitute(cond_test)
@@ -75,7 +75,7 @@ test_while_loop <- function(index = 1,
     tw$set(solution_pd = solution_pd)
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
-    # tw$set(blacklist = blacklist)
+    tw$set(fun_usage = fun_usage)
   })
   
   # WHILE condition part should always be there

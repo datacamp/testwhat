@@ -49,7 +49,7 @@ test_for_loop <- function(index = 1,
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
-  # blacklist <- tw$get("blacklist")
+  fun_usage <- tw$get("fun_usage")
   init_tags(fun = "test_for_loop")
   
   var_test <- substitute(var_test)
@@ -81,7 +81,7 @@ test_for_loop <- function(index = 1,
     tw$set(solution_pd = solution_pd)
     tw$set(student_code = student_code)
     tw$set(solution_code = solution_code)
-    # tw$set(blacklist = blacklist)
+    tw$set(fun_usage = fun_usage)
   })
   
   # for var part should always be there
