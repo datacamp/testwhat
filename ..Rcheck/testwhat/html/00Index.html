@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Easily write submission correctness tests for R exercises</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Easily write submission correctness tests for R exercises
+<img class="toplogo" src="../../../doc/html/logo.jpg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;testwhat&rsquo; version 3.0.2</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="testwhat.html">testwhat-package</a></td>
+<td>Easily write submission correctness tests for DataCamp</td></tr>
+<tr><td style="width: 25%;"><a href="build_doc_structure.html">build_doc_structure</a></td>
+<td>build R markdown document structure, using knitr functions</td></tr>
+<tr><td style="width: 25%;"><a href="DataCampReporter-class.html">DataCampReporter</a></td>
+<td>DataCamp reporter: gather test results along with elapsed time and feedback messages.</td></tr>
+<tr><td style="width: 25%;"><a href="DataCampReporter-class.html">DataCampReporter-class</a></td>
+<td>DataCamp reporter: gather test results along with elapsed time and feedback messages.</td></tr>
+<tr><td style="width: 25%;"><a href="get_clean_lines.html">get_clean_lines</a></td>
+<td>convert student/solution code to vector of clean strings with the pipe operator removed.</td></tr>
+<tr><td style="width: 25%;"><a href="get_solution_code.html">get_solution_code</a></td>
+<td>Get solution environment (backwards comp)</td></tr>
+<tr><td style="width: 25%;"><a href="get_solution_env.html">get_solution_env</a></td>
+<td>Get solution environment (backwards comp)</td></tr>
+<tr><td style="width: 25%;"><a href="get_student_code.html">get_student_code</a></td>
+<td>Get solution environment (backwards comp)</td></tr>
+<tr><td style="width: 25%;"><a href="get_student_output.html">get_student_output</a></td>
+<td>Get solution environment (backwards comp)</td></tr>
+<tr><td style="width: 25%;"><a href="parse_docs.html">parse_docs</a></td>
+<td>Parse both the student and solution document</td></tr>
+<tr><td style="width: 25%;"><a href="success_msg.html">success_msg</a></td>
+<td>Define the success message</td></tr>
+<tr><td style="width: 25%;"><a href="testwhat.html">testwhat</a></td>
+<td>Easily write submission correctness tests for DataCamp</td></tr>
+<tr><td style="width: 25%;"><a href="test_an_object.html">test_an_object</a></td>
+<td>Check if the student defined an object, independent of the name</td></tr>
+<tr><td style="width: 25%;"><a href="test_axis.html">test_axis</a></td>
+<td>Test whether the student correctly defined axis properties (ggvis exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_chunk_options.html">test_chunk_options</a></td>
+<td>Test whether the student defined the correct chunk options (R Markdown exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_correct.html">test_correct</a></td>
+<td>Test things. If it fails, test additional things.</td></tr>
+<tr><td style="width: 25%;"><a href="test_data_frame.html">test_data_frame</a></td>
+<td>Test list elements (or data frame columns)</td></tr>
+<tr><td style="width: 25%;"><a href="test_error.html">test_error</a></td>
+<td>Check whether the student's submission threw an error.</td></tr>
+<tr><td style="width: 25%;"><a href="test_exercise.html">test_exercise</a></td>
+<td>Run all tests for an exercise</td></tr>
+<tr><td style="width: 25%;"><a href="test_expression_output.html">test_expression_output</a></td>
+<td>Test output of expression</td></tr>
+<tr><td style="width: 25%;"><a href="test_expression_result.html">test_expression_result</a></td>
+<td>Test result of expression</td></tr>
+<tr><td style="width: 25%;"><a href="test_file_exists.html">test_file_exists</a></td>
+<td>Test whether a file exists</td></tr>
+<tr><td style="width: 25%;"><a href="test_for_loop.html">test_for_loop</a></td>
+<td>Test a for loop</td></tr>
+<tr><td style="width: 25%;"><a href="test_function.html">test_function</a></td>
+<td>Test whether a student correctly called a function</td></tr>
+<tr><td style="width: 25%;"><a href="test_function_definition.html">test_function_definition</a></td>
+<td>Check whether the student defined a function correctly</td></tr>
+<tr><td style="width: 25%;"><a href="test_function_result.html">test_function_result</a></td>
+<td>Check the result of a function call</td></tr>
+<tr><td style="width: 25%;"><a href="test_function.html">test_function_v2</a></td>
+<td>Test whether a student correctly called a function</td></tr>
+<tr><td style="width: 25%;"><a href="test_ggplot.html">test_ggplot</a></td>
+<td>Test ggplot call</td></tr>
+<tr><td style="width: 25%;"><a href="test_if_else.html">test_if_else</a></td>
+<td>Test a conditional statement</td></tr>
+<tr><td style="width: 25%;"><a href="test_instruction.html">test_instruction</a></td>
+<td>Test a single instruction of the challenges interface</td></tr>
+<tr><td style="width: 25%;"><a href="test_library_function.html">test_library_function</a></td>
+<td>Test whether the library function was called correctly</td></tr>
+<tr><td style="width: 25%;"><a href="test_mc.html">test_mc</a></td>
+<td>Test a multiple choice exercise</td></tr>
+<tr><td style="width: 25%;"><a href="test_object.html">test_object</a></td>
+<td>Test R object existence and value</td></tr>
+<tr><td style="width: 25%;"><a href="test_or.html">test_or</a></td>
+<td>Test if one of the given sct parts are correct.</td></tr>
+<tr><td style="width: 25%;"><a href="test_output_contains.html">test_output_contains</a></td>
+<td>Check whether the student printed something to the console</td></tr>
+<tr><td style="width: 25%;"><a href="test_pipe.html">test_pipe</a></td>
+<td>Test whether a student used the pipe operator sufficiently (ggvis and dplyr exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_props.html">test_props</a></td>
+<td>Test whether the student used the correct properties (ggvis exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_rmd_file.html">test_rmd_file</a></td>
+<td>Test R Markdown file</td></tr>
+<tr><td style="width: 25%;"><a href="test_rmd_group.html">test_rmd_group</a></td>
+<td>Test a single R Markdown file group (R Markdown exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_student_typed.html">test_student_typed</a></td>
+<td>Test student's submission as text</td></tr>
+<tr><td style="width: 25%;"><a href="test_subexpr_eval.html">test_subexpr_eval</a></td>
+<td>Test whether a student called a subexpression correctly. (dplyr and ggvis exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_text.html">test_text</a></td>
+<td>Test inline text and formatting (Markdown)</td></tr>
+<tr><td style="width: 25%;"><a href="test_tree_contains.html">test_tree_contains</a></td>
+<td>Test whether a student's function call contains a certain character (dplyr and ggvis exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_tree_order.html">test_tree_order</a></td>
+<td>Test whether a student's collection of function calls follows that of the solution (dplyr exercises)</td></tr>
+<tr><td style="width: 25%;"><a href="test_what.html">test_what</a></td>
+<td>Expectation wrapper</td></tr>
+<tr><td style="width: 25%;"><a href="test_while_loop.html">test_while_loop</a></td>
+<td>Test a while loop</td></tr>
+<tr><td style="width: 25%;"><a href="test_yaml_header.html">test_yaml_header</a></td>
+<td>Test yaml header (Markdown)</td></tr>
+</table>
+</body></html>

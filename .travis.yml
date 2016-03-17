@@ -1,2 +1,4 @@
 language: r
 sudo: required
+
+r_check_args: --as-cran --no-tests

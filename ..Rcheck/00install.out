@@ -1,0 +1,13 @@
+* installing *source* package ‘testwhat’ ...
+** R
+** inst
+** preparing package for lazy loading
+Warning: package ‘knitr’ was built under R version 3.2.3
+Warning: package ‘rmarkdown’ was built under R version 3.2.3
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+Warning: package ‘knitr’ was built under R version 3.2.3
+Warning: package ‘rmarkdown’ was built under R version 3.2.3
+* DONE (testwhat)
