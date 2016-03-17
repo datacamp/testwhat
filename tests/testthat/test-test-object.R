@@ -156,4 +156,13 @@ test_that("test_object with line numbers - 2", {
   output <- test_it(lst)
   fails(output)
   line_info(output, NULL, NULL)
+  
+  # if x is used on the wrong side, shouldn't be taken as assignment
+  lst <- list()
+  lst$DC_CODE <- "x <- 5\ny <- x"
+  lst$DC_SOLUTION <- "x <- 4"
+  lst$DC_SCT <- "test_object('x')"
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 1, 1)
 })

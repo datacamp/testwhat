@@ -180,7 +180,7 @@ extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
     if (eval && (is.name(object) || is.call(object) || is.expression(object))) {
       object <- try(eval(object, envir = env), silent = TRUE)
       if (inherits(object, "try-error")) {
-        return(NULL)
+        object <- "try-error"
       }
     }
     object

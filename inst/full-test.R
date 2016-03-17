@@ -16,7 +16,7 @@ test_everything <- function() {
   }
   
   message("The results of the tests can be found here:\n", log_path)
-  setwd(oldwd)  
+  setwd(oldwd)
 }
 
 library(RAutomatedTesting)

@@ -114,5 +114,4 @@ get_assignment <- function(name, pd) {
   } else {
     return(NULL)
   }
-  return(assign_calls)
 }

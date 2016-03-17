@@ -20,16 +20,43 @@
 #' @export
 test_error <- function(incorrect_msg = NULL) {
   output_list <- tw$get("output_list")
+  student_pd <- tw$get("student_pd")
   init_tags(fun = "test_error")
   
-  errors =  sapply(output_list, function(x) { if(x$type == "r-error") return(x$payload) })
-  errors[sapply(errors, is.null)] <- NULL
-  if(length(errors) == 0) {
-    build_msg <- "all good"
+  error_indices <- which(sapply(output_list, `[[`, "type") == "r-error")
+  if(length(error_indices) == 0) {
+    feedback <- "all good"
   } else {
-    build_msg <- sprintf("Your solution contains an error:<br><i>%s</i>%s", 
-                         errors[[1]],
-                         ifelse(is.null(incorrect_msg), "", paste0("<br>",incorrect_msg)))
+    error_index <- error_indices[1]
+    error <- output_list[[error_index]]$payload
+    build_msg <- paste("Your code contains an error that you should fix:",
+                       "```",
+                       error,
+                       "```",
+                       ifelse(is.null(incorrect_msg), "", incorrect_msg), sep = "\n")
+    
+    line_info <- NULL
+    call_index <- error_indices[1] - 1
+    if(call_index > 0) {
+      call <- output_list[[call_index]]$payload
+      hits <- student_pd$text == call
+      if(!any(hits)) {
+        line_info <- NULL
+      } else if (sum(hits) == 1) {
+        line_info <- student_pd[hits, c("line1", "col1", "line2", "col2")]
+      } else {
+        # more than 1 hit - select the code that actually generated the error
+        hit_indices <- which(sapply(output_list, function(x) {
+          x$type == "code" && x$payload == call
+        }))
+        line_info <- student_pd[which(hits)[call_index == hit_indices], c("line1", "col1", "line2", "col2")]
+      }
+    }
+    if(!is.null(line_info)) {
+      names(line_info) <- c("line_start", "column_start", "line_end", "column_end")  
+    }
+    
+    feedback <- c(list(message = build_msg), line_info)
   }
-  test_what(expect_true(length(errors) == 0), feedback_msg = build_msg)
+  test_what(expect_true(length(error_indices) == 0), feedback)
 }
