@@ -63,9 +63,7 @@ test_axis <- function(index = 1,
     }
     tw$set(student_code = stud_expr)
     tw$set(solution_code = sol_expr)
-    test_function("add_axis", args = props[p],
-                  student_code = stud_expr, solution_code = sol_expr, 
-                  incorrect_msg = incorrect_msg)
+    test_function("add_axis", args = props[p], incorrect_msg = incorrect_msg)
   }
 }
 

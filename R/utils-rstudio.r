@@ -57,3 +57,21 @@ test_sufficient_length = function(stud, index, incorrect_number_of_calls_msg = N
   
   return(sufficient_length)
 }
+
+# get all properties (uses ggvis function ggvis:::props!)
+get_all_props = function(fun, expression) {
+  extractor <- function(data, ...) {
+    return(ggvis:::props(...))
+  }
+  
+  expression = gsub(fun, "extractor", expression)
+  out = try(eval(parse(text = expression)))
+  if(inherits(out, "try-error")) {
+    return(NULL)
+  }
+  else {
+    # tidy up names and return
+    names(out) = gsub(".update","",names(out))
+    return(out)
+  }
+}
