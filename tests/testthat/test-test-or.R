@@ -27,10 +27,12 @@ test_that("test_or works in 'content_testing_mode'", {
   lst$DC_SCT <- "test_or(test_output_contains('a'), test_output_contains('b'))"
   
   lst$DC_TEST_MODE <- FALSE
-  output <- test_it(lst)
+  capture.output(output <- test_it(lst))
   passes(output)
   
   lst$DC_TEST_MODE <- TRUE
-  output <- test_it(lst)
+  capture.output(output <- test_it(lst))
   fails(output, mess_patt = "testing mode")
 })
+
+
