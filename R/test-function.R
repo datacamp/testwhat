@@ -81,8 +81,9 @@ test_function <- function(name,
     args_correct_feedback <- NULL
     
     if(!has_arguments(solution_call$call, args, ignore, allow_extra)) {
-      stop("The solution call doesn't have the listed arguments itself.")  
+      stop("The solution call doesn't meet the listed arguments conditions itself.")  
     }
+    solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
     
     seq <- get_seq(name, stud_indices = 1:n_student_calls, sol_index = index)
     for(i in seq) {
@@ -109,7 +110,6 @@ test_function <- function(name,
       
       # Test if the specified arguments are correctly called
       student_args <- extract_arguments(student_call$call, args, eval, env = student_env)
-      solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
       
       args_correct_vec <- mapply(is_equal, student_args, solution_args, eq_condition)
       args_correct <- all(args_correct_vec)

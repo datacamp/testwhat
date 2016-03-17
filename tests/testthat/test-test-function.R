@@ -75,6 +75,201 @@ test_that("test_function, eq_condition", {
   fails(output)
 })
 
+
+test_that("test_function, eval stuff", {
+  lst <- list()
+  lst$DC_CODE <- "df.equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  var(df.equiv)\n  df.not_equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  lm(df.not_equiv)"
+  lst$DC_SOLUTION <- "df.equiv <- data.frame(c = c(1, 2, 3), d = c(4, 5, 6))\n  var(df.equiv)\n  df.not_equiv <- data.frame(c = c(7, 8, 9), d = c(4, 5, 6))\n  lm(df.not_equiv)"
+  
+  lst$DC_SCT <- "test_function(\"var\", \"x\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", eval = FALSE)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"lm\", eval = FALSE)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", eval = FALSE, eq_condition = \"equal\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"lm\", eval = FALSE, eq_condition = \"equal\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  
+  lst$DC_SCT <- "test_function(\"lm\", \"formula\")"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", \"x\", eq_condition = \"equal\")"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_SCT <- "test_function(\"lm\", \"formula\", eq_condition = \"equal\")"
+  output <- test_it(lst)
+  fails(output)
+})
+
+
+test_that("test_function, more tests", {
+  lst <- list()
+  lst$DC_CODE <- "var.iden <- 3\n  var(var.iden)\n  var.equal <- 4\n  mean(var.equal)"
+  lst$DC_SOLUTION <- "var.iden <- 3 + 4.4e-8\n  var(var.iden)\n  var.equal <- 4\n  mean(var.equal)"
+  
+  lst$DC_SCT <- "test_function(\"var\", \"x\", eq_condition = \"equal\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", eq_condition = \"equal\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", eq_condition = \"identical\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", eval = FALSE, eq_condition = \"equal\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", eval = FALSE, eq_condition = \"equal\")"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_SCT <- "test_function(\"var\", eval = FALSE, eq_condition = \"identical\")"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_SCT <- "test_function(\"mean\", eval = FALSE, eq_condition = \"identical\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", \"x\", eq_condition = \"identical\")"
+  output <- test_it(lst)
+  fails(output)
+  
+  
+})
+
+
+test_that("test_function, eval", {
+  lst <- list()
+  lst$DC_CODE <- "var.a <- c(302, 305, 309)\n  mean(var.a)\n  var(var.a)"
+  lst$DC_SOLUTION <- "var.b <- c(302, 305, 309)\n  mean(var.b)\n  var(var.b)"
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", \"x\", eval = FALSE)"
+  output <- test_it(lst)
+  fails(output)
+  
+})
+
+test_that("test_function, allow_extra", {
+  lst <- list()
+  lst$DC_CODE <- "mean(1:10, trim = 0.9)\n  var(1:5, 6:10)"
+  lst$DC_SOLUTION <- "mean(1:10, trim = 0.9)\n  var(1:5, 6:10)"
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", c(\"x\", \"trim\"), allow_extra = FALSE)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", c(\"x\", \"y\"), allow_extra = FALSE)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SOLUTION <- "mean(1:10)\n  var(1:5, 6:10)"
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", allow_extra = FALSE)"
+  output <- test_it(lst)
+  fails(output)
+})
+
+
+test_that("test_function, allow_extra and ignore", {
+  lst <- list()
+  lst$DC_CODE <- "mean(1:10, trim = 0.9, na.rm = FALSE)\n  var(1:5, 6:10)"
+  lst$DC_SOLUTION <- "mean(1:10)\n  var(1:5, 11:15)"
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", allow_extra = FALSE, ignore = c(\"trim\", \"na.rm\"))"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"var\", \"x\", allow_extra = FALSE, ignore = \"y\")"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", allow_extra = FALSE, ignore = \"na.rm\")"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", allow_extra = FALSE, ignore = \"na.rm\")"
+  output <- test_it(lst)
+  fails(output)
+})
+
+
+test_that("test_function, index stuff", {
+  lst <- list()
+  lst$DC_CODE <- "a <- \"test\"\n  mean(1:10, trim = 0.9, na.rm = FALSE)\n  mean(1:5, trim = 0.8)\n  mean(1:10, trim = 0.9)"
+  lst$DC_SOLUTION <- "a <- \"test\"\n  mean(1:10, trim = 0.9)\n  mean(1:9)\n  mean(1:10)"
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", index = 1)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", c(\"x\", \"trim\"))"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", index = 1)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", c(\"x\", \"trim\"), allow_extra = FALSE, index = 1)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function(\"mean\", \"x\", allow_extra = FALSE, index = 3)"
+  output <- test_it(lst)
+  fails(output)
+  
+})
+
+test_that("test_function, a bit of everything", {
+  lst <- list()
+  lst$DC_CODE <- "mean(1:10, na.rm = FALSE)\nmean(1:10, trim = 0.1)"
+  lst$DC_SOLUTION <- "mean(1:10, trim = 0.1)\nmean(1:10, na.rm = FALSE)"
+  
+  lst$DC_SCT <- "test_function('mean', args = 'x', index = 1)\ntest_function('mean', args = 'x', index = 2)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "test_function('mean', args = c('x', 'trim'), index = 1)\ntest_function('mean', args = c('x', 'na.rm'), index = 2)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- paste0("test_function('mean', args = 'x', index = 2)\n",
+                       "test_function('mean', args = 'na.rm', index = 2)")
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- paste0("test_function('mean', args = 'x', index = 1)\n",
+                       "test_function('mean', args = 'trim', index = 1)")
+  output <- test_it(lst)
+  fails(output)
+})
+
 test_that("test_function works with function_usage bookkeeping", {
   lst <- list()
   lst$DC_PEC <- 'emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org", 

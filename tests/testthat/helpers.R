@@ -13,10 +13,18 @@ test_it <- function(lst) {
 }
 
 get_sct_payload <- function(output) {
+  if(any(sapply(output, `[[`, "type") == "error")) {
+    print(output)
+    stop("an error occured")
+  }
   output[sapply(output, `[[`, "type") == "sct"][[1]]$payload
 }
 
 get_error_payload <- function(output) {
+  if(any(sapply(output, `[[`, "type") == "sct")) {
+    print(output)
+    stop("no error occured")
+  }
   output[sapply(output, `[[`, "type") == "error"][[1]]$payload
 }
 
