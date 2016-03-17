@@ -21,6 +21,3 @@ test_everything <- function() {
 
 library(RAutomatedTesting)
 test_everything()
-
-# Run the tests in the tests folder
-testthat::test_dir('tests')

@@ -81,7 +81,7 @@ test_function <- function(name,
     args_correct_feedback <- NULL
     
     if(!has_arguments(solution_call$call, args, ignore, allow_extra)) {
-      stop("The solution call doesn't meet the listed arguments conditions itself.")  
+      stop("The solution call doesn't meet the argument conditions itself.")  
     }
     solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
     

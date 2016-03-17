@@ -10,10 +10,22 @@ To learn more about course creation for DataCamp, visit our [Teach Documentation
 
 ## Installation
 
-```
+```R
 install.packages("devtools")
 library("devtools")
 install_github("Data-Camp/testwhat")
 ```
 
 For more details, questions and suggestions, you can contact <b>content-engineering@datacamp.com</b>.
+
+## Testing this package
+
+To test this package, you to have several proprietary packages installed on your system. The tests are in two places at the moment: as scenarios in the `inst` folder, and in the traditional `tests` folder.
+
+```R
+# test the scenarios
+source('inst/full-test.R')
+
+# perform the tests in the tests/ folder
+testthat::test_dir('tests')
+```
