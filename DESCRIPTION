@@ -10,12 +10,13 @@ URL: www.DataCamp.com
 Depends:
     R (>= 3.0.0),
     testthat,
-    knitr,
-    rmarkdown
 Imports:
     methods,
     markdown,
-    stringdist
+    stringdist,
+    knitr,
+    rmarkdown,
+    ggvis
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),
