@@ -69,7 +69,7 @@ test_that("test_while_loop with expr_test works", {
 test_that("test_while_loop works with multiple while loops", {
   lst <- list()
   lst$DC_CODE <- "i = 3\n  n = 3\n  while (i < 8) {\n    rpois(2,i)\n    i = i + 1\n  }\n  a <- \"some code here\"\n  while (n < 5) {\n    rnorm(5, n*n)\n    n = n + 1\n  }"
-  lst$DC_SOLUTION <- "i = 1\n  n = 3\n  while (i < 10) {\n    rpois(10,i)\n    i = i + 1\n  }\n  while (n < 5) {\n    rnorm(5, n*n)\n    n = n + 1\n  }"
+  lst$DC_SOLUTION <- "i = 1\n  n = 3\n  while (i < 10) {\n    rpois(10,i)\n    i = i + 1\n  }\n  while (n < 5) {\n    rnorm(5, n*n)\n    n = n + 1\n  }\nx <- 2\nwhile(x > 0) { print(x); x <- x - 1 } \n"
   lst$DC_SCT <-  "test_while_loop(2, cond_test = test_student_typed('n < 5'), expr_test = test_function(\"rnorm\", c(\"n\")))"
   output <- test_it(lst)
   passes(output)

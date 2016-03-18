@@ -61,7 +61,7 @@ test_that("test_for works with expr_test", {
 test_that("test_for works with indexes", {
   lst <- list()
   lst$DC_CODE <- "for (i in 3:8) {\n    rpois(2,i)\n  }\n  a <- \"some code here\"\n  for (n in 3:5) {\n    rnorm(5, n*n)\n  }"
-  lst$DC_SOLUTION <- "for (i in 1:10) {\n    rpois(10,i)\n  }\n  for (n in 3:5) {\n    rnorm(5, n*n)\n  }"
+  lst$DC_SOLUTION <- "for (i in 1:10) {\n    rpois(10,i)\n  }\n  for (n in 3:5) {\n    rnorm(5, n*n)\n  }\n\nfor(x in 1:5) print(x)"
   
   lst$DC_SCT <- "test_for_loop(2, cond_test = test_object(\"n\"), expr_test = test_function(\"rnorm\", c(\"n\")))"
   output <- test_it(lst)
