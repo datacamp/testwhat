@@ -45,7 +45,14 @@ test_exercise <- function(sct,
   with_reporter(reporter, .test_exercise(parse(text = sct), env))
 
   # Obtain feedback from DataCamp reporter and return it invisibly
-  reporter$get_outcome()
+  outcome <- reporter$get_outcome()
+  
+  # If markdown exercise, remove line information
+  if(ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
+    outcome[c("line_start", "column_start", "line_end", "column_end")] <- NULL
+  }
+  
+  return(outcome)
 }
 
 .test_exercise <- function(code, parent_env) {
