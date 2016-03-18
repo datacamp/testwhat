@@ -26,9 +26,7 @@ enter the same amount of commands as the solution did.}
 \description{
 For a specified command in the student's code, check whether the order of function calls
 follows the one specified by the teacher. The teacher can set several orders that are accepted.
-}
-\details{
-This test is implemented using \code{\link{test_that}}. Only exact string matching is
-performed for the moment. No support for summarize(), only summarise()! (unless teacher codes it explicitly)
+Only exact string matching is performed for the moment. No support for summarize(), only summarise()! 
+(unless teacher codes it explicitly)
 }
 

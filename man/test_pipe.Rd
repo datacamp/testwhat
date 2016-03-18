@@ -18,7 +18,4 @@ Test whether a student used the pipe sufficiently. By default, the function only
 the pipe was used at least once. The user can also select the minimal
 number of occurrences of the pipe.
 }
-\details{
-This test is implemented using \code{\link{test_that}}.
-}
 

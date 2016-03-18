@@ -3,8 +3,7 @@
 #' Test whether a student called a(n) (sub)expression. If yes, test for this function call
 #' if the result corresponds to the subexpression called in the solution.
 #'
-#' This test is implemented using \code{\link{test_that}}.  When testing
-#' whether the resut is the same, small numeric differences or
+#' When testing whether the resut is the same, small numeric differences or
 #' differences in attributes are allowed.
 #'
 #' @param index  exercise to be checked (solution and student code should have same number of calls!)

@@ -26,7 +26,4 @@ enter the same amount of commands as the solution did.}
 Test whether the student correctly assigned axis properties. The student's and solution code is automatically compared to
 one another for specific properties of the axes.
 }
-\details{
-This test is implemented using \code{\link{test_that}}.
-}
 

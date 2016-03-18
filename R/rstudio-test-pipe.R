@@ -4,7 +4,6 @@
 #' the pipe was used at least once. The user can also select the minimal
 #' number of occurrences of the pipe.
 #'
-#' This test is implemented using \code{\link{test_that}}.
 #'
 #' @param num minimal number of times the pipe operator has to appear (default = 1)
 #' @param absent_msg feedback message in case the student did not use a single pipe.

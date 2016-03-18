@@ -39,7 +39,6 @@ For a specified command in the student's code, check whether a particular functi
 a set of queries. Also the number of times these queries have to appear can be specified.
 }
 \details{
-This test is implemented using \code{\link{test_that}}. Only exact string matching is
-performed for the moment.
+Only exact string matching is performed for the moment.
 }
 

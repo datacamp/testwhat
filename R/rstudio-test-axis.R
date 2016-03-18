@@ -3,8 +3,6 @@
 #' Test whether the student correctly assigned axis properties. The student's and solution code is automatically compared to
 #' one another for specific properties of the axes.
 #'
-#' This test is implemented using \code{\link{test_that}}.
-#'
 #' @param index  exercise to be checked (solution and student code should have same number of calls!)
 #' properties inside the first mentioned function by the teacher.
 #' @param type  which axis to check (x or y). Only one axis is tested at the same time.

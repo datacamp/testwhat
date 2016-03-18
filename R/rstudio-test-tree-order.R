@@ -2,9 +2,8 @@
 #'
 #' For a specified command in the student's code, check whether the order of function calls
 #' follows the one specified by the teacher. The teacher can set several orders that are accepted.
-#'
-#' This test is implemented using \code{\link{test_that}}. Only exact string matching is
-#' performed for the moment. No support for summarize(), only summarise()! (unless teacher codes it explicitly)
+#' Only exact string matching is performed for the moment. No support for summarize(), only summarise()! 
+#' (unless teacher codes it explicitly)
 #'
 #' @param index  exercise to be checked (solution and student code should have same number of calls!)
 #' @param allow_extra  if TRUE, allows the student to define additional function, as long as the functions in

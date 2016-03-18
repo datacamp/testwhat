@@ -3,8 +3,7 @@
 #' For a specified command in the student's code, check whether a particular function contains
 #' a set of queries. Also the number of times these queries have to appear can be specified.
 #'
-#' This test is implemented using \code{\link{test_that}}. Only exact string matching is
-#' performed for the moment.
+#' Only exact string matching is performed for the moment.
 #'
 #' @param index  exercise to be checked (solution and student code should have same number of calls!)
 #' @param fun  name of the function to be checked. if fun = NULL, check the entire command.
