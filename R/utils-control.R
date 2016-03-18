@@ -7,7 +7,7 @@ extract_control <- function(pd, keyword, elnames) {
     top_level_ids <- pd$id[!(pd$parent %in% pd$id)]
     top_level_ids_with_curly_brackets <- pd$id[grepl("^\\s*\\{.*?\\}\\s*$", pd$text) & pd$id %in% top_level_ids]
     children_of_curly_brackets <- pd$id[pd$parent %in% top_level_ids_with_curly_brackets]
-    ids <- intersect(parents, c(top_level_ids, children_of_curly_brackets))
+    ids <- base::intersect(parents, c(top_level_ids, children_of_curly_brackets))
                      
     chop_up_pd <- function(id, elnames) {
       expr_ids <- pd$id[pd$parent == id & pd$token %in% c("expr", "forcond")]

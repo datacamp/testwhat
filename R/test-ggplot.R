@@ -345,14 +345,14 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
       sol_cols <- names(sol_facet$cols)
       stud_cols <- names(stud_facet$cols)
       
-      if (length(intersect(sol_cols, stud_cols)) >= length(sol_cols)) {
+      if (length(base::intersect(sol_cols, stud_cols)) >= length(sol_cols)) {
         same_cols <- TRUE
       }
       
       sol_rows <- names(sol_facet$rows)
       stud_rows <- names(stud_facet$rows)
       
-      if (length(intersect(sol_rows, stud_rows)) >= length(sol_rows)) {
+      if (length(base::intersect(sol_rows, stud_rows)) >= length(sol_rows)) {
         same_rows <- TRUE
       }
     }
@@ -603,7 +603,7 @@ get_geom_params <- function(geom_layer) {
 filter_standard_geom_params <- function(geom_call, params) {
   standard_layer <- eval(call(geom_call))
   standard_params <- get_geom_params(standard_layer)
-  ov <- intersect(names(params), names(standard_params))
+  ov <- base::intersect(names(params), names(standard_params))
   eq <- mapply(function(x,y) compare(x,y)$equal, standard_params[ov], params[ov])
   if (any(eq)) {
     params[names(eq[eq])] <- NULL

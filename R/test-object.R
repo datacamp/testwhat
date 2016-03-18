@@ -92,7 +92,7 @@ get_assignment <- function(name, pd) {
   for(i in 1:nrow(assigns)) {
     assign <- assigns[i, ]
     children <- get_children(pd, assign$parent)
-    hit <- intersect(children, symbols$id)
+    hit <- base::intersect(children, symbols$id)
     if(length(hit) != 1) {
       next
     } else {
