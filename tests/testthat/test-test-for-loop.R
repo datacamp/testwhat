@@ -1,4 +1,4 @@
-context("test_while")
+context("test_for_loop")
 source("helpers.R")
 
 test_that("test_for works in basic form", {
