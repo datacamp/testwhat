@@ -1,7 +1,7 @@
 context("test_object")
 source("helpers.R")
 
-test_that("test_object works for simple objects", {
+test_that("test_file_exists works", {
   lst <- list()
   lst$DC_PEC <- "if (file.exists(\"testing.txt\")) file.remove(\"testing.txt\")"
   lst$DC_CODE <- "\n  write(\"testing\", file = \"testing.txt\")"
