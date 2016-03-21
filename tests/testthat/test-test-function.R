@@ -304,3 +304,32 @@ test_that("test_function passes along correct line numbers", {
   fails(output)
   line_info(output, 3, 5)
 })
+
+test_that("test_function works with S3 functions", {
+  lst <- list()
+  lst$DC_PEC <- "
+      set.seed(1)
+      library(rpart)
+      titanic <- read.csv(url('http://s3.amazonaws.com/assets.datacamp.com/course/intro_to_ml/titanic.csv'))
+      titanic$Survived <- factor(titanic$Survived, levels=c('1','0'))
+      titanic$Pclass <- factor(titanic$Pclass)
+      shuffled <- titanic[sample(nrow(titanic)),]
+      train <- shuffled[1:round(0.7*nrow(shuffled)),]
+      test <- shuffled[(round(0.7*nrow(shuffled))+1):nrow(shuffled),]
+      tree <- rpart(Survived ~ ., train, method = 'class')"
+  lst$DC_CODE <- "predict(type = 'class', newdata = test, lm(c(1,2,3) ~ c(4,5,6)))
+                  predict(object = tree, type = 'class', train)"
+  lst$DC_SOLUTION <- "predict(object = tree, type = 'class', train)    
+                      predict(type = 'class', newdata = test, tree)"
+  lst$DC_SCT <- "test_function('predict', args = c('object', 'type'), index = 1)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst <- list()
+  lst$DC_SOLUTION <- "mean(c(1:10, NA), 0.1, TRUE)"
+  lst$DC_CODE <- "mean(c(1:10, NA), 0.1, TRUE)"
+  lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
+  output <- test_it(lst)
+  passes(output)
+})
+
