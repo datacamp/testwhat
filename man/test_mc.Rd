@@ -4,10 +4,10 @@
 \alias{test_mc}
 \title{Test a multiple choice exercise}
 \usage{
-test_mc(correct = NULL, no_selection_msg = NULL, feedback_msgs = NULL)
+test_mc(correct, no_selection_msg = NULL, feedback_msgs = NULL)
 }
 \arguments{
-\item{correct}{number of the correct answer}
+\item{correct}{number of the correct answer (or vector of numbers, if several options are fine)}
 
 \item{no_selection_msg}{feedback message in case the student did not select an answer.}
 
