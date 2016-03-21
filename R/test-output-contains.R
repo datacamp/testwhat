@@ -21,10 +21,11 @@ test_output_contains <- function(expr, times = 1, incorrect_msg = NULL, env = gl
   
   console_output = get("DM.console.output", envir = globalenv())
   
-    # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
-    if(is.null(incorrect_msg)) {
-      incorrect_msg <- build_incorrect_output_msg(expr)
-    }
+  # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
+  if(is.null(incorrect_msg)) {
+    incorrect_msg <- sprintf("Make sure to print <code>%s</code> to the console", expr)
+  }
+  
   test_what(expect_true(output_contains(expr,console_output = console_output, env) >= times),
             incorrect_msg)
 }

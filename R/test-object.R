@@ -58,8 +58,12 @@ test_object <- function(name, eq_condition = "equivalent",
   stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
+  build_incorrect_object_msg <- function(name) {
+    
+  }
+  
   if (is.null(undefined_msg)) {
-    undefined_msg <- build_undefined_object_msg(name)
+    undefined_msg <-  sprintf("Did you define a variable `%s` without errors?", name)
   }
 
   line_info <- get_assignment(name, student_pd)
@@ -76,7 +80,7 @@ test_object <- function(name, eq_condition = "equivalent",
     
     # set_tags(auto_feedback = is.null(incorrect_msg))
     if (is.null(incorrect_msg)) {
-      incorrect_msg <- build_incorrect_object_msg(name)
+      incorrect_msg <- sprintf("The contents of the variable `%s` aren't correct.", name)
     }
     
     # set_tags(test = "correct")
@@ -115,3 +119,22 @@ get_assignment <- function(name, pd) {
     return(NULL)
   }
 }
+
+
+# alias <- function(name) UseMethod("alias")
+# 
+# alias.default <- function(name) {
+#   sprintf("variable %s", name)
+# }
+# 
+# alias.data.frame <- function(name) {
+#   sprintf("data frame %s", name)
+# }
+# 
+# alias.list <- function(name) {
+#   sprintf("list %s", name)
+# }
+# 
+# alias.character <- function(name) {
+#   
+# }

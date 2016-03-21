@@ -1,19 +1,4 @@
 
-# TEST_OBJECT
-build_undefined_object_msg <- function(name) {
-  sprintf("Did you define <code>%s</code>?", name)
-}
-
-build_incorrect_object_msg <- function(name) {
-  sprintf("It looks like you didn't assign the correct value to <code>%s</code>.", name)
-}
-
-# TEST_OUTPUT_CONTAINS
-build_incorrect_output_msg <- function(expr) {
-  sprintf("Make sure to print <code>%s</code> to the console", expr)
-}
-
-
 build_summary <- function(x, ...) UseMethod("build_summary")
 
 build_summary.default <- function(x) {

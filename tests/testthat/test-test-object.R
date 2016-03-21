@@ -5,6 +5,10 @@ test_that("test_object works for simple objects", {
   lst <- list()
   lst$DC_CODE <- "\n    var.equiv <- 3\n    var.not_equiv <- 4"
   lst$DC_SOLUTION <- "\n    var.equiv <- 3\n    var.not_equiv <- 3\n    var.not_here <- 2"
+
+  lst$DC_SCT <- "test_object()"
+  output <- test_it(lst)
+  error(output, mess_patt = "missing, with no default")
   
   lst$DC_SCT <- "test_object(\"var.not_equiv\")"
   output <- test_it(lst)
