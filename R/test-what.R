@@ -37,7 +37,7 @@ test_what <- function(code, feedback, feedback_msg) {
   rep$set_data(feedback)
   eval(code)
   
-  if (rep$failed) {
+  if (rep$failed || isTRUE(rep$get_silent_fail())) {
     stop(sct_failed_msg)
   }
 }

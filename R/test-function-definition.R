@@ -63,30 +63,27 @@ test_function_definition <- function(name,
   defined <- exists(name, envir = student_env, inherits = FALSE)
   test_what(expect_true(defined), undefined_msg)
   
-  if (defined) {
-    stud_function <- get(name, envir = student_env, inherits = FALSE)
-    stud_arguments <- as.list(formals(stud_function))
-    sol_arguments <- as.list(formals(sol_function))
+  stud_function <- get(name, envir = student_env, inherits = FALSE)
+  stud_arguments <- as.list(formals(stud_function))
+  sol_arguments <- as.list(formals(sol_function))
+  
+  rep <- get_reporter()
+  rep$be_silent()
+  run_until_fail(function_test, env = student_env)
+  fail <- rep$get_silent_fail()
+  rep$be_loud()
+  
+  if (fail) {
+    test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
     
-    rep <- get_reporter()
-    
-    rep$be_silent()
-    eval(function_test, envir = student_env)
-    fail <- rep$get_silent_fail()
-    rep$be_loud()
-    
-    if (fail) {
-      test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
-      
-      if(!is.null(body_test)) {
-        tw$set(student_code = paste(deparse(stud_function), collapse = "\n"))
-        tw$set(solution_code = paste(deparse(sol_function), collapse = "\n"))
-        eval(body_test, envir = env)
-        tw$set(student_code = student_code)
-        tw$set(solution_code = solution_code)  
-      }
-      
-      eval(function_test, envir = student_env)
+    if(!is.null(body_test)) {
+      tw$set(student_code = paste(deparse(stud_function), collapse = "\n"))
+      tw$set(solution_code = paste(deparse(sol_function), collapse = "\n"))
+      eval(body_test, envir = env)
+      tw$set(student_code = student_code)
+      tw$set(solution_code = solution_code)  
     }
+    
+    eval(function_test, envir = student_env)
   }
 }

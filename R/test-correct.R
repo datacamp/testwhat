@@ -42,16 +42,7 @@
 test_correct = function(check_code, diagnose_code, env = parent.frame()) {
   check_code <- as.character(substitute(check_code))[-1]
   diagnose_code <- as.character(substitute(diagnose_code))[-1]
-  
   check_diagnose_code <- parse(text = c(diagnose_code,check_code))
   check_code <- parse(text = check_code)
-  
-  test_or({
-    check_code
-  }, {
-    check_diagnose_code
-  },
-  subs = FALSE,
-  choose_feedback = 2,
-  env = env)
+  test_or(check_code, check_diagnose_code, subs = FALSE, choose_feedback = 2, env = env)
 }
