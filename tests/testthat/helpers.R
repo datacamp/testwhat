@@ -7,7 +7,10 @@ test_it <- function(lst) {
   if(is.null(lst$DC_SCT)) lst$DC_SCT <- ""
   lst$DC_COMMAND <- "init"
   output <- rjson::fromJSON(RBackend::execute(rjson::toJSON(lst)))
-  if(any(sapply(output, `[[`, "type") == "error")) stop("init failed")
+  if(any(sapply(output, `[[`, "type") == "error")) {
+    print(output)
+    stop("init failed")
+  }
   lst$DC_COMMAND <- "submit"
   rjson::fromJSON(RBackend::execute(rjson::toJSON(lst)))
 }

@@ -35,9 +35,20 @@ test_function_definition <- function(name,
   
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
+  student_pd <- tw$get("student_pd")
+  solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  fun_usage <- tw$get("fun_usage")
   init_tags(fun = "test_function_definition")
+  
+  on.exit({
+    tw$set(student_pd = student_pd)
+    tw$set(solution_pd = solution_pd)
+    tw$set(student_code = student_code)
+    tw$set(solution_code = solution_code)
+    tw$set(fun_usage = fun_usage)
+  })
   
   if (is.null(name)) {
     stop("argument \"name\" is missing, with no default")
@@ -51,6 +62,9 @@ test_function_definition <- function(name,
 
   function_test <- substitute(function_test)
   if (is.character(function_test)) code <- parse(text = function_test)
+  
+  body_test <- substitute(body_test)
+  if (is.character(body_test)) code <- parse(text = body_test)
   
   if (is.null(undefined_msg)) {
     undefined_msg <- sprintf("Did you define the function <code>%s()</code>?", name)
@@ -75,12 +89,22 @@ test_function_definition <- function(name,
     
     test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
     
+    
+    solution_fun_def <- extract_function_definition(solution_pd, name)
+    student_fun_def <- extract_function_definition(student_pd, name)
+    
+    if(is.null(solution_fun_def)) {
+      stop(sprintf("The function definition if %s was not found in the solution code", name))
+    }
+    test_what(expect_false(is.null(student_fun_def)), 
+              feedback = sprintf("A proper definition of `%s` could not be found in your submission. Make sure to use the `%s <- function() { ... }` recipe.", name, name))
+    
     if(!is.null(body_test)) {
-      tw$set(student_code = paste(deparse(stud_function), collapse = "\n"))
-      tw$set(solution_code = paste(deparse(sol_function), collapse = "\n"))
+      tw$set(student_pd = student_fun_def$pd)
+      tw$set(solution_pd = solution_fun_def$pd)
+      tw$set(student_code = student_fun_def$code)
+      tw$set(solution_code = solution_fun_def$code)
       eval(body_test, envir = env)
-      tw$set(student_code = student_code)
-      tw$set(solution_code = solution_code)  
     }
     
     eval(function_test, envir = env)

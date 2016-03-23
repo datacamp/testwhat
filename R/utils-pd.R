@@ -87,3 +87,19 @@ extract_object_assignment <- function(pd, name) {
     return(NULL)
   }
 }
+
+extract_function_definition <- function(pd, name) {
+  # body of the function is the last brother of the function keyword
+  sub_pds <- extract_assignments(pd, name)
+  if(length(sub_pds) == 1) {
+    pd <- sub_pds[[1]]$pd
+    function_parent <- pd$parent[pd$token == "FUNCTION"]
+    last_brother <- tail(pd$id[pd$parent == function_parent], 1)
+    code <- getParseText(pd, last_brother)
+    sub_pd <- get_sub_pd(pd, last_brother)
+    return(list(code = code, pd = sub_pd))
+  } else {
+    return(NULL)
+  }
+  
+}

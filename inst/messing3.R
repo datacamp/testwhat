@@ -1,19 +1,14 @@
 input <- "
-(a = (2))
 
-a <- c(1, 2, 3)
+a <- function(x, y) {
+  return(x + y)
+}
 
-b <- 12
+b <- function(x = 2, y) x
 
-1 ->> a
-
-a[a < 2] = 0
-
-a <- 123
-# some comments
-names(a) <- 'test'
 "
 
 pd <- getParseData(parse(text = input, keep.source = TRUE), includeText = TRUE)
 
-x <- testwhat:::extract_assignments(pd, "a")
+astuff <- testwhat:::extract_assignments(pd, "a")
+bstuff <- testwhat:::extract_assignments(pd, "b")
