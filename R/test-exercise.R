@@ -68,13 +68,13 @@ run_until_fail <- function(code, env) {
     cond <- attr(eval_fail, "condition")$message
     if (identical(cond, sct_failed_msg)) {
       # The SCT failed
-      return(invisible())
+      return(FALSE)
     } else {
       # Something actually went wrong, not an SCT that failed
       stop(attr(eval_fail, "condition"))
     }
   } else {
     # The SCT passed
-    return(invisible())
+    return(TRUE)
   }
 }

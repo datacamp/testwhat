@@ -17,7 +17,6 @@ DataCampReporter <- setRefClass(
     ex_type = "character",
     results = "list",
     silent = "numeric",
-    silent_fail = "logical",
     instruction_index = "numeric",
     feedback = "list",
     success_msg = "character",
@@ -45,32 +44,24 @@ DataCampReporter <- setRefClass(
     },
     
     add_result = function(result) {
-      if(silent) {
-        if(!result$passed) {
-          silent_fail[silent] <<- TRUE
-        }
-      } else {
+      if(silent == 0) {
         results <<- c(results, list(list(passed = result$passed,
                                          feedback = feedback,
                                          instruction_index = instruction_index)))
-        if(!result$passed) {
-          failed <<- TRUE
-        }
+      }
+      
+      if(!result$passed) {
+        stop(sct_failed_msg)
       }
     },
 
     ### new methods
     be_silent = function() {
       silent <<- silent + 1
-      silent_fail[silent] <<- FALSE
     },
 
     be_loud = function() {
       silent <<- max(0, silent - 1)
-    },
-    
-    get_silent_fail = function() {
-      return(silent_fail[silent])
     },
     
     ## challenge methods

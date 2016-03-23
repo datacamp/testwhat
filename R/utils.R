@@ -14,6 +14,8 @@ get_solution_code <- function() { tw$get("solution_code") }
 #' @export
 get_student_output <- function() { get(DM.console.output, envir = globalenv()) }
 
+sct_failed_msg <- "<sct_failed_error>"
+
 tw_accessors <- function() {
   tw_data <- list()
   

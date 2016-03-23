@@ -41,8 +41,7 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1,
   for (i in 1:len) {
     code <- input[[i]]
     rep$be_silent()
-    run_until_fail(code, env)
-    passes[i] <- !rep$get_silent_fail()
+    passes[i] <- run_until_fail(code, env)
     rep$be_loud()
     if (passes[i] && !in_test_mode) break
   }

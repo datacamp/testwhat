@@ -39,10 +39,12 @@
 #' }
 #'
 #' @export
-test_correct = function(check_code, diagnose_code, env = parent.frame()) {
-  check_code <- as.character(substitute(check_code))[-1]
-  diagnose_code <- as.character(substitute(diagnose_code))[-1]
-  check_diagnose_code <- parse(text = c(diagnose_code,check_code))
-  check_code <- parse(text = check_code)
-  test_or(check_code, check_diagnose_code, subs = FALSE, choose_feedback = 2, env = env)
+test_correct <- function(check_code, diagnose_code, env = parent.frame()) {
+  check_code <- substitute(check_code)
+  if (is.character(check_code)) check_code <- parse(text = check_code)
+  
+  diagnose_code <- substitute(diagnose_code)
+  if (is.character(diagnose_code)) diagnose_code <- parse(text = diagnose_code)
+  
+  test_or(check_code, parse(text = c(deparse(diagnose_code), deparse(check_code))), subs = FALSE, choose_feedback = 2, env = env)
 }
