@@ -1,7 +1,6 @@
 ![banner](https://s3.amazonaws.com/assets.datacamp.com/img/github/content-engineering-repos/testwhat_banner.png)
 
 [![Build Status](https://api.travis-ci.org/datacamp/testwhat.svg?branch=master)](https://travis-ci.org/datacamp/testwhat)
-
 [![codecov.io](https://codecov.io/github/datacamp/testwhat/coverage.svg?branch=master)](https://codecov.io/github/datacamp/testwhat?branch=master)
 
 The `testwhat` package provides rich functionality to write Submission Correctness Tests for interactive R exercises on the DataCamp platform. The package is a wrapper around [Hadley Wickham's `testthat` package](https://github.com/hadley/testthat), the standard for unit testing in R.
