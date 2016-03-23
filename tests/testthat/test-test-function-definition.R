@@ -86,3 +86,15 @@ test_that("test_function_definition works 3", {
   fails(output, mess_patt = "Make sure that .* outputs")
   
 })
+
+test_that("test_function_definition works with control structure in there", {
+  lst <- list()
+  lst$DC_CODE <- "my_filter <- function (x) {\n  if (x >= 0) {\n    print(x)\n  } else {\n    print(\"NULL\")\n  }}"
+  lst$DC_SOLUTION <- "my_filter <- function (x) {\n  if (x >= 0) {\n    print(x)\n  } else {\n    print(NULL)\n  }}"
+  
+  lst$DC_SCT <- paste("test_function_definition('my_filter',", 
+                      "function_test = {\ntest_expression_result('my_filter(5)')\ntest_expression_output('my_filter(-5)')\n})#,",
+                      "body_test = test_if_else(index = 1, if_cond_test = test_student_typed(c(\"> 0\",\"0 <\")), else_expr_test = test_student_typed(\"NULL\")))", sep = "")
+  output <- test_it(lst)
+  fails(output)
+})

@@ -63,16 +63,16 @@ test_function_definition <- function(name,
   defined <- exists(name, envir = student_env, inherits = FALSE)
   test_what(expect_true(defined), undefined_msg)
   
-  stud_function <- get(name, envir = student_env, inherits = FALSE)
-  stud_arguments <- as.list(formals(stud_function))
-  sol_arguments <- as.list(formals(sol_function))
-  
   rep <- get_reporter()
   rep$be_silent()
   passes <- run_until_fail(function_test, env = student_env)
   rep$be_loud()
   
   if (!passes) {
+    stud_function <- get(name, envir = student_env, inherits = FALSE)
+    stud_arguments <- as.list(formals(stud_function))
+    sol_arguments <- as.list(formals(sol_function))
+    
     test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
     
     if(!is.null(body_test)) {
@@ -83,6 +83,6 @@ test_function_definition <- function(name,
       tw$set(solution_code = solution_code)  
     }
     
-    eval(function_test, envir = student_env)
+    eval(function_test, envir = env)
   }
 }
