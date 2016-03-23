@@ -32,5 +32,5 @@ source('inst/full-test.R')
 testthat::test_dir('tests')
 
 # Upload code coverage report to codecov.io
-covr::codecov(token = "left_out")
+covr::codecov(token = "private_token")
 ```
