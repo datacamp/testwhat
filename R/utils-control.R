@@ -12,13 +12,7 @@ extract_control <- function(pd, keyword, elnames) {
     chop_up_pd <- function(id, elnames) {
       expr_ids <- pd$id[pd$parent == id & pd$token %in% c("expr", "forcond")]
       sub_codes <- lapply(expr_ids, getParseText, parseData = pd)
-      
-      get_sub_pd <- function(id) {
-        children <- get_children(pd, id)
-        pd[pd$id %in% c(children, id), ]
-      }
-      
-      sub_pds <- lapply(expr_ids, get_sub_pd)
+      sub_pds <- lapply(expr_ids, get_sub_pd, pd = pd)
       out <- mapply(function(code, pd) list(code = code, pd = pd), sub_codes, sub_pds, SIMPLIFY = FALSE)
       names(out) <- elnames[1:length(out)]
       out

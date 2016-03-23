@@ -1,5 +1,5 @@
 # Find all calls to a given function within a piece of code
-find_function_calls <- function(name, pd, env = parent.frame()) {
+find_function_calls <- function(pd, name, env = parent.frame()) {
   
   # summarize vs summarise hack
   if(name == "summarise") pd$text <- gsub("summarize", "summarise", pd$text)

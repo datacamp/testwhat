@@ -66,7 +66,7 @@ test_object <- function(name, eq_condition = "equivalent",
     undefined_msg <-  sprintf("Did you define a variable `%s` without errors?", name)
   }
 
-  line_info <- get_assignment(name, student_pd)
+  line_info <- extract_object_assignment(student_pd, name)
   defined <- exists(name, envir = student_env, inherits = FALSE)
   test_what(expect_true(defined), c(list(message = undefined_msg), line_info))
   
@@ -85,38 +85,6 @@ test_object <- function(name, eq_condition = "equivalent",
     
     # set_tags(test = "correct")
     test_what(eq_fun(student, solution), c(list(message = incorrect_msg), line_info))
-  }
-}
-
-get_assignment <- function(name, pd) {
-  symbols <- pd[pd$token == "SYMBOL" & pd$text == name, ]
-  assigns <- pd[pd$token %in% c("LEFT_ASSIGN", "RIGHT_ASSIGN"), ]
-  
-  assign_calls <- list()
-  for(i in 1:nrow(assigns)) {
-    assign <- assigns[i, ]
-    children <- get_children(pd, assign$parent)
-    hit <- base::intersect(children, symbols$id)
-    if(length(hit) != 1) {
-      next
-    } else {
-      comp <- switch(assign$token, LEFT_ASSIGN = `<`, RIGHT_ASSIGN = `>`)
-      if(comp(hit, assign$id)) {
-        parent <- pd[pd$id == assign$parent, ]
-        line_info <- as.list(parent[c("line1", "col1", "line2", "col2")])
-        names(line_info) <- c("line_start", "column_start", "line_end", "column_end")
-        assign_calls <- c(assign_calls, list(line_info))
-      } else {
-        next
-      }
-    }
-  }
-  
-  # for now, only pass line info if there's only assignment
-  if(length(assign_calls) == 1) {
-    return(assign_calls[[1]])
-  } else {
-    return(NULL)
   }
 }
 

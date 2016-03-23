@@ -1,27 +1,19 @@
 input <- "
+(a = (2))
 
-# Create the object x
-x <- mean(1:10,
-          trim = 0.1)
+a <- c(1, 2, 3)
 
-# Update the object x
-x = 52
+b <- 12
 
-# Update the object y
-23 -> x
+1 ->> a
 
-x <- list()
+a[a < 2] = 0
 
-x[['b']] <- 'test'
-
-'test2' -> x[['c']]
-
-# Print the object x
-x
-
-mean(x <- 1:3)
+a <- 123
+# some comments
+names(a) <- 'test'
 "
 
 pd <- getParseData(parse(text = input, keep.source = TRUE), includeText = TRUE)
 
-str(get_assignments("x", pd))
+x <- testwhat:::extract_assignments(pd, "a")

@@ -152,14 +152,29 @@ test_that("test_object with line numbers - 2", {
   fails(output)
   line_info(output, 1, 1)
   
-  # use of equality sign doesn't show yet!
+  lst <- list()
+  lst$DC_CODE <- "5 ->> a\nx <- 6"
+  lst$DC_SOLUTION <- "x <- 4"
+  lst$DC_SCT <- "test_object('x')"
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 2, 2)
+  
   lst <- list()
   lst$DC_CODE <- "x = 5"
   lst$DC_SOLUTION <- "x <- 4"
   lst$DC_SCT <- "test_object('x')"
   output <- test_it(lst)
   fails(output)
-  line_info(output, NULL, NULL)
+  line_info(output, 1, 1)
+  
+  lst <- list()
+  lst$DC_PEC <- "x <- c(1, 2, 3)"
+  lst$DC_CODE <- "x[x < 2] = 0"
+  lst$DC_SOLUTION <- "x <- c(1, 2, 3)"
+  lst$DC_SCT <- "test_object('x')"
+  output <- test_it(lst)
+  line_info(output, 1, 1)
   
   # if x is used on the wrong side, shouldn't be taken as assignment
   lst <- list()

@@ -28,4 +28,7 @@ source('inst/full-test.R')
 
 # perform the tests in the tests/ folder
 testthat::test_dir('tests')
+
+# Upload code coverage report to codecov.io
+covr::codecov(token = "left_out")
 ```

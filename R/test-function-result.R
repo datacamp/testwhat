@@ -22,8 +22,8 @@ test_function_result <- function(name = NULL,
   init_tags(fun = "test_subexpr_result")
   
   # Find all function calls in the student and solution code
-  student_calls <- find_function_calls(name, student_pd, student_env)
-  solution_calls <- find_function_calls(name, solution_pd, solution_env)
+  student_calls <- find_function_calls(student_pd, name, student_env)
+  solution_calls <- find_function_calls(solution_pd, name, solution_env)
   n_student_calls <- length(student_calls)
   n_solution_calls <- length(solution_calls)
   
