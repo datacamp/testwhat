@@ -33,17 +33,17 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
       silent = TRUE)))
   
   if (length(output_sol) == 0) {
-    output_sol <- "NULL"
+    output_sol <- NULL
   }
   
   if (inherits(output_sol, "try-error")) {
     stop("expr in test_output() results in an error in the solution environment")
   }
   
-  output_sol <- paste0(output_sol, collapse = "<br>")
+  output_sol <- ifelse(!is.null(output_sol), paste0(output_sol, collapse = "<br>"), NULL)
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs:<br><code>%s</code>", expr, build_summary(output_sol, output = TRUE))
+    incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs%s", expr, ifelse(is.null(output_sol), " nothing", sprintf(":<br><code>%s</code>", build_summary(output_sol, output = TRUE))))
   }
   
   output_stud <- try(capture.output(
@@ -52,7 +52,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
       silent = TRUE)))
   
   if (length(output_stud) == 0) {
-    output_stud <- "NULL"
+    output_stud <- NULL
   }
   
   if (inherits(output_stud, "try-error")) {
@@ -61,10 +61,10 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
                       incorrect_msg, 
                       build_summary(attr(output_stud,"condition")$message, output = TRUE)))
   } else {
-    output_stud <- paste0(output_stud, collapse = "<br>")
+    output_stud <- ifelse(!is.null(output_stud), paste0(output_stud, collapse = "<br>"), NULL)
     test_what(expect_equal(output_sol, output_stud),
-              sprintf("%s<br>Instead, got:<br><code>%s</code>", 
+              sprintf("%s<br>Instead, got%s", 
                       incorrect_msg, 
-                      build_summary(output_stud, output = TRUE)))
+                      ifelse(is.null(output_stud), " no output", sprintf(":<br><code>%s</code>",build_summary(output_stud, output = TRUE)))))
   }
 }

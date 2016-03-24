@@ -30,9 +30,9 @@ test_expression_result <- function(expr,
   solution_env <- tw$get("solution_env")
   init_tags(fun = "test_expression_result")
   
-  capture.output(result_sol <- try(eval(parse(text = expr), envir = solution_env), silent = TRUE))
+  result_sol <- try(eval(parse(text = expr), envir = solution_env), silent = TRUE)
   if (length(result_sol) == 0) {
-    result_sol <- "NULL"
+    result_sol <- NULL
   }
   
   if (inherits(result_sol, "try-error")) {
@@ -40,12 +40,12 @@ test_expression_result <- function(expr,
   }
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> returns <code>%s</code>", expr, build_summary(result_sol))
+    incorrect_msg <- sprintf("Make sure that running <code>%s</code> returns <code>%s</code>", expr, ifelse(is.null(result_sol), "NULL", build_summary(result_sol)))
   }
   
-  capture.output(result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE))
+  result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE)
   if (length(result_stud) == 0) {
-    result_stud <- "NULL"
+    result_stud <- NULL
   }
   
   if (inherits(result_stud, "try-error")) {
@@ -63,6 +63,6 @@ test_expression_result <- function(expr,
     test_what(eq_fun(result_sol, result_stud),
               sprintf("%s<br>Instead, got: <code>%s</code>", 
                       incorrect_msg, 
-                      build_summary(result_stud)))
+                      ifelse(is.null(result_stud), "NULL", build_summary(result_stud))))
   }
 }
