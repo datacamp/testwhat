@@ -36,10 +36,6 @@ test_an_object <- function(name,
   solution_env <- tw$get("solution_env")
   init_tags(fun = "test_an_object")
   
-  if (is.null(name)) {
-    stop("argument \"name\" is missing, with no default")
-  }
-  
   if (is.null(undefined_msg)) {
     # Avoid returning this message, always set undefined_msg
     undefined_msg <- "There is some object missing in your code."

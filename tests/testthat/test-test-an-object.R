@@ -6,9 +6,13 @@ test_that("test_an_object works", {
   lst$DC_SOLUTION <- "\n  var.equiv <- 3\n  var.other_equiv <- 4\n  var.not_here <- 2\n  var.not_equiv <- 5"
   lst$DC_CODE <- "\n  var.equiv <- 3\n  var.not_equiv <- 4"
   
-  lst$DC_SCT <- "test_an_object(\"var.not_equiv\", undefined_msg = \"Testing 1\")"
+  lst$DC_SCT <- "test_an_object('not_existing_in_solution')"
   output <- test_it(lst)
-  fails(output, mess_patt = "Testing")
+  error(output)
+  
+  lst$DC_SCT <- "test_an_object(\"var.not_equiv\")"
+  output <- test_it(lst)
+  fails(output, mess_patt = "There is some object missing in your code")
   
   lst$DC_SCT <- "test_an_object(\"var.not_here\", undefined_msg = \"This is the undefined message\")"
   output <- test_it(lst)
@@ -21,6 +25,13 @@ test_that("test_an_object works", {
   lst$DC_SCT <- "test_an_object(\"var.other_equiv\", \"Testing 3\")"
   output <- test_it(lst)
   passes(output)
+  
+  lst <- list()
+  lst$DC_SOLUTION <- "\n  var.equiv <- 3\n  var.other_equiv <- 4\n  var.not_here <- 2\n  var.not_equiv <- 5"
+  lst$DC_CODE <- "print('retteketet')"
+  lst$DC_SCT <- "test_an_object('var.equiv')"
+  output <- test_it(lst)
+  fails(output)
 })
 
 test_that("test_an_object works with eq_condition 1", {
