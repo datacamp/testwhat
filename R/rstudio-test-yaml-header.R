@@ -21,12 +21,12 @@ test_yaml_header <- function(options = NULL,
   solution_code <- tw$get("solution_code")
   init_tags(fun = "test_yaml_header")
 
-  yaml_solution <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(solution_code, split = "\n")[[1]])))
+  yaml_solution <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(solution_code, split = "\n")[[1]])), silent = TRUE)
   if(inherits(yaml_solution, "try-error")) {
     stop("Something wrong with yaml header of solution code!")
   }
   
-  yaml_student <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(student_code, split = "\n")[[1]])))
+  yaml_student <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(student_code, split = "\n")[[1]])), silent = TRUE)
   test_what(expect_false(inherits(yaml_student, "try-error")), "Make sure the YAML header contains no errors. Beware of erroneous indentation.")
   
   if(is.null(options)) {
