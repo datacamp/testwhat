@@ -63,7 +63,9 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
                       incorrect_msg, 
                       build_summary(attr(output_stud,"condition")$message, output = TRUE)))
   } else {
-    output_stud <- ifelse(!is.null(output_stud), paste0(output_stud, collapse = "<br>"), NULL)
+    if(!is.null(output_stud)) {
+      output_stud <- paste0(output_stud, collapse = "<br>")
+    }
     test_what(expect_equal(output_sol, output_stud),
               sprintf("%s<br>Instead, got%s", 
                       incorrect_msg, 
