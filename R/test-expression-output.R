@@ -40,7 +40,9 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
     stop("expr in test_output() results in an error in the solution environment")
   }
   
-  output_sol <- ifelse(!is.null(output_sol), paste0(output_sol, collapse = "<br>"), NULL)
+  if(!is.null(output_sol)) {
+    output_sol <- paste0(output_sol, collapse = "<br>")
+  }
   
   if(is.null(incorrect_msg)) {
     incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs%s", expr, ifelse(is.null(output_sol), " nothing", sprintf(":<br><code>%s</code>", build_summary(output_sol, output = TRUE))))

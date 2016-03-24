@@ -1,7 +1,7 @@
 Package: testwhat
 Type: Package
 Title: Easily write submission correctness tests for R exercises
-Version: 3.1.5
+Version: 3.1.6
 Date: 2014-07-31
 Description: This package makes it easy for teachers to test students'
     code submissions for R exercises, e.g., for interactive R courses on
