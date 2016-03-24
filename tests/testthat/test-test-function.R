@@ -333,3 +333,14 @@ test_that("test_function works with S3 functions", {
   passes(output)
 })
 
+test_that("test_function works appropriately inside test_corect", {
+  lst <- list()
+  lst$DC_SOLUTION <- "summary(mtcars)\nsummary(pressure)"
+  lst$DC_CODE <- "summary(mtcars)\nsummary(cars)"
+  lst$DC_SCT <- paste("test_correct(test_output_contains('summary(mtcars)'), test_function('summary', args = 'object', index = 1))",
+                      "test_correct(test_output_contains('summary(pressure)'), test_function('summary', args = 'object', index = 2))", sep = "\n")
+  
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 2, 2)
+})
