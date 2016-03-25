@@ -5,19 +5,19 @@
 \title{Check the result of a function call}
 \usage{
 test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
-  not_called_msg = NULL, incorrect_msg = NULL)
+  not_called_msg = NULL, eval_error_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
 \item{name}{name of the function whose output you would like to check.}
 
-\item{index}{Ordinal number of the solution call you want to check}
+\item{index}{Ordinal number of the call you want to check (both student and solution!).}
 
 \item{eq_condition}{character vector indicating how to perform the
 comparison for each argument. See \code{\link{test_object}}}
 
 \item{not_called_msg}{feedback message in case the function is not retrieved.}
 
-\item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution}
+\item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution.}
 }
 \description{
 TODO More information here.

@@ -25,7 +25,7 @@ Because `testwhat` depends on proprietary R packages, you can only run the tests
 
 ```R
 # Run the tests locally
-testthat::test_dir('tests')
+testthat::test_dir('tests/testthat')
 
 # Upload code coverage report to codecov.io
 covr::codecov(token = "private_token")
