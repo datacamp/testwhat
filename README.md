@@ -21,13 +21,10 @@ For more details, questions and suggestions, you can contact <b>content-engineer
 
 ## Testing this package
 
-To test this package, you to have several proprietary packages installed on your system. The tests are in two places at the moment: as scenarios in the `inst` folder, and in the traditional `tests` folder.
+Because `testwhat` depends on proprietary R packages, you can only run the tests on locally, if you have these packages installed. If you have the private Codecov token, you can upload the coverage results from your local system:
 
 ```R
-# test the scenarios
-source('inst/full-test.R')
-
-# perform the tests in the tests/ folder
+# Run the tests locally
 testthat::test_dir('tests')
 
 # Upload code coverage report to codecov.io
