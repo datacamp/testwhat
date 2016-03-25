@@ -19,17 +19,21 @@ test_that("test_function_result fails correctly", {
   lst$DC_SCT <- "test_function_result('summarise')"
   output <- test_it(lst)
   fails(output)
+  line_info(output, 1, 1)
   lst$DC_SCT <- "test_function_result('summarise', eval_error_msg = 'gave_error')"
   output <- test_it(lst)
   fails(output, mess_patt = 'gave_error')
+  line_info(output, 1, 1)
   
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(mpg))"
   lst$DC_SCT <- "test_function_result('summarise')"
   output <- test_it(lst)
   fails(output)
+  line_info(output, 1, 1)
   lst$DC_SCT <- "test_function_result('summarise', incorrect_msg = 'not_correct')"
   output <- test_it(lst)
   fails(output, mess_patt = 'not_correct')
+  line_info(output, 1, 1)
 })
 
 test_that("test_function_result passes appropriately", {
