@@ -63,7 +63,7 @@ get_expression <- function(id, pd) {
 
 # From all parsedata for a set of commands, return only the parse data linked to a single command.
 get_single_pd = function(index, pd, incorrect_number_of_calls_msg = NULL) {
-  ok <- testwhat:::test_sufficient_length(stud = pd, index = index, incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
+  ok <- test_sufficient_length(stud = pd, index = index, incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
   if(ok) {
     return(pd[[index]])
   } else {

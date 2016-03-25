@@ -17,6 +17,8 @@ comparison for each argument. See \code{\link{test_object}}}
 
 \item{not_called_msg}{feedback message in case the function is not retrieved.}
 
+\item{eval_error_msg}{feedback message in case the student function call at the mentioned index generated an error.}
+
 \item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution.}
 }
 \description{

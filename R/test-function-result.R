@@ -5,7 +5,7 @@
 #' @param name name of the function whose output you would like to check.
 #' @param index Ordinal number of the call you want to check (both student and solution!).
 #' @param not_called_msg feedback message in case the function is not retrieved.
-#' @parem eval_error_msg feedback message in case the student function call at the mentioned index generated an error.
+#' @param eval_error_msg feedback message in case the student function call at the mentioned index generated an error.
 #' @param incorrect_msg  feedback message in case the evaluation was not the same as in the solution.
 #' @inheritParams test_function
 #'

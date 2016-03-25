@@ -57,20 +57,20 @@ test_props <- function(index = 1,
   # message if specified function was not called
   if(is.null(not_called_msg)) {
     calls = if(length(funs) == 1) "a call" else "calls"
-    not_called_msg = sprintf("Command %i of your solution should contain %s to %s.", index, calls, testwhat:::collapse_funs(funs))
+    not_called_msg = sprintf("Command %i of your solution should contain %s to %s.", index, calls, collapse_funs(funs))
   }
   # message if the properties or not found or set incorrectly
   if(is.null(incorrect_msg)) {
     propstr <- if(length(props) == 1) "property" else "properties"
     incorrect_msg = sprintf("In command %i of your solution, make sure to correctly define the %s %s inside %s.",
-                            index, propstr, testwhat:::collapse_props(props), testwhat:::collapse_funs(funs, conn = " or "))
+                            index, propstr, collapse_props(props), collapse_funs(funs, conn = " or "))
     if(length(props[!props  %in% c("x","y")]) > 0)
       incorrect_msg = paste(incorrect_msg, "Beware of the difference between <code>=</code> and <code>:=</code>.")
     if(!allow_extra)
       incorrect_msg = paste(incorrect_msg, "Do not define any other properties!")
     if(length(props) == 0)
       incorrect_msg = sprintf("In command %i of your solution, make sure that you do not define any properties inside %s.",
-                              index, testwhat:::collapse_funs(funs))
+                              index, collapse_funs(funs))
   }
   
   pass <- FALSE

@@ -69,14 +69,14 @@ test_tree_contains <- function(index = 1, fun = NULL, queries = NULL,
     else funtext <- sprintf(" inside %s", funstr)
     if(contain_all && fixed_order) {
       absent_msg = sprintf("In command %i of your solution, make sure to use %s%s the correct number of times and in the correct order!",
-                           index, testwhat:::collapse_props(queries), funtext)
+                           index, collapse_props(queries), funtext)
     }
     else if(contain_all && !fixed_order) {
       absent_msg = sprintf("In command %i of your solution, make sure to use %s%s the correct number of times!",
-                           index, testwhat:::collapse_props(queries), funtext)
+                           index, collapse_props(queries), funtext)
     } else {
       absent_msg = sprintf("In command %i of your solution, %s were not found%s sufficiently. Make sure to use at least one of them!",
-                           index, testwhat:::collapse_props(queries), funtext)
+                           index, collapse_props(queries), funtext)
     }
   }
   test_what(expect_true(any(result)), feedback_msg = absent_msg)
