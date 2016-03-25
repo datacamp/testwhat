@@ -4,7 +4,3 @@
 results.log
 .DS_Store
 .tmp.RData
-inst/doc
-inst/messing.R
-inst/messing2.R
-inst/messing3.R
