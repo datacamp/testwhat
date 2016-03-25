@@ -344,3 +344,27 @@ test_that("test_function works appropriately inside test_corect", {
   fails(output)
   line_info(output, 2, 2)
 })
+
+test_that("test_function works with the pipe operator and summarise/summarize", {
+  lst <- list()
+  lst$DC_PEC <- "library(dplyr)"
+  lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(hp))"
+  lst$DC_SCT <- "test_function('summarise', args = '.data')"
+  
+  lst$DC_CODE <- "mtcars %>% summarise(avg = mean(hp))"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "mtcars %>% summarize(avg = mean(hp))"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "cars %>% summarize(avg = mean(speed))"
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 1, 1)
+  
+  lst$DC_CODE <- "mtcars %>% select(hp)"
+  output <- test_it(lst)
+  fails(output)
+})
