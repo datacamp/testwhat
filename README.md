@@ -21,7 +21,7 @@ For more details, questions and suggestions, you can contact <b>content-engineer
 
 ## Testing this package
 
-Because `testwhat` depends on proprietary R packages, you can only run the tests on locally, if you have these packages installed. If you have the private Codecov token, you can upload the coverage results from your local system:
+Because `testwhat` depends on proprietary R packages, you can only run the tests on a system that has these packages installed. If you have the private Codecov token, you can also upload the coverage results:
 
 ```R
 # Run the tests locally
