@@ -12,8 +12,6 @@ test_output_contains(expr, times = 1, incorrect_msg = NULL)
 \item{times}{How often the expression's output should occur in the student's console}
 
 \item{incorrect_msg}{feeback message in case the output did not contain the expression}
-
-\item{env}{environment where the code in expr exectued.}
 }
 \description{
 Function checks whether the student's console contains the output one gets by

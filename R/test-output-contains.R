@@ -7,7 +7,6 @@
 #' @param expr The expression (as string) for which the output should be in the student's console output.
 #' @param times How often the expression's output should occur in the student's console
 #' @param incorrect_msg feeback message in case the output did not contain the expression
-#' @param env environment where the code in expr exectued.
 #' 
 #' @examples
 #' \dontrun{
