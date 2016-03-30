@@ -15,14 +15,18 @@ install_github("datacamp/testwhat")
 
 ## Testing this package
 
-Because `testwhat` depends on proprietary R packages, you can only run the tests on locally, if you have these packages installed. If you have the private Codecov token, you can upload the coverage results from your local system:
+Because `testwhat` depends on proprietary R packages, you can only run the tests on a system that has these packages installed. If you have the private Codecov token, you can also upload the coverage results:
 
 ```R
 # Run the tests locally
-testthat::test_dir('tests/testthat')
+testthat::test_dir("tests/testthat")
+
+# Run only a part of the tests
+testthat::test_dir("tests/testthat", filter = "test-object")
 
 # Upload code coverage report to codecov.io
 covr::codecov(token = "private_token")
 ```
 
 For more details, questions and suggestions, you can contact <b>content-engineering@datacamp.com</b>.
+
