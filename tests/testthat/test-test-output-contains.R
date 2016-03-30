@@ -25,3 +25,11 @@ test_that("test_output_contains works with times argument", {
   output <- test_it(lst)
   fails(output, mess_patt = "NOOOO")
 })
+
+test_that("test_output_contains works in other cases", {
+  lst <- list()
+  lst$DC_CODE <- "x <- mtcars\nsummary(x)\nrm(x)"
+  lst$DC_SCT <- "test_output_contains(\'summary(x)\')"
+  output <- test_it(lst)
+  fails(output)
+})

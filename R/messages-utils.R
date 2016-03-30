@@ -21,6 +21,14 @@ collapse_funs <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"()</code>"), conn)
 }
 
+get_language <- function() {
+  lang <- getOption("lang")
+  ifelse(is.null(lang), "en", lang)
+}
+
+no_msg <- "No message could be built for the specified language."
+
+
 get_num <- function(index) {
   switch(index, 
          "1" = "first", "2" = "second", 

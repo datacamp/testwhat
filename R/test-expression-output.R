@@ -27,10 +27,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
   solution_env <- tw$get("solution_env")
   init_tags(fun = "test_expression_output")
   
-  output_sol <- try(capture.output(
-    try(
-      invisible(eval(parse(text = expr), envir = solution_env)), 
-      silent = TRUE)))
+  output_sol <- try(capture.output(eval(parse(text = expr), envir = solution_env)), silent = TRUE)
   
   if (length(output_sol) == 0) {
     output_sol <- NULL
@@ -48,10 +45,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
     incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs%s", expr, ifelse(is.null(output_sol), " nothing", sprintf(":<br><code>%s</code>", build_summary(output_sol, output = TRUE))))
   }
   
-  output_stud <- try(capture.output(
-    try(
-      invisible(eval(parse(text = expr), envir = student_env)), 
-      silent = TRUE)))
+  output_stud <- try(capture.output(eval(parse(text = expr), envir = student_env)), silent = TRUE)
   
   if (length(output_stud) == 0) {
     output_stud <- NULL

@@ -70,7 +70,7 @@ test_function <- function(name,
   solution_call <- solution_calls[[index]]
   
   if(is.null(not_called_msg)) {
-    not_called_msg <- sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", get_num(index), name)
+    not_called_msg <- build_function_not_called_msg(name, index)
   }
   test_what(expect_true(n_student_calls >= index), list(message = not_called_msg))
   
@@ -94,8 +94,7 @@ test_function <- function(name,
       if(!args_specified) {
         if(is.null(args_specified_feedback)) {
           if(is.null(args_not_specified_msg)) {
-            args_not_specified_msg <- sprintf("Did you specify the argument%s %s in your call of `%s()`?", 
-                                              ifelse(n_args > 1, "s", ""), collapse_args(args), name)
+            args_not_specified_msg <- build_function_args_not_specified_msg(name, args, n_args)
           }
           args_specified_feedback <- list(message = args_not_specified_msg,
                                           line_start = student_call$line1,
@@ -118,8 +117,7 @@ test_function <- function(name,
         if(is.null(args_correct_feedback) || args_correct_feedback$score < score) {
           if(is.null(incorrect_msg)) {
             incorrect_args <- args[!args_correct_vec]
-            incorrect_msg <- sprintf("Did you correctly specify the argument%s %s in your call of `%s()`?", 
-                                     ifelse(length(incorrect_args) > 1, "s", ""), collapse_args(incorrect_args), name)
+            incorrect_msg <- build_function_incorrect_msg(name, incorrect_args)
           }
           args_correct_feedback <- list(message = incorrect_msg,
                                         line_start = student_call$line1,

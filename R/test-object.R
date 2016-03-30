@@ -63,7 +63,7 @@ test_object <- function(name, eq_condition = "equivalent",
   }
   
   if (is.null(undefined_msg)) {
-    undefined_msg <-  sprintf("Did you define a variable `%s` without errors?", name)
+    undefined_msg <-  build_object_undefined_msg(name)
   }
 
   line_info <- extract_object_assignment(student_pd, name)
@@ -80,7 +80,7 @@ test_object <- function(name, eq_condition = "equivalent",
     
     # set_tags(auto_feedback = is.null(incorrect_msg))
     if (is.null(incorrect_msg)) {
-      incorrect_msg <- sprintf("The contents of the variable `%s` aren't correct.", name)
+      incorrect_msg <- build_object_incorrect_msg(name)
     }
     
     # set_tags(test = "correct")

@@ -19,8 +19,8 @@ test_that("test_expression_output works", {
 
 test_that("test_expression_output works 2", {
   lst <- list()
-  lst$DC_CODE <- "func <- function(x) { print(\"Test: \"); print(x); x }"
-  lst$DC_SOLUTION <- "func <- function(x) { print(\"Test: \"); print(x); x - 1 }"
+  lst$DC_CODE <- "func <- function(x) { print(\"Test: \"); print(x); return(invisible(x)) }"
+  lst$DC_SOLUTION <- "func <- function(x) { print(\"Test: \"); print(x); return(invisible(x - 1)) }"
   
   lst$DC_SCT <- "test_expression_output(\"func(3)\")"
   output <- test_it(lst)
@@ -40,4 +40,18 @@ test_that("test_expression_output works with NULL", {
   lst$DC_CODE <- "func <- function(x) { print(\"NULL\") }"
   output <- test_it(lst)
   fails(output, mess_patt = "got:<br><code>\\[1\\] &quot;NULL")
+})
+
+test_that("test_expression_output works if broken", {
+  lst <- list()
+  lst$DC_CODE <- "func <- function(x) { print(\"Test: \"); y <- wrong_stuff }"
+  lst$DC_SOLUTION <- "func <- function(x) { print(\"Test: \"); y <- wrong_stuff }"
+  
+  lst$DC_SCT <- "test_expression_output(\"func(3)\")"
+  output <- test_it(lst)
+  error(output)
+  
+  lst$DC_SOLUTION <- "func <- function(x) { print(\"Test: \"); y <- \"ok_stuff\" }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "resulted in the following error")
 })

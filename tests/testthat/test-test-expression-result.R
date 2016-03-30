@@ -40,3 +40,17 @@ test_that("test_expression_result works with NULL", {
   output <- test_it(lst)
   fails(output, mess_patt = "Make sure that running.*returns <code>NULL</code>.*Instead, got: <code>")
 })
+
+test_that("test_expression_result works with erroneous code", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- 5"
+  lst$DC_CODE <- "x <- 5\nrm(x)"
+  
+  lst$DC_SCT <- "test_expression_result('class(non_existing)')"
+  output <- test_it(lst)
+  error(output)
+  
+  lst$DC_SCT <- "test_expression_result('class(x)')"
+  output <- test_it(lst)
+  fails(output)
+})
