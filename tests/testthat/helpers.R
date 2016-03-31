@@ -1,5 +1,3 @@
-library("RBackend")
-
 test_it <- function(lst) {
   if(is.null(lst$DC_TYPE)) lst$DC_TYPE <- "NormalExercise"
   if(is.null(lst$DC_PEC)) lst$DC_PEC <- ""

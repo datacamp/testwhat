@@ -19,7 +19,7 @@ Because `testwhat` depends on proprietary R packages, you can only run the tests
 
 ```R
 # Run the tests locally
-testthat::test_dir("tests/testthat")
+devtools::test()
 
 # Run only a part of the tests
 testthat::test_dir("tests/testthat", filter = "test-object")

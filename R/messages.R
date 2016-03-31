@@ -37,7 +37,7 @@ build_function_args_not_specified_msg <- function(name, args, n_args) {
   lang <- get_language()
   if(lang == "en") {
     msg <- sprintf("Did you specify the argument%s %s in your call of `%s()`?", 
-                   ifelse(n_args > 1, "s", ""), collapse_args(args), name)
+                   ifelse(n_args == 1, "", "s"), collapse_args(args), name)
   } else if (lang == "fr") {
     msg <- sprintf("Avez-vous specifi\u00e9 %sargument%s %s dans la fonction `%s()` ?",
                    ifelse(n_args == 1, "l'", "les "),
@@ -61,11 +61,11 @@ build_function_incorrect_msg <- function(name, incorrect_args) {
   n_args <- length(incorrect_args)
   if(lang == "en") {
     msg <- sprintf("Did you correctly specify the argument%s %s in your call of `%s()`?", 
-                   ifelse(n_args > 1, "s", ""), collapse_args(incorrect_args), name)
+                   ifelse(n_args == 1, "", "s"), collapse_args(incorrect_args), name)
   } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous affect\u00e9 %s %s argument%s %s dans la fonction `%s()` ?",
+    msg <- sprintf("Avez-vous affect\u00e9 %s %sargument%s %s dans la fonction `%s()` ?",
                    ifelse(n_args == 1, "la bonne valeur", "les bonnes valeurs"),
-                   ifelse(n_args == 1, "\u00e0 l'", "aux"),
+                   ifelse(n_args == 1, "\u00e0 l'", "aux "),
                    ifelse(n_args == 1, "", "s"),
                    collapse_args(incorrect_args, " et "),
                    name)

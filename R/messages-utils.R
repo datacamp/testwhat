@@ -21,8 +21,13 @@ collapse_funs <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"()</code>"), conn)
 }
 
+#' @export
+set_language <- function(lang) {
+  tw$set(language = lang)
+}
+
 get_language <- function() {
-  lang <- getOption("lang")
+  lang <- tw$get("language")
   ifelse(is.null(lang), "en", lang)
 }
 
