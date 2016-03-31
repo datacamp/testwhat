@@ -21,9 +21,17 @@ collapse_funs <- function(x, conn = " and ") {
   collapse(paste0("<code>",x,"()</code>"), conn)
 }
 
+#' Specify the language for the automated feedback
+#' 
+#' @param lang shorthand notation for the language. Currently, "en", "fr" and "es" are supported
 #' @export
-set_language <- function(lang) {
+set_language <- function(lang = c("en", "fr", "es")) {
+  lang <- match.arg(lang)
   tw$set(language = lang)
+}
+
+reset_language <- function() {
+  tw$set(language = NULL)
 }
 
 get_language <- function() {

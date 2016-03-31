@@ -10,8 +10,8 @@ build_object_undefined_msg <- function(name) {
 build_object_incorrect_msg <- function(name) {
   template <- switch(get_language(),
                      en = "The contents of the variable `%s` aren't correct.",
-                     fr = "Il semblerait que vous n'ayez pas affect\u00e9 la bonne valeur \u00e0 `%s<`.",
-                     es = "Parece que no asignaste el valor correcto a `>%s`.",
+                     fr = "Il semblerait que vous n'ayez pas affect\u00e9 la bonne valeur \u00e0 `%s`.",
+                     es = "Parece que no asignaste el valor correcto a `%s`.",
                      stop(no_msg))
   sprintf(template, name)
 }

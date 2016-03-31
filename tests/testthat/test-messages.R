@@ -1,7 +1,7 @@
 context("messages")
 
 test_that("language utils work", {
-  set_language(NULL)
+  reset_language()
   expect_equal(get_language(), "en")
   set_language("en")
   expect_equal(get_language(), "en")
@@ -9,11 +9,11 @@ test_that("language utils work", {
   expect_equal(get_language(), "fr")
   set_language("es")
   expect_equal(get_language(), "es")
-  set_language(NULL)
+  reset_language()
 })
 
 test_that("languages work for test_object", {
-  set_language(NULL)
+  reset_language()
   msg <- build_object_undefined_msg("a")
   expect_true(grepl("Did you define", msg))
   msg <- build_object_incorrect_msg("a")
@@ -37,13 +37,14 @@ test_that("languages work for test_object", {
   msg <- build_object_incorrect_msg("a")
   expect_true(grepl("Parece que no asignaste el valor", msg))
   
-  set_language("non_existing")
+  expect_error(set_language("non_existing"))
+  tw$set(language = "non_existing")
   expect_error(build_object_undefined_msg('test'))
   expect_error(build_object_incorrect_msg('test'))
 })
 
 test_that("languages work for test_function", {
-  set_language(NULL)
+  reset_language()
   msg <- build_function_not_called_msg("test_fun", 2)
   expect_true(grepl("The system wants to check the second call of `test_fun()", msg, fixed = TRUE))
   msg <- build_function_args_not_specified_msg("test_fun", c("a"), 1)
@@ -93,11 +94,11 @@ test_that("languages work for test_function", {
   msg <- build_function_incorrect_msg("test_fun", c("a", "b", "c"))
   expect_true(grepl("\u00bfUsaste los valores correctos para los argumentos `a`, `b` y `c` en la funci\u00f3n `test_fun()`?", msg, fixed = TRUE))
   
-  set_language("invalid")
-  set_language("non_existing")
+  expect_error(set_language("non_existing"))
+  tw$set(language = "non_existing")
   expect_error(build_function_not_called_msg('test'))
   expect_error(build_function_args_not_specified_msg('test', 'a', 1))
   expect_error(build_function_incorrect_msg('test', 'a'))
   
-  set_language(NULL)
+  reset_language()
 })
