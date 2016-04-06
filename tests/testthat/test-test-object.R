@@ -27,6 +27,17 @@ test_that("test_object works for simple objects", {
   passes(output)
 })
 
+test_that("test_object resilient to different classes", {
+  lst <- list()
+  lst$DC_PEC <- "load(url(\"http://s3.amazonaws.com/assets.datacamp.com/course/dplyr/hflights.RData\")); library(dplyr); hflights <- tbl_df(hflights); "
+  lst$DC_CODE <- "carriers <- hflights$TaxiIn"
+  lst$DC_SOLUTION <- "carriers <- hflights$UniqueCarrier"
+  
+  lst$DC_SCT <- "test_object('carriers')"
+  output <- test_it(lst)
+  fails(output)
+})
+
 test_that("test_object works with eq_condition", {
   lst <- list()
   lst$DC_CODE <- "\n    df.equiv <- data.frame(a=c(1,2,3), b=c(4,5,6))\n    df.not_equiv <- data.frame(a=c(1,2,3), b=c(4,5,6))"
