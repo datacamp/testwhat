@@ -70,21 +70,24 @@ test_object <- function(name, eq_condition = "equivalent",
   defined <- exists(name, envir = student_env, inherits = FALSE)
   test_what(expect_true(defined), c(list(message = undefined_msg), line_info))
   
-  if (defined && eval) {
+  if (eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
+    
+     
+    
     eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
                                    identical = expect_identical,
                                    equal = expect_equal,
                                    like = expect_like,
                                    stop("invalid equality condition"))
     
-    # set_tags(auto_feedback = is.null(incorrect_msg))
     if (is.null(incorrect_msg)) {
       incorrect_msg <- build_object_incorrect_msg(name)
     }
     
-    # set_tags(test = "correct")
-    test_what(eq_fun(student, solution), c(list(message = incorrect_msg), line_info))
+    feedback <- c(list(message = incorrect_msg), line_info)
+    test_what(expect_true(any(class(student) %in% class(solution))), feedback)
+    test_what(eq_fun(student, solution), feedback)
   }
 }
 
