@@ -36,11 +36,11 @@ test_that("test_function_result fails correctly", {
   line_info(output, 1, 1)
 })
 
-test_that("test_function_result passes appropriately", {
+test_that("test_function_result passes with different orders", {
   lst <- list()
   lst$DC_PEC <- "library(dplyr)"
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
-  lst$DC_SCT <- "test_function_result('summarise')"
+  lst$DC_SCT <- "test_function_result('summarise', ordered = FALSE)"
   
   lst$DC_CODE <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
   output <- test_it(lst)
@@ -53,5 +53,15 @@ test_that("test_function_result passes appropriately", {
   lst$DC_CODE <- "summarise(mtcars, max = max(mpg), avg = mean(mpg))"
   output <- test_it(lst)
   passes(output)
+  
+  lst$DC_SCT <- "test_function_result('summarise', ordered = TRUE)"
+  
+  lst$DC_CODE <- "mtcars %>% summarise(max = max(mpg), avg = mean(mpg))"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "summarise(mtcars, max = max(mpg), avg = mean(mpg))"
+  output <- test_it(lst)
+  fails(output)
 })
 

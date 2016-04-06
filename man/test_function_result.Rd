@@ -5,7 +5,8 @@
 \title{Check the result of a function call}
 \usage{
 test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
-  not_called_msg = NULL, eval_error_msg = NULL, incorrect_msg = NULL)
+  ordered = TRUE, not_called_msg = NULL, eval_error_msg = NULL,
+  incorrect_msg = NULL)
 }
 \arguments{
 \item{name}{name of the function whose output you would like to check.}
