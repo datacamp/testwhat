@@ -16,6 +16,8 @@ test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
 \item{eq_condition}{character vector indicating how to perform the
 comparison for each argument. See \code{\link{test_object}}}
 
+\item{ordered}{Does the order of the elments ins the result matter?}
+
 \item{not_called_msg}{feedback message in case the function is not retrieved.}
 
 \item{eval_error_msg}{feedback message in case the student function call at the mentioned index generated an error.}
