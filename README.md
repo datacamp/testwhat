@@ -22,7 +22,7 @@ Because `testwhat` depends on proprietary R packages, you can only run the tests
 devtools::test()
 
 # Run only a part of the tests
-testthat::test_dir("tests/testthat", filter = "test-object")
+testthat::test(filter = "test-object")
 
 # Upload code coverage report to codecov.io
 covr::codecov(token = "private_token")
