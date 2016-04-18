@@ -2,3 +2,5 @@ language: r
 sudo: required
 
 r_check_args: --as-cran --no-tests
+
+after_failure: "cat /home/travis/build/datacamp/testwhat/testwhat.Rcheck/00check.log"
