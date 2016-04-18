@@ -8,7 +8,6 @@ The `testwhat` package provides rich functionality to write Submission Correctne
 ## Installation
 
 ```R
-install.packages("devtools")
 library("devtools")
 install_github("datacamp/testwhat")
 ```
