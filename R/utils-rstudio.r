@@ -57,7 +57,7 @@ get_expressions_for_function_call = function(fun, pd) {
 
 # get the expression linked to an id in the parseData table
 get_expression <- function(id, pd) {
-  grandparent_id = pd$parent[pd$id == pd$parent[pd$id == id]]
+  grandparent_id <- pd$parent[pd$id == pd$parent[pd$id == id]]
   return(getParseText(pd, id = grandparent_id))
 }
 
