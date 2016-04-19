@@ -1,57 +1,45 @@
-#' DataCamp reporter: gather test results along with elapsed time and
-#' feedback messages.
-#'
-#' This reporter gathers all results, adding additional information such as
-#' test elapsed time and feedback messages.
+#' DataCamp reporter: gather test results
 #'
 #' @export
 #' @importFrom R6 R6Class
 DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter,
-  public = list(
-    failures = list(),
-    silent = 0,
-    feedback = list(),
-    success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
-
-    set_success_msg = function(msg = "") {
-      self$success_msg <- msg
-    },
-    
+public = list(
+  
     add_result = function(context, test, result) {
-      if (testthat:::expectation_broken(result)) {
-        self$failures <- c(self$failures, list(test))
+      if (testthat:::expectation_broken(result) && private$silent == 0) {
+        private$failures <- c(private$failures, list(test))
       }
     },
-    
-    end_test = function(context, test) {
-      failures <- self$failures
-      if (length(failures) == 0) {
-        return()
-      } else {
-        stop(sct_failed_msg)
-      }
-    },
-
-    ### new methods
+  
     be_silent = function() {
-      self$silent <- self$silent + 1
+      private$silent <- private$silent + 1
     },
 
     be_loud = function() {
-      self$silent <- max(0, self$silent - 1)
+      private$silent <- max(0, private$silent - 1)
     },
     
-    get_outcome = function() {
-      failures <- self$failures
+    set_success_msg = function(msg) {
+      private$success_msg <- msg
+    },
+    
+    end_reporter = function() {
+      failures <- private$failures
       if (length(failures) == 0) {
         return(list(correct = TRUE,
-                    message = to_html(self$success_msg)))
+                    message = to_html(private$success_msg)))
       } else {
         failure <- failures[[1]]
         failure$message <- to_html(failure$message)
         return(c(list(correct = FALSE), failure))
       }
     }
+  ),
+  
+  private = list(
+    silent = 0,
+    success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
+    failures = list()
   )
 )
 

@@ -3,7 +3,7 @@ source("helpers.R")
 
 test_that("test_ggplot works 1", {
   lst <- list()
-  lst$DC_PEC <- "library(ggplot2)"
+  lst$DC_PEC <- "suppressWarnings(library(ggplot2))"
   lst$DC_CODE <- '
 # base layers
 cyl.am <- ggplot(mtcars, aes(x = factor(cyl), fill = factor(am)))
@@ -73,7 +73,7 @@ a = 1
 
 test_that("test_ggplot works 2", {
   lst <- list()
-  lst$DC_PEC <- "library(ggplot2)"
+  lst$DC_PEC <- "suppressWarnings(library(ggplot2))"
   lst$DC_CODE <- '
 # The previous plot, without points:
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -92,7 +92,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 test_that('test_ggplot works 3', {
   lst <- list()
-  lst$DC_PEC <- "library(ggplot2)\nlibrary(RColorBrewer)\nlibrary(car)"
+  lst$DC_PEC <- "suppressWarnings(library(ggplot2))\nlibrary(RColorBrewer)\nlibrary(car)"
   lst$DC_CODE <- '
 myColors <- c(brewer.pal(3, "Dark2"), "black")
 ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
@@ -117,7 +117,7 @@ test_ggplot(1, check = "scale")'
 
 test_that("test_ggplot works 4", {
   lst <- list()
-  lst$DC_PEC <- 'library(ggplot2)\nlibrary(RColorBrewer)\n
+  lst$DC_PEC <- 'suppressWarnings(library(ggplot2))\nlibrary(RColorBrewer)\n
     z <- ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
     geom_point(alpha = 0.7, size = 3) +
     geom_smooth(method = "lm", se = FALSE) +

@@ -3,15 +3,13 @@
 \docType{data}
 \name{DataCampReporter}
 \alias{DataCampReporter}
-\title{DataCamp reporter: gather test results along with elapsed time and
-feedback messages.}
+\title{DataCamp reporter: gather test results}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 DataCampReporter
 }
 \description{
-This reporter gathers all results, adding additional information such as
-test elapsed time and feedback messages.
+DataCamp reporter: gather test results
 }
 \keyword{datasets}
 

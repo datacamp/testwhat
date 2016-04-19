@@ -38,14 +38,14 @@ test_exercise <- function(sct,
                      solution_env = solution_env,
                      output_list = output_list,
                      in_test_mode = isTRUE(in_test_mode)))
-  
+
   # Execute sct with the DataCamp reporter such that it collects test results
   reporter <- DataCampReporter$new()
-  with_reporter(reporter, run_until_fail(parse(text = sct), env))
+  old <- set_reporter(reporter)
+  on.exit(set_reporter(old))
+  run_until_fail(parse(text = sct), env)
 
-  # Obtain feedback from DataCamp reporter and return it invisibly
-  outcome <- reporter$get_outcome()
-  
+  outcome <- reporter$end_reporter()
   # If markdown exercise, remove line information
   if (ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
     outcome[c("line_start", "column_start", "line_end", "column_end")] <- NULL

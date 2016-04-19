@@ -61,10 +61,7 @@ test_function_definition <- function(name,
   sol_function <- get(name, envir = solution_env, inherits = FALSE)
 
   function_test <- substitute(function_test)
-  if (is.character(function_test)) code <- parse(text = function_test)
-  
   body_test <- substitute(body_test)
-  if (is.character(body_test)) code <- parse(text = body_test)
   
   if (is.null(undefined_msg)) {
     undefined_msg <- sprintf("Did you define the function <code>%s()</code>?", name)
@@ -93,13 +90,13 @@ test_function_definition <- function(name,
     solution_fun_def <- extract_function_definition(solution_pd, name)
     student_fun_def <- extract_function_definition(student_pd, name)
     
-    if(is.null(solution_fun_def)) {
+    if (is.null(solution_fun_def)) {
       stop(sprintf("The function definition if %s was not found in the solution code", name))
     }
     test_what(expect_false(is.null(student_fun_def)), 
               feedback = sprintf("A proper definition of `%s` could not be found in your submission. Make sure to use the `%s <- function() { ... }` recipe.", name, name))
     
-    if(!is.null(body_test)) {
+    if (!is.null(body_test)) {
       tw$set(student_pd = student_fun_def$pd)
       tw$set(solution_pd = solution_fun_def$pd)
       tw$set(student_code = student_fun_def$code)
