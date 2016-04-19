@@ -1,118 +1,45 @@
-setOldClass('proc_time')
-
-#' DataCamp reporter: gather test results along with elapsed time and
-#' feedback messages.
-#'
-#' This reporter gathers all results, adding additional information such as
-#' test elapsed time and feedback messages.
+#' DataCamp reporter: gather test results
 #'
 #' @export
-#' @export DataCampReporter
-#' @aliases DataCampReporter
-#' @importFrom methods setRefClass
-#' @keywords debugging
-DataCampReporter <- setRefClass(
-  "DataCampReporter", contains = "Reporter",
-  fields = list(
-    ex_type = "character",
-    results = "list",
-    silent = "numeric",
-    instruction_index = "numeric",
-    feedback = "list",
-    success_msg = "character",
-    tags = "list"),
-
-  methods = list(
-    ### overriden methods from Reporter
-    start_reporter = function(...) {
-      callSuper(...)
-      results <<- list()
-      silent <<- 0
-      instruction_index <<- 0
-      success_msg <<- sample(c("Good Job!", 
-                               "Well done!", 
-                               "Great work!"), 1)
-      feedback <<- list()
-    },
-
-    set_data = function(feedback) {
-      feedback <<- feedback
-    },
-    
-    set_success_msg = function(msg = "") {
-      success_msg <<- msg
-    },
-    
-    add_result = function(result) {
-      if(silent == 0) {
-        results <<- c(results, list(list(passed = result$passed,
-                                         feedback = feedback,
-                                         instruction_index = instruction_index)))
-      }
-      
-      if(!result$passed) {
-        stop(sct_failed_msg)
+#' @importFrom R6 R6Class
+DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter,
+public = list(
+  
+    add_result = function(context, test, result) {
+      if (testthat:::expectation_broken(result) && private$silent == 0) {
+        private$failures <- c(private$failures, list(test))
       }
     },
-
-    ### new methods
+  
     be_silent = function() {
-      silent <<- silent + 1
+      private$silent <- private$silent + 1
     },
 
     be_loud = function() {
-      silent <<- max(0, silent - 1)
+      private$silent <- max(0, private$silent - 1)
     },
     
-    ## challenge methods
-    set_instruction_index = function(index) {
-      failed <<- FALSE
-      instruction_index <<- index
+    set_success_msg = function(msg) {
+      private$success_msg <- msg
     },
     
-    get_outcome = function() {
-      if (ex_type == "ChallengeExercise") {
-        if(length(results) == 0) {
-          stop("No tests written for challenge!")
-        }
-        
-        instruction_indices <- unique(select_info(results, "instruction_index"))
-        n_inst <- length(instruction_indices)
-        
-        if(n_inst < 2) {
-          stop("Make sure to have at least two instructions, i.e. 1 step and the goal.")
-        }
-        
-        if(max(instruction_indices) != n_inst) {
-          stop("Make sure to write at least one test for each challenge step.")
-        }
-        
-        res_per_inst <- sapply(1:n_inst, function(x) {
-          all(select_info(results, "passed")[select_info(results, "instruction_index") == x])
-        })
-        
-        challenge_passed <- tail(res_per_inst, 1)
-        passed_steps <- head(res_per_inst, n_inst - 1)
-        if (challenge_passed) {
-          passed_steps <- rep(TRUE, n_inst - 1)
-        }
-        
-        return(list(correct = challenge_passed, 
-                    message = to_html(ifelse(challenge_passed, success_msg, "try again.")), 
-                    steps_correct = passed_steps))
+    end_reporter = function() {
+      failures <- private$failures
+      if (length(failures) == 0) {
+        return(list(correct = TRUE,
+                    message = to_html(private$success_msg)))
       } else {
-        test_results <- select_info(results, "passed")
-        if(!all(test_results)) {
-          selector <- which(!test_results)[1]
-          fb <- results[[selector]]$feedback
-          fb$message <- to_html(fb$message)
-          return(c(list(correct = FALSE), fb))
-        } else {
-          return(list(correct = TRUE, 
-                      message = to_html(success_msg)))
-        }
+        failure <- failures[[1]]
+        failure$message <- to_html(failure$message)
+        return(c(list(correct = FALSE), failure))
       }
     }
+  ),
+  
+  private = list(
+    silent = 0,
+    success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
+    failures = list()
   )
 )
 

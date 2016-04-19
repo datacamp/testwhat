@@ -45,22 +45,14 @@
 test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
                         undefined_msg = NULL, incorrect_msg = NULL) {
-  
+
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
   student_pd <- tw$get("student_pd")
   init_tags(fun = "test_object")
   
-  if (is.null(name)) {
-    stop("argument \"name\" is missing, with no default")
-  }
-  
   stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
   solution <- get(name, envir = solution_env, inherits = FALSE)
-  
-  build_incorrect_object_msg <- function(name) {
-    
-  }
   
   if (is.null(undefined_msg)) {
     undefined_msg <-  build_object_undefined_msg(name)
@@ -73,12 +65,9 @@ test_object <- function(name, eq_condition = "equivalent",
   if (eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
     
-     
-    
     eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
                                    identical = expect_identical,
                                    equal = expect_equal,
-                                   like = expect_like,
                                    stop("invalid equality condition"))
     
     if (is.null(incorrect_msg)) {

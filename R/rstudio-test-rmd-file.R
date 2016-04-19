@@ -11,10 +11,10 @@
 #' @inheritParams test_function
 #' 
 #' @export
-test_rmd_file = function(code, 
-                         student_file = NULL, 
-                         solution_file = NULL, 
-                         env = parent.frame()) {
+test_rmd_file <- function(code, 
+                          student_file = NULL, 
+                          solution_file = NULL, 
+                          env = parent.frame()) {
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
@@ -31,23 +31,23 @@ test_rmd_file = function(code,
     tw$set(solution_ds = NULL)
   })
   
-  if(is.null(student_file)) {
-    student_file = names(student_code)[grepl(".rmd|.Rmd", names(student_code))]
-    if(length(student_file) != 1) {
+  if (is.null(student_file)) {
+    student_file <- names(student_code)[grepl(".rmd|.Rmd", names(student_code))]
+    if (length(student_file) != 1) {
       stop("no or too many .Rmd files were found in the student code.")
     }
   }
-  if(is.null(solution_file)) {
-    solution_file = names(solution_code)[grepl(".rmd|.Rmd", names(solution_code))]
-    if(length(solution_file) != 1) {
+  if (is.null(solution_file)) {
+    solution_file <- names(solution_code)[grepl(".rmd|.Rmd", names(solution_code))]
+    if (length(solution_file) != 1) {
       stop("no or too many .Rmd files were found in the solution code.")
     }
   }
-  
-  if(!student_file %in% names(student_code)) {
+
+  if (!student_file %in% names(student_code)) {
     stop("student file name was not found in student code")
   } 
-  if(!solution_file %in% names(solution_code)) {
+  if (!solution_file %in% names(solution_code)) {
     stop("solution file name was not found in solution code")
   }
   

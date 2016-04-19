@@ -1,6 +1,5 @@
-library(RBackend)
-library(rjson)
-init_output <- fromJSON(execute(toJSON(list(DC_COMMAND = "init", 
+
+init_output <- rjson::fromJSON(RBackend::execute(rjson::toJSON(list(DC_COMMAND = "init", 
                                             DC_PEC = "", 
                                             DC_SOLUTION = '
 
@@ -14,12 +13,12 @@ test_object("x")
 ', 
                                             DC_TYPE = "NormalExercise", 
                                             DC_ECHO = TRUE))))
-submit_output <- fromJSON(execute(toJSON(list(DC_COMMAND = "submit", 
+submit_output <- rjson::fromJSON(RBackend::execute(rjson::toJSON(list(DC_COMMAND = "submit", 
                                               DC_TYPE = "NormalExercise",
                                               DC_CODE ='
 
 
-x <- 3
+y <- 3
 
                                               '))))
 str(tail(submit_output, 1))

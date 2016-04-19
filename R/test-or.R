@@ -45,7 +45,7 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1,
     rep$be_loud()
   }
   
-  if(in_test_mode && !all(passes)) {
+  if (in_test_mode && !all(passes)) {
     test_what(fail(), "Content testing mode: tests in test_or/test_correct don't all pass.")
     return(invisible())
   }

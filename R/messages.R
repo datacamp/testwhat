@@ -18,7 +18,7 @@ build_object_incorrect_msg <- function(name) {
 
 build_function_not_called_msg <- function(name, index) {
   lang <- get_language()
-  if(lang == "en") {
+  if (lang == "en") {
     msg <- sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", 
                    get_num(index), name)
   } else if (lang == "fr") {
@@ -59,7 +59,7 @@ build_function_args_not_specified_msg <- function(name, args, n_args) {
 build_function_incorrect_msg <- function(name, incorrect_args) {
   lang <- get_language()
   n_args <- length(incorrect_args)
-  if(lang == "en") {
+  if (lang == "en") {
     msg <- sprintf("Did you correctly specify the argument%s %s in your call of `%s()`?", 
                    ifelse(n_args == 1, "", "s"), collapse_args(incorrect_args), name)
   } else if (lang == "fr") {
@@ -93,7 +93,9 @@ build_summary.list <- function(x) {
   # Back up names, recursion will mess them up otherwise
   tmp_names <- names(x)
   # Need to manually index using seq_along, doesn't work with element-wise lapply.
-  x <- lapply(seq_along(x), function(i) { build_summary(x[[i]]) })
+  x <- lapply(seq_along(x), function(i) { 
+    build_summary(x[[i]]) 
+  })
   if (!is.null(tmp_names)) {
     x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(tmp_names[i]) != 0, paste0(tmp_names[i], " = ", x[i]), paste0(x[i])) }))
   }
@@ -104,7 +106,9 @@ build_summary.data.frame <- function(x) {
   # Back up names, recursion will mess them up otherwise
   tmp_names <- names(x)
   # Need to manually index using seq_along, doesn't work with element-wise lapply.
-  x <- lapply(seq_along(x), function(i) { build_summary(x[[i]]) })
+  x <- lapply(seq_along(x), function(i) { 
+    build_summary(x[[i]]) 
+  })
   if (!is.null(tmp_names)) {
     x <- paste(lapply(seq_along(x), function(i) { ifelse(nchar(tmp_names[i]) != 0, paste0(tmp_names[i], " = ", x[i]), paste0(x[i])) }))
   }
@@ -113,9 +117,13 @@ build_summary.data.frame <- function(x) {
 
 build_summary.character <- function(x, ..., output = FALSE) {
   if (output) {
-    shorten <- function(str) { paste0(substr(str, 1, 100), ifelse(nchar(str) > 100, "...", "")) }
+    shorten <- function(str) { 
+      paste0(substr(str, 1, 100), ifelse(nchar(str) > 100, "...", "")) 
+    }
   } else {
-    shorten <- function(str) { paste0('"',substr(str, 1, 100), ifelse(nchar(str) > 100, "...", ""),'"') }
+    shorten <- function(str) { 
+      paste0('"',substr(str, 1, 100), ifelse(nchar(str) > 100, "...", ""),'"') 
+    }
   }
   if (length(x) > 1) {
     x <- lapply(x, shorten)

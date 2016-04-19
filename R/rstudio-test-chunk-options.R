@@ -22,34 +22,34 @@ test_chunk_options <- function(options = NULL,
   init_tags(fun = "test_chunk_options")
   
   # First, check if both student and solution chunk are 'block' class (i.e. code chunks)
-  if(class(solution_chunk) != "block") {
+  if (class(solution_chunk) != "block") {
     stop("The specified rmd group is not of 'block' class.")
   }
   
   test_what(expect_equal(class(student_chunk), "block"), "Wrong class student chunk")
   
-  sol_options = solution_chunk$params
-  stud_options = student_chunk$params
+  sol_options <- solution_chunk$params
+  stud_options <- student_chunk$params
   
-  if(is.null(options)) {
+  if (is.null(options)) {
     options <- names(sol_options)
-    if(length(options) == 0) {
+    if (length(options) == 0) {
       return(TRUE)
     }
   } 
   
   # Set up default messages
   # message if specified function was not called
-  if(is.null(not_called_msg)) {
+  if (is.null(not_called_msg)) {
     not_called_msg = sprintf("Code chunk %i of your submission should contain the option%s %s.", 
-                             chunk_number, if(length(options) == 1) "" else "s", collapse_props(options))
+                             chunk_number, if (length(options) == 1) "" else "s", collapse_props(options))
   }
   
   # message if the properties or not found or set incorrectly
-  if(is.null(incorrect_msg)) {
+  if (is.null(incorrect_msg)) {
     incorrect_msg = sprintf("In code chunk %i of your submission, make sure to correctly define the option%s %s.",
-                            chunk_number, if(length(options) == 1) "" else "s", collapse_props(options))
-    if(!allow_extra)
+                            chunk_number, if (length(options) == 1) "" else "s", collapse_props(options))
+    if (!allow_extra)
       incorrect_msg = paste(incorrect_msg, "Do not define any other options!")
   }
       
@@ -59,7 +59,7 @@ test_chunk_options <- function(options = NULL,
   # the last options are the ones that are seen as valid by RMarkdown
   sol_options_select = rev(sol_options)[options]
   stud_options_select = rev(stud_options)[options]
-  if(any(is.na(names(sol_options_select)))) {
+  if (any(is.na(names(sol_options_select)))) {
       stop(sprintf("You defined options that are not in code chunk %i of the solution", chunk_number))
   }
   

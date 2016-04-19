@@ -2,7 +2,7 @@
 collapse <- function(x, conn = " and ") {
   if (length(x) > 1) {
     n <- length(x)
-    last <- c(n-1, n)
+    last <- c(n - 1, n)
     collapsed <- paste(x[last], collapse = conn)
     collapsed <- paste(c(x[-last], collapsed), collapse = ", ")
   } else collapsed <- x
@@ -43,10 +43,10 @@ no_msg <- "No message could be built for the specified language."
 
 
 get_num <- function(index) {
-  switch(index, 
-         "1" = "first", "2" = "second", 
-         "3" = "third", "4" = "fourth", 
-         "5" = "fifth", "6" = "sixth", 
+  switch(index,
+         "1" = "first", "2" = "second",
+         "3" = "third", "4" = "fourth",
+         "5" = "fifth", "6" = "sixth",
          "7" = "seventh", sprintf("%ith", index))
 }
 
@@ -57,8 +57,8 @@ trunc_str <- function(x,start="c") {
   paste0(start,"(",
          as.character(paste(x[1:min(max_in,length(x))], collapse = ", ")),
          ifelse(length(x) > tot, ", ...", ""), 
-         ifelse(length(x) > max_in, 
-                paste0(", ",as.character(paste(x[(length(x)-(max_out - 1 - max(0,tot-length(x)))):length(x)], collapse = ", "))),
+         ifelse(length(x) > max_in,
+                paste0(", ", as.character(paste(x[(length(x) - (max_out - 1 - max(0,tot - length(x)))):length(x)], collapse = ", "))),
                 ""),
          ")")
 }
