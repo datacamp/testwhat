@@ -2,14 +2,13 @@ context("test_object")
 source("helpers.R")
 
 test_that("test_object works for simple objects", {
-  source("tests/testthat/helpers.R")
   lst <- list()
   lst$DC_CODE <- "\n    var.equiv <- 3\n    var.not_equiv <- 4"
   lst$DC_SOLUTION <- "\n    var.equiv <- 3\n    var.not_equiv <- 3\n    var.not_here <- 2"
-
-  #lst$DC_SCT <- "test_object()"
-  #output <- test_it(lst)
-  #error(output, mess_patt = "missing, with no default")
+  
+  lst$DC_SCT <- "test_object()"
+  output <- test_it(lst)
+  error(output, mess_patt = "missing, with no default")
   
   lst$DC_SCT <- "test_object(\"var.not_equiv\")"
   output <- test_it(lst)
@@ -97,7 +96,7 @@ test_that("test_object works with eval", {
   passes(output)
 })
 
-test_that("test_object wroks with 'like' eq_condition", {
+test_that("test_object work with 'like' eq_condition", {
   lst <- list()
   lst$DC_CODE <- "var <- \"Filip stinkt\"\nvar2 <- \"Filip is leuk\"\n"
   lst$DC_SOLUTION <- "var <- \"Filip drinkt\"\nvar2 <- \"Filip is stom\"\n"

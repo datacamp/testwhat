@@ -1,5 +1,3 @@
-setOldClass('proc_time')
-
 #' DataCamp reporter: gather test results along with elapsed time and
 #' feedback messages.
 #'
@@ -7,10 +5,7 @@ setOldClass('proc_time')
 #' test elapsed time and feedback messages.
 #'
 #' @export
-#' @export DataCampReporter
-#' @aliases DataCampReporter
-#' @importFrom methods setRefClass
-#' @keywords debugging
+#' @importFrom R6 R6Class
 DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter,
   public = list(
     failures = list(),
@@ -22,31 +17,20 @@ DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter
       self$success_msg <- msg
     },
     
-    add_result = function(contest, test, result) {
-      self$cat_tight("ADD RESULT!")
-      if (testthat:::expectation_failur(result)) {
-        self$failures <- c(self$failures, list(result))
-        cat("Shit went wrong")
-      } else if (testthat:::expectation_error(result)) {
-        self$failures <- c(self$failures, list(result))
-        cat("Shit threw an error")
-      } else {
-        self$successes <- c(self$successes, list(result))
-        cat("All good")
+    add_result = function(context, test, result) {
+      if (testthat:::expectation_broken(result)) {
+        self$failures <- c(self$failures, list(test))
       }
     },
-#     add_result = function(context, test, result) {
-#       str(result)
-#       
-#       if (silent == 0) {
-#         self$results <- c(self$results, list(list(passed = result$passed,
-#                                                   feedback = self$feedback)))
-#       }
-#       
-#       if (!result$passed) {
-#         stop(sct_failed_msg)
-#       }
-#     },
+    
+    end_test = function(context, test) {
+      failures <- self$failures
+      if (length(failures) == 0) {
+        return()
+      } else {
+        stop(sct_failed_msg)
+      }
+    },
 
     ### new methods
     be_silent = function() {
@@ -57,17 +41,15 @@ DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter
       self$silent <- max(0, self$silent - 1)
     },
     
-    
     get_outcome = function() {
-      test_results <- select_info(self$results, "passed")
-      if (!all(test_results)) {
-        selector <- which(!test_results)[1]
-        fb <- self$results[[selector]]$feedback
-        fb$message <- to_html(fb$message)
-        return(c(list(correct = FALSE), fb))
-      } else {
-        return(list(correct = TRUE, 
+      failures <- self$failures
+      if (length(failures) == 0) {
+        return(list(correct = TRUE,
                     message = to_html(self$success_msg)))
+      } else {
+        failure <- failures[[1]]
+        failure$message <- to_html(failure$message)
+        return(c(list(correct = FALSE), failure))
       }
     }
   )

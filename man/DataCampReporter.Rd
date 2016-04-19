@@ -13,5 +13,5 @@ DataCampReporter
 This reporter gathers all results, adding additional information such as
 test elapsed time and feedback messages.
 }
-\keyword{debugging}
+\keyword{datasets}
 

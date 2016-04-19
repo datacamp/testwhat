@@ -31,5 +31,5 @@ test_what <- function(code, feedback, feedback_msg) {
   }
 
   feedback <- c(feedback, list(tags = tw$get("tags")))
-  testthat:::test_code(feedback, code, env = parent.frame())
+  testthat:::test_code(feedback, substitute(code), env = parent.frame())
 }
