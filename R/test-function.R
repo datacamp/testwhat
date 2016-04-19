@@ -168,8 +168,6 @@ is_equal <- function(x, y, condition = "equivalent") {
 
 .equivalent <- function(x, y) compare(x, y, check.attributes = FALSE)$equal
 .equal <- function(x, y) compare(x, y)$equal
-#' @importFrom stringdist stringdist
-.like <- function(x, y, dist = round(nchar(y) * 0.2)) stringdist(x,y) <= dist
 
 # Extract specified arguments from a function call and evaluate if necessary
 extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {

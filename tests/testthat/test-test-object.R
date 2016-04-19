@@ -96,24 +96,6 @@ test_that("test_object works with eval", {
   passes(output)
 })
 
-test_that("test_object work with 'like' eq_condition", {
-  lst <- list()
-  lst$DC_CODE <- "var <- \"Filip stinkt\"\nvar2 <- \"Filip is leuk\"\n"
-  lst$DC_SOLUTION <- "var <- \"Filip drinkt\"\nvar2 <- \"Filip is stom\"\n"
-  
-  lst$DC_SCT <- "test_object(\"var2\", eq_condition = \"like\")"
-  output <- test_it(lst)
-  fails(output)
-  
-  lst$DC_SCT <- "test_object(\"var2\", eq_condition = \"like\", incorrect_msg = \"Too different\")"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Too different")
-  
-  lst$DC_SCT <- "test_object(\"var\", eq_condition = \"like\")"
-  output <- test_it(lst)
-  passes(output)
-})
-
 test_that("test_object passes along correct line numbers", {
   lst <- list()
   lst$DC_CODE <- "a <- 5\n\ny <- 4\n\nz <- 6\n\nz <- 7"

@@ -91,7 +91,7 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   fun_usage <- tw$get("fun_usage")
   init_tags(fun = sprintf("test_%s_loop", type))
   
-  if(type == "for") {
+  if (type == "for") {
     extract_fun <- extract_for
   } else {
     extract_fun <- extract_while
@@ -99,11 +99,11 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   student_structs <- extract_fun(student_pd)
   solution_structs <- extract_fun(solution_pd)
   
-  if(length(solution_structs) < index) {
+  if (length(solution_structs) < index) {
     stop(sprintf("The solution doesn't contain %s (internal) %s loops itself.", index, type))
   }
   
-  if(is.null(not_found_msg)) {
+  if (is.null(not_found_msg)) {
     not_found_msg <- sprintf(paste("The system wants to test if the %s `%s` loop",
                                    "you coded is correct, but it hasn't found it. Add more code."), 
                              get_num(index), type)
@@ -122,13 +122,13 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   })
   
   # WHILE condition part should always be there
-  if(!is.null(cond_test)) {
+  if (!is.null(cond_test)) {
     prepare_tw(student_struct, solution_struct, "cond_part")
     eval(cond_test, envir = env)
   }
   
   # IF expression part should always be available.
-  if(!is.null(expr_test)) {
+  if (!is.null(expr_test)) {
     prepare_tw(student_struct, solution_struct, "expr_part")
     eval(expr_test, envir = env)
   }

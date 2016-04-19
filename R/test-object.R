@@ -73,12 +73,9 @@ test_object <- function(name, eq_condition = "equivalent",
   if (eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
     
-     
-    
     eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
                                    identical = expect_identical,
                                    equal = expect_equal,
-                                   like = expect_like,
                                    stop("invalid equality condition"))
     
     if (is.null(incorrect_msg)) {
