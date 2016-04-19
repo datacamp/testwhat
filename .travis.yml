@@ -1,8 +1,7 @@
 language: r
 sudo: required
 
-r_github_packages: hadley/testthat@v0.11.0
-
 r_check_args: --as-cran --no-tests
+r_github_packages: hadley/testthat@v0.11.0
 
 after_failure: "cat /home/travis/build/datacamp/testwhat/testwhat.Rcheck/00check.log"
