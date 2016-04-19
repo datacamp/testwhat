@@ -31,35 +31,27 @@ test_exercise <- function(sct,
   # Store everything that's needed locally (initialize does a full reset)
   tw$initialize(list(pec = pec,
                      student_code = student_code,
-                     student_pd = if(ex_type == "MarkdownExercise") NULL else build_pd(student_code),
+                     student_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(student_code),
                      student_env = globalenv(),
                      solution_code = solution_code,
-                     solution_pd = if(ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
+                     solution_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
                      solution_env = solution_env,
                      output_list = output_list,
                      in_test_mode = isTRUE(in_test_mode)))
   
   # Execute sct with the DataCamp reporter such that it collects test results
-  reporter <- DataCampReporter$new(ex_type = ex_type)
-  on.exit(reporter$end_reporter())
-  with_reporter(reporter, .test_exercise(parse(text = sct), env))
+  reporter <- DataCampReporter$new()
+  with_reporter(reporter, run_until_fail(parse(text = sct), env))
 
   # Obtain feedback from DataCamp reporter and return it invisibly
   outcome <- reporter$get_outcome()
   
   # If markdown exercise, remove line information
-  if(ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
+  if (ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
     outcome[c("line_start", "column_start", "line_end", "column_end")] <- NULL
   }
   
   return(outcome)
-}
-
-.test_exercise <- function(code, parent_env) {
-  get_reporter()$start_reporter()
-  n <- length(code)
-  if (n == 0L) return(invisible())
-  run_until_fail(code, parent_env)
 }
 
 run_until_fail <- function(code, env) {

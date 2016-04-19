@@ -11,106 +11,63 @@ setOldClass('proc_time')
 #' @aliases DataCampReporter
 #' @importFrom methods setRefClass
 #' @keywords debugging
-DataCampReporter <- setRefClass(
-  "DataCampReporter", contains = "Reporter",
-  fields = list(
-    ex_type = "character",
-    results = "list",
-    silent = "numeric",
-    instruction_index = "numeric",
-    feedback = "list",
-    success_msg = "character",
-    tags = "list"),
+DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter,
+  public = list(
+    failures = list(),
+    silent = 0,
+    feedback = list(),
+    success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
 
-  methods = list(
-    ### overriden methods from Reporter
-    start_reporter = function(...) {
-      callSuper(...)
-      results <<- list()
-      silent <<- 0
-      instruction_index <<- 0
-      success_msg <<- sample(c("Good Job!", 
-                               "Well done!", 
-                               "Great work!"), 1)
-      feedback <<- list()
-    },
-
-    set_data = function(feedback) {
-      feedback <<- feedback
-    },
-    
     set_success_msg = function(msg = "") {
-      success_msg <<- msg
+      self$success_msg <- msg
     },
     
-    add_result = function(result) {
-      if(silent == 0) {
-        results <<- c(results, list(list(passed = result$passed,
-                                         feedback = feedback,
-                                         instruction_index = instruction_index)))
-      }
-      
-      if(!result$passed) {
-        stop(sct_failed_msg)
+    add_result = function(contest, test, result) {
+      self$cat_tight("ADD RESULT!")
+      if (testthat:::expectation_failur(result)) {
+        self$failures <- c(self$failures, list(result))
+        cat("Shit went wrong")
+      } else if (testthat:::expectation_error(result)) {
+        self$failures <- c(self$failures, list(result))
+        cat("Shit threw an error")
+      } else {
+        self$successes <- c(self$successes, list(result))
+        cat("All good")
       }
     },
+#     add_result = function(context, test, result) {
+#       str(result)
+#       
+#       if (silent == 0) {
+#         self$results <- c(self$results, list(list(passed = result$passed,
+#                                                   feedback = self$feedback)))
+#       }
+#       
+#       if (!result$passed) {
+#         stop(sct_failed_msg)
+#       }
+#     },
 
     ### new methods
     be_silent = function() {
-      silent <<- silent + 1
+      self$silent <- self$silent + 1
     },
 
     be_loud = function() {
-      silent <<- max(0, silent - 1)
+      self$silent <- max(0, self$silent - 1)
     },
     
-    ## challenge methods
-    set_instruction_index = function(index) {
-      failed <<- FALSE
-      instruction_index <<- index
-    },
     
     get_outcome = function() {
-      if (ex_type == "ChallengeExercise") {
-        if(length(results) == 0) {
-          stop("No tests written for challenge!")
-        }
-        
-        instruction_indices <- unique(select_info(results, "instruction_index"))
-        n_inst <- length(instruction_indices)
-        
-        if(n_inst < 2) {
-          stop("Make sure to have at least two instructions, i.e. 1 step and the goal.")
-        }
-        
-        if(max(instruction_indices) != n_inst) {
-          stop("Make sure to write at least one test for each challenge step.")
-        }
-        
-        res_per_inst <- sapply(1:n_inst, function(x) {
-          all(select_info(results, "passed")[select_info(results, "instruction_index") == x])
-        })
-        
-        challenge_passed <- tail(res_per_inst, 1)
-        passed_steps <- head(res_per_inst, n_inst - 1)
-        if (challenge_passed) {
-          passed_steps <- rep(TRUE, n_inst - 1)
-        }
-        
-        return(list(correct = challenge_passed, 
-                    message = to_html(ifelse(challenge_passed, success_msg, "try again.")), 
-                    steps_correct = passed_steps))
+      test_results <- select_info(self$results, "passed")
+      if (!all(test_results)) {
+        selector <- which(!test_results)[1]
+        fb <- self$results[[selector]]$feedback
+        fb$message <- to_html(fb$message)
+        return(c(list(correct = FALSE), fb))
       } else {
-        test_results <- select_info(results, "passed")
-        if(!all(test_results)) {
-          selector <- which(!test_results)[1]
-          fb <- results[[selector]]$feedback
-          fb$message <- to_html(fb$message)
-          return(c(list(correct = FALSE), fb))
-        } else {
-          return(list(correct = TRUE, 
-                      message = to_html(success_msg)))
-        }
+        return(list(correct = TRUE, 
+                    message = to_html(self$success_msg)))
       }
     }
   )
