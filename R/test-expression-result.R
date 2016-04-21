@@ -39,7 +39,7 @@ test_expression_result <- function(expr,
     stop("expr in test_result() results in an error in the solution environment")
   }
   
-  if(is.null(incorrect_msg)) {
+  if (is.null(incorrect_msg)) {
     incorrect_msg <- sprintf("Make sure that running <code>%s</code> returns <code>%s</code>", expr, ifelse(is.null(result_sol), "NULL", build_summary(result_sol)))
   }
   
