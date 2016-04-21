@@ -8,8 +8,9 @@
 #' Using this function should be a last resort, as there are myriad ways of
 #' solving the same problems in R!
 #'
-#' @param strings A set of strings, at least one of which must be in the student_code
+#' @param strings A set of strings that should be available in the student code.
 #' @param fixed exact string matching (TRUE) or use regex (FALSE)?
+#' @param times how often should any of the strings be matched?
 #' @param not_typed_msg Feedback message in case the student did not type the string.
 #' @inheritParams test_function
 #' 
@@ -24,14 +25,15 @@
 #' @export
 test_student_typed <- function(strings,
                                fixed = TRUE,
+                               times = 1,
                                not_typed_msg = NULL) {
   
   student_code <- tw$get("student_code")
   init_tags(fun = "test_student_typed")
   
-  if(is.null(not_typed_msg)) {
+  if (is.null(not_typed_msg)) {
     not_typed_msg <- sprintf("The solution expects you to type %s at the appropriate location%s.", 
-                             collapse_args(strings, conn = " or "), if(length(strings) == 1) "" else "s")
+                             collapse_args(strings, conn = " or "), if (length(strings) == 1) "" else "s")
   }
   
   # Clean up both string and student code
@@ -46,7 +48,14 @@ test_student_typed <- function(strings,
   student_code <- gsub("\"", "'", student_code)
   strings <- gsub("\"", "'", strings)
   
-  hits <- sapply(strings, grepl, x = student_code, fixed = fixed)
+  counts <- sapply(strings, function(patt) {
+    res <- gregexpr(patt, text = student_code)[[1]]
+    if (any(res) == -1) {
+      return(0L)
+    } else {
+      return(length(res))
+    }
+  }, USE.NAMES = FALSE)
   
-  test_what(expect_true(any(hits)), not_typed_msg)
+  test_what(expect_gte(sum(counts), times), feedback = list(message = not_typed_msg))
 }

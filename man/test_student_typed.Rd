@@ -4,12 +4,14 @@
 \alias{test_student_typed}
 \title{Test student's submission as text}
 \usage{
-test_student_typed(strings, fixed = TRUE, not_typed_msg = NULL)
+test_student_typed(strings, fixed = TRUE, times = 1, not_typed_msg = NULL)
 }
 \arguments{
-\item{strings}{A set of strings, at least one of which must be in the student_code}
+\item{strings}{A set of strings that should be available in the student code.}
 
 \item{fixed}{exact string matching (TRUE) or use regex (FALSE)?}
+
+\item{times}{how often should any of the strings be matched?}
 
 \item{not_typed_msg}{Feedback message in case the student did not type the string.}
 }
