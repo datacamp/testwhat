@@ -368,3 +368,26 @@ test_that("test_function works with the pipe operator and summarise/summarize", 
   output <- test_it(lst)
   fails(output)
 })
+
+test_that("test_function works with incorrect_msg that's a vector", {
+  lst <- list()
+  lst$DC_SOLUTION <- "mean(1:20, trim = 0.1, na.rm = TRUE)"
+  lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'), incorrect_msg = c('x_incorrect', 'trim_incorrect', 'na.rm_incorrect'))"
+  
+  lst$DC_CODE <- "mean(1:10, trim = 0.1, na.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, 'x_incorrect')
+  
+  lst$DC_CODE <- "mean(1:20, trim = 0.2, na.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, 'trim_incorrect')
+  
+  lst$DC_CODE <- "mean(1:20, trim = 0.1, na.rm = FALSE)"
+  output <- test_it(lst)
+  fails(output, 'na.rm_incorrect')
+  
+  # take the first one if multiple args wrong
+  lst$DC_CODE <- "mean(1:10, trim = 0.2, na.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, 'x_incorrect')
+})

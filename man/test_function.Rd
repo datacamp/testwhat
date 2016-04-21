@@ -47,9 +47,9 @@ function often enough.}
 with the arguments listed in \code{args}}
 
 \item{incorrect_msg}{feedback message in case the student did not call the
-function with the same argument values as in the sample solution.  If
-there are multiple function calls in the sample solution, a vector of
-feedback messages can be supplied.}
+function with the same argument values as in the sample solution. 
+You can specify a vector of arguments with the same length as \code{args}, to have
+argument-specific custom feedback.}
 }
 \description{
 Test whether a student called a function, possibly with certain arguments, correctly.

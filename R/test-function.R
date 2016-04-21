@@ -24,9 +24,9 @@
 #' @param args_not_specified_msg feedback message in case the student did call the function
 #' with the arguments listed in \code{args}
 #' @param incorrect_msg  feedback message in case the student did not call the
-#' function with the same argument values as in the sample solution.  If
-#' there are multiple function calls in the sample solution, a vector of
-#' feedback messages can be supplied.
+#' function with the same argument values as in the sample solution. 
+#' You can specify a vector of arguments with the same length as \code{args}, to have
+#' argument-specific custom feedback.
 #' 
 #' @examples
 #' \dontrun{
@@ -54,6 +54,9 @@ test_function <- function(name,
   init_tags(fun = "test_function")
 
   n_args <- length(args)
+  if (!is.null(incorrect_msg) && length(incorrect_msg) < n_args) {
+    incorrect_msg <- rep(incorrect_msg[1], n_args)
+  }
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
   
@@ -64,12 +67,12 @@ test_function <- function(name,
   n_solution_calls <- length(solution_calls)
 
   # Check if index exists in solution
-  if(index > length(solution_calls)) {
+  if  (index > length(solution_calls)) {
     stop(sprintf("There aren't %s calls of `%s()` available in the solution.", index, name))
   }
   solution_call <- solution_calls[[index]]
   
-  if(is.null(not_called_msg)) {
+  if (is.null(not_called_msg)) {
     not_called_msg <- build_function_not_called_msg(name, index)
   }
   test_what(expect_true(n_student_calls >= index), list(message = not_called_msg))
@@ -80,20 +83,20 @@ test_function <- function(name,
     args_specified_feedback <- NULL
     args_correct_feedback <- NULL
     
-    if(!has_arguments(solution_call$call, args, ignore, allow_extra)) {
+    if (!has_arguments(solution_call$call, args, ignore, allow_extra)) {
       stop("The solution call doesn't meet the argument conditions itself.")  
     }
     solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
     
     seq <- get_seq(name, stud_indices = 1:n_student_calls, sol_index = index)
-    for(i in seq) {
+    for (i in seq) {
       student_call <- student_calls[[i]]
       
       # Check if the function is called with the right arguments
       args_specified <- has_arguments(student_call$call, args, ignore, allow_extra)
-      if(!args_specified) {
-        if(is.null(args_specified_feedback)) {
-          if(is.null(args_not_specified_msg)) {
+      if (!args_specified) {
+        if (is.null(args_specified_feedback)) {
+          if (is.null(args_not_specified_msg)) {
             args_not_specified_msg <- build_function_args_not_specified_msg(name, args, n_args)
           }
           args_specified_feedback <- list(message = args_not_specified_msg,
@@ -111,15 +114,16 @@ test_function <- function(name,
       student_args <- extract_arguments(student_call$call, args, eval, env = student_env)
       
       args_correct_vec <- mapply(is_equal, student_args, solution_args, eq_condition)
-      args_correct <- all(args_correct_vec)
-      if(!args_correct) {
+      if (!all(args_correct_vec)) {
         score <- sum(args_correct_vec)
-        if(is.null(args_correct_feedback) || args_correct_feedback$score < score) {
-          if(is.null(incorrect_msg)) {
+        if (is.null(args_correct_feedback) || args_correct_feedback$score < score) {
+          if (is.null(incorrect_msg)) {
             incorrect_args <- args[!args_correct_vec]
-            incorrect_msg <- build_function_incorrect_msg(name, incorrect_args)
+            feedback_msg <- build_function_incorrect_msg(name, incorrect_args)
+          } else {
+            feedback_msg <- incorrect_msg[!args_correct_vec][1]
           }
-          args_correct_feedback <- list(message = incorrect_msg,
+          args_correct_feedback <- list(message = feedback_msg,
                                         line_start = student_call$line1,
                                         line_end = student_call$line2,
                                         column_start = student_call$col1,
@@ -135,9 +139,9 @@ test_function <- function(name,
       }
     }
     
-    if(!args_correct_passed) {
+    if (!args_correct_passed) {
       # Still need something that fails...
-      if(!args_specified_passed) {
+      if (!args_specified_passed) {
         test_what(fail(), args_specified_feedback)
       } else {
         test_what(fail(), args_correct_feedback)
@@ -195,7 +199,7 @@ get_seq <- function(name, stud_indices, sol_index) {
   name_hits <- sapply(fu, `[[`, "name") == name
   fu <- fu[name_hits]
   sol_index_hits <- sapply(fu, `[[`, "sol_index") == sol_index
-  if(any(sol_index_hits)) {
+  if (any(sol_index_hits)) {
     fu <- fu[sol_index_hits]
     fu[[1]]$stud_index
   } else {
