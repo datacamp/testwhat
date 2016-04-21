@@ -54,3 +54,19 @@ test_that("test_expression_result works with erroneous code", {
   output <- test_it(lst)
   fails(output)
 })
+
+test_that("test_expression_result works with eq_condition equal", {
+  lst <- list()
+  lst$DC_SOLUTION <- "func <- function(x) { return(list(a = 1, b = 2)) }"
+  lst$DC_SCT <- "test_expression_result(\"func(3)\", eq_condition = \"equal\")"
+  
+  lst$DC_CODE <- "func <- function(x) { return(list(1, 2)) }"
+  output <- test_it(lst)
+  fails(output, "list\\(a = 1, b = 2\\)")
+  fails(output, "Instead, got: <code>list\\(1, 2\\)")
+  
+  lst$DC_CODE <- "func <- function(x) { return(list(a = 1, b = 2)) }"
+  output <- test_it(lst)
+  passes(output)
+})
+
