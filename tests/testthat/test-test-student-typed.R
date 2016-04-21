@@ -30,3 +30,44 @@ test_that("test_student_typed works", {
   fails(output, mess_patt = "not pronting")
 
 })
+
+test_that("test_student_typed works with times argument", {
+  lst <- list()
+  lst$DC_SCT <- "test_student_typed(c('a', 'b'), times = 2)"
+  
+  lst$DC_CODE <- "ab"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "aa"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "bb"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "aba"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "abb"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "bbb"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "a"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "b"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "c"
+  output <- test_it(lst)
+  fails(output)
+})
