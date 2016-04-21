@@ -14,7 +14,7 @@ install_github("datacamp/testwhat")
 
 ## Testing this package
 
-Because `testwhat` depends on proprietary R packages, you can only run the tests on a system that has these packages installed. If you have the private Codecov token, you can also upload the coverage results:
+Because `testwhat` depends on proprietary R packages, you can only run the tests on a system that has these packages installed. If you have the private [codecov](https://codecov.io/github/datacamp/testwhat) token, you can also upload the coverage results:
 
 ```R
 # Run the tests locally
