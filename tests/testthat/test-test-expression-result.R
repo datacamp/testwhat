@@ -70,3 +70,16 @@ test_that("test_expression_result works with eq_condition equal", {
   passes(output)
 })
 
+test_that("test_expression_result works with eq_condition equal", {
+  lst <- list()
+  lst$DC_SOLUTION <- "func <- function(x) { return(data.frame(a = c(1,2), b = c(3,4))) }"
+  lst$DC_SCT <- "test_expression_result(\"func(3)\", eq_condition = \"equal\")"
+  
+  lst$DC_CODE <- "func <- function(x) { return(data.frame(c(1, 2), c(3, 4))) }"
+  output <- test_it(lst)
+  fails(output, "data.frame\\(a = c\\(1, 2\\), b = c\\(3, 4\\)\\)")
+
+  lst$DC_CODE <- "func <- function(x) { return(data.frame(a = c(1, 2), b = c(3, 4))) }"
+  output <- test_it(lst)
+  passes(output)
+})
