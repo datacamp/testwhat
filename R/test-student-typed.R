@@ -49,8 +49,8 @@ test_student_typed <- function(strings,
   strings <- gsub("\"", "'", strings)
   
   counts <- sapply(strings, function(patt) {
-    res <- gregexpr(patt, text = student_code)[[1]]
-    if (any(res) == -1) {
+    res <- gregexpr(patt, text = student_code, fixed = fixed)[[1]]
+    if (any(res == -1)) {
       return(0L)
     } else {
       return(length(res))
