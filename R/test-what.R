@@ -5,29 +5,24 @@
 #'
 #' @param code The expectation that should be wrapped
 #' @param feedback A character string with feedback when the expection is not met 
-#' OR a list object, containing multiple pieces of information.
-#' @param feedback_msg deprecated argument, for backwards compatibility
+#' OR a list object, containing multiple pieces of information. This list should at
+#' least contain an element named \code{message}
 #' 
 #' @import testthat
 #' @export
-test_what <- function(code, feedback, feedback_msg) {
+test_what <- function(code, feedback) {
   
-  # ensure backwards compatibility
-  if (!missing(feedback_msg) && missing(feedback)) {
-    feedback <- list(message = feedback_msg)
-  }
-
-  # feedback can be a character string.
+  # feedback can be a character string
   if (is.character(feedback)) {
-    if (nchar(feedback) == 0) {
-      stop("No feedback message defined. Use test_what() around expect_ function.")
-    }
     feedback <- list(message = feedback)
-  }
+  } 
   
-  if (!is.list(feedback) || !("message" %in% names(feedback)) || is.null(feedback$message)) {
-    stop(paste("the feedback object passed to test_what() isn't in the correct format;",
-               "make sure it's a list that contains at least a non-NULL element named 'message'."))
+  if (!is.list(feedback) || 
+      !("message" %in% names(feedback)) || 
+      is.null(feedback$message) || 
+      !is.character(feedback$message) || 
+      nchar(feedback$message) == 0) {
+    stop("The feedback you specified in test_what() isn't in the correct format")
   }
 
   feedback <- c(feedback, list(tags = tw$get("tags")))

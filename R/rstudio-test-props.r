@@ -77,7 +77,7 @@ test_props <- function(index = 1,
   keeptrying <- TRUE
   for (i in 1:length(funs)) {
     stud_exprs = get_expressions_for_function_call(funs[i], pd_stud)
-    test_what(expect_that(length(stud_exprs) > 0, is_true()), feedback_msg = not_called_msg)
+    test_what(expect_that(length(stud_exprs) > 0, is_true()), feedback = not_called_msg)
     
     if (pass) # if passed already, only check on the function being present, so next loop not needed anymore
       next
@@ -130,6 +130,6 @@ test_props <- function(index = 1,
     if (!keeptrying) # if one expression contained more props, fail, and stop trying
       break
   }
-  test_what(expect_true(pass), feedback_msg = incorrect_msg)
+  test_what(expect_true(pass), feedback = incorrect_msg)
 }
 

@@ -30,7 +30,7 @@ test_mc <- function(correct, no_selection_msg = NULL, feedback_msgs = NULL) {
   init_tags(fun = "test_mc")
   
   # see if DM.result exists
-  if(is.null(no_selection_msg)) {
+  if (is.null(no_selection_msg)) {
     no_selection_msg <- "Please select one of the options!"
   }
   
@@ -38,11 +38,11 @@ test_mc <- function(correct, no_selection_msg = NULL, feedback_msgs = NULL) {
   result <- get("DM.result", envir = globalenv())
   
   # see if result is correct
-  if(!is.null(feedback_msgs) && is.na(feedback_msgs[result])) {
+  if (!is.null(feedback_msgs) && is.na(feedback_msgs[result])) {
     stop("There is no feedback message available for this user input! Make sure you define enough feedback messages.")
   }
   
-  test_what(expect_true(result %in% correct), feedback_msg = ifelse(is.null(feedback_msgs), "Your answer is incorrect. Try again.", feedback_msgs[result]))
+  test_what(expect_true(result %in% correct), feedback = ifelse(is.null(feedback_msgs), "Your answer is incorrect. Try again.", feedback_msgs[result]))
 
-  success_msg(ifelse(is.null(feedback_msgs), "Very good! Continue to the next exercise.", feedback_msgs[correct]))
+  success_msg(ifelse(is.null(feedback_msgs), "Good job! Continue to the next exercise.", feedback_msgs[correct]))
 }
