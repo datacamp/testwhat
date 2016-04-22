@@ -25,31 +25,31 @@ test_subexpr_eval <- function(index = 1, fun = NULL,
 
   pd_stud <- get_single_pd(index = index, pd = create_student_pd(student_code = student_code), incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
   pd_sol <- get_single_pd(index = index, pd = create_solution_pd(solution_code = solution_code), incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
-  if(is.null(pd_stud) || is.null(pd_sol)) {
+  if (is.null(pd_stud) || is.null(pd_sol)) {
     return(FALSE)
   }
   
-  if(is.null(fun)) funstr = "the entire command"
+  if (is.null(fun)) funstr = "the entire command"
   else funstr = sprintf("<code>%s()</code>",fun)
 
   student_exprs <- get_expressions_for_function_call(fun = fun, pd = pd_stud)
   solution_exprs <- get_expressions_for_function_call(fun = fun, pd = pd_sol)
   
   # DEFAULT MESSAGES
-  if(!is.character(solution_exprs)) {
+  if (!is.character(solution_exprs)) {
     stop(sprintf("Function %s was not found in command %i of the solution code. Check this code and your SCT.",funstr,index))
   }
-  if(is.null(not_called_msg)) {
+  if (is.null(not_called_msg)) {
     not_called_msg = sprintf("Function %s was not called in command %i of your solution.", funstr, index);
   }
-  if(is.null(incorrect_msg)) {
+  if (is.null(incorrect_msg)) {
     incorrect_msg = sprintf("The result of %s in command %i of your solution is not as expected. Check it again.",funstr,index);
   }
 
-  test_what(expect_true(is.character(student_exprs)), feedback_msg = not_called_msg)
-  studresult = try(eval(parse(text=tail(student_exprs,n=1))))
-  solresult = try(eval(parse(text = tail(solution_exprs,n=1))))
+  test_what(expect_true(is.character(student_exprs)), feedback = not_called_msg)
+  studresult = try(eval(parse(text = tail(student_exprs, n = 1))))
+  solresult = try(eval(parse(text = tail(solution_exprs, n = 1))))
 
   # TAKE LAST CALLS OF EXPRESSIONS (tail(..., n = 1)) # change this?
-  test_what(expect_true(isTRUE(try(all.equal(studresult, solresult)))), feedback_msg = incorrect_msg)
+  test_what(expect_true(isTRUE(try(all.equal(studresult, solresult)))), feedback = incorrect_msg)
 }

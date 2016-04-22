@@ -90,14 +90,14 @@ test_ggplot <- function(index = 1,
   len <- length(stud_ggplot_objects)
   
   if (len < index) {
-    test_what(fail(), feedback_msg = "You didn't define enough `ggplot` commands.")
+    test_what(fail(), feedback = list(message = "You didn't define enough `ggplot` commands."))
   }
   
   feedback <- sprintf("In your %s `ggplot` command,", nd(index))
   
   stud_selected <- stud_ggplot_objects[[index]]
   
-  test_what(expect_false(inherits(stud_selected, "try-error")), feedback_msg = paste(feedback, "you got an error. Make sure you use the correct `ggplot` syntax. Have another look at the instructions."))
+  test_what(expect_false(inherits(stud_selected, "try-error")), feedback = list(message = paste(feedback, "you got an error. Make sure you use the correct `ggplot` syntax. Have another look at the instructions.")))
   
   sol_selected_command <- sol_ggplot_commands[[index]]
   stud_selected_command <- stud_ggplot_commands[[index]]
@@ -167,7 +167,7 @@ test_data_layer <- function(sol_data, stud_data, feedback, data_fail_msg) {
     feedback_msg <- paste(feedback, "you didn't get the data layer right.")
   }
   
-  test_what(expect_equal(sol_data$base, stud_data$base), feedback_msg = feedback_msg)
+  test_what(expect_equal(sol_data$base, stud_data$base), feedback = list(message = feedback_msg))
 }
 
 test_aes_layer <- function(sol_mapping, stud_mapping, feedback, aes_fail_msg, exact_aes) {
@@ -180,10 +180,10 @@ test_aes_layer <- function(sol_mapping, stud_mapping, feedback, aes_fail_msg, ex
                         paste0(feedback, " have you mapped exactly what is asked on the aesthetics layer, no more and no less?"))
     }
     
-    test_what(expect_false(is.null(stud_mapping$base[map][[1]])), feedback_msg = feedback_msg[1])
-    test_what(expect_equal(stud_mapping$base[map], sol_mapping$base[map]), feedback_msg = feedback_msg[2])
+    test_what(expect_false(is.null(stud_mapping$base[map][[1]])), feedback = list(message = feedback_msg[1]))
+    test_what(expect_equal(stud_mapping$base[map], sol_mapping$base[map]), feedback = list(message = feedback_msg[2]))
     if (exact_aes) {
-      test_what(expect_equal(length(stud_mapping), length(sol_mapping)), feedback_msg = feedback_msg[3])
+      test_what(expect_equal(length(stud_mapping), length(sol_mapping)), feedback = list(message = feedback_msg[3]))
     }
   }
 }
@@ -300,7 +300,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
                               }, character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {
-        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])
+        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings - 1)], collapse = ", "), " and ", param_strings[nb_param_strings])
       } else {
         param_feedback <- param_strings
       }
@@ -311,10 +311,10 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
       
     }
     
-    test_what(expect_true(found_geom_name), feedback_msg = feedback_msg[1])
-    test_what(expect_true(found_geom_with_params), feedback_msg = feedback_msg[2])
-    test_what(expect_true(found_geom_with_exact_params), feedback_msg = feedback_msg[3])
-    test_what(expect_true(found_geom_with_correct_position), feedback_msg = feedback_msg[4])
+    test_what(expect_true(found_geom_name), feedback = list(message = feedback_msg[1]))
+    test_what(expect_true(found_geom_with_params), feedback = list(message = feedback_msg[2]))
+    test_what(expect_true(found_geom_with_exact_params), feedback = list(message = feedback_msg[3]))
+    test_what(expect_true(found_geom_with_correct_position), feedback = list(message = feedback_msg[4]))
   }
   
   if (isTRUE(exact_geom)) {
@@ -323,7 +323,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
     } else {
       feedback_msg <- paste0(feedback, " have you added only the geom layers that are asked for? Nothing more.")
     }
-    test_what(expect_equal(length(stud_layers), 0), feedback_msg = feedback_msg)
+    test_what(expect_equal(length(stud_layers), 0), feedback = list(message = feedback_msg))
   }
 }
 
@@ -339,7 +339,7 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
     
     stud_type <- class(stud_facet)[1]
     
-    if(stud_type == "grid") {
+    if (stud_type == "grid") {
       same_facet <- TRUE
       
       sol_cols <- names(sol_facet$cols)
@@ -369,9 +369,9 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
                         feedback_incorrect)
     }
     
-    test_what(expect_true(same_facet), feedback_msg = feedback_msg[1])
-    test_what(expect_true(same_cols), feedback_msg = feedback_msg[2])
-    test_what(expect_true(same_rows), feedback_msg = feedback_msg[3])
+    test_what(expect_true(same_facet), feedback = list(message = feedback_msg[1]))
+    test_what(expect_true(same_cols), feedback = list(message = feedback_msg[2]))
+    test_what(expect_true(same_rows), feedback = list(message = feedback_msg[3]))
   }
 }
 
@@ -486,7 +486,7 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
                               }, character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {
-        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])
+        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings - 1)], collapse = ", "), " and ", param_strings[nb_param_strings])
       } else {
         param_feedback <- param_strings
       }
@@ -496,9 +496,9 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
       
     }
     
-    test_what(expect_true(found_name), feedback_msg = feedback_msg[1])
-    test_what(expect_true(found_with_params), feedback_msg = feedback_msg[2])
-    test_what(expect_true(found_with_exact_params), feedback_msg = feedback_msg[3])
+    test_what(expect_true(found_name), feedback = list(message = feedback_msg[1]))
+    test_what(expect_true(found_with_params), feedback = list(message = feedback_msg[2]))
+    test_what(expect_true(found_with_exact_params), feedback = list(message = feedback_msg[3]))
   }
 }
 
@@ -613,7 +613,7 @@ filter_standard_geom_params <- function(geom_call, params) {
 
 get_ggplot_solution_info <- function(code, predefined_code, envir) { 
   saved_solution_code <- tw$get("saved_solution_code")
-  if(is.null(saved_solution_code)) saved_solution_code <- ""
+  if (is.null(saved_solution_code)) saved_solution_code <- ""
   saved_solution_ggplot_info <- tw$get("saved_solution_ggplot_info")
   
   if (code != saved_solution_code || is.null(saved_solution_ggplot_info)) {
@@ -626,7 +626,7 @@ get_ggplot_solution_info <- function(code, predefined_code, envir) {
 
 get_ggplot_student_info <- function(code, predefined_code, envir) {
   saved_student_code <- tw$get("saved_student_code")
-  if(is.null(saved_student_code)) saved_student_code <- ""
+  if (is.null(saved_student_code)) saved_student_code <- ""
   saved_student_ggplot_info <- tw$get("saved_student_ggplot_info")
   
   if (code != saved_student_code || is.null(saved_student_ggplot_info)) {
