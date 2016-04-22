@@ -300,7 +300,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
                               }, character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {
-        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])
+        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings - 1)], collapse = ", "), " and ", param_strings[nb_param_strings])
       } else {
         param_feedback <- param_strings
       }
@@ -339,7 +339,7 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
     
     stud_type <- class(stud_facet)[1]
     
-    if(stud_type == "grid") {
+    if (stud_type == "grid") {
       same_facet <- TRUE
       
       sol_cols <- names(sol_facet$cols)
@@ -486,7 +486,7 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
                               }, character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {
-        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings-1)], collapse = ", "), " and ", param_strings[nb_param_strings])
+        param_feedback <- paste0(paste(param_strings[1:(nb_param_strings - 1)], collapse = ", "), " and ", param_strings[nb_param_strings])
       } else {
         param_feedback <- param_strings
       }
@@ -613,7 +613,7 @@ filter_standard_geom_params <- function(geom_call, params) {
 
 get_ggplot_solution_info <- function(code, predefined_code, envir) { 
   saved_solution_code <- tw$get("saved_solution_code")
-  if(is.null(saved_solution_code)) saved_solution_code <- ""
+  if (is.null(saved_solution_code)) saved_solution_code <- ""
   saved_solution_ggplot_info <- tw$get("saved_solution_ggplot_info")
   
   if (code != saved_solution_code || is.null(saved_solution_ggplot_info)) {
@@ -626,7 +626,7 @@ get_ggplot_solution_info <- function(code, predefined_code, envir) {
 
 get_ggplot_student_info <- function(code, predefined_code, envir) {
   saved_student_code <- tw$get("saved_student_code")
-  if(is.null(saved_student_code)) saved_student_code <- ""
+  if (is.null(saved_student_code)) saved_student_code <- ""
   saved_student_ggplot_info <- tw$get("saved_student_ggplot_info")
   
   if (code != saved_student_code || is.null(saved_student_ggplot_info)) {
