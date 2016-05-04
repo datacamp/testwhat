@@ -212,3 +212,22 @@ test_that("test_object inside MarkdownExercise doesn't show line numbers", {
   fails(output)
   line_info(output, NULL, NULL)
 })
+
+test_that("test_object works with an object which is the same but has different class", {
+  lst <- list()
+  lst$DC_SOLUTION <- "number <- which(c('a', 'b', 'c') == 'b')"
+  lst$DC_CODE <-"number <- 2"
+  lst$DC_SCT <- "test_object('number')"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <-"number <- 1"
+  lst$DC_SCT <- "test_object('number')"
+  output <- test_it(lst)
+  fails(output)
+
+  lst$DC_CODE <-"number <- which(c('a', 'b', 'c') == 'c')"
+  lst$DC_SCT <- "test_object('number')"
+  output <- test_it(lst)
+  fails(output)
+})
