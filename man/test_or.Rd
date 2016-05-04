@@ -4,7 +4,7 @@
 \alias{test_or}
 \title{Test if one of the given sct parts are correct.}
 \usage{
-test_or(..., incorrect_msg = NULL, choose_feedback = 1, subs = TRUE,
+test_or(..., incorrect_msg = NULL, choose_feedback = 1,
   env = parent.frame())
 }
 \arguments{
@@ -13,8 +13,6 @@ test_or(..., incorrect_msg = NULL, choose_feedback = 1, subs = TRUE,
 \item{incorrect_msg}{msg displayed when none succeeds}
 
 \item{choose_feedback}{choose feedback of test with this index}
-
-\item{subs}{substitute content of ...}
 
 \item{env}{environment in which to execute tests.}
 }
