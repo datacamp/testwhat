@@ -40,11 +40,15 @@
 #'
 #' @export
 test_correct <- function(check_code, diagnose_code, env = parent.frame()) {
+  in_test_mode <- tw$get("in_test_mode")
   check_code <- substitute(check_code)
-  if (is.character(check_code)) check_code <- parse(text = check_code)
-  
   diagnose_code <- substitute(diagnose_code)
-  if (is.character(diagnose_code)) diagnose_code <- parse(text = diagnose_code)
-  
-  test_or(check_code, parse(text = c(deparse(diagnose_code), deparse(check_code))), subs = FALSE, choose_feedback = 2, env = env)
+  rep <- get_reporter()
+  rep$be_silent()
+  ok <- run_until_fail(check_code, env = env)
+  rep$be_loud()
+  if (!ok || in_test_mode) {
+    eval(diagnose_code, envir = env)
+    eval(check_code, envir = env)
+  }
 }

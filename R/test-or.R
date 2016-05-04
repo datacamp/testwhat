@@ -13,7 +13,6 @@
 #' @param ... one of these code blocks with tests should succeed 
 #' @param incorrect_msg msg displayed when none succeeds
 #' @param choose_feedback choose feedback of test with this index
-#' @param subs substitute content of ...
 #' @param env environment in which to execute tests.
 #' 
 #' @examples
@@ -23,16 +22,13 @@
 #' }
 #'
 #' @export
-test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1, 
-                    subs = TRUE, env = parent.frame()) {
+test_or <- function(..., incorrect_msg = NULL, 
+                    choose_feedback = 1, env = parent.frame()) {
   in_test_mode <- tw$get("in_test_mode")
   
-  if (subs) {
-    input <- substitute(alist(...))
-    input[[1]] <- NULL
-  } else {
-    input <- list(...)
-  }
+  input <- substitute(alist(...))
+  input[[1]] <- NULL
+  
   len <- length(input) 
   
   passes <- logical(len)
@@ -52,8 +48,8 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1,
   
   if (!any(passes)) {
     if (is.null(incorrect_msg)) {
-      first <- input[[choose_feedback]]
-      run_until_fail(first, env)
+      failing_test <- input[[choose_feedback]]
+      eval(failing_test, env = env)
     } else {
       test_what(fail(), incorrect_msg)
     }

@@ -81,7 +81,7 @@ test_that("test_correct works in testing mode", {
   
   lst$DC_TEST_MODE <- TRUE
   output <- test_it(lst)
-  fails(output, mess_patt = "testing mode")
+  fails(output, mess_patt = "<code>a</code>")
 })
 
 test_that("test_correct works in nested form", {
