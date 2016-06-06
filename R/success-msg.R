@@ -1,6 +1,6 @@
 #' Define the success message
 #' 
-#' If all tests in an SCT pass, the students gets a 
+#' If all tests in an SCT pass, the student is presented with a 
 #' congratulatory message. You can specify this message with
 #' /code{success_msg()}. It does not matter where in the SCT
 #' you specify this message, but at the end makes most sense.

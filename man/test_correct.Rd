@@ -7,11 +7,11 @@
 test_correct(check_code, diagnose_code, env = parent.frame())
 }
 \arguments{
-\item{check_code}{High-level tests. Also provide feedback messages here, 
+\item{check_code}{high-level tests. Also provide feedback messages here, 
 as this code is run loudly after executing the \code{diagnose_code} code, 
 in the case of failing tests.}
 
-\item{diagnose_code}{Low-level tests that are run if tests in \code{check_code} fail.}
+\item{diagnose_code}{low-level tests that are run if tests in \code{check_code} fail.}
 
 \item{env}{environment in which to execute tests.}
 }
@@ -25,8 +25,8 @@ tests if there were failures. The teacher should specify two code chunks;
  \item{\code{diagnose_code}: Set of tests that gets executed if the 
  tests in \code{check_code} fail. These tests contain more 
  detailed tests, to pinpoint the problem. To make sure there 
- is a fail in the end, the tests in \code{check_code} are run afterwards,
- this time 'loudly'.}
+ is a fail in the end, the tests in \code{check_code} are run again, 
+ this time not silently (so they can actually cause a message).}
 }
 }
 \details{
@@ -36,7 +36,7 @@ battery of tests is not run) and increases the flexibility for the student
 }
 \examples{
 \dontrun{
-# Example 1 solution code:
+# Example solution code:
 # x <- mean(1:3, na.rm = TRUE)
 
 # Example SCT

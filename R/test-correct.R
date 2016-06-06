@@ -9,23 +9,23 @@
 #'  \item{\code{diagnose_code}: Set of tests that gets executed if the 
 #'  tests in \code{check_code} fail. These tests contain more 
 #'  detailed tests, to pinpoint the problem. To make sure there 
-#'  is a fail in the end, the tests in \code{check_code} are run afterwards,
-#'  this time 'loudly'.}
+#'  is a fail in the end, the tests in \code{check_code} are run again, 
+#'  this time not silently (so they can actually cause a message).}
 #' }
 #' 
 #' \code{test_correct} reduces computation time (if it's ok, the additional 
 #' battery of tests is not run) and increases the flexibility for the student 
 #' (if the final result is ok, different paths towards this result are allowed).
 #' 
-#' @param check_code High-level tests. Also provide feedback messages here, 
+#' @param check_code high-level tests. Also provide feedback messages here, 
 #' as this code is run loudly after executing the \code{diagnose_code} code, 
 #' in the case of failing tests.
-#' @param diagnose_code Low-level tests that are run if tests in \code{check_code} fail.
+#' @param diagnose_code low-level tests that are run if tests in \code{check_code} fail.
 #' @param env environment in which to execute tests.
 #' 
 #' @examples
 #' \dontrun{
-#' # Example 1 solution code:
+#' # Example solution code:
 #' # x <- mean(1:3, na.rm = TRUE)
 #' 
 #' # Example SCT

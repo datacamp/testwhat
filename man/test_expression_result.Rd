@@ -29,7 +29,7 @@ the student and the solution environment.
 
 # Test whether my_fun(1,2) and my_fun(1,2)
 # give same _result_
-test_function_definition({
+test_function_definition("my_fun", {
  test_expression_result(my_fun(1,2))
  test_expression_result(my_fun(-1,-2))
 })
