@@ -5,8 +5,7 @@
 \title{Test a conditional statement}
 \usage{
 test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
-  else_expr_test = NULL, not_found_msg = NULL, missing_else_msg = NULL,
-  env = parent.frame())
+  else_expr_test = NULL, not_found_msg = NULL, missing_else_msg = NULL)
 }
 \arguments{
 \item{index}{The index of the control structure to check.}
@@ -25,8 +24,6 @@ part of the control structure}
 
 \item{missing_else_msg}{Messing in case the else part of the 
 control structure should be there but is missing}
-
-\item{env}{Environment in which to perform all these SCTs}
 }
 \description{
 Check whether the student correctly coded a conditional statement. 

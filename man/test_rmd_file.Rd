@@ -4,8 +4,7 @@
 \alias{test_rmd_file}
 \title{Test R Markdown file}
 \usage{
-test_rmd_file(code, student_file = NULL, solution_file = NULL,
-  env = parent.frame())
+test_rmd_file(code, student_file = NULL, solution_file = NULL)
 }
 \arguments{
 \item{code}{the SCT code for the file}
@@ -13,8 +12,6 @@ test_rmd_file(code, student_file = NULL, solution_file = NULL,
 \item{student_file}{the name of the student file to be tested}
 
 \item{solution_file}{the name of the solution file to be tested}
-
-\item{env}{The environment in which the code should be tested.}
 }
 \description{
 Test a single R Markdown file

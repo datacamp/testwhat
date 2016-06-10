@@ -9,7 +9,6 @@
 #' function was not defined
 #' @param incorrect_number_arguments_msg Optional feedback message in case the 
 #' function does not have the correct number of arguments.
-#' @param env Environment in which to perform the tests
 
 #' @examples
 #' \dontrun{
@@ -30,8 +29,7 @@ test_function_definition <- function(name,
                                      function_test = NULL, 
                                      body_test = NULL,
                                      undefined_msg = NULL, 
-                                     incorrect_number_arguments_msg = NULL,
-                                     env = parent.frame()) {
+                                     incorrect_number_arguments_msg = NULL) {
   
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
@@ -76,7 +74,7 @@ test_function_definition <- function(name,
   
   rep <- get_reporter()
   rep$be_silent()
-  passes <- run_until_fail(function_test, env = student_env)
+  passes <- run_until_fail(function_test)
   rep$be_loud()
   
   if (!passes) {
@@ -101,9 +99,9 @@ test_function_definition <- function(name,
       tw$set(solution_pd = solution_fun_def$pd)
       tw$set(student_code = student_fun_def$code)
       tw$set(solution_code = solution_fun_def$code)
-      eval(body_test, envir = env)
+      eval(body_test)
     }
     
-    eval(function_test, envir = env)
+    eval(function_test)
   }
 }

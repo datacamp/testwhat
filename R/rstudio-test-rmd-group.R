@@ -5,10 +5,9 @@
 #'
 #' @param group_number  Number of the group.
 #' @param code  SCT code to test the group (in curly braces)
-#' @param env The environment in which the code should be tested.
 #'
 #' @export
-test_rmd_group <- function(group_number, code, env = parent.frame()) {
+test_rmd_group <- function(group_number, code) {
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
@@ -56,5 +55,5 @@ test_rmd_group <- function(group_number, code, env = parent.frame()) {
     tw$set(inline_number = group_number - sum(sapply(student_ds[1:group_number],class) == "block"))
   }
   
-  eval(code, envir = env)
+  eval(code)
 }

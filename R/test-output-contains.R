@@ -21,7 +21,7 @@ test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
   console_output = get("DM.console.output", envir = globalenv())
   
   # in reality incorrect_msg should be defined at all times... no good feedback messages result from this.
-  if(is.null(incorrect_msg)) {
+  if (is.null(incorrect_msg)) {
     incorrect_msg <- sprintf("Make sure to print <code>%s</code> to the console", expr)
   }
   
@@ -30,13 +30,13 @@ test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
 }
 
 output_contains <- function(expr, console_output, env) {
-  correct_output <- try(capture.output(eval(parse(text=expr), envir = env)), silent = TRUE)
+  correct_output <- try(capture.output(eval(parse(text = expr), envir = env)), silent = TRUE)
   
   if (inherits(correct_output, "try-error")) {
     return(FALSE)
   }
   
-  correct_output <- paste(correct_output, collapse='')
+  correct_output <- paste(correct_output, collapse = '')
 
   # Remove new-lines:
   console_output <- gsub("\n|[[:space:]]","", console_output)

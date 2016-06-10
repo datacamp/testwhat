@@ -4,7 +4,7 @@
 \alias{test_correct}
 \title{Test things. If it fails, test additional things.}
 \usage{
-test_correct(check_code, diagnose_code, env = parent.frame())
+test_correct(check_code, diagnose_code)
 }
 \arguments{
 \item{check_code}{high-level tests. Also provide feedback messages here, 
@@ -12,8 +12,6 @@ as this code is run loudly after executing the \code{diagnose_code} code,
 in the case of failing tests.}
 
 \item{diagnose_code}{low-level tests that are run if tests in \code{check_code} fail.}
-
-\item{env}{environment in which to execute tests.}
 }
 \description{
 Test if a set of tests passes, and do additional, more precise 

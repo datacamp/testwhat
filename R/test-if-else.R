@@ -18,7 +18,6 @@
 #' (at given index) is not found.
 #' @param missing_else_msg Messing in case the else part of the 
 #' control structure should be there but is missing
-#' @param env  Environment in which to perform all these SCTs
 #' 
 #' @examples
 #' \dontrun{
@@ -59,8 +58,7 @@ test_if_else <- function(index = 1,
                          if_expr_test = NULL, 
                          else_expr_test = NULL,
                          not_found_msg = NULL,
-                         missing_else_msg = NULL,
-                         env = parent.frame()) {
+                         missing_else_msg = NULL) {
   
   student_pd <- tw$get("student_pd")
   solution_pd <- tw$get("solution_pd")
@@ -105,28 +103,28 @@ test_if_else <- function(index = 1,
   })
   
   # IF condition part should always be there
-  if(!is.null(if_cond_test)) {
+  if (!is.null(if_cond_test)) {
     prepare_tw(stud_str, sol_str, "cond_part")
-    eval(if_cond_test, envir = env)
+    eval(if_cond_test)
   }
       
   # IF expression part should always be available.
-  if(!is.null(if_expr_test)) {
+  if (!is.null(if_expr_test)) {
     prepare_tw(stud_str, sol_str, "if_part")
-    eval(if_expr_test, envir = env)
+    eval(if_expr_test)
   }
       
   # ELSE expression part is not always be available.
-  if(!is.null(else_expr_test)) {
-    if(is.null(sol_str[["else_part"]])) {
+  if (!is.null(else_expr_test)) {
+    if (is.null(sol_str[["else_part"]])) {
       stop(sprintf("The %s control construct in the solution doesn't contain an else part itself.", get_num(index)))
     }
-    if(is.null(missing_else_msg)) {
+    if (is.null(missing_else_msg)) {
       missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
     }
     test_what(expect_false(is.null(stud_str[["else_part"]])), missing_else_msg)
     prepare_tw(stud_str, sol_str, "else_part")
-    eval(else_expr_test, envir = env)
+    eval(else_expr_test)
   }
 }
 

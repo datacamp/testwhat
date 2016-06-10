@@ -1,20 +1,20 @@
 # Find all calls to a given function within a piece of code
-find_function_calls <- function(pd, name, env = parent.frame()) {
+find_function_calls <- function(pd, name, env) {
   
   # summarize vs summarise hack
-  if(name == "summarise") pd$text <- gsub("summarize", "summarise", pd$text)
-  if(name == "summarize") pd$text <- gsub("summarise", "summarize", pd$text)
+  if (name == "summarise") pd$text <- gsub("summarize", "summarise", pd$text)
+  if (name == "summarize") pd$text <- gsub("summarise", "summarize", pd$text)
   
   # Retrieve all function calls from parse information
   fun_ids <- pd$parent[pd$text == name & pd$token == "SYMBOL_FUNCTION_CALL"]
   
   output <- list()
-  for(fun_id in fun_ids) {
+  for (fun_id in fun_ids) {
     expr_id <- pd$parent[pd$id == fun_id] 
     
     # if parent expression contains %>% on left hand side ...
     siblings <- pd$id[pd$parent == pd$parent[pd$id == expr_id]]
-    if("%>%" %in% pd$text[pd$id %in% siblings] && pd$id[pd$text == "%>%" & pd$id %in% siblings] < expr_id) {
+    if ("%>%" %in% pd$text[pd$id %in% siblings] && pd$id[pd$text == "%>%" & pd$id %in% siblings] < expr_id) {
       # ... go one level up, normalize call, and return string
       expr_id <- pd$parent[pd$id == expr_id]
       expr_string <- deparse(unpipe(as.call(parse(text = getParseText(pd, expr_id)))[[1]]))
@@ -30,7 +30,7 @@ find_function_calls <- function(pd, name, env = parent.frame()) {
 }
 
 # Expand argument names of a function call (borrowed from pryr standardise_call)
-standardize_call <- function (call, call_string, env = parent.frame()) {
+standardize_call <- function(call, call_string, env) {
   stopifnot(is.call(call))
   
   f <- args(get(as.character(call[[1]]), env))
@@ -49,7 +49,7 @@ standardize_call <- function (call, call_string, env = parent.frame()) {
   }
 }
 
-find_S3_call <- function (matched_call, env = parent.frame()) {
+find_S3_call <- function(matched_call, env) {
   if (inherits(matched_call, "try-error")) {
     return(matched_call)
   }
@@ -69,7 +69,7 @@ find_S3_call <- function (matched_call, env = parent.frame()) {
     call_dispatched <- paste(call_method,call_class, sep = ".")
     find_call <- rep(FALSE, length(met))
     for (one_call in call_dispatched) {
-      find_call <- met==one_call
+      find_call <- met == one_call
       if (any(find_call)) {
         call_dispatched <- one_call
         break
@@ -78,7 +78,7 @@ find_S3_call <- function (matched_call, env = parent.frame()) {
     if (!any(find_call)) {
       call_dispatched <- paste(call_method, "default", sep = ".")
       cal_class <- "default"
-      find_call <- met==call_dispatched
+      find_call <- met == call_dispatched
       if (!any(find_call)) {
         # At this point, we are almost certain the call is a primitive.
         # Just ignore.

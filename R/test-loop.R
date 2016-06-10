@@ -17,7 +17,6 @@
 #' @param cond_test  SCT to perform on the condition part
 #' @param expr_test  SCT to perform on the expression part
 #' @param not_found_msg  Message in case the loop (at the specified index) is not found.
-#' @param env  Environment in which to perform all these SCTs
 #' 
 #' @examples
 #' \dontrun{
@@ -57,13 +56,12 @@ NULL
 test_while_loop <- function(index = 1, 
                             cond_test = NULL, 
                             expr_test = NULL,                          
-                            not_found_msg = NULL,
-                            env = parent.frame()) {
+                            not_found_msg = NULL) {
   cond_test <- substitute(cond_test)
   if (is.character(cond_test)) code <- parse(text = cond_test)
   expr_test <- substitute(expr_test)
   if (is.character(expr_test)) expr_test <- parse(text = expr_test)
-  test_loop(type = "while", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg, env = env)
+  test_loop(type = "while", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg)
 }
 
 #' @rdname test_loop
@@ -71,13 +69,12 @@ test_while_loop <- function(index = 1,
 test_for_loop <- function(index = 1, 
                           cond_test = NULL,
                           expr_test = NULL,
-                          not_found_msg = NULL,
-                          env = parent.frame()) {
+                          not_found_msg = NULL) {
   cond_test <- substitute(cond_test)
   if (is.character(cond_test)) code <- parse(text = cond_test)
   expr_test <- substitute(expr_test)
   if (is.character(expr_test)) expr_test <- parse(text = expr_test)
-  test_loop(type = "for", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg, env = env)
+  test_loop(type = "for", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg)
 }
 
 
@@ -124,12 +121,12 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   # WHILE condition part should always be there
   if (!is.null(cond_test)) {
     prepare_tw(student_struct, solution_struct, "cond_part")
-    eval(cond_test, envir = env)
+    eval(cond_test)
   }
   
   # IF expression part should always be available.
   if (!is.null(expr_test)) {
     prepare_tw(student_struct, solution_struct, "expr_part")
-    eval(expr_test, envir = env)
+    eval(expr_test)
   }
 }

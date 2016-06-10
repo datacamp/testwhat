@@ -21,7 +21,6 @@
 #' as this code is run loudly after executing the \code{diagnose_code} code, 
 #' in the case of failing tests.
 #' @param diagnose_code low-level tests that are run if tests in \code{check_code} fail.
-#' @param env environment in which to execute tests.
 #' 
 #' @examples
 #' \dontrun{
@@ -39,21 +38,21 @@
 #' }
 #'
 #' @export
-test_correct <- function(check_code, diagnose_code, env = parent.frame()) {
+test_correct <- function(check_code, diagnose_code) {
   in_test_mode <- tw$get("in_test_mode")
   check_code <- substitute(check_code)
   diagnose_code <- substitute(diagnose_code)
   rep <- get_reporter()
   rep$be_silent()
-  ok <- run_until_fail(check_code, env = env)
+  ok <- run_until_fail(check_code)
   
   if (!ok || in_test_mode) {
     rep$be_loud()
-    eval(diagnose_code, envir = env)
-    eval(check_code, envir = env)
+    eval(diagnose_code)
+    eval(check_code)
   } else {
     # Execute this part to deal with 'blacklisting' of function calls
-    run_until_fail(diagnose_code, env = env)
+    run_until_fail(diagnose_code)
     rep$be_loud()
   }
 }

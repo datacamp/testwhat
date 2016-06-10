@@ -174,7 +174,7 @@ is_equal <- function(x, y, condition = "equivalent") {
 .equal <- function(x, y) compare(x, y)$equal
 
 # Extract specified arguments from a function call and evaluate if necessary
-extract_arguments <- function(call, args, eval = TRUE, env = parent.frame()) {
+extract_arguments <- function(call, args, eval = TRUE, env) {
   mapply(function(arg, eval) {
     object <- call[[arg]]
     if (eval && (is.name(object) || is.call(object) || is.expression(object))) {

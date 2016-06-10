@@ -7,14 +7,12 @@
 #' @param code the SCT code for the file
 #' @param student_file the name of the student file to be tested
 #' @param solution_file the name of the solution file to be tested
-#' @param env The environment in which the code should be tested.
 #' @inheritParams test_function
 #' 
 #' @export
 test_rmd_file <- function(code, 
                           student_file = NULL, 
-                          solution_file = NULL, 
-                          env = parent.frame()) {
+                          solution_file = NULL) {
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
@@ -54,5 +52,5 @@ test_rmd_file <- function(code,
   tw$set(student_code = student_code[student_file])
   tw$set(solution_code = solution_code[solution_file])
   
-  eval(code, envir = env)
+  eval(code)
 }

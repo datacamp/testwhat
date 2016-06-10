@@ -4,8 +4,7 @@
 \alias{test_or}
 \title{Test if one of the given sct parts are correct.}
 \usage{
-test_or(..., incorrect_msg = NULL, choose_feedback = 1,
-  env = parent.frame())
+test_or(..., incorrect_msg = NULL, choose_feedback = 1)
 }
 \arguments{
 \item{...}{one of these code blocks with tests should succeed}
@@ -13,8 +12,6 @@ test_or(..., incorrect_msg = NULL, choose_feedback = 1,
 \item{incorrect_msg}{msg displayed when none succeeds}
 
 \item{choose_feedback}{choose feedback of test with this index}
-
-\item{env}{environment in which to execute tests.}
 }
 \description{
 Test if one of the given SCT code batteries are evaluated as being

@@ -5,7 +5,7 @@
 \title{Run all tests for an exercise}
 \usage{
 test_exercise(sct, ex_type, pec, student_code, solution_code, solution_env,
-  output_list, in_test_mode = FALSE, env = test_env())
+  output_list, in_test_mode = FALSE)
 }
 \arguments{
 \item{sct}{Submission correctness tests as a character string.}
@@ -24,8 +24,6 @@ test_exercise(sct, ex_type, pec, student_code, solution_code, solution_env,
 
 \item{in_test_mode}{whether or not the system is in 'content testing mode'. 
 If this is the case, e.g. \code{\link{test_or}} will behave differently.}
-
-\item{env}{environment in which to execute tests.}
 }
 \value{
 A list with components \code{passed} that indicates whether all

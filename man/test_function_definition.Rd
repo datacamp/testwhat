@@ -5,8 +5,7 @@
 \title{Check whether the student defined a function correctly}
 \usage{
 test_function_definition(name, function_test = NULL, body_test = NULL,
-  undefined_msg = NULL, incorrect_number_arguments_msg = NULL,
-  env = parent.frame())
+  undefined_msg = NULL, incorrect_number_arguments_msg = NULL)
 }
 \arguments{
 \item{name}{The name of the function to test}
@@ -22,8 +21,6 @@ function was not defined}
 
 \item{incorrect_number_arguments_msg}{Optional feedback message in case the 
 function does not have the correct number of arguments.}
-
-\item{env}{Environment in which to perform the tests}
 }
 \description{
 Check whether the student defined a function correctly

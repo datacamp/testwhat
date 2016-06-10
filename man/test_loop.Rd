@@ -7,10 +7,10 @@
 \title{Test a \code{while} or \code{for} loop}
 \usage{
 test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
-  not_found_msg = NULL, env = parent.frame())
+  not_found_msg = NULL)
 
 test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
-  not_found_msg = NULL, env = parent.frame())
+  not_found_msg = NULL)
 }
 \arguments{
 \item{index}{The index of the \code{while} or \code{for} loop to check (counting for for and while loops is separate)}
@@ -20,8 +20,6 @@ test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
 \item{expr_test}{SCT to perform on the expression part}
 
 \item{not_found_msg}{Message in case the loop (at the specified index) is not found.}
-
-\item{env}{Environment in which to perform all these SCTs}
 }
 \description{
 Test whether a student correctly coded a while or \code{for} loop. The function parses

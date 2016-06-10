@@ -13,7 +13,6 @@
 #' @param ... one of these code blocks with tests should succeed 
 #' @param incorrect_msg msg displayed when none succeeds
 #' @param choose_feedback choose feedback of test with this index
-#' @param env environment in which to execute tests.
 #' 
 #' @examples
 #' \dontrun{
@@ -22,8 +21,7 @@
 #' }
 #'
 #' @export
-test_or <- function(..., incorrect_msg = NULL, 
-                    choose_feedback = 1, env = parent.frame()) {
+test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
   in_test_mode <- tw$get("in_test_mode")
   
   input <- substitute(alist(...))
@@ -37,7 +35,7 @@ test_or <- function(..., incorrect_msg = NULL,
   for (i in 1:len) {
     code <- input[[i]]
     rep$be_silent()
-    passes[i] <- run_until_fail(code, env)
+    passes[i] <- run_until_fail(code)
     rep$be_loud()
   }
   
@@ -49,7 +47,7 @@ test_or <- function(..., incorrect_msg = NULL,
   if (!any(passes)) {
     if (is.null(incorrect_msg)) {
       failing_test <- input[[choose_feedback]]
-      eval(failing_test, env = env)
+      eval(failing_test)
     } else {
       test_what(fail(), incorrect_msg)
     }

@@ -77,7 +77,7 @@ test_object <- function(name, eq_condition = "equivalent",
     feedback <- c(list(message = incorrect_msg), line_info)
     rep <- get_reporter()
     rep$be_silent()
-    ok <- run_until_fail(test_what(eq_fun(student, solution), feedback), parent.frame())
+    ok <- run_until_fail(test_what(eq_fun(student, solution), feedback))
     rep$be_loud()
     if (!ok) {
       test_what(expect_true(any(class(student) %in% class(solution))), feedback)
