@@ -1,11 +1,19 @@
+if (!requireNamespace("RBackend", quietly = TRUE)) {
+  stop("RBackend is needed to run the tests. Please install it.", call. = FALSE)
+}
+
+if (!requireNamespace("rjson", quietly = TRUE)) {
+  stop("rjson is needed to run the tests. Please install it.", call. = FALSE)
+}
+
 test_it <- function(lst) {
-  if(is.null(lst$DC_TYPE)) lst$DC_TYPE <- "NormalExercise"
-  if(is.null(lst$DC_PEC)) lst$DC_PEC <- ""
-  if(is.null(lst$DC_SOLUTION)) lst$DC_SOLUTION <- ""
-  if(is.null(lst$DC_SCT)) lst$DC_SCT <- ""
+  if (is.null(lst$DC_TYPE)) lst$DC_TYPE <- "NormalExercise"
+  if (is.null(lst$DC_PEC)) lst$DC_PEC <- ""
+  if (is.null(lst$DC_SOLUTION)) lst$DC_SOLUTION <- ""
+  if (is.null(lst$DC_SCT)) lst$DC_SCT <- ""
   lst$DC_COMMAND <- "init"
   output <- rjson::fromJSON(RBackend::execute(rjson::toJSON(lst)))
-  if(any(sapply(output, `[[`, "type") == "error")) {
+  if (any(sapply(output, `[[`, "type") == "error")) {
     print(output)
     stop("init failed")
   }
@@ -14,7 +22,7 @@ test_it <- function(lst) {
 }
 
 get_sct_payload <- function(output) {
-  if(any(sapply(output, `[[`, "type") == "error")) {
+  if (any(sapply(output, `[[`, "type") == "error")) {
     print(output)
     stop("an error occured")
   }
@@ -22,7 +30,7 @@ get_sct_payload <- function(output) {
 }
 
 get_error_payload <- function(output) {
-  if(any(sapply(output, `[[`, "type") == "sct")) {
+  if (any(sapply(output, `[[`, "type") == "sct")) {
     print(output)
     stop("no error occured")
   }
@@ -32,7 +40,7 @@ get_error_payload <- function(output) {
 passes <- function(output, mess_patt = NULL) {
   sct_payload <- get_sct_payload(output)
   expect_true(sct_payload$correct)
-  if(!is.null(mess_patt)) {
+  if (!is.null(mess_patt)) {
     expect_true(grepl(mess_patt, sct_payload$message))
   }
 }
@@ -40,7 +48,7 @@ passes <- function(output, mess_patt = NULL) {
 fails <- function(output, mess_patt = NULL) {
   sct_payload <- get_sct_payload(output)
   expect_false(sct_payload$correct)
-  if(!is.null(mess_patt)) {
+  if (!is.null(mess_patt)) {
     expect_true(grepl(mess_patt, sct_payload$message))
   }
 }
@@ -48,7 +56,7 @@ fails <- function(output, mess_patt = NULL) {
 error <- function(output, mess_patt = NULL) {
   error_payload <- get_error_payload(output)
   expect_false(is.null(error_payload))
-  if(!is.null(mess_patt)) {
+  if (!is.null(mess_patt)) {
     expect_true(grepl(mess_patt, error_payload))
   }
 }
