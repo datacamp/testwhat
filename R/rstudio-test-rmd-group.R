@@ -55,5 +55,5 @@ test_rmd_group <- function(group_number, code) {
     tw$set(inline_number = group_number - sum(sapply(student_ds[1:group_number],class) == "block"))
   }
   
-  eval(code)
+  eval(code, envir = parent.frame())
 }

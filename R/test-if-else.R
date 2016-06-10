@@ -105,13 +105,13 @@ test_if_else <- function(index = 1,
   # IF condition part should always be there
   if (!is.null(if_cond_test)) {
     prepare_tw(stud_str, sol_str, "cond_part")
-    eval(if_cond_test)
+    eval(if_cond_test, envir = parent.frame())
   }
       
   # IF expression part should always be available.
   if (!is.null(if_expr_test)) {
     prepare_tw(stud_str, sol_str, "if_part")
-    eval(if_expr_test)
+    eval(if_expr_test, envir = parent.frame())
   }
       
   # ELSE expression part is not always be available.
@@ -124,7 +124,7 @@ test_if_else <- function(index = 1,
     }
     test_what(expect_false(is.null(stud_str[["else_part"]])), missing_else_msg)
     prepare_tw(stud_str, sol_str, "else_part")
-    eval(else_expr_test)
+    eval(else_expr_test, envir = parent.frame())
   }
 }
 

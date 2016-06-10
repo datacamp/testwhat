@@ -99,9 +99,9 @@ test_function_definition <- function(name,
       tw$set(solution_pd = solution_fun_def$pd)
       tw$set(student_code = student_fun_def$code)
       tw$set(solution_code = solution_fun_def$code)
-      eval(body_test)
+      eval(body_test, envir = parent.frame())
     }
     
-    eval(function_test)
+    eval(function_test, envir = parent.frame())
   }
 }

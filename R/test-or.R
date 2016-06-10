@@ -47,7 +47,7 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
   if (!any(passes)) {
     if (is.null(incorrect_msg)) {
       failing_test <- input[[choose_feedback]]
-      eval(failing_test)
+      eval(failing_test, envir = parent.frame())
     } else {
       test_what(fail(), incorrect_msg)
     }

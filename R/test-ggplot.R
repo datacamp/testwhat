@@ -444,8 +444,8 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
               sol_value <- sol_params[[sol_param]]
               stud_value <- stud_params[[sol_param]]
               
-              eval_sol <- without_args(eval(sol_value, solution_env))
-              eval_stud <- without_args(try(eval(stud_value, student_env), silent = TRUE))
+              eval_sol <- without_args(eval(sol_value, envir = solution_env))
+              eval_stud <- without_args(try(eval(stud_value, envir = student_env), silent = TRUE))
               if (inherits(eval_stud, "try-error") ||
                   !compare(eval_sol, eval_stud)$equal) {
                 found_params <- FALSE

@@ -52,5 +52,5 @@ test_rmd_file <- function(code,
   tw$set(student_code = student_code[student_file])
   tw$set(solution_code = solution_code[solution_file])
   
-  eval(code)
+  eval(code, envir = parent.frame())
 }

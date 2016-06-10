@@ -48,8 +48,8 @@ test_correct <- function(check_code, diagnose_code) {
   
   if (!ok || in_test_mode) {
     rep$be_loud()
-    eval(diagnose_code)
-    eval(check_code)
+    eval(diagnose_code, envir = parent.frame())
+    eval(check_code, envir = parent.frame())
   } else {
     # Execute this part to deal with 'blacklisting' of function calls
     run_until_fail(diagnose_code)

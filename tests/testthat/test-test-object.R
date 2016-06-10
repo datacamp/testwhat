@@ -27,6 +27,20 @@ test_that("test_object works for simple objects", {
   passes(output)
 })
 
+test_that("test_object works with a feedback message specified outside of the function", {
+  lst <- list()
+  lst$DC_CODE <- "\n    var.equiv <- 3\n    var.not_equiv <- 4"
+  lst$DC_SOLUTION <- "\n    var.equiv <- 3\n    var.not_equiv <- 3\n    var.not_here <- 2"
+  
+  lst$DC_SCT <- "msg <- \"This is the undefined message\"\ntest_object(\"var.not_here\", undefined_msg = msg)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "This is the undefined message")
+  
+  lst$DC_SCT <- "msg <- \"This is the incorrect message\"\ntest_object(\"var.not_equiv\", incorrect_msg = msg)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "This is the incorrect message")
+})
+
 test_that("test_object resilient to different classes", {
   lst <- list()
   lst$DC_PEC <- "load(url(\"http://s3.amazonaws.com/assets.datacamp.com/course/dplyr/hflights.RData\")); library(dplyr); hflights <- tbl_df(hflights); "
@@ -231,3 +245,4 @@ test_that("test_object works with an object which is the same but has different 
   output <- test_it(lst)
   fails(output)
 })
+

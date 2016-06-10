@@ -121,12 +121,12 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   # WHILE condition part should always be there
   if (!is.null(cond_test)) {
     prepare_tw(student_struct, solution_struct, "cond_part")
-    eval(cond_test)
+    eval(cond_test, envir = parent.frame())
   }
   
   # IF expression part should always be available.
   if (!is.null(expr_test)) {
     prepare_tw(student_struct, solution_struct, "expr_part")
-    eval(expr_test)
+    eval(expr_test, envir = parent.frame())
   }
 }
