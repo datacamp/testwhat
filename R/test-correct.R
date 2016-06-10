@@ -46,9 +46,14 @@ test_correct <- function(check_code, diagnose_code, env = parent.frame()) {
   rep <- get_reporter()
   rep$be_silent()
   ok <- run_until_fail(check_code, env = env)
-  rep$be_loud()
+  
   if (!ok || in_test_mode) {
+    rep$be_loud()
     eval(diagnose_code, envir = env)
     eval(check_code, envir = env)
+  } else {
+    # Execute this part to deal with 'blacklisting' of function calls
+    run_until_fail(diagnose_code, env = env)
+    rep$be_loud()
   }
 }
