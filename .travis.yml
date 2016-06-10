@@ -4,6 +4,6 @@ sudo: required
 env:
   global:
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
-    
+
 r_check_args: --as-cran --no-tests
 
