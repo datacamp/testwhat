@@ -16,10 +16,9 @@ test_rmd_file <- function(code,
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
-  init_tags(fun = "test_rmd_file")
+  test_env <- tw$get("test_env")
   
-  code <- substitute(code)
-  if (is.character(code)) code <- parse(text = code)
+  init_tags(fun = "test_rmd_file")
   
   # get the entire student code and solution code and reset it on exit.
   on.exit({ 
@@ -52,5 +51,5 @@ test_rmd_file <- function(code,
   tw$set(student_code = student_code[student_file])
   tw$set(solution_code = solution_code[solution_file])
   
-  eval(code, envir = parent.frame())
+  eval(substitute(code), envir = test_env)
 }

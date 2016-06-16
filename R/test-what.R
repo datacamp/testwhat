@@ -27,6 +27,7 @@ test_what <- function(code, feedback) {
 
   feedback <- c(feedback, list(tags = tw$get("tags")))
   ok <- testthat:::test_code(feedback, substitute(code), env = parent.frame())
+  
   if (!ok) {
     stop(sct_failed_msg)
   }

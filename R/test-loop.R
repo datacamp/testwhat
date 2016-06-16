@@ -58,9 +58,7 @@ test_while_loop <- function(index = 1,
                             expr_test = NULL,                          
                             not_found_msg = NULL) {
   cond_test <- substitute(cond_test)
-  if (is.character(cond_test)) code <- parse(text = cond_test)
   expr_test <- substitute(expr_test)
-  if (is.character(expr_test)) expr_test <- parse(text = expr_test)
   test_loop(type = "while", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg)
 }
 
@@ -71,9 +69,7 @@ test_for_loop <- function(index = 1,
                           expr_test = NULL,
                           not_found_msg = NULL) {
   cond_test <- substitute(cond_test)
-  if (is.character(cond_test)) code <- parse(text = cond_test)
   expr_test <- substitute(expr_test)
-  if (is.character(expr_test)) expr_test <- parse(text = expr_test)
   test_loop(type = "for", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg)
 }
 
@@ -85,6 +81,7 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  test_env <- tw$get("test_env")
   fun_usage <- tw$get("fun_usage")
   init_tags(fun = sprintf("test_%s_loop", type))
   
@@ -121,12 +118,12 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   # WHILE condition part should always be there
   if (!is.null(cond_test)) {
     prepare_tw(student_struct, solution_struct, "cond_part")
-    eval(cond_test, envir = parent.frame())
+    eval(cond_test, envir = test_env)
   }
   
   # IF expression part should always be available.
   if (!is.null(expr_test)) {
     prepare_tw(student_struct, solution_struct, "expr_part")
-    eval(expr_test, envir = parent.frame())
+    eval(expr_test, envir = test_env)
   }
 }

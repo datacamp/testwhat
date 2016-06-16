@@ -40,6 +40,8 @@
 #' @export
 test_correct <- function(check_code, diagnose_code) {
   in_test_mode <- tw$get("in_test_mode")
+  test_env <- tw$get("test_env")
+  
   check_code <- substitute(check_code)
   diagnose_code <- substitute(diagnose_code)
   rep <- get_reporter()
@@ -48,8 +50,8 @@ test_correct <- function(check_code, diagnose_code) {
   
   if (!ok || in_test_mode) {
     rep$be_loud()
-    eval(diagnose_code, envir = parent.frame())
-    eval(check_code, envir = parent.frame())
+    eval(diagnose_code, envir = test_env)
+    eval(check_code, envir = test_env)
   } else {
     # Execute this part to deal with 'blacklisting' of function calls
     run_until_fail(diagnose_code)

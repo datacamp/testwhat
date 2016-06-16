@@ -27,6 +27,7 @@ test_exercise <- function(sct,
                           in_test_mode = FALSE) {
   
   # Store everything that's needed locally (initialize does a full reset)
+  tw$clear()
   tw$initialize(list(pec = pec,
                      student_code = student_code,
                      student_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(student_code),
@@ -35,6 +36,7 @@ test_exercise <- function(sct,
                      solution_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
                      solution_env = solution_env,
                      output_list = output_list,
+                     test_env = new.env(parent = environment()),
                      in_test_mode = isTRUE(in_test_mode)))
 
   # Execute sct with the DataCamp reporter such that it collects test results
@@ -44,7 +46,8 @@ test_exercise <- function(sct,
   run_until_fail(parse(text = sct))
 
   outcome <- reporter$end_reporter()
-  # If markdown exercise, remove line information
+  
+  # HACK: If markdown exercise, remove line information
   if (ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
     outcome[c("line_start", "column_start", "line_end", "column_end")] <- NULL
   }
@@ -53,7 +56,7 @@ test_exercise <- function(sct,
 }
 
 run_until_fail <- function(code) {
-  eval_fail <- try(eval(code, envir = parent.frame()), silent = TRUE)
+  eval_fail <- try(eval(code, envir = tw$get("test_env")), silent = TRUE)
   if (inherits(eval_fail, "try-error")) {
     cond <- attr(eval_fail, "condition")$message
     if (identical(cond, sct_failed_msg)) {

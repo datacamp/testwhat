@@ -51,6 +51,7 @@ merge_list <- function(x, y) {
   x
 }
 
+#' @export
 tw <- tw_accessors()
 
 init_tags <- function(...) {
@@ -59,10 +60,4 @@ init_tags <- function(...) {
 
 set_tags <- function(...) {
   tw$set(tags = merge_list(tw$get("tags"), list(...)))
-}
-
-# Find expression that created a variable
-find_expr <- function(name, env = parent.frame()) {
-  subs <- do.call("substitute", list(as.name(name), env))
-  paste0(deparse(subs, width.cutoff = 500), collapse = "\n")
 }

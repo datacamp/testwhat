@@ -11,13 +11,11 @@ test_rmd_group <- function(group_number, code) {
   
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  test_env <- tw$get("test_env")
   solution_ds <- tw$get("solution_ds")
   student_ds <- tw$get("student_ds")
   init_tags(fun = "test_rmd_group")
   
-  code <- substitute(code)
-  if (is.character(code)) code <- parse(text = code)
-
   # get the entire student code and solution code and reset it on exit.
   on.exit({ 
     tw$set(student_code = student_code)
@@ -55,5 +53,6 @@ test_rmd_group <- function(group_number, code) {
     tw$set(inline_number = group_number - sum(sapply(student_ds[1:group_number],class) == "block"))
   }
   
-  eval(code, envir = parent.frame())
+  code <- substitute(code)
+  eval(code, envir = test_env)
 }

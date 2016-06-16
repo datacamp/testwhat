@@ -23,6 +23,7 @@
 #' @export
 test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
   in_test_mode <- tw$get("in_test_mode")
+  test_env <- tw$get("test_env")
   
   input <- substitute(alist(...))
   input[[1]] <- NULL
@@ -47,7 +48,7 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
   if (!any(passes)) {
     if (is.null(incorrect_msg)) {
       failing_test <- input[[choose_feedback]]
-      eval(failing_test, envir = parent.frame())
+      eval(failing_test, envir = test_env)
     } else {
       test_what(fail(), incorrect_msg)
     }

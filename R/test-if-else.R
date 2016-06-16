@@ -64,17 +64,14 @@ test_if_else <- function(index = 1,
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
   solution_code <- tw$get("solution_code")
+  test_env <- tw$get("test_env")
+  
   fun_usage <- tw$get("fun_usage")
   init_tags(fun = "test_if_else")
   
   if_cond_test <- substitute(if_cond_test)
-  if (is.character(if_cond_test)) code <- parse(text = if_cond_test)
-  
   if_expr_test <- substitute(if_expr_test)
-  if (is.character(if_expr_test)) if_expr_test <- parse(text = if_expr_test)
-  
   else_expr_test <- substitute(else_expr_test)
-  if (is.character(else_expr_test)) else_expr_test <- parse(text = else_expr_test)
   
   student_structs <- extract_if(student_pd)
   solution_structs <- extract_if(solution_pd)
@@ -105,13 +102,13 @@ test_if_else <- function(index = 1,
   # IF condition part should always be there
   if (!is.null(if_cond_test)) {
     prepare_tw(stud_str, sol_str, "cond_part")
-    eval(if_cond_test, envir = parent.frame())
+    eval(if_cond_test, envir = test_env)
   }
       
   # IF expression part should always be available.
   if (!is.null(if_expr_test)) {
     prepare_tw(stud_str, sol_str, "if_part")
-    eval(if_expr_test, envir = parent.frame())
+    eval(if_expr_test, envir = test_env)
   }
       
   # ELSE expression part is not always be available.
@@ -124,7 +121,7 @@ test_if_else <- function(index = 1,
     }
     test_what(expect_false(is.null(stud_str[["else_part"]])), missing_else_msg)
     prepare_tw(stud_str, sol_str, "else_part")
-    eval(else_expr_test, envir = parent.frame())
+    eval(else_expr_test, envir = test_env)
   }
 }
 

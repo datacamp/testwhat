@@ -33,6 +33,8 @@ test_function_definition <- function(name,
   
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
+  test_env <- tw$get("test_env")
+  
   student_pd <- tw$get("student_pd")
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
@@ -99,9 +101,9 @@ test_function_definition <- function(name,
       tw$set(solution_pd = solution_fun_def$pd)
       tw$set(student_code = student_fun_def$code)
       tw$set(solution_code = solution_fun_def$code)
-      eval(body_test, envir = parent.frame())
+      eval(body_test, envir = test_env)
     }
     
-    eval(function_test, envir = parent.frame())
+    eval(function_test, envir = test_env)
   }
 }
