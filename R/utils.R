@@ -51,7 +51,6 @@ merge_list <- function(x, y) {
   x
 }
 
-#' @export
 tw <- tw_accessors()
 
 init_tags <- function(...) {
