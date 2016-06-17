@@ -1,8 +1,8 @@
 build_object_undefined_msg <- function(name) {
   template <- switch(get_language(),
                      en = "Did you define the variable `%s` without errors?",
-                     fr = "Avez-vous d\u00e9fini `%s` ?",
-                     es = "\u00bfDefiniste el valor `%s`?",
+                     fr = "Avez-vous d&#233;fini `%s` ?",
+                     es = "&#191;Definiste el valor `%s`?",
                      stop(no_msg))
   sprintf(template, name)
 }
@@ -10,7 +10,7 @@ build_object_undefined_msg <- function(name) {
 build_object_incorrect_msg <- function(name) {
   template <- switch(get_language(),
                      en = "The contents of the variable `%s` aren't correct.",
-                     fr = "Il semblerait que vous n'ayez pas affect\u00e9 la bonne valeur \u00e0 `%s`.",
+                     fr = "Il semblerait que vous n'ayez pas affect&#233; la bonne valeur &#224; `%s`.",
                      es = "Parece que no asignaste el valor correcto a `%s`.",
                      stop(no_msg))
   sprintf(template, name)
@@ -22,10 +22,10 @@ build_function_not_called_msg <- function(name, index) {
     msg <- sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", 
                    get_num(index), name)
   } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous ex\u00e9cut\u00e9 %d fois la fonction `%s()` ?", 
+    msg <- sprintf("Avez-vous ex&#233;cut&#233; %d fois la fonction `%s()` ?", 
                    index, name)
   } else if (lang == "es") {
-    msg <- sprintf("\u00bfUsaste la funci\u00f3n `%s()` %s?", 
+    msg <- sprintf("&#191;Usaste la funci&#243;n `%s()` %s?", 
                    name, ifelse(index == 1, "una vez", sprintf("%d veces", index)))
   } else {
     stop(no_msg)
@@ -39,13 +39,13 @@ build_function_args_not_specified_msg <- function(name, args, n_args) {
     msg <- sprintf("Did you specify the argument%s %s in your call of `%s()`?", 
                    ifelse(n_args == 1, "", "s"), collapse_args(args), name)
   } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous specifi\u00e9 %sargument%s %s dans la fonction `%s()` ?",
+    msg <- sprintf("Avez-vous specifi&#233; %sargument%s %s dans la fonction `%s()` ?",
                    ifelse(n_args == 1, "l'", "les "),
                    ifelse(n_args == 1, "", "s"),
                    collapse_args(args, " et "),
                    name)
   } else if (lang == "es") {
-    msg <- sprintf("Especifcaste %s argumento%s %s en la funci\u00f3n `%s()`?",
+    msg <- sprintf("Especifcaste %s argumento%s %s en la funci&#243;n `%s()`?",
                    ifelse(n_args == 1, "el", "los"),
                    ifelse(n_args == 1, "", "s"),
                    collapse_args(args, " y "),
@@ -63,14 +63,14 @@ build_function_incorrect_msg <- function(name, incorrect_args) {
     msg <- sprintf("Did you correctly specify the argument%s %s in your call of `%s()`?", 
                    ifelse(n_args == 1, "", "s"), collapse_args(incorrect_args), name)
   } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous affect\u00e9 %s %sargument%s %s dans la fonction `%s()` ?",
+    msg <- sprintf("Avez-vous affect&#233; %s %sargument%s %s dans la fonction `%s()` ?",
                    ifelse(n_args == 1, "la bonne valeur", "les bonnes valeurs"),
-                   ifelse(n_args == 1, "\u00e0 l'", "aux "),
+                   ifelse(n_args == 1, "&#224; l'", "aux "),
                    ifelse(n_args == 1, "", "s"),
                    collapse_args(incorrect_args, " et "),
                    name)
   } else if (lang == "es") {
-    msg <- sprintf("\u00bfUsaste %s para %s argumento%s %s en la funci\u00f3n `%s()`?",
+    msg <- sprintf("&#191;Usaste %s para %s argumento%s %s en la funci&#243;n `%s()`?",
                    ifelse(n_args == 1, "el valor correcto", "los valores correctos"),
                    ifelse(n_args == 1, "el", "los"),
                    ifelse(n_args == 1, "", "s"),
