@@ -19,11 +19,11 @@
 #' case (use with care!).
 #' @param eq_condition  character vector indicating how to perform the
 #' comparison for each argument. See \code{\link{test_object}}
-#' @param not_called_msg feedback message in case the student did not call the
+#' @param not_called_msg custom feedback message in case the student did not call the
 #' function often enough.
-#' @param args_not_specified_msg feedback message in case the student did call the function
+#' @param args_not_specified_msg custom feedback message in case the student did call the function
 #' with the arguments listed in \code{args}
-#' @param incorrect_msg  feedback message in case the student did not call the
+#' @param incorrect_msg custom feedback message in case the student did not call the
 #' function with the same argument values as in the sample solution. 
 #' You can specify a vector of arguments with the same length as \code{args}, to have
 #' argument-specific custom feedback.
@@ -164,16 +164,6 @@ has_arguments <- function(call, args, ignore = NULL, allow_extra = TRUE) {
   }
 }
 
-# Check equality with a specified equality condition
-is_equal <- function(x, y, condition = "equivalent") {
-  eq_fun <- switch(condition, equivalent = .equivalent, equal = .equal,
-                   identical = identical, stop("invalid equality condition"))
-  eq_fun(x, y)
-}
-
-.equivalent <- function(x, y) compare(x, y, check.attributes = FALSE)$equal
-.equal <- function(x, y) compare(x, y)$equal
-
 # Extract specified arguments from a function call and evaluate if necessary
 extract_arguments <- function(call, args, eval = TRUE, env) {
   mapply(function(arg, eval) {
@@ -188,22 +178,3 @@ extract_arguments <- function(call, args, eval = TRUE, env) {
   }, args, eval, SIMPLIFY = FALSE)
 }
 
-set_used <- function(name, stud_index, sol_index) {
-  tw$set(fun_usage = c(tw$get("fun_usage"), 
-                       list(list(name = name, 
-                                 stud_index = stud_index, 
-                                 sol_index = sol_index))))
-}
-
-get_seq <- function(name, stud_indices, sol_index) {
-  fu <- tw$get("fun_usage")
-  name_hits <- sapply(fu, `[[`, "name") == name
-  fu <- fu[name_hits]
-  sol_index_hits <- sapply(fu, `[[`, "sol_index") == sol_index
-  if (any(sol_index_hits)) {
-    fu <- fu[sol_index_hits]
-    fu[[1]]$stud_index
-  } else {
-    setdiff(stud_indices, sapply(fu, `[[`, "stud_index"))
-  }
-}

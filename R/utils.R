@@ -1,4 +1,14 @@
-#' Get solution environment (backwards comp)
+# Check equality with a specified equality condition
+is_equal <- function(x, y, condition = "equivalent") {
+  eq_fun <- switch(condition, equivalent = .equivalent, equal = .equal,
+                   identical = identical, stop("invalid equality condition"))
+  eq_fun(x, y)
+}
+
+.equivalent <- function(x, y) compare(x, y, check.attributes = FALSE)$equal
+.equal <- function(x, y) compare(x, y)$equal
+
+#' Get solution environment (backwards compatbility)
 #' @export
 get_solution_env <- function() { tw$get("solution_env") }
 

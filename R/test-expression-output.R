@@ -21,6 +21,7 @@
 #' }
 #' 
 #' @export 
+#' @importFrom utils capture.output
 test_expression_output <- function(expr, incorrect_msg = NULL) {
   
   student_env <- tw$get("student_env")

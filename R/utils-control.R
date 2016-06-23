@@ -1,3 +1,4 @@
+#' @importFrom utils getParseText
 extract_control <- function(pd, keyword, elnames) {
   if(any(pd$token == keyword)) {
     # Intersection of parent of ids with the correct keyword WITH

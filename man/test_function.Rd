@@ -40,13 +40,13 @@ case (use with care!).}
 \item{eq_condition}{character vector indicating how to perform the
 comparison for each argument. See \code{\link{test_object}}}
 
-\item{not_called_msg}{feedback message in case the student did not call the
+\item{not_called_msg}{custom feedback message in case the student did not call the
 function often enough.}
 
-\item{args_not_specified_msg}{feedback message in case the student did call the function
+\item{args_not_specified_msg}{custom feedback message in case the student did call the function
 with the arguments listed in \code{args}}
 
-\item{incorrect_msg}{feedback message in case the student did not call the
+\item{incorrect_msg}{custom feedback message in case the student did not call the
 function with the same argument values as in the sample solution. 
 You can specify a vector of arguments with the same length as \code{args}, to have
 argument-specific custom feedback.}

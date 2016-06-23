@@ -1,3 +1,4 @@
+#' @importFrom utils getParseData
 build_pd <- function(code) {
   if(is.null(code)) {
     stop("code can't be NULL if you want to parse it")
@@ -88,6 +89,7 @@ extract_object_assignment <- function(pd, name) {
   }
 }
 
+#' @importFrom utils tail getParseText
 extract_function_definition <- function(pd, name) {
   # body of the function is the last brother of the function keyword
   sub_pds <- extract_assignments(pd, name)

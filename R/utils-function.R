@@ -1,4 +1,5 @@
 # Find all calls to a given function within a piece of code
+#' @importFrom utils getParseText
 find_function_calls <- function(pd, name, env) {
   
   # summarize vs summarise hack
@@ -49,6 +50,7 @@ standardize_call <- function(call, call_string, env) {
   }
 }
 
+#' @importFrom utils getAnywhere methods
 find_S3_call <- function(matched_call, env) {
   if (inherits(matched_call, "try-error")) {
     return(matched_call)
