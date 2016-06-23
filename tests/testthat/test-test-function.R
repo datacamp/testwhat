@@ -152,8 +152,6 @@ test_that("test_function, more tests", {
   lst$DC_SCT <- "test_function(\"var\", \"x\", eq_condition = \"identical\")"
   output <- test_it(lst)
   fails(output)
-  
-  
 })
 
 
@@ -243,7 +241,6 @@ test_that("test_function, index stuff", {
   lst$DC_SCT <- "test_function(\"mean\", \"x\", allow_extra = FALSE, index = 3)"
   output <- test_it(lst)
   fails(output)
-  
 })
 
 test_that("test_function, a bit of everything", {
