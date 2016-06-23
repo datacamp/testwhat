@@ -33,23 +33,28 @@ build_function_not_called_msg <- function(name, index) {
   return(msg)
 }
 
-build_function_args_not_specified_msg <- function(name, args, n_args) {
+build_function_args_not_specified_msg <- function(name, args, n_args, allow_extra) {
   lang <- get_language()
   if(lang == "en") {
-    msg <- sprintf("Did you specify the argument%s %s in your call of `%s()`?", 
-                   ifelse(n_args == 1, "", "s"), collapse_args(args), name)
+    msg <- sprintf("Did you specify the argument%s %s in your call of `%s()`?%s",
+                   ifelse(n_args == 1, "", "s"),
+                   collapse_args(args),
+                   name,
+                   ifelse(allow_extra, "", " You shouldn't specify any other arguments!"))
   } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous specifi&#233; %sargument%s %s dans la fonction `%s()` ?",
+    msg <- sprintf("Avez-vous specifi&#233; %sargument%s %s dans la fonction `%s()` ?%s",
                    ifelse(n_args == 1, "l'", "les "),
                    ifelse(n_args == 1, "", "s"),
                    collapse_args(args, " et "),
-                   name)
+                   name,
+                   ifelse(allow_extra, "", " Ne specifiez pas d'autres arguments !"))
   } else if (lang == "es") {
-    msg <- sprintf("Especifcaste %s argumento%s %s en la funci&#243;n `%s()`?",
+    msg <- sprintf("Especifcaste %s argumento%s %s en la funci&#243;n `%s()`? %s",
                    ifelse(n_args == 1, "el", "los"),
                    ifelse(n_args == 1, "", "s"),
                    collapse_args(args, " y "),
-                   name)
+                   name,
+                   ifelse(allow_extra, "", " No especifica otros argumentos!"))
   } else {
     stop(no_msg)
   }
