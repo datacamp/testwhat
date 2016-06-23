@@ -97,7 +97,7 @@ test_function <- function(name,
       if (!args_specified) {
         if (is.null(args_specified_feedback)) {
           if (is.null(args_not_specified_msg)) {
-            args_not_specified_msg <- build_function_args_not_specified_msg(name, args, n_args)
+            args_not_specified_msg <- build_function_args_not_specified_msg(name, args, n_args, allow_extra)
           }
           args_specified_feedback <- list(message = args_not_specified_msg,
                                           line_start = student_call$line1,
