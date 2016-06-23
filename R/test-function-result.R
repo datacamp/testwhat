@@ -31,23 +31,26 @@ test_function_result <- function(name = NULL,
   n_student_calls <- length(student_calls)
   n_solution_calls <- length(solution_calls)
   
-  # Check if index exists in solution
+  # Check if index exists in solution and run it.
   if (index > length(solution_calls)) {
     stop(sprintf("There aren't %s calls of `%s()` available in the solution.", index, name))
   }
   solution_call <- solution_calls[[index]]
+  solution_result <- try(eval(solution_call$call), silent = TRUE)
+  if (inherits(solution_result, "try-error")) stop(paste("SOLUTION:", eval_error_msg))
   
   if (is.null(not_called_msg)) {
-    not_called_msg = sprintf("The system wants to check the %s call of `%s()`, but couldn't find it.", get_num(index), name)
+    not_called_msg <- sprintf("The system wants to check the %s call of `%s()`, but couldn't find it.", get_num(index), name)
   }
+
   test_what(expect_true(n_student_calls >= index), feedback = list(message = not_called_msg))
+  
   student_call <- student_calls[[index]]
   
   if (is.null(eval_error_msg)) {
     eval_error_msg <- sprintf("Evaluating the %s call of `%s` generated an error.", get_num(index), name)
   }
-  solution_result <- try(eval(solution_call$call), silent = TRUE)
-  if (inherits(solution_result, "try-error")) stop(paste("SOLUTION:", eval_error_msg))
+  
   student_result <- try(eval(student_call$call), silent = TRUE)
   test_what(expect_false(inherits(student_result, "try-error")),  feedback = list(message = eval_error_msg,
                                                                                   line_start = student_call$line1,

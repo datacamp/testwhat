@@ -69,19 +69,42 @@ test_that("test_correct works", {
   fails(output, mess_patt = "It will send this oneeee")
 })
 
-test_that("test_correct works in testing mode", {
+test_that("test_correct throws errors if incorrect diagnose_code", {
   lst <- list()
-  lst$DC_CODE <- "a <- 2; b <- 3; c <- a + b"
-  lst$DC_SOLUTION <- "a <- 3; b <- 2; c <- a + b"
-  lst$DC_SCT <- "test_correct(test_object('c'), { test_object('a'); test_object('c') })"
+  lst$DC_CODE <- "a <- 2; b <- 2; c <- a + b"
+  lst$DC_SOLUTION <- "b <- 2; c <- 2 + b"
   
-  lst$DC_TEST_MODE <- FALSE
+  lst$DC_SCT <- "test_correct(test_object('c'), test_object('b'))"
   output <- test_it(lst)
   passes(output)
   
-  lst$DC_TEST_MODE <- TRUE
+  lst$DC_SCT <- "test_correct(test_object('c'), test_object('a'))"
   output <- test_it(lst)
-  fails(output, mess_patt = "<code>a</code>")
+  error(output)
+  
+  lst <- list()
+  lst$DC_CODE <- "x <- nchar('test')"
+  lst$DC_SOLUTION <- "x <- nchar('test')"
+  lst$DC_SCT <- "test_correct(test_object('x'), test_function('nchar', 'x'))"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst <- list()
+  lst$DC_CODE <- "x <- nchar('tester')"
+  lst$DC_SOLUTION <- "x <- nchar('test')"
+  lst$DC_SCT <- "test_correct(test_object('x'), test_function('nchar', 'x'))"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst <- list()
+  lst$DC_CODE <- "x <- nchar('tester')"
+  lst$DC_SOLUTION <- "x <- nchar('test')"
+  lst$DC_SCT <- "test_correct(test_object('x'), test_function('nchar', 'object'))"
+  output <- test_it(lst)
+  error(output)
+  lst$DC_CODE <- "x <- nchar('test')"
+  output <- test_it(lst)
+  error(output)
 })
 
 test_that("test_correct works in nested form", {

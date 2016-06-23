@@ -80,6 +80,12 @@ test_if_else <- function(index = 1,
     stop(sprintf("The solution doesn't contain %s control constructs itself.", index))
   }
   
+  sol_str <- solution_structs[[index]]
+  
+  if (!is.null(else_expr_test) && is.null(sol_str[["else_part"]])) {
+      stop(sprintf("The %s control construct in the solution doesn't contain an else part itself.", get_num(index)))
+  }
+  
   if(is.null(not_found_msg)) {
     not_found_msg <- sprintf(paste("The system wants to test if the %s control construct",
                                   "you coded is correct, but it hasn't found it. Add more code."), 
@@ -88,7 +94,6 @@ test_if_else <- function(index = 1,
   test_what(expect_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
   
   stud_str <- student_structs[[index]]
-  sol_str <- solution_structs[[index]]
   additionaltext <- sprintf(" in the %s control construct of your submission", get_num(index))
 
   on.exit({
@@ -113,9 +118,6 @@ test_if_else <- function(index = 1,
       
   # ELSE expression part is not always be available.
   if (!is.null(else_expr_test)) {
-    if (is.null(sol_str[["else_part"]])) {
-      stop(sprintf("The %s control construct in the solution doesn't contain an else part itself.", get_num(index)))
-    }
     if (is.null(missing_else_msg)) {
       missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
     }

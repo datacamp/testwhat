@@ -39,7 +39,6 @@
 #'
 #' @export
 test_correct <- function(check_code, diagnose_code) {
-  in_test_mode <- tw$get("in_test_mode")
   test_env <- tw$get("test_env")
   
   check_code <- substitute(check_code)
@@ -48,7 +47,7 @@ test_correct <- function(check_code, diagnose_code) {
   rep$be_silent()
   ok <- run_until_fail(check_code)
   
-  if (!ok || in_test_mode) {
+  if (!ok) {
     rep$be_loud()
     eval(diagnose_code, envir = test_env)
     eval(check_code, envir = test_env)

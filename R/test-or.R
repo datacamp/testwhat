@@ -22,7 +22,6 @@
 #'
 #' @export
 test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
-  in_test_mode <- tw$get("in_test_mode")
   test_env <- tw$get("test_env")
   
   input <- substitute(alist(...))
@@ -38,11 +37,6 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
     rep$be_silent()
     passes[i] <- run_until_fail(code)
     rep$be_loud()
-  }
-  
-  if (in_test_mode && !all(passes)) {
-    test_what(fail(), "Content testing mode: tests in test_or/test_correct don't all pass.")
-    return(invisible())
   }
   
   if (!any(passes)) {

@@ -70,7 +70,12 @@ test_function <- function(name,
   if  (index > length(solution_calls)) {
     stop(sprintf("There aren't %s calls of `%s()` available in the solution.", index, name))
   }
+  
   solution_call <- solution_calls[[index]]
+  
+  if (n_args > 0 && !has_arguments(solution_call$call, args, ignore, allow_extra)) {
+      stop("The solution call doesn't meet the argument conditions itself.")  
+  }
   
   if (is.null(not_called_msg)) {
     not_called_msg <- build_function_not_called_msg(name, index)
@@ -82,11 +87,6 @@ test_function <- function(name,
     args_correct_passed <- FALSE
     args_specified_feedback <- NULL
     args_correct_feedback <- NULL
-    
-    if (!has_arguments(solution_call$call, args, ignore, allow_extra)) {
-      stop("The solution call doesn't meet the argument conditions itself.")  
-    }
-    solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
     
     seq <- get_seq(name, stud_indices = 1:n_student_calls, sol_index = index)
     for (i in seq) {
@@ -111,6 +111,7 @@ test_function <- function(name,
       }
       
       # Test if the specified arguments are correctly called
+      solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
       student_args <- extract_arguments(student_call$call, args, eval, env = student_env)
       
       args_correct_vec <- mapply(is_equal, student_args, solution_args, eq_condition)

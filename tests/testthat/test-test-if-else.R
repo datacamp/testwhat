@@ -57,7 +57,7 @@ test_that("test_if_else handles missing ifs, elses and indexing correctly", {
   output <- test_it(lst)
   fails(output, mess_patt = "NO ELSE")
   
-  lst$DC_SCT <- "test_if_else(2, if_cond_test = test_student_typed(\"a == 3\"), if_expr_test = test_function(\"print\", \"x\"),else_expr_test = test_function(\"print\", \"x\"), not_found_msg = \"NO IF\")"
+  lst$DC_SCT <- "test_if_else(2, not_found_msg = \"NO IF\")"
   output <- test_it(lst)
   fails(output, mess_patt = "NO IF")
   
@@ -69,7 +69,7 @@ test_that("test_if_else handles missing ifs, elses and indexing correctly", {
   output <- test_it(lst)
   error(output, mess_patt = "itself")
   
-  lst$DC_SCT <- "test_if_else(3,if_cond_test = test_student_typed(\"a == 3\"),if_expr_test = test_function(\"print\", \"x\"), else_expr_test = test_function(\"print\", \"x\"), not_found_msg = \"NO IF\")"
+  lst$DC_SCT <- "test_if_else(3, if_cond_test = test_student_typed(\"a == 3\"), if_expr_test = test_function(\"print\", \"x\"), not_found_msg = \"NO IF\")"
   output <- test_it(lst)
   fails(output, mess_patt = "NO IF")
   

@@ -34,7 +34,7 @@ test_function_definition <- function(name,
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
   test_env <- tw$get("test_env")
-  
+
   student_pd <- tw$get("student_pd")
   solution_pd <- tw$get("solution_pd")
   student_code <- tw$get("student_code")
@@ -79,31 +79,43 @@ test_function_definition <- function(name,
   passes <- run_until_fail(function_test)
   rep$be_loud()
   
+  solution_fun_def <- extract_function_definition(solution_pd, name)
+  student_fun_def <- extract_function_definition(student_pd, name)
+  
+  if (is.null(solution_fun_def)) {
+    stop(sprintf("The function definition if %s was not found in the solution code", name))
+  }
+  
   if (!passes) {
-    stud_function <- get(name, envir = student_env, inherits = FALSE)
-    stud_arguments <- as.list(formals(stud_function))
-    sol_arguments <- as.list(formals(sol_function))
-    
-    test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
-    
-    
-    solution_fun_def <- extract_function_definition(solution_pd, name)
-    student_fun_def <- extract_function_definition(student_pd, name)
-    
-    if (is.null(solution_fun_def)) {
-      stop(sprintf("The function definition if %s was not found in the solution code", name))
-    }
     test_what(expect_false(is.null(student_fun_def)), 
               feedback = sprintf("A proper definition of `%s` could not be found in your submission. Make sure to use the `%s <- function() { ... }` recipe.", name, name))
+  }
     
-    if (!is.null(body_test)) {
-      tw$set(student_pd = student_fun_def$pd)
-      tw$set(solution_pd = solution_fun_def$pd)
-      tw$set(student_code = student_fun_def$code)
-      tw$set(solution_code = solution_fun_def$code)
-      eval(body_test, envir = test_env)
+  stud_function <- get(name, envir = student_env, inherits = FALSE)
+  stud_arguments <- as.list(formals(stud_function))
+  sol_arguments <- as.list(formals(sol_function))
+
+  if (!passes) {
+    test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
+  } 
+  
+    
+  if (!is.null(body_test)) {
+    tw$set(student_pd = student_fun_def$pd)
+    tw$set(solution_pd = solution_fun_def$pd)
+    tw$set(student_code = student_fun_def$code)
+    tw$set(solution_code = solution_fun_def$code)
+    if (!passes) {
+      eval(body_test, envir = test_env)  
+    } else {
+      # run body_test for blacklisting
+      rep$be_silent()
+      run_until_fail(body_test)
+      rep$be_loud()
     }
-    
-    eval(function_test, envir = test_env)
+  }
+  
+  if (!passes) {
+    eval(function_test, envir = test_env)  
   }
 }
