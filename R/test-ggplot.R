@@ -188,7 +188,7 @@ test_aes_layer <- function(sol_mapping, stud_mapping, feedback, aes_fail_msg, ex
   }
 }
 
-
+#' @importFrom stats na.omit
 test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, feedback, geom_fail_msg, exact_geom, check_geom_params) {
   nb_sol_layers <- length(sol_layers)
   
@@ -517,6 +517,7 @@ nd <- function(number) {
                  "10" = "tenth")
 }
 
+#' @importFrom utils argsAnywhere
 extract_params <- function(command) {
   if (!is.call(command)) {
     return(NULL)

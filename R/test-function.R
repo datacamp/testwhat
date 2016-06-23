@@ -19,11 +19,11 @@
 #' case (use with care!).
 #' @param eq_condition  character vector indicating how to perform the
 #' comparison for each argument. See \code{\link{test_object}}
-#' @param not_called_msg feedback message in case the student did not call the
+#' @param not_called_msg custom feedback message in case the student did not call the
 #' function often enough.
-#' @param args_not_specified_msg feedback message in case the student did call the function
+#' @param args_not_specified_msg custom feedback message in case the student did call the function
 #' with the arguments listed in \code{args}
-#' @param incorrect_msg  feedback message in case the student did not call the
+#' @param incorrect_msg custom feedback message in case the student did not call the
 #' function with the same argument values as in the sample solution. 
 #' You can specify a vector of arguments with the same length as \code{args}, to have
 #' argument-specific custom feedback.

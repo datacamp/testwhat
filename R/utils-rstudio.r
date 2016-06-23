@@ -1,3 +1,4 @@
+#' @importFrom utils getParseData getParseText
 get_clean_lines <- function(code) {
   # convert summarize to summarise. (hacky solution)
   code = gsub("summarize","summarise",code)
@@ -27,7 +28,7 @@ clean_unpipe <- function(code) {
   }
 }
 
-
+#' @importFrom utils getParseData
 create_student_pd <- function(student_code = NULL) {
   if(is.null(student_code)) {
     stop("The student_code argument cannot be empty")
@@ -37,6 +38,7 @@ create_student_pd <- function(student_code = NULL) {
   return(stud)
 }
 
+#' @importFrom utils getParseData
 create_solution_pd <- function(solution_code = NULL) {
   if(is.null(solution_code)) {
     stop("The solution_code argument cannot be empty")
@@ -48,6 +50,7 @@ create_solution_pd <- function(solution_code = NULL) {
 
 # Get all strings for get all strings for the expressions that correspond to a certain function
 # the parse data passed should be for a single call!!!
+#' @importFrom utils getParseText
 get_expressions_for_function_call = function(fun, pd) {
   if(is.null(fun))
     return(getParseText(pd, id = max(pd$id)))
@@ -56,6 +59,7 @@ get_expressions_for_function_call = function(fun, pd) {
 }
 
 # get the expression linked to an id in the parseData table
+#' @importFrom utils getParseText
 get_expression <- function(id, pd) {
   grandparent_id <- pd$parent[pd$id == pd$parent[pd$id == id]]
   return(getParseText(pd, id = grandparent_id))

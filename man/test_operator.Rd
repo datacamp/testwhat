@@ -5,14 +5,36 @@
 \title{Test whether a student correctly used an inline operator}
 \usage{
 test_operator(name, index = 1, eval = TRUE, eq_condition = "equivalent",
-  not_called_msg = NULL, not_specified_msg = NULL, incorrect_msg = NULL)
+  not_called_msg = NULL, incorrect_msg = NULL)
+}
+\arguments{
+\item{name}{Name of the operator as a string, e.g. \code{"+"}}
+
+\item{index}{integer that specifies which \code{name} operator that will be
+checked in the solution}
+
+\item{eval}{whether or not to evaluate the expression that is formed by the
+operator}
+
+\item{eq_condition}{How results of expression evaluations are compared. See
+\code{\link{test_object}}}
+
+\item{not_called_msg}{custom feedback message in case the student did not
+call the operator often enough.}
+
+\item{incorrect_msg}{custom feedback message in case the student's evaluation
+of the expression that is formed by the operator does not correspond with
+the corresponding call in the solution}
 }
 \description{
 Test whether a student correctly used an inline operator
 }
 \examples{
 \dontrun{
-# Todo add examples
+# Suppose the solution contains: 4 + 5
+
+# To test this submission, provide the following in the sct
+test_operator("+")
 }
 
 }

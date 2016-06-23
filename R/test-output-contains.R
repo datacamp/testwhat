@@ -29,6 +29,7 @@ test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
             incorrect_msg)
 }
 
+#' @importFrom utils capture.output
 output_contains <- function(expr, console_output, env) {
   correct_output <- try(capture.output(eval(parse(text = expr), envir = env)), silent = TRUE)
   

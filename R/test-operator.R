@@ -1,17 +1,34 @@
 #' Test whether a student correctly used an inline operator
 #' 
+#' @param name Name of the operator as a string, e.g. \code{"+"}
+#' @param index integer that specifies which \code{name} operator that will be
+#'   checked in the solution
+#' @param eval whether or not to evaluate the expression that is formed by the
+#'   operator
+#' @param eq_condition How results of expression evaluations are compared. See
+#'   \code{\link{test_object}}
+#' @param not_called_msg custom feedback message in case the student did not
+#'   call the operator often enough.
+#' @param incorrect_msg custom feedback message in case the student's evaluation
+#'   of the expression that is formed by the operator does not correspond with
+#'   the corresponding call in the solution
+#' @inheritParams test_function
+#' 
+#' 
 #' @examples
 #' \dontrun{
-#' # Todo add examples
+#' # Suppose the solution contains: 4 + 5
+#' 
+#' # To test this submission, provide the following in the sct
+#' test_operator("+")
 #' }
-#'
+#' 
 #' @export
 test_operator <- function(name,
                           index = 1,
                           eval = TRUE,
                           eq_condition = "equivalent",
-                          not_called_msg = NULL, 
-                          error_msg = NULL,
+                          not_called_msg = NULL,
                           incorrect_msg = NULL) {
   
   student_env <- tw$get("student_env")
@@ -78,6 +95,7 @@ test_operator <- function(name,
 }
 
 # Find all operators in the parse data
+#' @importFrom utils getParseText
 find_operator <- function(pd, name) {
   parent_ids <- pd$parent[pd$text == name]
   lapply(parent_ids, function(id) {
