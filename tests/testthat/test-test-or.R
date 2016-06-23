@@ -20,19 +20,19 @@ test_that("test_or works", {
 
 })
 
-test_that("test_or works in 'content_testing_mode'", {
+test_that("test_or throws error if something is off", {
   lst <- list()
-  lst$DC_CODE <- "a = 2; print(a); b = 3"
-  lst$DC_SOLUTION <- "a = 2; print(a); b = 3; print(b)"
-  lst$DC_SCT <- "test_or(test_output_contains('a'), test_output_contains('b'))"
+  lst$DC_CODE <- "summary(mtcars)"
+  lst$DC_SOLUTION <- "summary(mtcars); str(mtcars)"
   
-  lst$DC_TEST_MODE <- FALSE
+  lst$DC_SCT <- "test_or(test_function('summary', 'object'), test_function('str', 'object'))"
   capture.output(output <- test_it(lst))
   passes(output)
-  
-  lst$DC_TEST_MODE <- TRUE
+
+  # argument of second test function incorrect
+  lst$DC_SCT <- "test_or(test_function('summary', 'object'), test_function('str', 'x'))"
   capture.output(output <- test_it(lst))
-  fails(output, mess_patt = "testing mode")
+  error(output)
 })
 
 

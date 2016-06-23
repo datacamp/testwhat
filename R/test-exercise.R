@@ -36,8 +36,7 @@ test_exercise <- function(sct,
                      solution_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
                      solution_env = solution_env,
                      output_list = output_list,
-                     test_env = new.env(parent = environment()),
-                     in_test_mode = isTRUE(in_test_mode)))
+                     test_env = new.env(parent = environment())))
 
   # Execute sct with the DataCamp reporter such that it collects test results
   reporter <- DataCampReporter$new()
