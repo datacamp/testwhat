@@ -1,6 +1,9 @@
 #' Test whether a student correctly called a function 
 #'
-#' Test whether a student called a function, possibly with certain arguments, correctly.
+#' Test whether a student called a function, possibly with certain arguments, 
+#' correctly. Note that \code{test_function} and \code{test_function_v2} are now
+#' identical and either can be used, although the latter is likely to be phased
+#' out in the future.
 #' 
 #' @param name  name of the function to test.
 #' @param args  character vector of argument names that the student should have
