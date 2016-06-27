@@ -52,7 +52,10 @@ You can specify a vector of arguments with the same length as \code{args}, to ha
 argument-specific custom feedback.}
 }
 \description{
-Test whether a student called a function, possibly with certain arguments, correctly.
+Test whether a student called a function, possibly with certain arguments, 
+correctly. Note that \code{test_function} and \code{test_function_v2} are now
+identical and either can be used, although the latter is likely to be phased
+out in the future.
 }
 \examples{
 \dontrun{
