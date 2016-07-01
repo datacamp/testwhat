@@ -27,7 +27,7 @@ comparison for each argument. See \code{\link{test_object}}}
 \description{
 \code{test_function_result} finds a function specified by \code{name} in both the
 student and solution code, and then compares the result of calling these functions.
-Compared to \link{\code{test_function}}, the arguments of the function call are not checked,
+Compared to \code{\link{test_function}}, the arguments of the function call are not checked,
 only the result.
 }
 
