@@ -1,10 +1,13 @@
 #' Check the result of a function call
-#'
-#' TODO More information here.
+#' 
+#' \code{test_function_result} finds a function specified by \code{name} in both the
+#' student and solution code, and then compares the result of calling these functions.
+#' Compared to \link{\code{test_function}}, the arguments of the function call are not checked,
+#' only the result.
 #' 
 #' @param name name of the function whose output you would like to check.
 #' @param index Ordinal number of the call you want to check (both student and solution!).
-#' @param ordered Does the order of the elments ins the result matter?
+#' @param ordered Does the order of the elments in the result matter?
 #' @param not_called_msg feedback message in case the function is not retrieved.
 #' @param eval_error_msg feedback message in case the student function call at the mentioned index generated an error.
 #' @param incorrect_msg  feedback message in case the evaluation was not the same as in the solution.

@@ -16,7 +16,7 @@ test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
 \item{eq_condition}{character vector indicating how to perform the
 comparison for each argument. See \code{\link{test_object}}}
 
-\item{ordered}{Does the order of the elments ins the result matter?}
+\item{ordered}{Does the order of the elments in the result matter?}
 
 \item{not_called_msg}{feedback message in case the function is not retrieved.}
 
@@ -25,6 +25,9 @@ comparison for each argument. See \code{\link{test_object}}}
 \item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution.}
 }
 \description{
-TODO More information here.
+\code{test_function_result} finds a function specified by \code{name} in both the
+student and solution code, and then compares the result of calling these functions.
+Compared to \link{\code{test_function}}, the arguments of the function call are not checked,
+only the result.
 }
 
