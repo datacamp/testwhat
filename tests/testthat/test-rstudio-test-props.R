@@ -93,9 +93,9 @@ test_that("test not enough calls", {
   
   lst$DC_SCT <- "test_props(index = 1, funs = c('ggvis','layer_points'))"
   output <- test_it(lst)
-  fails(output, mess_patt = "The system wants to test if the first command you entered")
+  fails(output, mess_patt = "Command 1 of your solution should")
   
-  lst$DC_SCT <- "test_props(index = 1, funs = c('ggvis','layer_points'), incorrect_number_of_calls_msg = 'silly')"
+  lst$DC_SCT <- "test_props(index = 1, funs = c('ggvis','layer_points'), not_called_msg = 'silly')"
   output <- test_it(lst)
   fails(output, mess_patt = "silly")
 })

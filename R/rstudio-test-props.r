@@ -19,29 +19,32 @@
 #'
 #' @export
 test_props <- function(index = 1,
-                    funs = "ggvis",
-                    props = NULL,
-                    allow_extra = TRUE,
-                    not_called_msg = NULL,
-                    incorrect_msg = NULL,
-                    incorrect_number_of_calls_msg = NULL) {
-
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
+                       funs = "ggvis",
+                       props = NULL,
+                       allow_extra = TRUE,
+                       not_called_msg = NULL,
+                       incorrect_msg = NULL) {
+  
+  student_pd <- tw$get("student_pd")
+  solution_pd <- tw$get("solution_pd")
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
   init_tags(fun = "test_props")
   
-  pd_stud <- get_single_pd(index = index, pd = create_student_pd(student_code = student_code), incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
-  pd_sol <- get_single_pd(index = index, pd = create_solution_pd(solution_code = solution_code), incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
-  if(is.null(pd_stud) || is.null(pd_sol)) {
-    return(FALSE)
+  ggvis_pds_stud <- find_ggvis_pds(student_pd)
+  ggvis_pds_sol <- find_ggvis_pds(solution_pd)
+  
+  if (length(ggvis_pds_sol) < index) {
+    stop("Solution does not contain enough calls")
   }
   
-  # get the properties defined in the solution
-  sol_exprs = get_expressions_for_function_call(funs[1], pd_sol)
-  if (length(sol_exprs) != 1) {
+  sol_calls <- find_function_calls(ggvis_pds_sol[[index]], name = funs[1], env = solution_env)
+  
+  if (length(sol_calls) > 1) {
     stop(sprintf("Function %s should only occur exactly once in command %i.", funs[1], index))
   }
-  sol_props = get_all_props(funs[1], sol_exprs[[1]])
+  
+  sol_props <- get_all_props(funs[1], sol_calls[[1]]$call)
   
   if (is.null(props)) {
     props <- names(sol_props)
@@ -76,15 +79,16 @@ test_props <- function(index = 1,
   pass <- FALSE
   keeptrying <- TRUE
   for (i in 1:length(funs)) {
-    stud_exprs = get_expressions_for_function_call(funs[i], pd_stud)
-    test_what(expect_that(length(stud_exprs) > 0, is_true()), feedback = not_called_msg)
+    test_what(expect_that(length(ggvis_pds_stud) >= index, is_true()), feedback = not_called_msg)
+    stud_calls <- find_function_calls(ggvis_pds_stud[[index]], name = funs[i], env = student_env)
+    test_what(expect_that(length(stud_calls) > 0, is_true()), feedback = not_called_msg)
     
     if (pass) # if passed already, only check on the function being present, so next loop not needed anymore
       next
     
     # possibly more expressions are available
-    for (j in 1:length(stud_exprs)) {
-      stud_props <- get_all_props(funs[i], stud_exprs[[j]])
+    for (j in 1:length(stud_calls)) {
+      stud_props <- get_all_props(funs[i], stud_calls[[j]]$call)
       
       if (length(props) != length(stud_props) & !allow_extra) {
         # number of props specified does not correspond to function.

@@ -1,105 +1,14 @@
-#' @importFrom utils getParseData getParseText
-get_clean_lines <- function(code) {
-  # convert summarize to summarise. (hacky solution)
-  code = gsub("summarize","summarise",code)
-  
-  pd <- getParseData(parse(text = code, keep.source = TRUE))
-  exprids <- pd$id[pd$parent == 0 & pd$token != "COMMENT" & pd$token != "';'"]
-  codelines <- sapply(exprids, function(x) getParseText(pd, id = x))
-  
-  cleanlines <- sapply(codelines, clean_unpipe, USE.NAMES = FALSE)
-  
-  # remove "obj = " assignments: delete "=" lines and the ones preceding
-  eqsubsids = which(cleanlines == "=", TRUE)
-  if(length(eqsubsids) == 0) {
-    return(cleanlines)
-  } else {
-    removeids = c(eqsubsids, eqsubsids-1)
-    return(cleanlines[-removeids])
-  }
+# Find all top-level ggvis calls
+find_ggvis_pds <- function(pd) {
+  top_ggvis_ids <- pd[pd$parent == 0 & grepl("ggvis\\(", pd$text), "id"]
+  lapply(top_ggvis_ids, get_sub_pd, pd = pd)
 }
 
-# subfunction used by get_clean_lines to remove the pipe operator.
-clean_unpipe <- function(code) {
-  if(grepl("%>%",code)) {
-    return(paste0(deparse(unpipe(as.call(parse(text=code))[[1]])),collapse = ''))
-  } else {
-    return(code)
-  }
-}
-
-#' @importFrom utils getParseData
-create_student_pd <- function(student_code = NULL) {
-  if(is.null(student_code)) {
-    stop("The student_code argument cannot be empty")
-  }
-  student_code_parts = get_clean_lines(code = student_code)
-  stud = lapply(student_code_parts, function(x) getParseData(parse(text = x, keep.source = TRUE)))
-  return(stud)
-}
-
-#' @importFrom utils getParseData
-create_solution_pd <- function(solution_code = NULL) {
-  if(is.null(solution_code)) {
-    stop("The solution_code argument cannot be empty")
-  }
-  solution_code_parts = get_clean_lines(code = solution_code)
-  sol = lapply(solution_code_parts, function(x) getParseData(parse(text = x, keep.source = TRUE)))
-  return(sol)
-}
-
-# Get all strings for get all strings for the expressions that correspond to a certain function
-# the parse data passed should be for a single call!!!
-#' @importFrom utils getParseText
-get_expressions_for_function_call = function(fun, pd) {
-  if(is.null(fun))
-    return(getParseText(pd, id = max(pd$id)))
-  ids_of_function_call = pd$id[pd$text == fun & pd$token != "SYMBOL"]
-  return(sapply(ids_of_function_call, get_expression, pd))
-}
-
-# get the expression linked to an id in the parseData table
-#' @importFrom utils getParseText
-get_expression <- function(id, pd) {
-  grandparent_id <- pd$parent[pd$id == pd$parent[pd$id == id]]
-  return(getParseText(pd, id = grandparent_id))
-}
-
-# From all parsedata for a set of commands, return only the parse data linked to a single command.
-get_single_pd = function(index, pd, incorrect_number_of_calls_msg = NULL) {
-  ok <- test_sufficient_length(stud = pd, index = index, incorrect_number_of_calls_msg = incorrect_number_of_calls_msg)
-  if(ok) {
-    return(pd[[index]])
-  } else {
-    return(NULL)
-  }
-}
-
-test_sufficient_length = function(stud, index, incorrect_number_of_calls_msg = NULL) {
-  if(index < 1) {
-    stop("The index argument must be positive!")
-  }
+get_all_props = function(fun, call) {
+  call[1] <- call("props")
+  call <- call[-2]
   
-  if(is.null(incorrect_number_of_calls_msg)) {
-    incorrect_number_of_calls_msg <- sprintf("The system wants to test if the %s command you entered is correct, but it hasn't found one. Add more code.", get_num(index))
-  }
-  
-  
-  n_student_calls <- length(stud)
-  sufficient_length <- (index <= n_student_calls)
-  test_what(expect_true(sufficient_length), incorrect_number_of_calls_msg)
-  
-  return(sufficient_length)
-}
-
-# get all properties (uses ggvis function ggvis:::props!)
-get_all_props = function(fun, expression) {
-  extractor <- function(data, ...) {
-    return(ggvis:::props(...))
-  }
-  
-  expression = gsub(fun, "extractor", expression)
-  out = try(eval(parse(text = expression)))
+  out = eval(call)
   if(inherits(out, "try-error")) {
     return(NULL)
   }
@@ -109,3 +18,85 @@ get_all_props = function(fun, expression) {
     return(out)
   }
 }
+
+#' @importFrom lazyeval lazy_dots
+props <- function (..., .props = NULL, inherit = TRUE, env = parent.frame()) {
+  check_empty_args()
+  args <- pluck(lazyeval::lazy_dots(...), "expr")
+  all <- args_to_props(c(args, .props), env)
+  structure(all, inherit = inherit, class = "ggvis_props")
+}
+
+pluck <- function (x, name) {
+  lapply(x, `[[`, name)
+}
+
+check_empty_args <- function () {
+  call <- sys.call(-1)
+  args <- as.list(call[-1])
+  is_missing <- function(x) identical(x, quote(expr = ))
+  missing <- vapply(args, is_missing, logical(1))
+  if (!any(missing)) 
+    return(invisible(TRUE))
+  stop("Extra comma at position", if (sum(missing) > 1) 
+    "s", " ", paste0(which(missing), collapse = ", "), " in call to ", 
+    as.character(call[[1]]), "()", call. = FALSE)
+}
+
+args_to_props <- function (args, env) {
+  expr_to_prop <- function(name, expr, scale = NULL) {
+    name <- strsplit(name, ".", fixed = TRUE)[[1]]
+    property <- name[1]
+    event <- if (length(name) > 1) 
+      name[2]
+    else NULL
+    val <- eval(expr, env)
+    prop(property, val, scale = scale, event = event, label = as.character(val))
+  }
+  prop_full_name <- function(p) {
+    paste(c(p$property, p$event), collapse = ".")
+  }
+  arg_names <- names2(args)
+  named_args <- args[arg_names != ""]
+  unnamed_args <- args[arg_names == ""]
+  named_args <- Map(named_args, names(named_args), 
+                    f = function(x, name) expr_to_prop(name, x, scale = TRUE))
+  unnamed_args <- lapply(unnamed_args, function(x) {
+    if (uses_colon_equals(x)) {
+      expr_to_prop(deparse(x[[2]]), x[[3]], scale = FALSE)
+    }
+    else {
+      eval(x, env)
+    }
+  })
+  is_prop <- vapply(unnamed_args, is.prop, logical(1))
+  unnamed_props <- unnamed_args[is_prop]
+  unnamed_values <- unnamed_args[!is_prop]
+  names(named_args) <- vapply(named_args, prop_full_name, character(1))
+  names(unnamed_props) <- vapply(unnamed_props, prop_full_name, 
+                                 character(1))
+  missing_names <- setdiff(c("x.update", "y.update"), c(names(named_args), 
+                                                        names(unnamed_props)))
+  if (length(unnamed_values) > length(missing_names)) {
+    stop("Too many unnamed properties (can only have x and y)", 
+         call. = FALSE)
+  }
+  names(unnamed_values) <- missing_names[seq_along(unnamed_values)]
+  unnamed_values <- Map(unnamed_values, names(unnamed_values), 
+                        f = function(x, name) expr_to_prop(name, x, scale = TRUE))
+  c(named_args, unnamed_props, unnamed_values)
+}
+
+uses_colon_equals <- function (x) {
+  is.call(x) && identical(x[[1]], quote(`:=`))
+}
+
+names2 <- function (x) {
+  names(x) %||% rep("", length(x))
+}
+
+`%||%` <- function (a, b) {
+  if (!is.null(a)) a else b
+}
+  
+  

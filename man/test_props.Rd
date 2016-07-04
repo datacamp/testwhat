@@ -5,11 +5,10 @@
 \title{Test whether the student used the correct properties (ggvis exercises)}
 \usage{
 test_props(index = 1, funs = "ggvis", props = NULL, allow_extra = TRUE,
-  not_called_msg = NULL, incorrect_msg = NULL,
-  incorrect_number_of_calls_msg = NULL)
+  not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
-\item{index}{exercise to be checked (solution and student code should have same number of calls!)}
+\item{index}{number of ggvis caommdn to be checked}
 
 \item{funs}{the function in which to look for the x and y data. If the same info is found in one function, the test passes.
 All the functions that the teacher specifies, must be present in the students' solution! The function only looks for
