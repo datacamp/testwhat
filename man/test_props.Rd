@@ -5,7 +5,7 @@
 \title{Test whether the student used the correct properties (ggvis exercises)}
 \usage{
 test_props(index = 1, funs = "ggvis", props = NULL, allow_extra = TRUE,
-  not_called_msg = NULL, incorrect_msg = NULL)
+  not_called_msg = NULL, incorrect_msg = NULL, error_msg = NULL)
 }
 \arguments{
 \item{index}{number of ggvis caommdn to be checked}
@@ -22,6 +22,8 @@ specified as an empty charactor vector (c()), only the calling of the functions 
 \item{not_called_msg}{feedback message in case the specified function(s) was/were not found.}
 
 \item{incorrect_msg}{feedback message in case the student specified properties do not correspond with the ones in the solution.}
+
+\item{error_msg}{feedback maessage in case the student submitted a faulty ggvis call}
 }
 \description{
 Test whether the student used at least as many and the correct properties as the solution inside a specific
