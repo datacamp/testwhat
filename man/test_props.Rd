@@ -22,9 +22,6 @@ specified as an empty charactor vector (c()), only the calling of the functions 
 \item{not_called_msg}{feedback message in case the specified function(s) was/were not found.}
 
 \item{incorrect_msg}{feedback message in case the student specified properties do not correspond with the ones in the solution.}
-
-\item{incorrect_number_of_calls_msg}{feedback message in case the student did
-enter the same amount of commands as the solution did.}
 }
 \description{
 Test whether the student used at least as many and the correct properties as the solution inside a specific
