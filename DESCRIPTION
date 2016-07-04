@@ -15,6 +15,7 @@ Imports:
     knitr,
     rmarkdown,
     ggvis,
+    lazyeval,
     R6
 License: MIT + file LICENSE
 LazyData: true
