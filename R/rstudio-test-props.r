@@ -5,7 +5,7 @@
 #' student and solution. However, the teacher can also state that the definition of data can be done in other
 #' functions.
 #'
-#' @param index  exercise to be checked (solution and student code should have same number of calls!)
+#' @param index  number of ggvis caommdn to be checked
 #' @param funs  the function in which to look for the x and y data. If the same info is found in one function, the test passes.
 #' All the functions that the teacher specifies, must be present in the students' solution! The function only looks for
 #' properties inside the first mentioned function by the teacher.
