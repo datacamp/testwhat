@@ -39,14 +39,7 @@ test_data_frame <- function(name, columns = NULL,
   solution_env <- tw$get("solution_env")
   init_tags(fun = "test_data_frame")
   
-  if (is.null(name)) {
-    stop("argument \"name\" is missing, with no default")
-  }
-  
-  if (!exists(name, solution_env)) {
-    stop(sprintf("%s is not defined in your solution environment.", name))
-  }
-  
+  check_defined(name, solution_env)
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
   if (is.null(columns)) {
@@ -81,7 +74,7 @@ test_data_frame <- function(name, columns = NULL,
                        equivalent = expect_equivalent,
                        equal = expect_equal, 
                        identical = expect_identical,
-                       stop("invalid equality condition"))
+                       stop(invalid_eq_condition))
       for(col in columns) {
         test_what(eq_fun(student[col], solution[col]), incorrect_msg)
       }

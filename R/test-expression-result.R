@@ -36,7 +36,7 @@ test_expression_result <- function(expr,
   }
   
   if (inherits(result_sol, "try-error")) {
-    stop("expr in test_result() results in an error in the solution environment")
+    stop(expr, " in test_expression_result() results in an error in the solution environment")
   }
   
   if (is.null(incorrect_msg)) {

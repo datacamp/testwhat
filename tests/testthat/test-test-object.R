@@ -43,7 +43,7 @@ test_that("test_object works with a feedback message specified outside of the fu
 
 test_that("test_object resilient to different classes", {
   lst <- list()
-  lst$DC_PEC <- "load(url(\"http://s3.amazonaws.com/assets.datacamp.com/course/dplyr/hflights.RData\")); library(dplyr); hflights <- tbl_df(hflights); "
+  lst$DC_PEC <- "library(hflights); library(dplyr); hflights <- tbl_df(hflights); "
   lst$DC_CODE <- "carriers <- hflights$TaxiIn"
   lst$DC_SOLUTION <- "carriers <- hflights$UniqueCarrier"
   

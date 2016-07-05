@@ -35,12 +35,13 @@ test_function_result <- function(name = NULL,
   n_solution_calls <- length(solution_calls)
   
   # Check if index exists in solution and run it.
-  if (index > length(solution_calls)) {
-    stop(sprintf("There aren't %s calls of `%s()` available in the solution.", index, name))
-  }
+  check_sufficient(solution_calls, index, name)
   solution_call <- solution_calls[[index]]
   solution_result <- try(eval(solution_call$call), silent = TRUE)
-  if (inherits(solution_result, "try-error")) stop(paste("SOLUTION:", eval_error_msg))
+  if (inherits(solution_result, "try-error")) {
+    stop(sprintf("Running the %s call of %s() in generates an error: %s",
+                 get_num(index), name, attr(solution_result, "cond")$message))
+  }
   
   if (is.null(not_called_msg)) {
     not_called_msg <- sprintf("The system wants to check the %s call of `%s()`, but couldn't find it.", get_num(index), name)

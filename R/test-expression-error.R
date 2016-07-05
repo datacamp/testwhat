@@ -27,7 +27,7 @@ test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NUL
   init_tags(fun = "test_expression_output")
   
   if (is.null(no_error_msg)) {
-    no_error_msg <- sprintf("It seems that running <code>%s</code> does not generate an error while it should", expr)
+    no_error_msg <- sprintf("It seems that running `%s` does not generate an error while it should.", expr)
   }
   
 
@@ -38,7 +38,7 @@ test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NUL
   sol_error <- attr(result_sol, "condition")$message
   
   if (is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> generates the following error:<br><code>%s</code>", expr, sol_error)
+    incorrect_msg <- sprintf("Make sure that running `%s` generates the following error:<br>`%s`", expr, sol_error)
   }
   
   result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE)

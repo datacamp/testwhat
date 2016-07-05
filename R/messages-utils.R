@@ -1,3 +1,5 @@
+no_msg <- "No message for the specified language. Make sure you specify a valid language in `set_language()`."
+
 # Nicely collapse a character vector
 collapse <- function(x, conn = " and ") {
   if (length(x) > 1) {
@@ -38,9 +40,6 @@ get_language <- function() {
   lang <- tw$get("language")
   ifelse(is.null(lang), "en", lang)
 }
-
-no_msg <- "No message could be built for the specified language."
-
 
 get_num <- function(index) {
   switch(index,

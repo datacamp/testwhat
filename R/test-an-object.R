@@ -41,16 +41,13 @@ test_an_object <- function(name,
     undefined_msg <- "There is some object missing in your code."
   }
   
-  if (!exists(name, solution_env)) {
-    stop(sprintf("%s is not defined in your solution environment.", name))
-  }
-  
+  check_defined(name, solution_env)
   solution <- get(name, envir = solution_env, inherits = FALSE)
     
   eq_fun <- switch(eq_condition, equivalent = .equivalent, 
                                  equal = .equal,
                                  identical = identical, 
-                                 stop("invalid equality condition"))
+                                 stop(invalid_eq_condition))
     
   valid_values <- list()
   length(valid_values) <- length(ls(student_env))

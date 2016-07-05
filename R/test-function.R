@@ -69,15 +69,13 @@ test_function <- function(name,
   n_student_calls <- length(student_calls)
   n_solution_calls <- length(solution_calls)
 
-  # Check if index exists in solution
-  if  (index > length(solution_calls)) {
-    stop(sprintf("There aren't %s calls of `%s()` available in the solution.", index, name))
-  }
-  
+  check_sufficient(solution_calls, index, name)
   solution_call <- solution_calls[[index]]
   
   if (n_args > 0 && !has_arguments(solution_call$call, args, ignore, allow_extra)) {
-      stop("The solution call doesn't meet the argument conditions itself.")  
+      stop("The solution call doesn't meet the argument conditions itself.",
+           " Make sure that the args you specify in test_function(\"", name, "\", ...)", name, "()",
+           " are actually specified by the corresponding function call in the solution code")
   }
   
   if (is.null(not_called_msg)) {

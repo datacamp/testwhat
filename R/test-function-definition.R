@@ -50,14 +50,7 @@ test_function_definition <- function(name,
     tw$set(fun_usage = fun_usage)
   })
   
-  if (is.null(name)) {
-    stop("argument \"name\" is missing, with no default")
-  }
-  
-  if (!exists(name, solution_env)) {
-    stop(sprintf("%s is not defined in your solution environment.", name))
-  }
-  
+  check_defined(name, solution_env)
   sol_function <- get(name, envir = solution_env, inherits = FALSE)
 
   function_test <- substitute(function_test)
@@ -83,7 +76,7 @@ test_function_definition <- function(name,
   student_fun_def <- extract_function_definition(student_pd, name)
   
   if (is.null(solution_fun_def)) {
-    stop(sprintf("The function definition if %s was not found in the solution code", name))
+    stop(sprintf("The function definition of %s was not found in the solution code", name))
   }
   
   if (!passes) {
