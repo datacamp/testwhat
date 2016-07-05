@@ -51,7 +51,7 @@ test_object <- function(name, eq_condition = "equivalent",
   student_pd <- tw$get("student_pd")
   init_tags(fun = "test_object")
   
-  stopifnot(exists(name, envir =  solution_env, inherits = FALSE))
+  check_defined(name, solution_env)
   solution <- get(name, envir = solution_env, inherits = FALSE)
   
   if (is.null(undefined_msg)) {

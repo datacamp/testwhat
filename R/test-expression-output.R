@@ -35,7 +35,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
   }
   
   if (inherits(output_sol, "try-error")) {
-    stop("expr in test_output() results in an error in the solution environment")
+    stop(expr, " in test_expression_output results in an error when executed in the solution environment.")
   }
   
   if(!is.null(output_sol)) {
@@ -43,7 +43,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
   }
   
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Make sure that running <code>%s</code> outputs%s", expr, ifelse(is.null(output_sol), " nothing", sprintf(":<br><code>%s</code>", build_summary(output_sol, output = TRUE))))
+    incorrect_msg <- sprintf("Make sure that running `%s` outputs%s", expr, ifelse(is.null(output_sol), " nothing", sprintf(":<br>`%s`", build_summary(output_sol, output = TRUE))))
   }
   
   output_stud <- try(capture.output(eval(parse(text = expr), envir = student_env)), silent = TRUE)

@@ -1,3 +1,19 @@
+sct_failed_msg <- "<sct_failed_error>"
+
+check_defined <- function(name, sol_env) {
+  if (!exists(name, sol_env, inherits = FALSE)) {
+    stop(paste(name, "is not defined in your solution environment.",
+               "Specify the name of an object that is actually defined in the solution code"))
+  }
+}
+
+check_sufficient <- function(calls, index, name) {
+  if (index > length(calls)) {
+    stop(sprintf("Fix either the index argument or the solution code; currently, there aren't %s calls of %s() available in the solution.", index, name))
+  }
+}
+invalid_eq_condition <- "eq_condition should be either 'equivalent', 'equal' or 'identical'."
+
 # Check equality with a specified equality condition
 is_equal <- function(x, y, condition = "equivalent") {
   eq_fun <- switch(condition, equivalent = .equivalent, equal = .equal,
@@ -19,12 +35,6 @@ get_student_code <- function() { tw$get("student_code") }
 #' Get solution environment (backwards comp)
 #' @export
 get_solution_code <- function() { tw$get("solution_code") }
-
-#' Get solution environment (backwards comp)
-#' @export
-get_student_output <- function() { get(DM.console.output, envir = globalenv()) }
-
-sct_failed_msg <- "<sct_failed_error>"
 
 tw_accessors <- function() {
   tw_data <- list()
