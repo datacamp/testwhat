@@ -19,6 +19,19 @@ get_children <- function(pd, ids) {
   return(all_childs)
 }
 
+get_line_info <- function(pd) {
+  if (is.null(pd)) {
+    return(NULL)
+  }
+  id <- pd$id[!(pd$parent %in% pd$id)]
+  if (length(id) > 1) {
+    return(NULL)
+  }
+  x <- as.list(pd[pd$id == id, c("line1", "col1", "line2", "col2")])
+  names(x) <- c("line_start", "column_start", "line_end", "column_end")
+  x
+}
+
 get_sub_pd <- function(pd, ids) {
   children <- get_children(pd, ids)
   pd[pd$id %in% c(children, ids), ]

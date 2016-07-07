@@ -299,7 +299,7 @@ test_that("test_function passes along correct line numbers", {
   lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
   output <- test_it(lst)
   fails(output)
-  line_info(output, 3, 5)
+  line_info(output, 5, 5)
 })
 
 test_that("test_function works with S3 functions", {
@@ -390,4 +390,55 @@ test_that("test_function works with error in args", {
   lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
   output <- test_it(lst)
   fails(output)
+})
+
+test_that("test_function gives good automatic messages", {
+  lst <- list()
+  lst$DC_SOLUTION <- "mean(1:20, trim = 0.1, na.rm = TRUE)"
+  lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
+
+  # match by pos
+  lst$DC_CODE <- "mean(1:10,\ntrim = 0.1,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 1, 1)
+
+  # match by name
+  lst$DC_CODE <- "mean(x = 1:10,\ntrim = 0.1,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 1, 1)
+
+  # match by name
+  lst$DC_CODE <- "mean(trim = 0.1,\nx = 1:10,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 2, 2)
+
+  # match by name
+  lst$DC_CODE <- "mean(trim = 0.1,\nna.rm = TRUE,\nx = 1:10)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 3, 3)
+
+  # two args wrong -> only mention the first
+  lst$DC_CODE <- "mean(1:10,\ntrim = 0.2,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 1, 1)
+
+  lst$DC_CODE <- "mean(x = 1:10,\ntrim = 0.2,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 1, 1)
+
+  lst$DC_CODE <- "mean(trim = 0.2,\nx = 1:10,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 2, 2)
+
+  lst$DC_CODE <- "mean(trim = 0.2,\nna.rm = TRUE,\nx = 1:10)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call")
+  line_info(output, 3, 3)
 })

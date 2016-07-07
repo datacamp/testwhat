@@ -100,11 +100,8 @@ test_function <- function(name,
           if (is.null(args_not_specified_msg)) {
             args_not_specified_msg <- build_function_args_not_specified_msg(name, args, n_args, allow_extra)
           }
-          args_specified_feedback <- list(message = args_not_specified_msg,
-                                          line_start = student_call$line1,
-                                          line_end = student_call$line2,
-                                          column_start = student_call$col1,
-                                          column_end = student_call$col2)  
+          args_specified_feedback <- as.list(c(message = args_not_specified_msg,
+                                               get_line_info(student_call$function_pd)))
         }
         next
       } else {
@@ -119,18 +116,15 @@ test_function <- function(name,
       if (!all(args_correct_vec)) {
         score <- sum(args_correct_vec)
         if (is.null(args_correct_feedback) || args_correct_feedback$score < score) {
+          incorrect_arg <- args[!args_correct_vec][1]
           if (is.null(incorrect_msg)) {
-            incorrect_args <- args[!args_correct_vec]
-            feedback_msg <- build_function_incorrect_msg(name, incorrect_args)
+            feedback_msg <- build_function_incorrect_msg(name, incorrect_arg)
           } else {
             feedback_msg <- incorrect_msg[!args_correct_vec][1]
           }
-          args_correct_feedback <- list(message = feedback_msg,
-                                        line_start = student_call$line1,
-                                        line_end = student_call$line2,
-                                        column_start = student_call$col1,
-                                        column_end = student_call$col2,
-                                        score = score)
+          args_correct_feedback <- as.list(c(message = feedback_msg,
+                                             get_line_info(student_call$arg_pds[[incorrect_arg]]),
+                                             score = score))
         }
         next
       } else {
@@ -166,7 +160,7 @@ has_arguments <- function(call, args, ignore = NULL, allow_extra = TRUE) {
 }
 
 # Extract specified arguments from a function call and evaluate if necessary
-extract_arguments <- function(call, args, eval = TRUE, env) {
+extract_arguments <- function(call, args, eval, env) {
   mapply(function(arg, eval) {
     object <- call[[arg]]
     if (eval && (is.name(object) || is.call(object) || is.expression(object))) {

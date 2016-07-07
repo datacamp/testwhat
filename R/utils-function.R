@@ -9,8 +9,7 @@ find_function_calls <- function(pd, name, env) {
   # Retrieve all function calls from parse information
   fun_ids <- pd$parent[pd$text == name & pd$token == "SYMBOL_FUNCTION_CALL"]
   
-  output <- list()
-  for (fun_id in fun_ids) {
+  lapply(fun_ids, function(fun_id) {
     expr_id <- pd$parent[pd$id == fun_id] 
     
     # if parent expression contains %>% on left hand side ...
@@ -23,11 +22,29 @@ find_function_calls <- function(pd, name, env) {
       expr_string <- getParseText(pd, expr_id)  
     }
     expr <- parse(text = expr_string)
-    call <- standardize_call(as.call(expr)[[1]],expr_string,env)
-    line_info <- as.list(pd[pd$id == expr_id, c("line1", "col1", "line2", "col2")])
-    output <- c(output, list(c(call = call, line_info)))
+    original_call <- as.call(expr)[[1]]
+    standard_call <- standardize_call(original_call, expr_string, env)
+    function_pd <- get_sub_pd(pd = pd, expr_id)
+    arg_pds <- get_args_pds(function_pd, standard_call)
+    list(call = standard_call, function_pd = function_pd, arg_pds = arg_pds)
+  })
+}
+
+clean <- function(x) {
+  x <- gsub("\\s", "", x)
+  gsub("'", "\"", x)
+}
+
+get_args_pds <- function(pd, standard_call) {
+  if(length(standard_call) == 1) {
+    return(NULL)
   }
-  return(output)
+  n <- length(standard_call)
+  params <- lapply(standard_call, deparse)[2:n]
+  lapply(params, function(param) {
+    id <- pd$id[clean(param) == clean(pd$text) & pd$token == "expr"]
+    get_sub_pd(pd, id)
+  })
 }
 
 # Expand argument names of a function call (borrowed from pryr standardise_call)
