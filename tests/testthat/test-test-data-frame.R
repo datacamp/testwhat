@@ -1,4 +1,4 @@
-context("test_for_loop")
+context("test_data_frame")
 source("helpers.R")
 
 test_that("test_data_frame works", {

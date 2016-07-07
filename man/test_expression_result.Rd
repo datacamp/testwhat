@@ -10,10 +10,13 @@ test_expression_result(expr, eq_condition = "equivalent",
 \arguments{
 \item{expr}{The expression that is executed in both environments.}
 
-\item{eq_condition}{character string indicating how to compare. Possible values 
-are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
-See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
-and \code{\link{expect_identical}}, respectively.}
+\item{eq_condition}{character string indicating how to compare. Possible
+values are \code{"equivalent"} (the default), \code{"equal"} and
+\code{"identical"}. \code{"equivalent"} will check equality with a
+tolerance, without checking the attributes of the objects. \code{"equal"}
+will in addition check the attributes. \code{"identical"} uses the
+\code{identical} function of \code{base} package to check if two objects
+are identical.}
 
 \item{incorrect_msg}{Optional feedback message in case the evaluation is not the
 same in both environments. Automatically generated if not specified.}

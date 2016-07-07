@@ -10,5 +10,5 @@ is_equal <- function(x, y, condition = "equivalent") {
   eq_fun(x, y)
 }
 
-.equivalent <- function(x, y) compare(x, y, check.attributes = FALSE)$equal
-.equal <- function(x, y) compare(x, y)$equal
+.equivalent <- function(x, y) isTRUE(all.equal(x, y, check.attributes = FALSE))
+.equal <- function(x, y) isTRUE(all.equal(x, y))

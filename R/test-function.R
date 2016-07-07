@@ -118,7 +118,7 @@ test_function <- function(name,
         if (is.null(args_correct_feedback) || args_correct_feedback$score < score) {
           incorrect_arg <- args[!args_correct_vec][1]
           if (is.null(incorrect_msg)) {
-            feedback_msg <- build_function_incorrect_msg(name, incorrect_arg)
+            feedback_msg <- paste0(build_function_incorrect_msg(name, incorrect_arg))
           } else {
             feedback_msg <- incorrect_msg[!args_correct_vec][1]
           }
@@ -155,7 +155,7 @@ has_arguments <- function(call, args, ignore = NULL, allow_extra = TRUE) {
     all(args %in% names(call)[-1])
   else {
     supplied <- setdiff(names(call)[-1], ignore)
-    compare(args, supplied)$equal
+    is_equal(args, supplied)
   }
 }
 
