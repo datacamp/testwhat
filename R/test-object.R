@@ -88,22 +88,3 @@ test_object <- function(name, eq_condition = "equivalent",
     }
   }
 }
-
-
-# alias <- function(name) UseMethod("alias")
-# 
-# alias.default <- function(name) {
-#   sprintf("variable %s", name)
-# }
-# 
-# alias.data.frame <- function(name) {
-#   sprintf("data frame %s", name)
-# }
-# 
-# alias.list <- function(name) {
-#   sprintf("list %s", name)
-# }
-# 
-# alias.character <- function(name) {
-#   
-# }
