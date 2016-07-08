@@ -31,6 +31,7 @@ get_diff.logical <- function(sol, stud, eq_condition, id) {
   if (check_attr(eq_condition) && !same_attr(sol, stud)) {
     return(diff_attr(sol, stud, id))
   }
+  return(NULL)
 }
 
 get_diff.numeric <- function(sol, stud, eq_condition, id) {
@@ -47,7 +48,6 @@ get_diff.numeric <- function(sol, stud, eq_condition, id) {
   if (check_attr(eq_condition) && !same_attr(sol, stud)) {
     return(diff_attr(sol, stud, id))
   }
-  
   return(NULL)
 }
 
@@ -89,13 +89,23 @@ diff_length <- function(sol, stud, id) sprintf("%s has length %i, while it shoul
                                           id, length(stud), length(sol))
 
 same_dim <- function(sol, stud) isTRUE(all.equal(dim(sol), dim(stud)))
-diff_dim <- function(sol, stud, id) sprintf("%s has %i rows and %i columns, while it should have %i rows and %i columns.",
-                                            id, dim(stud)[1], dim(stud)[2], dim(sol)[1], dim(sol)[2])
+diff_dim <- function(sol, stud, id) {
+  stud_rows <- dim(stud)[1]
+  stud_cols <- dim(stud)[2]
+  sol_rows <- dim(sol)[1]
+  sol_cols <- dim(sol)[2]
+  plural <- function(x) {
+    ifelse(x > 1, "s", "")
+  }
+  sprintf("%s has %i row%s and %i column%s, while it should have %i row%s and %i column%s.",
+          id, stud_rows, plural(stud_rows), stud_cols, plural(stud_cols),
+          sol_rows, plural(sol_rows), sol_cols, plural(sol_cols))
+}
 
 klass <- function(sol) paste(class(sol), collapse = "/")
 
 same_type <- function(sol, stud) identical(typeof(sol), typeof(stud))
-diff_type <- function(sol, stud, id) sprintf("%s has type `%s` while it should be `%s`.",
+diff_type <- function(sol, stud, id) sprintf("%s has type `%s`, while it should have type `%s`.",
                                         id, typeof(stud), typeof(sol))
 
 same_class <- function(sol, stud) {
@@ -103,7 +113,7 @@ same_class <- function(sol, stud) {
     return(TRUE)
   identical(class(sol), class(stud))
 }
-diff_class <- function(sol, stud, id) sprintf("%s is of class `%s` while it it should be `%s`.", id, klass(stud), klass(sol))
+diff_class <- function(sol, stud, id) sprintf("%s is of class `%s`, while it should be of class `%s`.", id, klass(stud), klass(sol))
 
 same_attr <- function(sol, stud) is.null(attr.all.equal(sol, stud))
 diff_attr <- function(sol, stud, id) sprintf("are you sure the attributes (names, class, etc.) of %s are correct?", id)
