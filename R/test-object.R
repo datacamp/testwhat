@@ -72,7 +72,7 @@ test_object <- function(name, eq_condition = "equivalent",
     
     if (is.null(incorrect_msg)) {
       incorrect_msg <- paste0(build_object_incorrect_msg(name),
-                              build_diff(x = solution, y = student,
+                              build_diff(sol = solution, stud = student,
                                          eq_condition = eq_condition,
                                          id = sprintf("`%s`", name)))
     }

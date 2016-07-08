@@ -122,7 +122,7 @@ test_function <- function(name,
             sol_arg <- solution_args[!args_correct_vec][[1]]
             eq_cond <- eq_condition[!args_correct_vec][1]
             feedback_msg <- paste0(build_function_incorrect_msg(name, incorrect_arg),
-                                   build_diff(x = sol_arg, y = stud_arg,
+                                   build_diff(sol = sol_arg, stud = stud_arg,
                                               eq_condition = eq_cond,
                                               id = "the object you specified"))
           } else {

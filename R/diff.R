@@ -8,93 +8,102 @@ build_diff <- function(...) {
   }
 }
 
-get_diff <- function(x, y, ...) {
-  UseMethod("get_diff", x)
+get_diff <- function(sol, stud, ...) {
+  UseMethod("get_diff", sol)
 }
 
-get_diff.default <- function(x, ...) {
+get_diff.default <- function(sol, ...) {
   return(NULL)
 }
 
 ## Class-specific diffs
 
-get_diff.logical <- function(x, y, eq_condition, id) {
-  if (!typeof(y) %in% c("logical", "integer", "double")) {
-    return(diff_type(x, y, id))
+get_diff.logical <- function(sol, stud, eq_condition, id) {
+  if (!typeof(stud) %in% c("logical", "integer", "double")) {
+    return(diff_type(sol, stud, id))
   }
-  if (!same_class(x, y)) {
-    return(diff_class(x, y, id))
+  if (!same_class(sol, stud)) {
+    return(diff_class(sol, stud, id))
   }
-  if (!same_length(x, y)) {
-    return(diff_length(x, y, id))
+  if (!same_length(sol, stud)) {
+    return(diff_length(sol, stud, id))
   }
-  if (check_attr(eq_condition) && !same_attr(x, y)) {
-    return(diff_attr(x, y, id))
+  if (check_attr(eq_condition) && !same_attr(sol, stud)) {
+    return(diff_attr(sol, stud, id))
   }
 }
 
-get_diff.numeric <- function(x, y, eq_condition, id) {
+get_diff.numeric <- function(sol, stud, eq_condition, id) {
 
-  if (!typeof(y) %in% c("integer", "double")) {
-    return(diff_type(x, y, id))
+  if (!typeof(stud) %in% c("integer", "double")) {
+    return(diff_type(sol, stud, id))
   }
-  if (!same_class(x, y)) {
-    return(diff_class(x, y, id))
+  if (!same_class(sol, stud)) {
+    return(diff_class(sol, stud, id))
   }
-  if (!same_length(x, y)) {
-    return(diff_length(x, y, id))
+  if (!same_length(sol, stud)) {
+    return(diff_length(sol, stud, id))
   }
-  if (check_attr(eq_condition) && !same_attr(x, y)) {
-    return(diff_attr(x, y, id))
+  if (check_attr(eq_condition) && !same_attr(sol, stud)) {
+    return(diff_attr(sol, stud, id))
   }
   
   return(NULL)
 }
 
 
-get_diff.character <- function(x, y, eq_condition, id) {
-  if (!same_type(x, y)) {
-    return(diff_type(x, y, id))
+get_diff.character <- function(sol, stud, eq_condition, id) {
+  if (!same_type(sol, stud)) {
+    return(diff_type(sol, stud, id))
   }
-  if (!same_class(x, y)) {
-    return(diff_class(x, y, id))
+  if (!same_class(sol, stud)) {
+    return(diff_class(sol, stud, id))
   }
-  if (!same_length(x, y)) {
-    return(diff_length(x, y, id))
+  if (!same_length(sol, stud)) {
+    return(diff_length(sol, stud, id))
   }
-  if (check_attr(eq_condition) && !same_attr(x, y)) {
-    return(diff_attr(x, y, id))
+  if (check_attr(eq_condition) && !same_attr(sol, stud)) {
+    return(diff_attr(sol, stud, id))
   }
   return(NULL)
 }
 
-
-## Helpers for diff (from testthat)
-
-# vector_equal <- function(x, y) {
-#   (is.na(x) & is.na(y)) | (!is.na(x) & !is.na(y) & x == y)
-# }
-# 
-# vector_equal_tol <- function(x, y, tolerance = .Machine$double.eps ^ 0.5) {
-#   (is.na(x) & is.na(y)) | (!is.na(x) & !is.na(y) & abs(x - y) < tolerance)
-# }
-
-same_length <- function(x, y) length(x) == length(y)
-diff_length <- function(x, y, id) sprintf("%s has length %i, while it should have length %i.",
-                                          id, length(y), length(x))
-
-klass <- function(x) paste(class(x), collapse = "/")
-
-same_type <- function(x, y) identical(typeof(x), typeof(y))
-diff_type <- function(x, y, id) sprintf("%s has type `%s` while it should be `%s`.",
-                                        id, typeof(y), typeof(x))
-
-same_class <- function(x, y) {
-  if (!is.object(x) && !is.object(y))
-    return(TRUE)
-  identical(class(x), class(y))
+get_diff.data.frame <- function(sol, stud, eq_condition, id) {
+  if (!same_type(sol, stud)) {
+    return(diff_type(sol, stud, id))
+  }
+  if (!same_class(sol, stud)) {
+    return(diff_class(sol, stud, id))
+  }
+  if (!same_dim(sol, stud)) {
+    return(diff_dim(sol, stud, id))
+  }
+  if (check_attr(eq_condition) && !same_attr(sol, stud)) {
+    return(diff_attr(sol, stud, id))
+  }
 }
-diff_class <- function(x, y, id) sprintf("%s is of class `%s` while it it should be `%s`.", id, klass(y), klass(x))
 
-same_attr <- function(x, y) is.null(attr.all.equal(x, y))
-diff_attr <- function(x, y, id) sprintf("are you sure the attributes (names, class, etc.) of %s are correct?", id)
+
+same_length <- function(sol, stud) length(sol) == length(stud)
+diff_length <- function(sol, stud, id) sprintf("%s has length %i, while it should have length %i.",
+                                          id, length(stud), length(sol))
+
+same_dim <- function(sol, stud) isTRUE(all.equal(dim(sol), dim(stud)))
+diff_dim <- function(sol, stud, id) sprintf("%s has %i rows and %i columns, while it should have %i rows and %i columns.",
+                                            id, dim(stud)[1], dim(stud)[2], dim(sol)[1], dim(sol)[2])
+
+klass <- function(sol) paste(class(sol), collapse = "/")
+
+same_type <- function(sol, stud) identical(typeof(sol), typeof(stud))
+diff_type <- function(sol, stud, id) sprintf("%s has type `%s` while it should be `%s`.",
+                                        id, typeof(stud), typeof(sol))
+
+same_class <- function(sol, stud) {
+  if (!is.object(sol) && !is.object(stud))
+    return(TRUE)
+  identical(class(sol), class(stud))
+}
+diff_class <- function(sol, stud, id) sprintf("%s is of class `%s` while it it should be `%s`.", id, klass(stud), klass(sol))
+
+same_attr <- function(sol, stud) is.null(attr.all.equal(sol, stud))
+diff_attr <- function(sol, stud, id) sprintf("are you sure the attributes (names, class, etc.) of %s are correct?", id)
