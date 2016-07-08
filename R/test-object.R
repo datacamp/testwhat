@@ -71,7 +71,10 @@ test_object <- function(name, eq_condition = "equivalent",
     student <- get(name, envir = student_env, inherits = FALSE)
     
     if (is.null(incorrect_msg)) {
-      incorrect_msg <- build_object_incorrect_msg(name)
+      incorrect_msg <- paste0(build_object_incorrect_msg(name),
+                              build_diff(x = solution, y = student,
+                                         eq_condition = eq_condition,
+                                         id = sprintf("`%s`", name)))
     }
     
     feedback <- c(list(message = incorrect_msg), line_info)

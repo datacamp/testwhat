@@ -118,7 +118,13 @@ test_function <- function(name,
         if (is.null(args_correct_feedback) || args_correct_feedback$score < score) {
           incorrect_arg <- args[!args_correct_vec][1]
           if (is.null(incorrect_msg)) {
-            feedback_msg <- paste0(build_function_incorrect_msg(name, incorrect_arg))
+            stud_arg <- student_args[!args_correct_vec][[1]]
+            sol_arg <- solution_args[!args_correct_vec][[1]]
+            eq_cond <- eq_condition[!args_correct_vec][1]
+            feedback_msg <- paste0(build_function_incorrect_msg(name, incorrect_arg),
+                                   build_diff(x = sol_arg, y = stud_arg,
+                                              eq_condition = eq_cond,
+                                              id = "the object you specified"))
           } else {
             feedback_msg <- incorrect_msg[!args_correct_vec][1]
           }
