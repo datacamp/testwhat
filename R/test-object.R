@@ -84,7 +84,7 @@ test_object <- function(name, eq_condition = "equivalent",
     rep$be_loud()
     if (!ok) {
       test_what(expect_true(any(class(student) %in% class(solution))), feedback)
-      test_what(eq_fun(student, solution), feedback)
+      test_what(expect_true(is_equal(student, solution, eq_condition)), feedback)
     }
   }
 }
