@@ -16,7 +16,8 @@ Imports:
     rmarkdown,
     ggvis,
     lazyeval,
-    R6
+    R6,
+    stringdist
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),

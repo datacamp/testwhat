@@ -51,7 +51,7 @@ get_diff.numeric <- function(sol, stud, eq_condition, id) {
   return(NULL)
 }
 
-
+#' @importFrom stringdist stringdist
 get_diff.character <- function(sol, stud, eq_condition, id) {
   if (!same_type(sol, stud)) {
     return(diff_type(sol, stud, id))
@@ -64,6 +64,22 @@ get_diff.character <- function(sol, stud, eq_condition, id) {
   }
   if (check_attr(eq_condition) && !same_attr(sol, stud)) {
     return(diff_attr(sol, stud, id))
+  }
+  if (length(sol) == 1) { # stud is also length 1
+    if (tolower(sol) == tolower(stud)) {
+      return("note that R is case-sensitive!")
+    }
+    if (gsub("\\s", "", sol) == gsub("\\s", "", stud)) {
+      return("make sure to use the correct spacing!")
+    }
+    patt <- "[!\\?\\.\\;\\,\\:]"
+    if (gsub(patt, "", sol) == gsub(patt, "", stud)) {
+      return("make sure to use the correct punctuation marks!")
+    }
+    # If number of edits required is below a fifth of the character length: typo?
+    if (stringdist(sol, stud, nthread = 1, method = "dl") < round(nchar(sol)/5 + 1)) {
+      return("there might be a typo in there.")
+    }
   }
   return(NULL)
 }
@@ -120,19 +136,19 @@ diff_attr <- function(sol, stud, id) sprintf("are you sure the attributes (names
 
 typeof2 <- function(x) {
   if (typeof(x) == "logical") {
-    if (length(x) == 1) {
+    if (length(x) <= 1) {
       return("logical")
     } else {
       return("logical vector")
     }
   } else if (typeof(x) %in% c("integer", "double")) {
-    if (length(x) == 1) {
+    if (length(x) <= 1) {
       return("number")
     } else {
       return("numeric vector")
     }
   } else if (typeof(x) == "character") {
-    if (length(x) == 1) {
+    if (length(x) <= 1) {
       return("character string")
     } else {
       return("character vector")

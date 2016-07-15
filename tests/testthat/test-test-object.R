@@ -253,7 +253,7 @@ test_that("test_object produces meaningful additional hints", {
 
   lst$DC_SCT <- "test_object('a')"
   output <- test_it(lst)
-  fails(output, mess_patt = "<code>a</code> has type <code>double</code> while it should be <code>character</code>")
+  fails(output, mess_patt = "<code>a</code> is a number, while it should be a character string.")
 
   lst$DC_SCT <- "test_object('b')"
   output <- test_it(lst)

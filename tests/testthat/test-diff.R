@@ -98,7 +98,7 @@ test_that("test diff for characters", {
   expect_equal(get_diff("x", 3, "equivalent", "test"), "test is a number, while it should be a character string.")
   expect_equal(get_diff(c("x", "y"), 3, "equivalent", "test"), "test is a number, while it should be a character vector.")
   expect_equal(get_diff("x", c(1, 3), "equivalent", "test"), "test is a numeric vector, while it should be a character string.")
-  
+
   x <- 'x'
   class(x) <- c("anything", class(x))
   y <- 'y'
@@ -110,11 +110,17 @@ test_that("test diff for characters", {
   expect_equal(get_diff(c(a = 'x', b = 'x'), c(a = 'x', c = 'x'), "equivalent", "test"), NULL)
   expect_equal(get_diff(c(a = 'x', b = 'x'), c(a = 'x', c = 'x'), "equal", "test"),
                "are you sure the attributes (names, class, etc.) of test are correct?")
+
+  expect_equal(get_diff("This is a test", "this is a test", "equivalent", "test"), "note that R is case-sensitive!")
+  expect_equal(get_diff("This is a test", "This isatest", "equivalent", "test"), "make sure to use the correct spacing!")
+  expect_equal(get_diff("This is a test!", "This is a test?", "equivalent", "test"), "make sure to use the correct punctuation marks!")
+  expect_equal(get_diff("This is a test!", "This is a tester!", "equivalent", "test"), "there might be a typo in there.")
+  expect_equal(get_diff("This is a test!", "Total randomness!", "equivalent", "test"), NULL)
 })
 
 test_that("test diff for data.frames", {
   expect_equal(get_diff(mtcars, 3, "equivalent", "test"), "test is a number, while it should be a data frame.")
-  
+
   x <- mtcars
   class(x) <- c("anything", class(x))
   y <- mtcars[1:2, ]
