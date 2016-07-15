@@ -25,10 +25,42 @@ test_what <- function(code, feedback) {
     stop("The feedback you specified in test_what() isn't in the correct format")
   }
 
-  feedback <- c(feedback, list(tags = tw$get("tags")))
-  ok <- testthat:::test_code(feedback, substitute(code), env = parent.frame())
-  
+  ok <- run_expectation(substitute(code), env = parent.frame())
   if (!ok) {
+    get_reporter()$set_feedback(c(feedback, list(tags = tw$get("tags"))))
     stop(sct_failed_msg)
   }
+}
+
+run_expectation <- function(code, env = test_env()) {
+  ok <- TRUE
+  handle_error <- function(e) {
+    ok <<- FALSE
+  }
+  handle_expectation <- function(e) {
+    if(gsub("^expectation_", "", class(e)[[1]]) == "failure") {
+      ok <<- FALSE
+    }
+  }
+  handle_warning <- function(e) {
+    invokeRestart("muffleWarning")
+  }
+  handle_message <- function(e) {
+    invokeRestart("muffleMessage")
+  }
+
+  test_env <- new.env(parent = env)
+  tryCatch(
+    withCallingHandlers(
+      eval(code, test_env),
+      expectation = handle_expectation,
+      warning =     handle_warning,
+      message =     handle_message,
+      error =       handle_error
+    ),
+    # some errors may need handling here, e.g., stack overflow
+    error = handle_error
+  )
+
+  invisible(ok)
 }

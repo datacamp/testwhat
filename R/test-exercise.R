@@ -44,7 +44,7 @@ test_exercise <- function(sct,
   on.exit(set_reporter(old))
   run_until_fail(parse(text = sct))
 
-  outcome <- reporter$end_reporter()
+  outcome <- reporter$get_feedback()
   
   # HACK: If markdown exercise, remove line information
   if (ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
