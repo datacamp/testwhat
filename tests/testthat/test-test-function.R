@@ -508,3 +508,20 @@ test_that("test_function gives good automatic messages - deep - 2", {
   fails(output, "Are you sure the attributes")
 })
 
+test_that("try-errors", {
+  lst <- list()
+  lst$DC_PEC <- "RBackend::allow_solution_error()"
+  lst$DC_SOLUTION <- "print(123 + 'test')"
+  lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
+  lst$DC_CODE <- "print(123 + 'test')"
+  output <- test_it(lst)
+  error(output, mess_patt = "There are arguments in the first function call of print\\(\\) that cause errors")
+  
+  lst <- list()
+  lst$DC_SOLUTION <- "print(123)"
+  lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
+  lst$DC_CODE <- "print('test' + 123)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call of <code>print\\(\\)</code>")
+  fails(output, "Evaluating the expression you specified caused an error")
+})

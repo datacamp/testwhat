@@ -110,6 +110,9 @@ test_function <- function(name,
       
       # Test if the specified arguments are correctly called
       solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
+      if (any(sapply(solution_args, function(x) isTRUE(x == tryerrorstring)))) {
+        stop(sprintf("There are arguments in the %s function call of %s() that cause errors when evaluated.", get_num(index), name))
+      }
       student_args <- extract_arguments(student_call$call, args, eval, env = student_env)
       
       args_correct_vec <- mapply(is_equal, student_args, solution_args, eq_condition)
@@ -172,10 +175,11 @@ extract_arguments <- function(call, args, eval, env) {
     if (eval && (is.name(object) || is.call(object) || is.expression(object))) {
       object <- try(eval(object, envir = env), silent = TRUE)
       if (inherits(object, "try-error")) {
-        object <- "try-error"
+        object <- tryerrorstring
       }
     }
     object
   }, args, eval, SIMPLIFY = FALSE)
 }
 
+tryerrorstring <- "try-error-in-test-function"

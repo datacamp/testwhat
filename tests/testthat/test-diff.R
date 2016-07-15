@@ -4,10 +4,13 @@ test_that("test diff general", {
   expect_error(build_diff())
 
   # no class-specific implementation
-  expect_equal(build_diff(sol = list('a')), NULL)
-
+  expect_equal(build_diff(sol = list('a'), stud = 'blergh'), NULL)
+  
+  # stud is try-error
+  expect_equal(build_diff(sol = 'anything', stud = tryerrorstring), " Evaluating the expression you specified caused an error.")
+  
   # if class-specific implementation: need more info!
-  expect_error(build_diff(sol = "test"))
+  expect_error(build_diff(sol = "test"), stud = 'blergh')
   expect_error(build_diff(sol = "test", stud = TRUE))
   expect_error(build_diff(sol = "test", stud = TRUE, eq_condition = 'test'))
   expect_error(build_diff(sol = "test", stud = TRUE, eq_condition = 'equivalent'))

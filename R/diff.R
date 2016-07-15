@@ -1,5 +1,8 @@
-build_diff <- function(...) {
-  res <- get_diff(...)
+build_diff <- function(sol, stud, ...) {
+  if (stud == tryerrorstring) {
+    return(" Evaluating the expression you specified caused an error.")
+  }
+  res <- get_diff(sol, stud, ...)
   if (is.null(res)) {
     return(NULL)
   } else {
@@ -8,7 +11,7 @@ build_diff <- function(...) {
   }
 }
 
-get_diff <- function(sol, stud, ...) {
+get_diff <- function(sol, ...) {
   UseMethod("get_diff", sol)
 }
 
@@ -35,7 +38,6 @@ get_diff.logical <- function(sol, stud, eq_condition, id) {
 }
 
 get_diff.numeric <- function(sol, stud, eq_condition, id) {
-
   if (!typeof(stud) %in% c("integer", "double")) {
     return(diff_type(sol, stud, id))
   }
