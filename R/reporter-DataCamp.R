@@ -1,13 +1,14 @@
 #' DataCamp reporter: gather test results
 #'
-#' @export
 #' @importFrom R6 R6Class
 DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter,
-public = list(
+  public = list(
+
+    initialize = function() {},
   
-    add_result = function(context, test, result) {
-      if (testthat:::expectation_broken(result) && private$silent == 0) {
-        private$failures <- c(private$failures, list(test))
+    set_feedback = function(msg) {
+      if (private$silent == 0) {
+        private$feedback <- msg
       }
     },
   
@@ -23,15 +24,14 @@ public = list(
       private$success_msg <- msg
     },
     
-    end_reporter = function() {
-      failures <- private$failures
-      if (length(failures) == 0) {
+    get_feedback = function() {
+      feedback <- private$feedback
+      if (is.null(feedback)) {
         return(list(correct = TRUE,
                     message = to_html(private$success_msg)))
       } else {
-        failure <- failures[[1]]
-        failure$message <- to_html(failure$message)
-        return(c(list(correct = FALSE), failure))
+        feedback$message <- to_html(feedback$message)
+        return(c(list(correct = FALSE), feedback))
       }
     }
   ),
@@ -39,7 +39,7 @@ public = list(
   private = list(
     silent = 0,
     success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
-    failures = list()
+    feedback = NULL
   )
 )
 
