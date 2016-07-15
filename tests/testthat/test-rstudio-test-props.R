@@ -1,4 +1,4 @@
-context("rstudio-test-props")
+context("rstudio_test_props")
 
 test_that("test set basic 1", {
   lst <- list()

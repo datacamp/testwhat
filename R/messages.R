@@ -61,26 +61,17 @@ build_function_args_not_specified_msg <- function(name, args, n_args, allow_extr
   return(msg)
 }
 
-build_function_incorrect_msg <- function(name, incorrect_args) {
+build_function_incorrect_msg <- function(name, incorrect_arg) {
   lang <- get_language()
-  n_args <- length(incorrect_args)
   if (lang == "en") {
-    msg <- sprintf("Did you correctly specify the argument%s %s in your call of `%s()`?", 
-                   ifelse(n_args == 1, "", "s"), collapse_args(incorrect_args), name)
+    msg <- sprintf("Did you correctly specify the argument `%s` in your call of `%s()`?", 
+                   incorrect_arg, name)
   } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous affect&#233; %s %sargument%s %s dans la fonction `%s()` ?",
-                   ifelse(n_args == 1, "la bonne valeur", "les bonnes valeurs"),
-                   ifelse(n_args == 1, "&#224; l'", "aux "),
-                   ifelse(n_args == 1, "", "s"),
-                   collapse_args(incorrect_args, " et "),
-                   name)
+    msg <- sprintf("Avez-vous affect&#233; la bonne valeur &#224; l'argument `%s` dans la fonction `%s()` ?",
+                   incorrect_arg, name)
   } else if (lang == "es") {
-    msg <- sprintf("&#191;Usaste %s para %s argumento%s %s en la funci&#243;n `%s()`?",
-                   ifelse(n_args == 1, "el valor correcto", "los valores correctos"),
-                   ifelse(n_args == 1, "el", "los"),
-                   ifelse(n_args == 1, "", "s"),
-                   collapse_args(incorrect_args, " y "),
-                   name)
+    msg <- sprintf("&#191;Usaste el valor correcto para el argumento `%s` en la funci&#243;n `%s()`?",
+                   incorrect_arg, name)
   } else {
     stop(no_msg)
   }

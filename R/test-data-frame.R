@@ -70,13 +70,8 @@ test_data_frame <- function(name, columns = NULL,
     test_what(expect_true(columns_defined), undefined_cols_msg)
     
     if (columns_defined) {
-      eq_fun <- switch(eq_condition, 
-                       equivalent = expect_equivalent,
-                       equal = expect_equal, 
-                       identical = expect_identical,
-                       stop(invalid_eq_condition))
       for(col in columns) {
-        test_what(eq_fun(student[col], solution[col]), incorrect_msg)
+        test_what(expect_true(is_equal(student[col], solution[col], eq_condition)), feedback = incorrect_msg)
       }
     }
   }

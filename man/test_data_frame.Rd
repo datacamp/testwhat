@@ -13,10 +13,13 @@ test_data_frame(name, columns = NULL, eq_condition = "equivalent",
 \item{columns}{character vector or integer vector of list elements or 
 indices to test.}
 
-\item{eq_condition}{character string indicating how to compare. Possible values 
-are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
-See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
-and \code{\link{expect_identical}}, respectively.}
+\item{eq_condition}{character string indicating how to compare. Possible
+values are \code{"equivalent"} (the default), \code{"equal"} and
+\code{"identical"}. \code{"equivalent"} will check equality with a
+tolerance, without checking the attributes of the objects. \code{"equal"}
+will in addition check the attributes. \code{"identical"} uses the
+\code{identical} function of \code{base} package to check if two objects
+are identical.}
 
 \item{undefined_msg}{optional feedback message if list is not defined.}
 

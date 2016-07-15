@@ -1,22 +1,27 @@
 #' Test R object existence and value
-#'
-#' Test whether a student defined a certain object. If this is the case, and
-#' if \code{eval} is \code{TRUE}, also check whether the value of the object
+#' 
+#' Test whether a student defined a certain object. If this is the case, and if
+#' \code{eval} is \code{TRUE}, also check whether the value of the object 
 #' matches that of the solution.
-#'
+#' 
 #' @param name name of the object to test.
-#' @param eq_condition character string indicating how to compare. Possible values 
-#' are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
-#' See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
-#' and \code{\link{expect_identical}}, respectively.
-#' @param eval Next to existence, check if the value of the object corresponds
-#' between student en solution environment.
-#' @param undefined_msg Optional feedback message in case the student did not define
-#' the object. A meaningful message is automatically generated if not supplied.
-#' @param incorrect_msg optional feedback message in case the student's object is not
-#' the same as in the sample solution. Only used if \code{eval} is \code{TRUE}. 
-#' A meaningful message is automatically generated if not supplied.
-#'
+#' @param eq_condition character string indicating how to compare. Possible
+#'   values are \code{"equivalent"} (the default), \code{"equal"} and
+#'   \code{"identical"}. \code{"equivalent"} will check equality with a
+#'   tolerance, without checking the attributes of the objects. \code{"equal"}
+#'   will in addition check the attributes. \code{"identical"} uses the
+#'   \code{identical} function of \code{base} package to check if two objects
+#'   are identical.
+#' @param eval Next to existence, check if the value of the object corresponds 
+#'   between student en solution environment.
+#' @param undefined_msg Optional feedback message in case the student did not
+#'   define the object. A meaningful message is automatically generated if not
+#'   supplied.
+#' @param incorrect_msg optional feedback message in case the student's object
+#'   is not the same as in the sample solution. Only used if \code{eval} is
+#'   \code{TRUE}. A meaningful message is automatically generated if not
+#'   supplied.
+#'   
 #' @examples
 #' \dontrun{
 #' # Example 1 solution code:
@@ -40,7 +45,7 @@
 #' # No numerical difference allowed + check attributes
 #' test_object(y, eq_condtion = "identical")
 #' }
-#'
+#' 
 #' @export
 test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
@@ -65,42 +70,21 @@ test_object <- function(name, eq_condition = "equivalent",
   if (eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
     
-    eq_fun <- switch(eq_condition, equivalent = expect_equivalent,
-                                   identical = expect_identical,
-                                   equal = expect_equal,
-                                   stop("invalid equality condition"))
-    
     if (is.null(incorrect_msg)) {
-      incorrect_msg <- build_object_incorrect_msg(name)
+      incorrect_msg <- paste0(build_object_incorrect_msg(name),
+                              build_diff(sol = solution, stud = student,
+                                         eq_condition = eq_condition,
+                                         id = sprintf("`%s`", name)))
     }
     
     feedback <- c(list(message = incorrect_msg), line_info)
     rep <- get_reporter()
     rep$be_silent()
-    ok <- run_until_fail(test_what(eq_fun(student, solution), feedback))
+    ok <- run_until_fail(test_what(expect_true(is_equal(student, solution, eq_condition)), feedback))
     rep$be_loud()
     if (!ok) {
       test_what(expect_true(any(class(student) %in% class(solution))), feedback)
-      test_what(eq_fun(student, solution), feedback)
+      test_what(expect_true(is_equal(student, solution, eq_condition)), feedback)
     }
   }
 }
-
-
-# alias <- function(name) UseMethod("alias")
-# 
-# alias.default <- function(name) {
-#   sprintf("variable %s", name)
-# }
-# 
-# alias.data.frame <- function(name) {
-#   sprintf("data frame %s", name)
-# }
-# 
-# alias.list <- function(name) {
-#   sprintf("list %s", name)
-# }
-# 
-# alias.character <- function(name) {
-#   
-# }

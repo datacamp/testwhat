@@ -70,7 +70,7 @@ test_operator <- function(name,
       
       stud_result <- try(base::eval(parse(text = student_op$call), envir = student_env), silent = TRUE)
 
-      if (!inherits(stud_result, "try-error") && is_equal(stud_result, sol_result, condition = eq_condition)) {
+      if (!inherits(stud_result, "try-error") && is_equal(stud_result, sol_result, eq_condition)) {
         set_used(name, stud_index = i, sol_index = index)
         passed <- TRUE
         break

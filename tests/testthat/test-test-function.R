@@ -299,7 +299,7 @@ test_that("test_function passes along correct line numbers", {
   lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
   output <- test_it(lst)
   fails(output)
-  line_info(output, 3, 5)
+  line_info(output, 5, 5)
 })
 
 test_that("test_function works with S3 functions", {
@@ -391,3 +391,120 @@ test_that("test_function works with error in args", {
   output <- test_it(lst)
   fails(output)
 })
+
+test_that("test_function gives good automatic messages", {
+  lst <- list()
+  lst$DC_SOLUTION <- "mean(1:20, trim = 0.1, na.rm = TRUE)"
+  lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
+
+  mess_patt1 <- "Did you correctly specify the argument <code>x</code> in your call"
+  mess_patt2 <- "The object you specified has length 10, while it should have length 20"
+  # match by pos
+  lst$DC_CODE <- "mean(1:10,\ntrim = 0.1,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 1, 1)
+
+  # match by name
+  lst$DC_CODE <- "mean(x = 1:10,\ntrim = 0.1,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 1, 1)
+
+  # match by name
+  lst$DC_CODE <- "mean(trim = 0.1,\nx = 1:10,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 2, 2)
+
+  # match by name
+  lst$DC_CODE <- "mean(trim = 0.1,\nna.rm = TRUE,\nx = 1:10)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 3, 3)
+
+  # two args wrong -> only mention the first
+  lst$DC_CODE <- "mean(1:10,\ntrim = 0.2,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 1, 1)
+
+  lst$DC_CODE <- "mean(x = 1:10,\ntrim = 0.2,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 1, 1)
+
+  lst$DC_CODE <- "mean(trim = 0.2,\nx = 1:10,\nna.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 2, 2)
+
+  lst$DC_CODE <- "mean(trim = 0.2,\nna.rm = TRUE,\nx = 1:10)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, mess_patt = mess_patt2)
+  line_info(output, 3, 3)
+})
+
+test_that("test_function gives good automatic messages - deep", {
+  lst <- list()
+  lst$DC_SOLUTION <- "print('This is a serious thing!')"
+  lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
+  mess_patt1 <- "Did you correctly specify the argument <code>x</code> in your call of <code>print\\(\\)</code>"
+
+  lst$DC_CODE <- "print(123)"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, "The object you specified is a number, while it should be a character string")
+
+  lst$DC_CODE <- "print(c('this is', 'a serious thing'))"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, "The object you specified has length 2, while it should have length 1")
+
+  lst$DC_CODE <- "print('this is a serious thing!')"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, "Note that R is case-sensitive")
+
+  lst$DC_CODE <- "print('This is a serious thingyyy!')"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, "There might be a typo in there")
+})
+
+
+test_that("test_function gives good automatic messages - deep - 2", {
+  lst <- list()
+  lst$DC_SOLUTION <- "print(123)"
+  lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
+  mess_patt1 <- "Did you correctly specify the argument <code>x</code> in your call of <code>print\\(\\)</code>"
+
+  lst$DC_CODE <- "print(c(T, F))"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, "The object you specified is a logical vector, while it should be a number")
+
+  lst$DC_CODE <- "print(c(123, 123))"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, "The object you specified has length 2, while it should have length 1")
+
+  lst$DC_CODE <- "print(c(a = 123))"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_SCT <- "test_function('print', args = 'x', eq_condition = 'equal', index = 1)"
+  lst$DC_CODE <- "print(c(a = 123))"
+  output <- test_it(lst)
+  fails(output, mess_patt = mess_patt1)
+  fails(output, "Are you sure the attributes")
+})
+

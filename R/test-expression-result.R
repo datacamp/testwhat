@@ -54,13 +54,7 @@ test_expression_result <- function(expr,
                       incorrect_msg, 
                       build_summary(attr(result_stud,"condition")$message, output = TRUE)))
   } else {
-    eq_fun <- switch(eq_condition,
-                     equivalent = expect_equivalent,
-                     equal = expect_equal,
-                     identical = expect_identical,
-                     stop("invalid equality condition"))
-
-    test_what(eq_fun(result_sol, result_stud),
+    test_what(expect_true(is_equal(result_sol, result_stud, eq_condition)),
               sprintf("%s<br>Instead, got: <code>%s</code>", 
                       incorrect_msg, 
                       ifelse(is.null(result_stud), "NULL", build_summary(result_stud))))

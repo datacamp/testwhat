@@ -44,11 +44,6 @@ test_an_object <- function(name,
   check_defined(name, solution_env)
   solution <- get(name, envir = solution_env, inherits = FALSE)
     
-  eq_fun <- switch(eq_condition, equivalent = .equivalent, 
-                                 equal = .equal,
-                                 identical = identical, 
-                                 stop(invalid_eq_condition))
-    
   valid_values <- list()
   length(valid_values) <- length(ls(student_env))
   
@@ -62,7 +57,7 @@ test_an_object <- function(name,
   }
   
   if (counter > 1) {
-    correct <- vapply(valid_values[1:counter-1], function(x) { eq_fun(x, solution) }, logical(1))
+    correct <- vapply(valid_values[1:counter-1], function(x) { is_equal(x, solution, eq_condition) }, logical(1))
   } else {
     correct <- FALSE
   }

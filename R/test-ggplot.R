@@ -251,7 +251,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
               sol_value <- sol_params[[sol_param]]
               stud_value <- stud_params[[sol_param]]
               
-              if (!compare(sol_value, stud_value)$equal) {
+              if (!is_equal(sol_value, stud_value)) {
                 found_params <- FALSE
                 break
               }
@@ -447,7 +447,7 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
               eval_sol <- without_args(eval(sol_value, envir = solution_env))
               eval_stud <- without_args(try(eval(stud_value, envir = student_env), silent = TRUE))
               if (inherits(eval_stud, "try-error") ||
-                  !compare(eval_sol, eval_stud)$equal) {
+                  !is_equal(eval_sol, eval_stud)) {
                 found_params <- FALSE
                 break
               }
@@ -536,7 +536,7 @@ extract_params <- function(command) {
       }
     } else {
       for (i in 1:length(param_names)) {
-        if (compare(param_names[i], "")$equal) {
+        if (is_equal(param_names[i], "")) {
           attr(param_list[[i]], "dot") <- TRUE
           param_names[i] <- paste(nd(i), "argument")
         }
@@ -577,7 +577,7 @@ compare_positions <- function(sol_layer, stud_layer) {
    sol_position <- sol_layer$position
    stud_position <- stud_layer$position
 
-   return(compare(sol_position, stud_position)$equal)
+   return(is_equal(sol_position, stud_position))
 }
 
 almost_equal <- function(value1, value2) {
@@ -605,7 +605,7 @@ filter_standard_geom_params <- function(geom_call, params) {
   standard_layer <- eval(call(geom_call))
   standard_params <- get_geom_params(standard_layer)
   ov <- base::intersect(names(params), names(standard_params))
-  eq <- mapply(function(x,y) compare(x,y)$equal, standard_params[ov], params[ov])
+  eq <- mapply(is_equal, standard_params[ov], params[ov])
   if (any(eq)) {
     params[names(eq[eq])] <- NULL
   } 

@@ -13,10 +13,13 @@ test_an_object(name, undefined_msg = NULL, eq_condition = "equivalent")
 an object that corresponds to the solution object. This argument should 
 always be specified.}
 
-\item{eq_condition}{character string indicating how to compare. Possible values 
-are \code{"equivalent"} (the default), \code{"equal"} and \code{"identical"}.
-See \code{\link{expect_equivalent}}, \code{\link{expect_equal}}, 
-and \code{\link{expect_identical}}, respectively.}
+\item{eq_condition}{character string indicating how to compare. Possible
+values are \code{"equivalent"} (the default), \code{"equal"} and
+\code{"identical"}. \code{"equivalent"} will check equality with a
+tolerance, without checking the attributes of the objects. \code{"equal"}
+will in addition check the attributes. \code{"identical"} uses the
+\code{identical} function of \code{base} package to check if two objects
+are identical.}
 }
 \description{
 This function is an adaption of \code{\link{test_object}}. The function will

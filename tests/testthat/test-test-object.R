@@ -246,3 +246,25 @@ test_that("test_object works with an object which is the same but has different 
   fails(output)
 })
 
+test_that("test_object produces meaningful additional hints", {
+  lst <- list()
+  lst$DC_SOLUTION <- "a <- 'test'\nb <- 1:10\nc <- c(x = 1, y = 2)"
+  lst$DC_CODE <- "a <- 1\nb <- 1:20\nc <- c(x = 1, z = 2)"
+
+  lst$DC_SCT <- "test_object('a')"
+  output <- test_it(lst)
+  fails(output, mess_patt = "<code>a</code> is a number, while it should be a character string.")
+
+  lst$DC_SCT <- "test_object('b')"
+  output <- test_it(lst)
+  fails(output, mess_patt = "<code>b</code> has length 20, while it should have length 10")
+
+  lst$DC_SCT <- "test_object('c')"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_SCT <- "test_object('c', eq_condition = 'equal')"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Are you sure the attributes")
+})
+

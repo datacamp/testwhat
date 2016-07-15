@@ -56,11 +56,8 @@ test_function_result <- function(name = NULL,
   }
   
   student_result <- try(eval(student_call$call), silent = TRUE)
-  test_what(expect_false(inherits(student_result, "try-error")),  feedback = list(message = eval_error_msg,
-                                                                                  line_start = student_call$line1,
-                                                                                  line_end = student_call$line2,
-                                                                                  column_start = student_call$col1,
-                                                                                  column_end = student_call$col2))
+  test_what(expect_false(inherits(student_result, "try-error")),  feedback = as.list(c(message = eval_error_msg,
+                                                                                       get_line_info(student_call$function_pd))))
   
   # If ordered is FALSE, order the columns alphabetically
   if (!ordered && !is.null(attr(solution_result, "names")) && !is.null(attr(student_result, "names"))) {
@@ -72,9 +69,6 @@ test_function_result <- function(name = NULL,
     incorrect_msg <- sprintf("The output of the %s call of `%s` isn't what it should be. Try again.", get_num(index), name)
   }
   test_what(expect_true(is_equal(solution_result, student_result, eq_condition)),
-            feedback = list(message = incorrect_msg,
-                            line_start = student_call$line1,
-                            line_end = student_call$line2,
-                            column_start = student_call$col1,
-                            column_end = student_call$col2))
+            feedback = as.list(c(message = incorrect_msg,
+                                 get_line_info(student_call$function_pd))))
 }
