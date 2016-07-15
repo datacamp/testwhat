@@ -12,7 +12,7 @@ test_that("test diff general", {
   expect_error(build_diff(sol = "test", stud = TRUE, eq_condition = 'test'))
   expect_error(build_diff(sol = "test", stud = TRUE, eq_condition = 'equivalent'))
   res <- build_diff(sol = "test", stud = TRUE, eq_condition = 'equivalent', id = 'test')
-  expect_equal(res, " Test has type `logical`, while it should have type `character`.")
+  expect_equal(res, " Test is a logical, while it should be a character string.")
 })
 
 test_that("test diff helpers", {
@@ -35,8 +35,10 @@ test_that("test diff helpers", {
   # tests for same_type and diff_type
   expect_true(same_type(1, 2))
   expect_false(same_type("test", 2))
-  expect_equal(diff_type("test", 2, 'test'), "test has type `double`, while it should have type `character`.")
-
+  expect_equal(diff_type("test", 2, 'test'), "test is a number, while it should be a character string.")
+  expect_equal(diff_type(c("test", "test"), 2, 'test'), "test is a number, while it should be a character vector.")
+  expect_equal(diff_type("test", c(1, 2), 'test'), "test is a numeric vector, while it should be a character string.")
+  
   # test for same_class and diff_class
   expect_true(same_class(dplyr::tbl_df(mtcars), dplyr::tbl_df(mtcars)))
   expect_false(same_class(data.table::data.table(mtcars), dplyr::tbl_df(mtcars)))
@@ -55,8 +57,10 @@ test_that("test diff default", {
 })
 
 test_that("test diff for logicals", {
-  expect_equal(get_diff(TRUE, "x", "equivalent", "test"),
-               "test has type `character`, while it should have type `logical`.")
+  expect_equal(get_diff(TRUE, "x", "equivalent", "test"), "test is a character string, while it should be a logical.")
+  expect_equal(get_diff(c(T, F), "x", "equivalent", "test"), "test is a character string, while it should be a logical vector.")
+  expect_equal(get_diff(TRUE, c("x", "y"), "equivalent", "test"), "test is a character vector, while it should be a logical.")
+  
   x <- TRUE
   class(x) <- c("anything", class(x))
   y <- FALSE
@@ -72,8 +76,10 @@ test_that("test diff for logicals", {
 
 
 test_that("test diff for numerics", {
-  expect_equal(get_diff(3, "x", "equivalent", "test"),
-               "test has type `character`, while it should have type `double`.")
+  expect_equal(get_diff(3, "x", "equivalent", "test"), "test is a character string, while it should be a number.")
+  expect_equal(get_diff(c(1, 3), "x", "equivalent", "test"), "test is a character string, while it should be a numeric vector.")
+  expect_equal(get_diff(3, c("x", "y"), "equivalent", "test"), "test is a character vector, while it should be a number.")
+  
   x <- 3
   class(x) <- c("anything", class(x))
   y <- 3
@@ -89,8 +95,10 @@ test_that("test diff for numerics", {
 
 
 test_that("test diff for characters", {
-  expect_equal(get_diff("x", 3, "equivalent", "test"),
-               "test has type `double`, while it should have type `character`.")
+  expect_equal(get_diff("x", 3, "equivalent", "test"), "test is a number, while it should be a character string.")
+  expect_equal(get_diff(c("x", "y"), 3, "equivalent", "test"), "test is a number, while it should be a character vector.")
+  expect_equal(get_diff("x", c(1, 3), "equivalent", "test"), "test is a numeric vector, while it should be a character string.")
+  
   x <- 'x'
   class(x) <- c("anything", class(x))
   y <- 'y'
@@ -105,8 +113,8 @@ test_that("test diff for characters", {
 })
 
 test_that("test diff for data.frames", {
-  expect_equal(get_diff(mtcars, 3, "equivalent", "test"),
-               "test has type `double`, while it should have type `list`.")
+  expect_equal(get_diff(mtcars, 3, "equivalent", "test"), "test is a number, while it should be a data frame.")
+  
   x <- mtcars
   class(x) <- c("anything", class(x))
   y <- mtcars[1:2, ]

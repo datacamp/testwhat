@@ -105,8 +105,8 @@ diff_dim <- function(sol, stud, id) {
 klass <- function(sol) paste(class(sol), collapse = "/")
 
 same_type <- function(sol, stud) identical(typeof(sol), typeof(stud))
-diff_type <- function(sol, stud, id) sprintf("%s has type `%s`, while it should have type `%s`.",
-                                        id, typeof(stud), typeof(sol))
+diff_type <- function(sol, stud, id) sprintf("%s is a %s, while it should be a %s.",
+                                        id, typeof2(stud), typeof2(sol))
 
 same_class <- function(sol, stud) {
   if (!is.object(sol) && !is.object(stud))
@@ -117,3 +117,36 @@ diff_class <- function(sol, stud, id) sprintf("%s is of class `%s`, while it sho
 
 same_attr <- function(sol, stud) is.null(attr.all.equal(sol, stud))
 diff_attr <- function(sol, stud, id) sprintf("are you sure the attributes (names, class, etc.) of %s are correct?", id)
+
+typeof2 <- function(x) {
+  if (typeof(x) == "logical") {
+    if (length(x) == 1) {
+      return("logical")
+    } else {
+      return("logical vector")
+    }
+  } else if (typeof(x) %in% c("integer", "double")) {
+    if (length(x) == 1) {
+      return("number")
+    } else {
+      return("numeric vector")
+    }
+  } else if (typeof(x) == "character") {
+    if (length(x) == 1) {
+      return("character string")
+    } else {
+      return("character vector")
+    }
+  } else if (typeof(x) == "list") {
+    if (class(x) == "data.frame") {
+      return("data frame")
+    } else {
+      return("list")
+    }
+  } else {
+    return(sprintf("`%s`", typeof(x)))
+  }
+}
+
+
+
