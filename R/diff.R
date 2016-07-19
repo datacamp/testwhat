@@ -1,5 +1,5 @@
 build_diff <- function(sol, stud, ...) {
-  if (stud == tryerrorstring) {
+  if (isTRUE(all.equal(stud, tryerrorstring))) {
     return(" Evaluating the expression you specified caused an error.")
   }
   res <- get_diff(sol, stud, ...)

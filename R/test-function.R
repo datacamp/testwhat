@@ -110,7 +110,7 @@ test_function <- function(name,
       
       # Test if the specified arguments are correctly called
       solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
-      if (any(sapply(solution_args, function(x) isTRUE(x == tryerrorstring)))) {
+      if (any(sapply(solution_args, function(x) isTRUE(all.equal(x, tryerrorstring))))) {
         stop(sprintf("There are arguments in the %s function call of %s() that cause errors when evaluated.", get_num(index), name))
       }
       student_args <- extract_arguments(student_call$call, args, eval, env = student_env)
