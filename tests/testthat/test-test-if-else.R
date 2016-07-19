@@ -118,3 +118,17 @@ test_that("test_if_else works with nesting", {
   output <- test_it(lst)
   passes(output)
 })
+
+test_that("test_if_else with diagnostics inside", {
+  lst <- list()
+  lst$DC_SOLUTION <- "if(TRUE) { print(\"test\") }"
+  lst$DC_CODE <- "if(TRUE) { print(123) }"
+  lst$DC_SCT <- "test_if_else(if_expr_test = test_function('print', 'x'))"
+
+  output <- test_it(lst)
+  fails(output, mess_patt = "The object you specified is a number, while it should be a character string")
+
+  lst$DC_SCT <- "test_if_else(if_expr_test = test_function('print', 'x', incorrect_msg = 'test'))"
+  output <- test_it(lst)
+  fails(output, mess_patt = 'test')
+})
