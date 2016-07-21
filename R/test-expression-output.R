@@ -53,7 +53,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
   }
   
   if (inherits(output_stud, "try-error")) {
-    test_what(fail(), 
+    check_that(failure(), 
               sprintf("%s<br>Instead, it resulted in the following error:<br><i>%s</i>", 
                       incorrect_msg, 
                       build_summary(attr(output_stud,"condition")$message, output = TRUE)))
@@ -61,7 +61,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
     if(!is.null(output_stud)) {
       output_stud <- paste0(output_stud, collapse = "<br>")
     }
-    test_what(expect_equal(output_sol, output_stud),
+    check_that(is_equal(output_sol, output_stud),
               sprintf("%s<br>Instead, got%s", 
                       incorrect_msg, 
                       ifelse(is.null(output_stud), " no output", sprintf(":<br><code>%s</code>",build_summary(output_stud, output = TRUE)))))

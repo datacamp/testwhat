@@ -38,7 +38,7 @@ object, as only the corresponding \code{\link{name}} is compared in this
 case (use with care!).}
 
 \item{eq_condition}{character vector indicating how to perform the
-comparison for each argument. See \code{\link{test_object}}}
+comparison for each argument. See \code{\link{is_equal}}}
 
 \item{not_called_msg}{custom feedback message in case the student did not call the
 function often enough.}

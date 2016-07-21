@@ -8,8 +8,7 @@ Description: This package makes it easy for teachers to test students'
     \url{www.DataCamp.com}.
 URL: www.DataCamp.com
 Depends:
-    R (>= 3.0.0),
-    testthat
+    R (>= 3.0.0)
 Imports:
     markdown,
     knitr,
@@ -18,6 +17,8 @@ Imports:
     lazyeval,
     R6,
     stringdist
+Suggests:
+    testthat
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),

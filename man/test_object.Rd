@@ -10,28 +10,23 @@ test_object(name, eq_condition = "equivalent", eval = TRUE,
 \arguments{
 \item{name}{name of the object to test.}
 
-\item{eq_condition}{character string indicating how to compare. Possible
-values are \code{"equivalent"} (the default), \code{"equal"} and
-\code{"identical"}. \code{"equivalent"} will check equality with a
-tolerance, without checking the attributes of the objects. \code{"equal"}
-will in addition check the attributes. \code{"identical"} uses the
-\code{identical} function of \code{base} package to check if two objects
-are identical.}
+\item{eq_condition}{character string indicating how to compare. See
+\code{\link{is_equal}}.}
 
 \item{eval}{Next to existence, check if the value of the object corresponds 
 between student en solution environment.}
 
-\item{undefined_msg}{Optional feedback message in case the student did not
-define the object. A meaningful message is automatically generated if not
+\item{undefined_msg}{Optional feedback message in case the student did not 
+define the object. A meaningful message is automatically generated if not 
 supplied.}
 
-\item{incorrect_msg}{optional feedback message in case the student's object
-is not the same as in the sample solution. Only used if \code{eval} is
-\code{TRUE}. A meaningful message is automatically generated if not
+\item{incorrect_msg}{optional feedback message in case the student's object 
+is not the same as in the sample solution. Only used if \code{eval} is 
+\code{TRUE}. A meaningful message is automatically generated if not 
 supplied.}
 }
 \description{
-Test whether a student defined a certain object. If this is the case, and if
+Test whether a student defined a certain object. If this is the case, and if 
 \code{eval} is \code{TRUE}, also check whether the value of the object 
 matches that of the solution.
 }

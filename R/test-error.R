@@ -58,5 +58,5 @@ test_error <- function(incorrect_msg = NULL) {
     
     feedback <- c(list(message = build_msg), line_info)
   }
-  test_what(expect_true(length(error_indices) == 0), feedback)
+  check_that(is_true(length(error_indices) == 0), feedback)
 }

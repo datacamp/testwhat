@@ -2,7 +2,6 @@ context("test_chunk_options")
 source("helpers.R")
 
 test_that("test_chunk_options works", {
-  # source("tests/testthat/helpers.R")
   lst <- list()
   lst$DC_TYPE <- "MarkdownExercise"
   lst$DC_ACTIVE_TAB <- "my_doc.Rmd"

@@ -166,5 +166,11 @@ typeof2 <- function(x) {
   }
 }
 
-
+check_attr <- function(eq_condition) {
+  switch(eq_condition,
+         equivalent = FALSE,
+         equal = TRUE,
+         identical = TRUE,
+         stop(invalid_eq_condition))
+}
 

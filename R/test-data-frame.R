@@ -62,16 +62,16 @@ test_data_frame <- function(name, columns = NULL,
     }
   }
   defined <- exists(name, envir = student_env, inherits = FALSE)
-  test_what(expect_true(defined), undefined_msg)
+  check_that(is_true(defined), undefined_msg)
   if (defined) {
     student <- get(name, envir = student_env, inherits = FALSE)
     
     columns_defined <- all(columns %in% names(student))
-    test_what(expect_true(columns_defined), undefined_cols_msg)
+    check_that(is_true(columns_defined), undefined_cols_msg)
     
     if (columns_defined) {
       for(col in columns) {
-        test_what(expect_true(is_equal(student[col], solution[col], eq_condition)), feedback = incorrect_msg)
+        check_that(is_equal(student[col], solution[col], eq_condition), feedback = incorrect_msg)
       }
     }
   }

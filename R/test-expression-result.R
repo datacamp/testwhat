@@ -49,12 +49,12 @@ test_expression_result <- function(expr,
   }
   
   if (inherits(result_stud, "try-error")) {
-    test_what(fail(), 
+    check_that(failure(),
               sprintf("%s<br>Instead, it resulted in the following error: <i>%s</i>", 
                       incorrect_msg, 
                       build_summary(attr(result_stud,"condition")$message, output = TRUE)))
   } else {
-    test_what(expect_true(is_equal(result_sol, result_stud, eq_condition)),
+    check_that(is_true(is_equal(result_sol, result_stud, eq_condition)),
               sprintf("%s<br>Instead, got: <code>%s</code>", 
                       incorrect_msg, 
                       ifelse(is.null(result_stud), "NULL", build_summary(result_stud))))

@@ -16,8 +16,8 @@ checked in the solution}
 \item{eval}{whether or not to evaluate the expression that is formed by the
 operator}
 
-\item{eq_condition}{How results of expression evaluations are compared. See
-\code{\link{test_object}}}
+\item{eq_condition}{character vector indicating how to perform the
+comparison for each argument. See \code{\link{is_equal}}}
 
 \item{not_called_msg}{custom feedback message in case the student did not
 call the operator often enough.}

@@ -31,7 +31,7 @@ test_that("test_mc works", {
   lst$DC_CODE <- "not.DM.result <- 12"
   lst$DC_SCT <- "test_mc(1)"
   output <- test_it(lst)
-  error(output)
+  fails(output, mess_patt = "Please select one of the options!")
   
   lst <- list()
   lst$DC_TYPE <- "MultipleChoiceExercise"

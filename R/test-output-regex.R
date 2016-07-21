@@ -28,5 +28,5 @@ test_output_regex <- function(pattern, fixed = FALSE, times = 1, incorrect_msg =
     }
   }, USE.NAMES = FALSE)
   
-  test_what(expect_gte(sum(counts), times), feedback = list(message = incorrect_msg))
+  check_that(is_gte(sum(counts), times), feedback = list(message = incorrect_msg))
 }

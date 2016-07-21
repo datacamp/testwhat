@@ -36,22 +36,24 @@ test_exercise <- function(sct,
                      solution_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
                      solution_env = solution_env,
                      output_list = output_list,
-                     test_env = new.env(parent = environment())))
+                     test_env = new.env(parent = environment()),
+                     reporter = DC_reporter$new()))
+  on.exit(tw$clear())
 
   # Execute sct with the DataCamp reporter such that it collects test results
-  reporter <- DataCampReporter$new()
-  old <- set_reporter(reporter)
-  on.exit(set_reporter(old))
   run_until_fail(parse(text = sct))
+  outcome <- get_rep()$get_feedback()
 
-  outcome <- reporter$get_feedback()
-  
   # HACK: If markdown exercise, remove line information
   if (ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
     outcome[c("line_start", "column_start", "line_end", "column_end")] <- NULL
   }
-  
+
   return(outcome)
+}
+
+get_rep <- function() {
+  tw$get("reporter")
 }
 
 run_until_fail <- function(code) {

@@ -1,25 +1,20 @@
 #' Test R object existence and value
 #' 
-#' Test whether a student defined a certain object. If this is the case, and if
+#' Test whether a student defined a certain object. If this is the case, and if 
 #' \code{eval} is \code{TRUE}, also check whether the value of the object 
 #' matches that of the solution.
 #' 
 #' @param name name of the object to test.
-#' @param eq_condition character string indicating how to compare. Possible
-#'   values are \code{"equivalent"} (the default), \code{"equal"} and
-#'   \code{"identical"}. \code{"equivalent"} will check equality with a
-#'   tolerance, without checking the attributes of the objects. \code{"equal"}
-#'   will in addition check the attributes. \code{"identical"} uses the
-#'   \code{identical} function of \code{base} package to check if two objects
-#'   are identical.
+#' @param eq_condition character string indicating how to compare. See
+#'   \code{\link{is_equal}}.
 #' @param eval Next to existence, check if the value of the object corresponds 
 #'   between student en solution environment.
-#' @param undefined_msg Optional feedback message in case the student did not
-#'   define the object. A meaningful message is automatically generated if not
+#' @param undefined_msg Optional feedback message in case the student did not 
+#'   define the object. A meaningful message is automatically generated if not 
 #'   supplied.
-#' @param incorrect_msg optional feedback message in case the student's object
-#'   is not the same as in the sample solution. Only used if \code{eval} is
-#'   \code{TRUE}. A meaningful message is automatically generated if not
+#' @param incorrect_msg optional feedback message in case the student's object 
+#'   is not the same as in the sample solution. Only used if \code{eval} is 
+#'   \code{TRUE}. A meaningful message is automatically generated if not 
 #'   supplied.
 #'   
 #' @examples
@@ -65,7 +60,7 @@ test_object <- function(name, eq_condition = "equivalent",
 
   line_info <- extract_object_assignment(student_pd, name)
   defined <- exists(name, envir = student_env, inherits = FALSE)
-  test_what(expect_true(defined), c(list(message = undefined_msg), line_info))
+  check_that(is_true(defined), c(list(message = undefined_msg), line_info))
   
   if (eval) {
     student <- get(name, envir = student_env, inherits = FALSE)
@@ -78,13 +73,13 @@ test_object <- function(name, eq_condition = "equivalent",
     }
     
     feedback <- c(list(message = incorrect_msg), line_info)
-    rep <- get_reporter()
+    rep <- get_rep()
     rep$be_silent()
-    ok <- run_until_fail(test_what(expect_true(is_equal(student, solution, eq_condition)), feedback))
+    ok <- run_until_fail(check_that(is_equal(student, solution, eq_condition), feedback))
     rep$be_loud()
     if (!ok) {
-      test_what(expect_true(any(class(student) %in% class(solution))), feedback)
-      test_what(expect_true(is_equal(student, solution, eq_condition)), feedback)
+      check_that(is_true(any(class(student) %in% class(solution))), feedback)
+      check_that(is_true(is_equal(student, solution, eq_condition)), feedback)
     }
   }
 }

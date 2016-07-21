@@ -43,7 +43,7 @@ test_correct <- function(check_code, diagnose_code) {
   
   check_code <- substitute(check_code)
   diagnose_code <- substitute(diagnose_code)
-  rep <- get_reporter()
+  rep <- get_rep()
   rep$be_silent()
   ok <- run_until_fail(check_code)
   

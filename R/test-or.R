@@ -30,7 +30,7 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
   len <- length(input) 
   
   passes <- logical(len)
-  rep <- get_reporter()
+  rep <- get_rep()
   
   for (i in 1:len) {
     code <- input[[i]]
@@ -44,7 +44,7 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
       failing_test <- input[[choose_feedback]]
       eval(failing_test, envir = test_env)
     } else {
-      test_what(fail(), incorrect_msg)
+      check_that(failure(), incorrect_msg)
     }
   }
 }

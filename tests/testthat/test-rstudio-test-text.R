@@ -14,8 +14,6 @@ test_that("test_text works", {
     output: html_document
 ---
 
-
-    
     This
     is
     a

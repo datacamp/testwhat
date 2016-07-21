@@ -102,7 +102,7 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
                                    "you coded is correct, but it hasn't found it. Add more code."), 
                              get_num(index), type)
   }
-  test_what(expect_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
+  check_that(is_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
   
   student_struct <- student_structs[[index]]
   solution_struct <- solution_structs[[index]]

@@ -42,8 +42,8 @@ test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NUL
   }
   
   result_stud <- try(eval(parse(text = expr), envir = student_env), silent = TRUE)
-  test_what(expect_true(inherits(result_stud, "try-error")), feedback = list(message = no_error_msg))
+  check_that(is_true(inherits(result_stud, "try-error")), feedback = list(message = no_error_msg))
   
   student_error <- attr(result_stud, "condition")$message
-  test_what(expect_equal(student_error, sol_error), feedback = list(message = incorrect_msg))
+  check_that(is_equal(student_error, sol_error), feedback = list(message = incorrect_msg))
 }

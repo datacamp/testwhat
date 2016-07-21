@@ -12,5 +12,5 @@
 #' @param msg The congratulatory message as a character string.
 #' @export
 success_msg <- function(msg) {
-  get_reporter()$set_success_msg(msg)
+  get_rep()$set_success_msg(msg)
 }

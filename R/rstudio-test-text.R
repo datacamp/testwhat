@@ -26,7 +26,7 @@ test_text <- function(text,
   if(class(solution_inline) != "inline") {
     stop("The specified rmd group is not of 'inline' class.")
   }
-  test_what(expect_equal(class(student_inline), "inline"), "The student rmd group is not inline!")
+  check_that(is_equal(class(student_inline), "inline"), "The student rmd group is not inline!")
         
   # Set up default messages
   # message if text was not found
@@ -43,8 +43,8 @@ test_text <- function(text,
   
   # first, check if text is found in student_inline
   hits = gregexpr(pattern = text, student_inline$input)[[1]]
-  test_what(expect_false(hits[1] == -1), not_called_msg)
-  test_what(expect_true(length(hits) >= freq), not_called_msg)
+  check_that(is_false(hits[1] == -1), not_called_msg)
+  check_that(is_gte(length(hits), freq), not_called_msg)
   
   if(hits[1] == -1 || length(hits) < freq) {
     return(FALSE)
@@ -64,6 +64,6 @@ test_text <- function(text,
   }
 
   hits = gregexpr(pattern = patt, student_inline$input)[[1]]
-  test_what(expect_false(hits[1] == -1), incorrect_msg)
-  test_what(expect_true(length(hits) >= freq), not_called_msg)
+  check_that(is_false(hits[1] == -1), incorrect_msg)
+  check_that(is_gte(length(hits), freq), not_called_msg)
 }

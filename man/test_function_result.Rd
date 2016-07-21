@@ -14,7 +14,7 @@ test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
 \item{index}{Ordinal number of the call you want to check (both student and solution!).}
 
 \item{eq_condition}{character vector indicating how to perform the
-comparison for each argument. See \code{\link{test_object}}}
+comparison for each argument. See \code{\link{is_equal}}}
 
 \item{ordered}{Does the order of the elments in the result matter?}
 

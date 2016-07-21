@@ -83,9 +83,9 @@ test_props <- function(index = 1,
   pass <- FALSE
   keeptrying <- TRUE
   for (i in 1:length(funs)) {
-    test_what(expect_true(length(ggvis_pds_stud) >= index), feedback = not_called_msg)
+    check_that(is_true(length(ggvis_pds_stud) >= index), feedback = not_called_msg)
     stud_calls <- find_function_calls(ggvis_pds_stud[[index]], name = funs[i], env = student_env)
-    test_what(expect_true(length(stud_calls) > 0), feedback = not_called_msg)
+    check_that(is_true(length(stud_calls) > 0), feedback = not_called_msg)
     
     if (pass) # if passed already, only check on the function being present, so next loop not needed anymore
       next
@@ -94,7 +94,7 @@ test_props <- function(index = 1,
     for (j in 1:length(stud_calls)) {
       stud_props <- get_all_props(funs[i], stud_calls[[j]]$call)
       
-      test_what(expect_true(!is.null(stud_props)), feedback = error_msg)
+      check_that(is_true(!is.null(stud_props)), feedback = error_msg)
 
       if (length(props) != length(stud_props) & !allow_extra) {
         # number of props specified does not correspond to function.
@@ -140,7 +140,7 @@ test_props <- function(index = 1,
     if (!keeptrying) # if one expression contained more props, fail, and stop trying
       break
   }
-  test_what(expect_true(pass), feedback = incorrect_msg)
+  check_that(is_true(pass), feedback = incorrect_msg)
 }
 
 

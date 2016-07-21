@@ -17,10 +17,6 @@ For more information, see \url{docs.datacamp.com/teach/sct-design-r.html}.
 
 For a bunch of SCT examples, see \url{www.github.com/data-camp/introduction_to_R}.
 }
-\note{
-\pkg{testwhat} is a wrapper around \pkg{testthat} such that
-teachers can write their tests using a familiar framework.
-}
 \references{
 \url{www.DataCamp.com}
 }

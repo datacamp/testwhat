@@ -1,7 +1,7 @@
 #' DataCamp reporter: gather test results
 #'
 #' @importFrom R6 R6Class
-DataCampReporter <- R6::R6Class("DataCampReporter", inherit = testthat::Reporter,
+DC_reporter <- R6::R6Class("DC_reporter",
   public = list(
 
     initialize = function() {},

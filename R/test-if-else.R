@@ -91,7 +91,7 @@ test_if_else <- function(index = 1,
                                   "you coded is correct, but it hasn't found it. Add more code."), 
                             get_num(index))
   }
-  test_what(expect_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
+  check_that(is_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
   
   stud_str <- student_structs[[index]]
   additionaltext <- sprintf(" in the %s control construct of your submission", get_num(index))
@@ -121,7 +121,7 @@ test_if_else <- function(index = 1,
     if (is.null(missing_else_msg)) {
       missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
     }
-    test_what(expect_false(is.null(stud_str[["else_part"]])), missing_else_msg)
+    check_that(is_false(is.null(stud_str[["else_part"]])), missing_else_msg)
     prepare_tw(stud_str, sol_str, "else_part")
     eval(else_expr_test, envir = test_env)
   }

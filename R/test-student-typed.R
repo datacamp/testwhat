@@ -57,5 +57,5 @@ test_student_typed <- function(strings,
     }
   }, USE.NAMES = FALSE)
   
-  test_what(expect_gte(sum(counts), times), feedback = list(message = not_typed_msg))
+  check_that(is_gte(sum(counts), times), feedback = list(message = not_typed_msg))
 }

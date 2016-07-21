@@ -58,7 +58,7 @@ standardize_call <- function(call, call_string, env) {
   e <- find_S3_call(e, env = env)
   
   if (inherits(e, "try-error")) {
-    test_what(fail(), 
+    check_that(failure(), 
               sprintf("There is something wrong in the following function call **%s**: _%s_", 
                       call_string,
                       attr(e,"condition")$message))

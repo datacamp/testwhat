@@ -65,9 +65,9 @@ test_function_definition <- function(name,
   }
   
   defined <- exists(name, envir = student_env, inherits = FALSE)
-  test_what(expect_true(defined), undefined_msg)
+  check_that(is_true(defined), undefined_msg)
   
-  rep <- get_reporter()
+  rep <- get_rep()
   rep$be_silent()
   passes <- run_until_fail(function_test)
   rep$be_loud()
@@ -80,7 +80,7 @@ test_function_definition <- function(name,
   }
   
   if (!passes) {
-    test_what(expect_false(is.null(student_fun_def)), 
+    check_that(is_false(is.null(student_fun_def)), 
               feedback = sprintf("A proper definition of `%s` could not be found in your submission. Make sure to use the `%s <- function() { ... }` recipe.", name, name))
   }
     
@@ -89,7 +89,7 @@ test_function_definition <- function(name,
   sol_arguments <- as.list(formals(sol_function))
 
   if (!passes) {
-    test_what(expect_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
+    check_that(is_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
   } 
   
     

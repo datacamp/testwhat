@@ -1,6 +1,5 @@
 context("test_function_result")
 source("helpers.R")
-# test_dir('tests/testthat', filter = 'test-function-result')
 
 test_that("test_function_result fails correctly", {
   lst <- list()

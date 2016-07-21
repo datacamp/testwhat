@@ -21,7 +21,7 @@
 #' object, as only the corresponding \code{\link{name}} is compared in this
 #' case (use with care!).
 #' @param eq_condition  character vector indicating how to perform the
-#' comparison for each argument. See \code{\link{test_object}}
+#' comparison for each argument. See \code{\link{is_equal}}
 #' @param not_called_msg custom feedback message in case the student did not call the
 #' function often enough.
 #' @param args_not_specified_msg custom feedback message in case the student did call the function
@@ -81,7 +81,7 @@ test_function <- function(name,
   if (is.null(not_called_msg)) {
     not_called_msg <- build_function_not_called_msg(name, index)
   }
-  test_what(expect_true(n_student_calls >= index), list(message = not_called_msg))
+  check_that(is_true(n_student_calls >= index), list(message = not_called_msg))
   
   if (n_args > 0) {
     args_specified_passed <- FALSE
@@ -147,9 +147,9 @@ test_function <- function(name,
     if (!args_correct_passed) {
       # Still need something that fails...
       if (!args_specified_passed) {
-        test_what(fail(), args_specified_feedback)
+        check_that(failure(), args_specified_feedback)
       } else {
-        test_what(fail(), args_correct_feedback)
+        check_that(failure(), args_correct_feedback)
       }
     }
   }

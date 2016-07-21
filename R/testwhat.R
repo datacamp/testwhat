@@ -13,8 +13,5 @@
 #' @docType package
 #' @name testwhat
 #'
-#' @note \pkg{testwhat} is a wrapper around \pkg{testthat} such that
-#' teachers can write their tests using a familiar framework.
-#'
 #' @references \url{www.DataCamp.com}
 NULL

@@ -1,7 +1,6 @@
 #' Test a single R Markdown file group (R Markdown exercises)
 #'
 #' Test a single R Markdown file group (R Markdown exercises) with arbitrary testwhat functions.
-#' This test is implemented using \code{\link{test_what}}. 
 #'
 #' @param group_number  Number of the group.
 #' @param code  SCT code to test the group (in curly braces)

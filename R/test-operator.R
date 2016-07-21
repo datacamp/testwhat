@@ -5,8 +5,8 @@
 #'   checked in the solution
 #' @param eval whether or not to evaluate the expression that is formed by the
 #'   operator
-#' @param eq_condition How results of expression evaluations are compared. See
-#'   \code{\link{test_object}}
+#' @param eq_condition  character vector indicating how to perform the
+#'  comparison for each argument. See \code{\link{is_equal}}
 #' @param not_called_msg custom feedback message in case the student did not
 #'   call the operator often enough.
 #' @param incorrect_msg custom feedback message in case the student's evaluation
@@ -57,7 +57,7 @@ test_operator <- function(name,
   if (is.null(not_called_msg)) {
     not_called_msg <- sprintf("The system wants to check the %s `%s` operator in your code, but hasn't found it.", get_num(index), name)
   }
-  test_what(expect_true(n_student_ops >= index), list(message = not_called_msg))
+  check_that(is_gte(n_student_ops, index), list(message = not_called_msg))
   
   if (eval) {
     
@@ -89,7 +89,7 @@ test_operator <- function(name,
     }
     
     if (!passed) {
-      test_what(fail(), feedback = feedback)
+      check_that(failure(), feedback = feedback)
     }
   }
 }

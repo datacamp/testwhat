@@ -1,6 +1,5 @@
 #' Test a multiple choice exercise
 #'
-#' Test a multiple choice exercise using \code{\link{test_what}}. 
 #' This code expects the DM.result variable to be defined by the DataCamp frontend. 
 #' There is need to define the success_msg seperately, since it is defined inside the function.
 #'
@@ -34,7 +33,7 @@ test_mc <- function(correct, no_selection_msg = NULL, feedback_msgs = NULL) {
     no_selection_msg <- "Please select one of the options!"
   }
   
-  test_what(exists("DM.result", envir = globalenv()), no_selection_msg)
+  check_that(is_true(exists("DM.result", envir = globalenv())), no_selection_msg)
   result <- get("DM.result", envir = globalenv())
   
   # see if result is correct
@@ -42,7 +41,7 @@ test_mc <- function(correct, no_selection_msg = NULL, feedback_msgs = NULL) {
     stop("There is no feedback message available for this user input! Make sure you define enough feedback messages.")
   }
   
-  test_what(expect_true(result %in% correct), feedback = ifelse(is.null(feedback_msgs), "Your answer is incorrect. Try again.", feedback_msgs[result]))
+  check_that(is_true(result %in% correct), feedback = ifelse(is.null(feedback_msgs), "Your answer is incorrect. Try again.", feedback_msgs[result]))
 
   success_msg(ifelse(is.null(feedback_msgs), "Good job! Continue to the next exercise.", feedback_msgs[correct]))
 }

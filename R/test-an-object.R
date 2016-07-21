@@ -62,6 +62,6 @@ test_an_object <- function(name,
     correct <- FALSE
   }
   
-  test_what(expect_true(any(correct)), undefined_msg)
+  check_that(is_true(any(correct)), undefined_msg)
 }
 

@@ -2,7 +2,6 @@
 #'
 #' Test whether the student defined the correct chunk options in an R Markdown exercise
 #'
-#' This test is implemented using \code{\link{test_what}}. 
 #' This test can only be called inside a test_rmd_group() call!
 #'
 #' @param options  Set of options
@@ -26,7 +25,7 @@ test_chunk_options <- function(options = NULL,
     stop("The specified rmd group is not of 'block' class.")
   }
   
-  test_what(expect_equal(class(student_chunk), "block"), "Wrong class student chunk")
+  check_that(is_equal(class(student_chunk), "block"), "Wrong class student chunk")
   
   sol_options <- solution_chunk$params
   stud_options <- student_chunk$params
@@ -65,16 +64,16 @@ test_chunk_options <- function(options = NULL,
   
   no_nas <- any(is.na(names(stud_options_select)))
   # check if all options available
-  test_what(expect_false(no_nas), not_called_msg)
+  check_that(is_false(no_nas), not_called_msg)
   
   
   # check the equality of stud and solution options.
   if (!no_nas) {
-    test_what(expect_equal(sol_options_select, stud_options_select), incorrect_msg)
+    check_that(is_equal(sol_options_select, stud_options_select), incorrect_msg)
   }
 
   if(!allow_extra) {
-    test_what(expect_equal(length(stud_options_select), length(stud_options)), incorrect_msg)
+    check_that(is_equal(length(stud_options_select), length(stud_options)), incorrect_msg)
   }
 }
 

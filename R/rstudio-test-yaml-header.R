@@ -27,7 +27,7 @@ test_yaml_header <- function(options = NULL,
   }
   
   yaml_student <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(student_code, split = "\n")[[1]])), silent = TRUE)
-  test_what(expect_false(inherits(yaml_student, "try-error")), "Make sure the YAML header contains no errors. Beware of erroneous indentation.")
+  check_that(is_false(inherits(yaml_student, "try-error")), "Make sure the YAML header contains no errors. Beware of erroneous indentation.")
   
   if(is.null(options)) {
     options <- names(yaml_solution)
@@ -60,13 +60,13 @@ test_yaml_header <- function(options = NULL,
   
   no_nas = any(is.na(names(stud_options_select)))
   # check if all options available
-  test_what(expect_false(no_nas), not_called_msg)
+  check_that(is_false(no_nas), not_called_msg)
   
   if(!no_nas && check_equality) {
-    test_what(expect_equal(sol_options_select, stud_options_select), incorrect_msg)
+    check_that(is_equal(sol_options_select, stud_options_select), incorrect_msg)
   }
 
   if(!allow_extra) {
-    test_what(expect_equal(length(stud_options_select), length(yaml_student)), incorrect_msg)
+    check_that(is_equal(length(stud_options_select), length(yaml_student)), incorrect_msg)
   }
 }

@@ -25,7 +25,7 @@ test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
     incorrect_msg <- sprintf("Make sure to print <code>%s</code> to the console", expr)
   }
   
-  test_what(expect_true(output_contains(expr, console_output = console_output, env = student_env) >= times),
+  check_that(is_true(output_contains(expr, console_output = console_output, env = student_env) >= times),
             incorrect_msg)
 }
 

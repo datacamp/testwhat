@@ -19,7 +19,6 @@ the correct collection. The third and fourth messages correspond to feedback on 
 fourth option.}
 }
 \description{
-Test a multiple choice exercise using \code{\link{test_what}}. 
 This code expects the DM.result variable to be defined by the DataCamp frontend. 
 There is need to define the success_msg seperately, since it is defined inside the function.
 }
