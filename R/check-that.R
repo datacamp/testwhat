@@ -41,6 +41,16 @@ check_that <- function(code, feedback) {
   }
 }
 
+# for backwords compatibility
+test_what <- function(code, feedback) {
+  lut <- list(expect_true = call("is_true"),
+              expect_false = call("is_false"),
+              expect_equal = call("is_equal"))
+  call <- substitute(code)
+  call[1] <- lut[[as.character(call[[1]])]]
+  check_that(call, feedback)
+}
+
 #' Check if object is true
 #' 
 #' Utility function to use inside \code{\link{check_that}}.
