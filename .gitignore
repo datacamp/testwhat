@@ -4,4 +4,3 @@
 results.log
 .DS_Store
 .tmp.RData
-inst/experiment1.R
