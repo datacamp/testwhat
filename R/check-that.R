@@ -9,6 +9,7 @@
 #' @param feedback A character string with feedback when the expection is not
 #'   met OR a list object, containing multiple pieces of information. This list
 #'   should at least contain an element named \code{message}
+#' @param env environment in which the test should be evaluated; defaults to \code{parent.frame()}
 #'   
 #' @examples
 #' \dontrun{
@@ -19,7 +20,7 @@
 #' }
 #' 
 #' @export
-check_that <- function(code, feedback) {
+check_that <- function(code, feedback, env = parent.frame()) {
   
   # feedback can be a character string
   if (is.character(feedback)) {
@@ -34,7 +35,7 @@ check_that <- function(code, feedback) {
     stop("The feedback you specified in check_that() isn't in the correct format")
   }
 
-  res <- try(eval(code, envir = parent.frame()), silent = TRUE)
+  res <- try(eval(code, envir = env), silent = TRUE)
   if (!isTRUE(res)) {
     get_rep()$set_feedback(c(feedback, list(tags = tw$get("tags"))))
     stop(sct_failed_msg)
@@ -48,7 +49,7 @@ test_what <- function(code, feedback) {
               expect_equal = call("is_equal"))
   call <- substitute(code)
   call[1] <- lut[[as.character(call[[1]])]]
-  check_that(call, feedback)
+  check_that(call, feedback, env = parent.frame())
 }
 
 #' Check if object is true

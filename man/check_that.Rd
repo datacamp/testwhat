@@ -4,7 +4,7 @@
 \alias{check_that}
 \title{Expectation wrapper}
 \usage{
-check_that(code, feedback)
+check_that(code, feedback, env = parent.frame())
 }
 \arguments{
 \item{code}{The expectation that should be wrapped}
@@ -12,6 +12,8 @@ check_that(code, feedback)
 \item{feedback}{A character string with feedback when the expection is not
 met OR a list object, containing multiple pieces of information. This list
 should at least contain an element named \code{message}}
+
+\item{env}{environment in which the test should be evaluated; defaults to \code{parent.frame()}}
 }
 \description{
 This function wraps around an is_... function. When the expectation fails to
