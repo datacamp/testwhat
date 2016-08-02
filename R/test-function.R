@@ -74,7 +74,7 @@ test_function <- function(name,
   
   if (n_args > 0 && !has_arguments(solution_call$call, args, ignore, allow_extra)) {
       stop("The solution call doesn't meet the argument conditions itself.",
-           " Make sure that the args you specify in test_function(\"", name, "\", ...)", name, "()",
+           " Make sure that the args you specify in test_function(\"", name, "\", ...)",
            " are actually specified by the corresponding function call in the solution code")
   }
   
