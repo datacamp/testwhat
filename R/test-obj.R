@@ -34,7 +34,11 @@ test_obj <- function(state, name, undefined_msg = NULL) {
 test_equal <- function(state, incorrect_msg = NULL, eq_condition = "equivalent") {
   student_obj <- state$get("student_object")
   solution_obj <- state$get("solution_object")
-  state$set_details(case = "equal")
+  state$set_details(case = "equal",
+                    student = student_obj,
+                    solution = solution_obj,
+                    eq_condition = eq_condition)
+
   check_that(is_equal(student_obj, solution_obj, eq_condition),
              feedback = list(message = incorrect_msg,
                              details = state$get("details"),

@@ -3,13 +3,13 @@
 \docType{data}
 \name{DC_reporter}
 \alias{DC_reporter}
-\title{DataCamp reporter: gather test results}
+\title{DataCamp reporter: 'log' test results}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 DC_reporter
 }
 \description{
-DataCamp reporter: gather test results
+DataCamp reporter: 'log' test results
 }
 \keyword{datasets}
 

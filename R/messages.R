@@ -1,10 +1,12 @@
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
+`%+=%` <- function(a, b) {
+  eval.parent(substitute(a <- paste(a, b)))
+}
+
 build_feedback <- function(details) {
   msg <- ""
-  `%+=%` <- function(a, b) {
-    eval.parent(substitute(a <- paste(a, b)))
-  }
+
   for (det in details) {
     if (det$type == "object") {
       if (det$case == "undefined") {
@@ -13,6 +15,9 @@ build_feedback <- function(details) {
       if (det$case == "equal") {
         msg %+=% build_object_incorrect_msg(det$name)
       }
+      msg %+=% build_diff(sol = det$solution, stud = det$student,
+                          eq_condition = det$eq_condition,
+                          id = sprintf("`%s`", det$name))
     }
   }
   return(trim(msg))
