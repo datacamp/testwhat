@@ -49,12 +49,6 @@ test_function <- function(name,
                           not_called_msg = NULL, 
                           args_not_specified_msg = NULL,
                           incorrect_msg = NULL) {
-  
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  init_tags(fun = "test_function")
 
   n_args <- length(args)
   if (!is.null(incorrect_msg) && length(incorrect_msg) < n_args) {
@@ -63,6 +57,24 @@ test_function <- function(name,
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
   
+  
+  fun_state <- ex() %>% test_fun(name, index = index, not_called_msg = not_called_msg)
+  for (i in seq_along(args)) {
+    arg = args[i]
+    fun_state %>% 
+      test_arg(arg, arg_not_specified_msg = args_not_specified_msg) #%>% 
+      #test_equal(incorret_msg = incorrect_msg[i], eq_condition = eq_condition[i])
+  }
+  
+  return(NULL)
+  
+  student_env <- tw$get("student_env")
+  solution_env <- tw$get("solution_env")
+  student_pd <- tw$get("student_pd")
+  solution_pd <- tw$get("solution_pd")
+  init_tags(fun = "test_function")
+
+
   # Find all function calls in the student and solution code
   student_calls <- find_function_calls(student_pd, name, student_env)
   solution_calls <- find_function_calls(solution_pd, name, solution_env)
@@ -71,28 +83,28 @@ test_function <- function(name,
 
   check_sufficient(solution_calls, index, name)
   solution_call <- solution_calls[[index]]
-  
+
   if (n_args > 0 && !has_arguments(solution_call$call, args, ignore, allow_extra)) {
       stop("The solution call doesn't meet the argument conditions itself.",
            " Make sure that the args you specify in test_function(\"", name, "\", ...)", name, "()",
            " are actually specified by the corresponding function call in the solution code")
   }
-  
+
   if (is.null(not_called_msg)) {
     not_called_msg <- build_function_not_called_msg(name, index)
   }
   check_that(is_true(n_student_calls >= index), list(message = not_called_msg))
-  
+
   if (n_args > 0) {
     args_specified_passed <- FALSE
     args_correct_passed <- FALSE
     args_specified_feedback <- NULL
     args_correct_feedback <- NULL
-    
+
     seq <- get_seq(name, stud_indices = 1:n_student_calls, sol_index = index)
     for (i in seq) {
       student_call <- student_calls[[i]]
-      
+
       # Check if the function is called with the right arguments
       args_specified <- has_arguments(student_call$call, args, ignore, allow_extra)
       if (!args_specified) {
@@ -107,7 +119,7 @@ test_function <- function(name,
       } else {
         args_specified_passed <- TRUE
       }
-      
+
       # Test if the specified arguments are correctly called
       solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
       if (any(sapply(solution_args, function(x) isTRUE(try(all.equal(x, tryerrorstring), silent = TRUE))))) {
@@ -142,7 +154,7 @@ test_function <- function(name,
         break
       }
     }
-    
+
     if (!args_correct_passed) {
       # Still need something that fails...
       if (!args_specified_passed) {

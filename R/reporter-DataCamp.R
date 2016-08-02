@@ -1,4 +1,4 @@
-#' DataCamp reporter: gather test results
+#' DataCamp reporter: 'log' test results
 #'
 #' @importFrom R6 R6Class
 DC_reporter <- R6::R6Class("DC_reporter",
@@ -6,9 +6,9 @@ DC_reporter <- R6::R6Class("DC_reporter",
 
     initialize = function() {},
   
-    set_feedback = function(msg) {
+    register_feedback = function(feedback) {
       if (private$silent == 0) {
-        private$feedback <- msg
+        private$feedback <- feedback
       }
     },
   
@@ -24,14 +24,25 @@ DC_reporter <- R6::R6Class("DC_reporter",
       private$success_msg <- msg
     },
     
-    get_feedback = function() {
+    generate_feedback = function() {
       feedback <- private$feedback
       if (is.null(feedback)) {
         return(list(correct = TRUE,
                     message = to_html(private$success_msg)))
       } else {
-        feedback$message <- to_html(feedback$message)
-        return(c(list(correct = FALSE), feedback))
+        msg <- feedback$message
+        if (is.null(feedback$message)) {
+          msg <- build_feedback(feedback$details)
+        }
+        line_info <- get_line_info(feedback$pd)
+        if (is.null(line_info)) {
+          return(list(correct = FALSE,
+                      message = to_html(msg)))
+        } else {
+          return(c(list(correct = FALSE,
+                        message = to_html(msg)),
+                        line_info))
+        }
       }
     }
   ),
@@ -43,6 +54,22 @@ DC_reporter <- R6::R6Class("DC_reporter",
   )
 )
 
+
+get_line_info <- function(pd) {
+  if (is.null(pd) || is.na(pd)) {
+    return(NULL)
+  }
+  id <- pd$id[!(pd$parent %in% pd$id)]
+  if (length(id) > 1) {
+    return(list(line_start = min(pd$line1),
+                column_start = min(pd$col1),
+                line_end = max(pd$line2),
+                column_end = max(pd$col2)))
+  }
+  x <- as.list(pd[pd$id == id, c("line1", "col1", "line2", "col2")])
+  names(x) <- c("line_start", "column_start", "line_end", "column_end")
+  x
+}
 
 #' @importFrom markdown markdownToHTML
 to_html <- function(x) {

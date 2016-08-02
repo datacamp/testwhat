@@ -13,6 +13,10 @@ check_sufficient <- function(calls, index, name) {
   }
 }
 
+#' @importFrom magrittr %>%
+#' @export
+magrittr::`%>%`
+
 #' Get solution environment (backwards compatbility)
 #' @export
 get_solution_env <- function() { tw$get("solution_env") }

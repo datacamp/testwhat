@@ -1,3 +1,23 @@
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+
+build_feedback <- function(details) {
+  msg <- ""
+  `%+=%` <- function(a, b) {
+    eval.parent(substitute(a <- paste(a, b)))
+  }
+  for (det in details) {
+    if (det$type == "object") {
+      if (det$case == "undefined") {
+        msg %+=% build_object_undefined_msg(det$name)
+      }
+      if (det$case == "equal") {
+        msg %+=% build_object_incorrect_msg(det$name)
+      }
+    }
+  }
+  return(trim(msg))
+}
+
 build_object_undefined_msg <- function(name) {
   template <- switch(get_language(),
                      en = "Did you define the variable `%s` without errors?",
@@ -33,28 +53,14 @@ build_function_not_called_msg <- function(name, index) {
   return(msg)
 }
 
-build_function_args_not_specified_msg <- function(name, args, n_args, allow_extra) {
+build_function_args_not_specified_msg <- function(name, arg) {
   lang <- get_language()
   if(lang == "en") {
-    msg <- sprintf("Did you specify the argument%s %s in your call of `%s()`?%s",
-                   ifelse(n_args == 1, "", "s"),
-                   collapse_args(args),
-                   name,
-                   ifelse(allow_extra, "", " You shouldn't specify any other arguments!"))
+    msg <- sprintf("Did you specify the argument `%s` in your call of `%s()`?", arg, name)
   } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous specifi&#233; %sargument%s %s dans la fonction `%s()` ?%s",
-                   ifelse(n_args == 1, "l'", "les "),
-                   ifelse(n_args == 1, "", "s"),
-                   collapse_args(args, " et "),
-                   name,
-                   ifelse(allow_extra, "", " Ne specifiez pas d'autres arguments !"))
+    msg <- sprintf("Avez-vous specifi&#233; l'argument `%s` dans la fonction `%s()`", arg, name)
   } else if (lang == "es") {
-    msg <- sprintf("Especifcaste %s argumento%s %s en la funci&#243;n `%s()`? %s",
-                   ifelse(n_args == 1, "el", "los"),
-                   ifelse(n_args == 1, "", "s"),
-                   collapse_args(args, " y "),
-                   name,
-                   ifelse(allow_extra, "", " No especifica otros argumentos!"))
+    msg <- sprintf("Especifcaste el argumento `%s` en la funci&#243;n `%s()`?", arg, name)
   } else {
     stop(no_msg)
   }

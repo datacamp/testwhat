@@ -46,40 +46,8 @@ test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
                         undefined_msg = NULL, incorrect_msg = NULL) {
 
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  student_pd <- tw$get("student_pd")
-  init_tags(fun = "test_object")
-  
-  check_defined(name, solution_env)
-  solution <- get(name, envir = solution_env, inherits = FALSE)
-  
-  if (is.null(undefined_msg)) {
-    undefined_msg <-  build_object_undefined_msg(name)
-  }
-
-  line_info <- extract_object_assignment(student_pd, name)
-  defined <- exists(name, envir = student_env, inherits = FALSE)
-  check_that(is_true(defined), c(list(message = undefined_msg), line_info))
-  
+  obj_state <- ex() %>% test_obj(name, undefined_msg = undefined_msg)
   if (eval) {
-    student <- get(name, envir = student_env, inherits = FALSE)
-    
-    if (is.null(incorrect_msg)) {
-      incorrect_msg <- paste0(build_object_incorrect_msg(name),
-                              build_diff(sol = solution, stud = student,
-                                         eq_condition = eq_condition,
-                                         id = sprintf("`%s`", name)))
-    }
-    
-    feedback <- c(list(message = incorrect_msg), line_info)
-    rep <- get_rep()
-    rep$be_silent()
-    ok <- run_until_fail(check_that(is_equal(student, solution, eq_condition), feedback))
-    rep$be_loud()
-    if (!ok) {
-      check_that(is_true(any(class(student) %in% class(solution))), feedback)
-      check_that(is_true(is_equal(student, solution, eq_condition)), feedback)
-    }
+    obj_state %>% test_equal(incorrect_msg = incorrect_msg, eq_condition = eq_condition)  
   }
 }

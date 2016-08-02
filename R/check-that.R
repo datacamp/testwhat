@@ -28,16 +28,13 @@ check_that <- function(code, feedback, env = parent.frame()) {
   } 
   
   if (!is.list(feedback) || 
-      !("message" %in% names(feedback)) || 
-      is.null(feedback$message) || 
-      !is.character(feedback$message) || 
-      nchar(feedback$message) == 0) {
+      !("message" %in% names(feedback))) {
     stop("The feedback you specified in check_that() isn't in the correct format")
   }
 
   res <- try(eval(code, envir = env), silent = TRUE)
   if (!isTRUE(res)) {
-    get_rep()$set_feedback(c(feedback, list(tags = tw$get("tags"))))
+    get_rep()$register_feedback(c(feedback, list(tags = tw$get("tags"))))
     stop(sct_failed_msg)
   }
 }

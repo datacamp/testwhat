@@ -25,8 +25,8 @@ find_function_calls <- function(pd, name, env) {
     original_call <- as.call(expr)[[1]]
     standard_call <- standardize_call(original_call, expr_string, env)
     function_pd <- get_sub_pd(pd = pd, expr_id)
-    arg_pds <- get_args_pds(function_pd, standard_call)
-    list(call = standard_call, function_pd = function_pd, arg_pds = arg_pds)
+    arg_pds <- get_args(function_pd, standard_call)
+    list(call = standard_call, function_pd = function_pd, args = arg_pds)
   })
 }
 
@@ -35,15 +35,16 @@ clean <- function(x) {
   gsub("'", "\"", x)
 }
 
-get_args_pds <- function(pd, standard_call) {
-  if(length(standard_call) == 1) {
+get_args <- function(pd, standard_call) {
+  n <- length(standard_call)
+  if(n == 1) {
     return(NULL)
   }
-  n <- length(standard_call)
-  params <- lapply(standard_call, deparse)[2:n]
+  
+  params <- standard_call[2:n]
   lapply(params, function(param) {
-    id <- pd$id[clean(param) == clean(pd$text) & pd$token == "expr"]
-    get_sub_pd(pd, id)
+    id <- pd$id[clean(deparse(param)) == clean(pd$text) & pd$token == "expr"]
+    list(expr = param, pd = get_sub_pd(pd, id))
   })
 }
 

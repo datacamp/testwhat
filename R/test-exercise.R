@@ -28,21 +28,21 @@ test_exercise <- function(sct,
   
   # Store everything that's needed locally (initialize does a full reset)
   tw$clear()
-  tw$initialize(list(pec = pec,
+  state <- State$new(pec = pec,
                      student_code = student_code,
-                     student_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(student_code),
+                     student_pd = build_pd(student_code),
                      student_env = globalenv(),
                      solution_code = solution_code,
-                     solution_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
+                     solution_pd = build_pd(solution_code),
                      solution_env = solution_env,
                      output_list = output_list,
-                     test_env = new.env(parent = environment()),
-                     reporter = DC_reporter$new()))
+                     test_env = new.env(parent = environment()))
+  tw$set(state = state, reporter = DC_reporter$new())
   on.exit(tw$clear())
 
   # Execute sct with the DataCamp reporter such that it collects test results
   run_until_fail(parse(text = sct))
-  outcome <- get_rep()$get_feedback()
+  outcome <- get_rep()$generate_feedback()
 
   # HACK: If markdown exercise, remove line information
   if (ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
@@ -65,7 +65,7 @@ run_until_fail <- function(code) {
       return(FALSE)
     } else {
       # Something actually went wrong, not an SCT that failed
-      stop(attr(eval_fail, "condition"))
+      stop("Something went wrong in the SCT: ", attr(eval_fail, "condition"))
     }
   } else {
     # The SCT passed
