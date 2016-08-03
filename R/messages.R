@@ -1,4 +1,11 @@
-trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+trim <- function(x) gsub("^\\s+|\\s+$", "", x)
+
+capitalize <- function(x) {
+  x <- strsplit(x, split = "\\.\\s")[[1]]
+  x <- paste0(toupper(substring(x, 1, 1)), substring(x, 2), collapse = ". ")
+  x <- strsplit(x, split = "\\?\\s")[[1]]
+  x <- paste0(toupper(substring(x, 1, 1)), substring(x, 2), collapse = "? ")
+}
 
 `%+=%` <- function(a, b) {
   eval.parent(substitute(a <- paste(a, b)))
@@ -10,86 +17,39 @@ build_feedback <- function(details) {
   for (det in details) {
     if (det$type == "object") {
       if (det$case == "undefined") {
-        msg %+=% build_object_undefined_msg(det$name)
+        msg %+=% bsprintf("Did you define the variable `%s` without errors?", det$name)
       }
       if (det$case == "equal") {
-        msg %+=% build_object_incorrect_msg(det$name)
+        msg %+=% sprintf("The contents of the variable `%s` aren't correct.", det$name)
+        msg %+=% build_diff(sol = det$solution, stud = det$student,
+                            eq_condition = det$eq_condition,
+                            id = sprintf("`%s`", det$name))
       }
-      msg %+=% build_diff(sol = det$solution, stud = det$student,
-                          eq_condition = det$eq_condition,
-                          id = sprintf("`%s`", det$name))
+    }
+    if (det$type == "function") {
+      if (det$case == "called") {
+        msg %+=% sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", 
+                         get_num(det$index), det$name)
+      }
+      if (det$case == "correct") {
+        msg %+=% sprintf("Check your call of `%s()`.", det$name)
+      }
+    }
+    if (det$type == "argument") {
+      if (det$case == "specified") {
+        msg %+=% sprintf("Did you specify the argument `%s`?", det$name)
+      }
+      if (det$case == "equal") {
+        msg %+=% sprintf("Did you correctly specify the argument `%s`?", det$name)
+        msg %+=% build_diff(sol = det$solution, stud = det$student,
+                            eq_condition = det$eq_condition,
+                            id = "the object you specified")
+      }
     }
   }
-  return(trim(msg))
+  return(trim(capitalize(msg)))
 }
 
-build_object_undefined_msg <- function(name) {
-  template <- switch(get_language(),
-                     en = "Did you define the variable `%s` without errors?",
-                     fr = "Avez-vous d&#233;fini `%s` ?",
-                     es = "&#191;Definiste el valor `%s`?",
-                     stop(no_msg))
-  sprintf(template, name)
-}
-
-build_object_incorrect_msg <- function(name) {
-  template <- switch(get_language(),
-                     en = "The contents of the variable `%s` aren't correct.",
-                     fr = "Il semblerait que vous n'ayez pas affect&#233; la bonne valeur &#224; `%s`.",
-                     es = "Parece que no asignaste el valor correcto a `%s`.",
-                     stop(no_msg))
-  sprintf(template, name)
-}
-
-build_function_not_called_msg <- function(name, index) {
-  lang <- get_language()
-  if (lang == "en") {
-    msg <- sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", 
-                   get_num(index), name)
-  } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous ex&#233;cut&#233; %d fois la fonction `%s()` ?", 
-                   index, name)
-  } else if (lang == "es") {
-    msg <- sprintf("&#191;Usaste la funci&#243;n `%s()` %s?", 
-                   name, ifelse(index == 1, "una vez", sprintf("%d veces", index)))
-  } else {
-    stop(no_msg)
-  }
-  return(msg)
-}
-
-build_function_args_not_specified_msg <- function(name, arg) {
-  lang <- get_language()
-  if(lang == "en") {
-    msg <- sprintf("Did you specify the argument `%s` in your call of `%s()`?", arg, name)
-  } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous specifi&#233; l'argument `%s` dans la fonction `%s()`", arg, name)
-  } else if (lang == "es") {
-    msg <- sprintf("Especifcaste el argumento `%s` en la funci&#243;n `%s()`?", arg, name)
-  } else {
-    stop(no_msg)
-  }
-  return(msg)
-}
-
-build_function_incorrect_msg <- function(name, incorrect_arg) {
-  lang <- get_language()
-  if (lang == "en") {
-    msg <- sprintf("Did you correctly specify the argument `%s` in your call of `%s()`?", 
-                   incorrect_arg, name)
-  } else if (lang == "fr") {
-    msg <- sprintf("Avez-vous affect&#233; la bonne valeur &#224; l'argument `%s` dans la fonction `%s()` ?",
-                   incorrect_arg, name)
-  } else if (lang == "es") {
-    msg <- sprintf("&#191;Usaste el valor correcto para el argumento `%s` en la funci&#243;n `%s()`?",
-                   incorrect_arg, name)
-  } else {
-    stop(no_msg)
-  }
-  return(msg)
-  
-}
-  
 build_summary <- function(x, ...) UseMethod("build_summary")
 
 build_summary.default <- function(x) {

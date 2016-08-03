@@ -96,8 +96,8 @@ invalid_eq_condition <- "eq_condition should be either 'equivalent', 'equal' or 
 #' @export
 is_equal <- function(x, y, eq_condition = "equivalent") {
   eq_fun <- switch(eq_condition,
-                   equivalent = function(x, y) isTRUE(all.equal(x, y, check.attributes = FALSE)),
-                   equal = function(x, y) isTRUE(all.equal(x, y)),
+                   equivalent = function(x, y) isTRUE(try(all.equal(x, y, check.attributes = FALSE), silent = TRUE)),
+                   equal = function(x, y) isTRUE(try(all.equal(x, y), silent = TRUE)),
                    identical = identical,
                    stop(invalid_eq_condition))
   eq_fun(x, y)

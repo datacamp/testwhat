@@ -61,8 +61,10 @@ error <- function(output, mess_patt = NULL) {
   }
 }
 
-line_info <- function(output, line_start, line_end) {
+line_info <- function(output, line_start, line_end, column_start, column_end) {
   sct_payload <- get_sct_payload(output)
   expect_equal(sct_payload$line_start, line_start)
   expect_equal(sct_payload$line_end, line_end)
+  if(!missing(column_start)) expect_equal(sct_payload$column_start, column_start)
+  if(!missing(column_end)) expect_equal(sct_payload$column_end, column_end)
 }

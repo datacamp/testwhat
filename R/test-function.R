@@ -10,11 +10,6 @@
 #' supplied in the function calls.
 #' @param index  integer that specifies which call of \code{name} in the solution 
 #' code will be checked.
-#' @param ignore character vector of argument names that should not be tested
-#' (useful in combination with \code{allow_extra = FALSE} to allow certain
-#' arguments to be ignored, but not others).
-#' @param allow_extra  indicates whether extra arguments not specified by
-#' \code{args} or \code{ignore} are allowed in the student's function calls.
 #' @param eval  logical vector indicating whether the corresponding argument
 #' should be evaluated before testing. Setting this to \code{FALSE} can be
 #' useful, e.g., to test whether the student supplied a large predefined
@@ -42,8 +37,6 @@
 test_function <- function(name, 
                           args = NULL, 
                           index = 1,
-                          ignore = NULL,
-                          allow_extra = TRUE,
                           eval = TRUE,
                           eq_condition = "equivalent",
                           not_called_msg = NULL, 
@@ -60,109 +53,9 @@ test_function <- function(name,
   
   fun_state <- ex() %>% test_fun(name, index = index, not_called_msg = not_called_msg)
   for (i in seq_along(args)) {
-    arg = args[i]
     fun_state %>% 
-      test_arg(arg, arg_not_specified_msg = args_not_specified_msg) #%>% 
-      #test_equal(incorret_msg = incorrect_msg[i], eq_condition = eq_condition[i])
-  }
-  
-  return(NULL)
-  
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  init_tags(fun = "test_function")
-
-
-  # Find all function calls in the student and solution code
-  student_calls <- find_function_calls(student_pd, name, student_env)
-  solution_calls <- find_function_calls(solution_pd, name, solution_env)
-  n_student_calls <- length(student_calls)
-  n_solution_calls <- length(solution_calls)
-
-  check_sufficient(solution_calls, index, name)
-  solution_call <- solution_calls[[index]]
-
-  if (n_args > 0 && !has_arguments(solution_call$call, args, ignore, allow_extra)) {
-      stop("The solution call doesn't meet the argument conditions itself.",
-           " Make sure that the args you specify in test_function(\"", name, "\", ...)", name, "()",
-           " are actually specified by the corresponding function call in the solution code")
-  }
-
-  if (is.null(not_called_msg)) {
-    not_called_msg <- build_function_not_called_msg(name, index)
-  }
-  check_that(is_true(n_student_calls >= index), list(message = not_called_msg))
-
-  if (n_args > 0) {
-    args_specified_passed <- FALSE
-    args_correct_passed <- FALSE
-    args_specified_feedback <- NULL
-    args_correct_feedback <- NULL
-
-    seq <- get_seq(name, stud_indices = 1:n_student_calls, sol_index = index)
-    for (i in seq) {
-      student_call <- student_calls[[i]]
-
-      # Check if the function is called with the right arguments
-      args_specified <- has_arguments(student_call$call, args, ignore, allow_extra)
-      if (!args_specified) {
-        if (is.null(args_specified_feedback)) {
-          if (is.null(args_not_specified_msg)) {
-            args_not_specified_msg <- build_function_args_not_specified_msg(name, args, n_args, allow_extra)
-          }
-          args_specified_feedback <- as.list(c(message = args_not_specified_msg,
-                                               get_line_info(student_call$function_pd)))
-        }
-        next
-      } else {
-        args_specified_passed <- TRUE
-      }
-
-      # Test if the specified arguments are correctly called
-      solution_args <- extract_arguments(solution_call$call, args, eval, env = solution_env)
-      if (any(sapply(solution_args, function(x) isTRUE(try(all.equal(x, tryerrorstring), silent = TRUE))))) {
-        stop(sprintf("There are arguments in the %s function call of %s() that cause errors when evaluated.", get_num(index), name))
-      }
-      student_args <- extract_arguments(student_call$call, args, eval, env = student_env)
-      args_correct_vec <- mapply(is_equal, student_args, solution_args, eq_condition)
-      if (!all(args_correct_vec)) {
-        score <- sum(args_correct_vec)
-        if (is.null(args_correct_feedback) || args_correct_feedback$score < score) {
-          incorrect_arg <- args[!args_correct_vec][1]
-          if (is.null(incorrect_msg)) {
-            stud_arg <- student_args[!args_correct_vec][[1]]
-            sol_arg <- solution_args[!args_correct_vec][[1]]
-            eq_cond <- eq_condition[!args_correct_vec][1]
-            feedback_msg <- paste0(build_function_incorrect_msg(name, incorrect_arg),
-                                   build_diff(sol = sol_arg, stud = stud_arg,
-                                              eq_condition = eq_cond,
-                                              id = "the object you specified"))
-          } else {
-            feedback_msg <- incorrect_msg[!args_correct_vec][1]
-          }
-          args_correct_feedback <- as.list(c(message = feedback_msg,
-                                             get_line_info(student_call$arg_pds[[incorrect_arg]]),
-                                             score = score))
-        }
-        next
-      } else {
-        args_correct_passed <- TRUE
-        # We have a winner.
-        set_used(name, stud_index = i, sol_index = index)
-        break
-      }
-    }
-
-    if (!args_correct_passed) {
-      # Still need something that fails...
-      if (!args_specified_passed) {
-        check_that(failure(), args_specified_feedback)
-      } else {
-        check_that(failure(), args_correct_feedback)
-      }
-    }
+      test_arg(args[i], arg_not_specified_msg = args_not_specified_msg) %>% 
+      test_equal(incorrect_msg = incorrect_msg[i], eval = eval[i], eq_condition = eq_condition[i])
   }
 }
 

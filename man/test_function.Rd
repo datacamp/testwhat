@@ -5,15 +5,13 @@
 \alias{test_function_v2}
 \title{Test whether a student correctly called a function}
 \usage{
-test_function(name, args = NULL, index = 1, ignore = NULL,
-  allow_extra = TRUE, eval = TRUE, eq_condition = "equivalent",
-  not_called_msg = NULL, args_not_specified_msg = NULL,
-  incorrect_msg = NULL)
+test_function(name, args = NULL, index = 1, ignore = NULL, eval = TRUE,
+  eq_condition = "equivalent", not_called_msg = NULL,
+  args_not_specified_msg = NULL, incorrect_msg = NULL)
 
 test_function_v2(name, args = NULL, index = 1, ignore = NULL,
-  allow_extra = TRUE, eval = TRUE, eq_condition = "equivalent",
-  not_called_msg = NULL, args_not_specified_msg = NULL,
-  incorrect_msg = NULL)
+  eval = TRUE, eq_condition = "equivalent", not_called_msg = NULL,
+  args_not_specified_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
 \item{name}{name of the function to test.}
@@ -27,9 +25,6 @@ code will be checked.}
 \item{ignore}{character vector of argument names that should not be tested
 (useful in combination with \code{allow_extra = FALSE} to allow certain
 arguments to be ignored, but not others).}
-
-\item{allow_extra}{indicates whether extra arguments not specified by
-\code{args} or \code{ignore} are allowed in the student's function calls.}
 
 \item{eval}{logical vector indicating whether the corresponding argument
 should be evaluated before testing. Setting this to \code{FALSE} can be
