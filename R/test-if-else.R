@@ -83,18 +83,18 @@ test_if_else <- function(index = 1,
   sol_str <- solution_structs[[index]]
   
   if (!is.null(else_expr_test) && is.null(sol_str[["else_part"]])) {
-      stop(sprintf("The %s control construct in the solution doesn't contain an else part itself.", get_num(index)))
+      stop(sprintf("The %s control construct in the solution doesn't contain an else part itself.", get_ord(index)))
   }
   
   if(is.null(not_found_msg)) {
     not_found_msg <- sprintf(paste("The system wants to test if the %s control construct",
                                   "you coded is correct, but it hasn't found it. Add more code."), 
-                            get_num(index))
+                            get_ord(index))
   }
   check_that(is_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
   
   stud_str <- student_structs[[index]]
-  additionaltext <- sprintf(" in the %s control construct of your submission", get_num(index))
+  additionaltext <- sprintf(" in the %s control construct of your submission", get_ord(index))
 
   on.exit({
     tw$set(student_pd = student_pd)

@@ -159,7 +159,11 @@ ObjectState <- R6::R6Class("ObjectState", inherit = ChildState,
                            private = list(student_object = NULL,
                                           solution_object = NULL))
 
-
+ControlState <- R6::R6Class("ControlState",
+                            inherit = ChildState,
+                            public = list(),
+                            private = list(student_struct = NULL,
+                                           solution_struct = NULL))
 ex <- function() {
   return(tw$get("state"))
 }

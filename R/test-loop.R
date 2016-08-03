@@ -100,7 +100,7 @@ test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not
   if (is.null(not_found_msg)) {
     not_found_msg <- sprintf(paste("The system wants to test if the %s `%s` loop",
                                    "you coded is correct, but it hasn't found it. Add more code."), 
-                             get_num(index), type)
+                             get_ord(index), type)
   }
   check_that(is_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
   

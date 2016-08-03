@@ -40,11 +40,11 @@ test_function_result <- function(name = NULL,
   solution_result <- try(eval(solution_call$call), silent = TRUE)
   if (inherits(solution_result, "try-error")) {
     stop(sprintf("Running the %s call of %s() in generates an error: %s",
-                 get_num(index), name, attr(solution_result, "cond")$message))
+                 get_ord(index), name, attr(solution_result, "cond")$message))
   }
   
   if (is.null(not_called_msg)) {
-    not_called_msg <- sprintf("The system wants to check the %s call of `%s()`, but couldn't find it.", get_num(index), name)
+    not_called_msg <- sprintf("The system wants to check the %s call of `%s()`, but couldn't find it.", get_ord(index), name)
   }
 
   check_that(is_true(n_student_calls >= index), feedback = list(message = not_called_msg))
@@ -52,7 +52,7 @@ test_function_result <- function(name = NULL,
   student_call <- student_calls[[index]]
   
   if (is.null(eval_error_msg)) {
-    eval_error_msg <- sprintf("Evaluating the %s call of `%s` generated an error.", get_num(index), name)
+    eval_error_msg <- sprintf("Evaluating the %s call of `%s` generated an error.", get_ord(index), name)
   }
   
   student_result <- try(eval(student_call$call), silent = TRUE)
@@ -66,7 +66,7 @@ test_function_result <- function(name = NULL,
   }
   
   if (is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("The output of the %s call of `%s` isn't what it should be. Try again.", get_num(index), name)
+    incorrect_msg <- sprintf("The output of the %s call of `%s` isn't what it should be. Try again.", get_ord(index), name)
   }
   check_that(is_true(is_equal(solution_result, student_result, eq_condition)),
             feedback = as.list(c(message = incorrect_msg,

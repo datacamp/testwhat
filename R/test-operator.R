@@ -55,7 +55,7 @@ test_operator <- function(name,
   }
   
   if (is.null(not_called_msg)) {
-    not_called_msg <- sprintf("The system wants to check the %s `%s` operator in your code, but hasn't found it.", get_num(index), name)
+    not_called_msg <- sprintf("The system wants to check the %s `%s` operator in your code, but hasn't found it.", get_ord(index), name)
   }
   check_that(is_gte(n_student_ops, index), list(message = not_called_msg))
   

@@ -92,10 +92,10 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
                     eq_condition = eq_condition)
   
   # Test if the specified arguments are correctly called
-  
   solution_obj <- eval_argument(solution_arg$expr, 
                                 eval = eval, 
                                 env = state$get("solution_env"))
+  
   if (isTRUE(try(all.equal(solution_obj, tryerrorstring), silent = TRUE))) {
     stop("test_equal() found an argument that causes an error when evaluated.")
   }

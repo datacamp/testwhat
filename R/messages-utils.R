@@ -39,12 +39,19 @@ get_language <- function() {
   ifelse(is.null(lang), "en", lang)
 }
 
-get_num <- function(index) {
+get_ord <- function(index) {
   switch(index,
          "1" = "first", "2" = "second",
          "3" = "third", "4" = "fourth",
          "5" = "fifth", "6" = "sixth",
          "7" = "seventh", sprintf("%ith", index))
+}
+
+get_num <- function(index) {
+  switch(index,
+         "1" = "one", "2" = "two",
+         "3" = "three", "4" = "four",
+         "5" = "five", sprintf("%i", index)) 
 }
 
 trunc_str <- function(x,start="c") {

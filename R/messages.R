@@ -16,7 +16,7 @@ build_feedback <- function(details) {
 
   for (det in details) {
     if (det$type == "object") {
-      if (det$case == "undefined") {
+      if (det$case == "defined") {
         msg %+=% bsprintf("Did you define the variable `%s` without errors?", det$name)
       }
       if (det$case == "equal") {
@@ -29,7 +29,7 @@ build_feedback <- function(details) {
     if (det$type == "function") {
       if (det$case == "called") {
         msg %+=% sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", 
-                         get_num(det$index), det$name)
+                         get_ord(det$index), det$name)
       }
       if (det$case == "correct") {
         msg %+=% sprintf("Check your call of `%s()`.", det$name)
@@ -44,6 +44,11 @@ build_feedback <- function(details) {
         msg %+=% build_diff(sol = det$solution, stud = det$student,
                             eq_condition = det$eq_condition,
                             id = "the object you specified")
+      }
+    }
+    if (det$type == "cond") {
+      if (det$case == "defined") {
+        msg %+=% sprintf("Are you sure you coded %s conditional statement%s?", get_num(index), ifelse(index > 1, "s", ""))  
       }
     }
   }
