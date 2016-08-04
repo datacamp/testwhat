@@ -127,4 +127,6 @@ test_if_else <- function(index = 1,
   }
 }
 
+#' @export
+test_if_else_statement <- test_if_else
 
