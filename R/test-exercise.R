@@ -28,15 +28,15 @@ test_exercise <- function(sct,
   
   # Store everything that's needed locally (initialize does a full reset)
   tw$clear()
-  state <- State$new(pec = pec,
-                     student_code = student_code,
-                     student_pd = build_pd(student_code),
-                     student_env = globalenv(),
-                     solution_code = solution_code,
-                     solution_pd = build_pd(solution_code),
-                     solution_env = solution_env,
-                     output_list = output_list,
-                     test_env = new.env(parent = environment()))
+  state <- RootState$new(pec = pec,
+                         student_code = student_code,
+                         student_pd = build_pd(student_code),
+                         student_env = globalenv(),
+                         solution_code = solution_code,
+                         solution_pd = build_pd(solution_code),
+                         solution_env = solution_env,
+                         output_list = output_list,
+                         test_env = new.env(parent = environment()))
   tw$set(state = state, reporter = DC_reporter$new())
   on.exit(tw$clear())
 

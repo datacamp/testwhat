@@ -17,7 +17,7 @@ build_feedback <- function(details) {
   for (det in details) {
     if (det$type == "object") {
       if (det$case == "defined") {
-        msg %+=% bsprintf("Did you define the variable `%s` without errors?", det$name)
+        msg %+=% sprintf("Did you define the variable `%s` without errors?", det$name)
       }
       if (det$case == "equal") {
         msg %+=% sprintf("The contents of the variable `%s` aren't correct.", det$name)

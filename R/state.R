@@ -4,10 +4,6 @@
 #' @importFrom R6 R6Class
 State <- R6::R6Class("State",
   public = list(
-     
-    initialize = function(...) {
-      self$set(...)
-    },
     
     get = function(name) {
       return(private[[name]])
@@ -21,6 +17,26 @@ State <- R6::R6Class("State",
                   stop(sprintf("Cannot set '%s'; the name is invalid.", names(els[i])))
                 })
       }
+    }
+  ),
+   
+  private = list(
+    pec = NULL,
+    student_code = NULL,
+    student_pd = NULL,
+    student_env = NULL,
+    solution_code = NULL,
+    solution_pd = NULL,
+    solution_env = NULL,
+    output_list = NULL,
+    test_env = NULL
+  )
+)
+
+RootState <- R6::R6Class("State", inherit = State,
+  public = list(
+    initialize = function(...) {
+      self$set(...)
     },
     
     # blacklisting stuff
@@ -59,7 +75,7 @@ State <- R6::R6Class("State",
                                        stud_index = index,
                                        success = success)))
     },
-
+    
     set_used = function(name, sol_index, stud_index) {
       private$blacklist = c(private$blacklist, 
                             list(list(name = name, 
@@ -82,19 +98,7 @@ State <- R6::R6Class("State",
       }
     }
   ),
-   
   private = list(
-    pec = NULL,
-    student_code = NULL,
-    student_pd = NULL,
-    student_env = NULL,
-    solution_code = NULL,
-    solution_pd = NULL,
-    solution_env = NULL,
-    output_list = NULL,
-    test_env = NULL,
-    
-    # blacklisting
     fun_usage = list(),
     active_name = NULL,
     active_sol_index = NULL,
@@ -102,7 +106,8 @@ State <- R6::R6Class("State",
     blacklist = list()
   )
 )
-
+   
+                         
 ChildState <- R6::R6Class("ChildState", inherit = State,
   public = list(
     
