@@ -516,7 +516,7 @@ test_that("try-errors", {
   lst$DC_CODE <- "print(123 + 'test')"
   output <- test_it(lst)
   error(output, mess_patt = "There are arguments in the first function call of print\\(\\) that cause errors")
-  
+
   lst <- list()
   lst$DC_SOLUTION <- "print(123)"
   lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
@@ -524,4 +524,29 @@ test_that("try-errors", {
   output <- test_it(lst)
   fails(output, mess_patt = "Did you correctly specify the argument <code>x</code> in your call of <code>print\\(\\)</code>")
   fails(output, "Evaluating the expression you specified caused an error")
+})
+
+test_that("test_function - formulas", {
+  lst <- list()
+  lst$DC_SOLUTION <- "lm(mpg ~ wt + hp, data = mtcars)"
+  lst$DC_SCT <- "test_function('lm', args = 'formula')"
+
+  lst$DC_CODE <- "lm(mpg ~ wt + hp, data = mtcars)"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "lm(mpg ~ hp + wt, data = mtcars)"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "lm(mpg ~ wt + hp + drat, data = mtcars)"
+  output <- test_it(lst)
+  fails(output)
+
+  lst <- list()
+  lst$DC_SOLUTION <- "lm(mpg ~ ., data = mtcars)"
+  lst$DC_CODE <- "lm(mpg ~ ., data = mtcars)"
+  lst$DC_SCT <- "test_function('lm', args = 'formula')"
+  output <- test_it(lst)
+  passes(output)
 })
