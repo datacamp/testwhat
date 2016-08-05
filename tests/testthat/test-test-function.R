@@ -203,7 +203,7 @@ test_that("test_function - eval", {
 
 # test_that("test_function errs correctly", {})
 
-test_that("test_function gives good automatic messages", {
+test_that("test_function - diff messages - 1", {
   lst <- list()
   lst$DC_SOLUTION <- "mean(1:20, trim = 0.1, na.rm = TRUE)"
   lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
@@ -265,7 +265,7 @@ test_that("test_function gives good automatic messages", {
   line_info(output, 3, 3)
 })
 
-test_that("test_function - diff messages (1)", {
+test_that("test_function - diff messages - 2", {
   lst <- list()
   lst$DC_SOLUTION <- "print('This is a serious thing!')"
   lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
@@ -292,7 +292,7 @@ test_that("test_function - diff messages (1)", {
   fails(output, "There might be a typo in there")
 })
 
-test_that("test_function - diff messages (2)", {
+test_that("test_function - diff messages - 3", {
   lst <- list()
   lst$DC_SOLUTION <- "print(123)"
   lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
