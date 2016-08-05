@@ -92,7 +92,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
                     eq_condition = eq_condition)
   
   # Test if the specified arguments are correctly called
-  solution_obj <- eval_argument(solution_arg$expr, 
+  solution_obj <- eval_argument(solution_arg,
                                 eval = eval, 
                                 env = state$get("solution_env"))
   
@@ -106,7 +106,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
   for (i in seq) {
     student_arg <- student_args[[i]]
     if (is.null(student_arg)) next
-    student_obj <- eval_argument(student_arg$expr,
+    student_obj <- eval_argument(student_arg,
                                  eval = eval,
                                  env = state$get("student_env"))
     if (is.null(feedback)) {
@@ -134,13 +134,16 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
 tryerrorstring <- "try-error-in-test-function"
 
 eval_argument <- function(arg, eval, env) {
+  if (is.list(arg) && ! "expr" %in% names(arg)) {
+    return(lapply(arg, eval_argument, eval, env))
+  }
   if (eval) {
-    obj <- try(eval(arg, envir = env), silent = TRUE)
+    obj <- try(eval(arg$expr, envir = env), silent = TRUE)
     if (inherits(obj, "try-error")) {
       obj <- tryerrorstring
     }
   } else {
-    obj <- stringify(arg)
+    obj <- stringify(arg$expr)
   }
   return(obj)
 }
@@ -153,8 +156,3 @@ stringify <- function(arg) {
   x <- gsub("TRUE", "T", x)
   return(x)
 }
-
-is.callable <- function(x) {
-  is.name(x) || is.call(x) || is.expression(x)
-}
-

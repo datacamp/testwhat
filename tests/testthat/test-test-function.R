@@ -121,7 +121,7 @@ test_that("test_function - index (3)", {
             "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")'
   lst$DC_CODE <- 'sub("edu", "edu", emails)\nsub("edu", "edu", emails)'
   lst$DC_SOLUTION <- lst$DC_CODE
-  
+
   lst$DC_SCT <- paste('test_function("sub", "pattern", index = 1)\n',
                       'test_function("sub", "replacement", index = 1)\n',
                       'test_function("sub", "x", index = 1)\n',
@@ -130,7 +130,7 @@ test_that("test_function - index (3)", {
                       'test_function("sub", "x", index = 2)')
   output <- test_it(lst)
   passes(output)
-  
+
   lst$DC_SCT <- paste('test_function("sub", "pattern", index = 1)\n',
                       'test_function("sub", "pattern", index = 2)\n',
                       'test_function("sub", "replacement", index = 1)\n',
@@ -382,19 +382,19 @@ test_that("test_function - formulas", {
   lst <- list()
   lst$DC_SOLUTION <- "lm(mpg ~ wt + hp, data = mtcars)"
   lst$DC_SCT <- "test_function('lm', args = 'formula')"
-  
+
   lst$DC_CODE <- "lm(mpg ~ wt + hp, data = mtcars)"
   output <- test_it(lst)
   passes(output)
-  
+
   lst$DC_CODE <- "lm(mpg ~ hp + wt, data = mtcars)"
   output <- test_it(lst)
   passes(output)
-  
+
   lst$DC_CODE <- "lm(mpg ~ wt + hp + drat, data = mtcars)"
   output <- test_it(lst)
   fails(output)
-  
+
   lst <- list()
   lst$DC_SOLUTION <- "lm(mpg ~ ., data = mtcars)"
   lst$DC_CODE <- "lm(mpg ~ ., data = mtcars)"
@@ -403,6 +403,39 @@ test_that("test_function - formulas", {
   passes(output)
 })
 
+test_that("test_function - ...", {
+  lst <- list()
+  lst$DC_SOLUTION <- "sum(1, 2, 3, 4, NA, na.rm = TRUE)"
+  lst$DC_SCT <- "test_function('sum', args = c('...', 'na.rm'))"
+
+  lst$DC_CODE <- "sum(1, 2, 3, 4, NA, na.rm = TRUE)"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "sum(1, 1 + 1, 1 + 1 + 1, 4, NA, na.rm = TRUE)"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "sum(1, 2, 3, 4, NA, na.rm = FALSE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check your call of <code>sum\\(\\)</code>\\. Did you correctly specify the argument <code>na\\.rm</code>")
+
+  lst$DC_CODE <- "sum(1, 2, 3, NA, na.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the arguments that are matched to <code>...</code>")
+
+  lst <- list()
+  lst$DC_SOLUTION <- "sum(1, 2, 3, 4, 5)"
+  lst$DC_SCT <- "test_function('sum', args = '...')"
+
+  lst$DC_CODE <- "sum(1, 2, 3, 4, 5)"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "sum(1, 2, 3, 4)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the arguments that are matched to <code>...</code>")
+})
 
 ## STILL ACTIVATE TESTS BELOW
 

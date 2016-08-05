@@ -28,7 +28,7 @@ build_feedback <- function(details) {
     }
     if (det$type == "function") {
       if (det$case == "called") {
-        msg %+=% sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.", 
+        msg %+=% sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.",
                          get_ord(det$index), det$name)
       }
       if (det$case == "correct") {
@@ -37,13 +37,21 @@ build_feedback <- function(details) {
     }
     if (det$type == "argument") {
       if (det$case == "specified") {
-        msg %+=% sprintf("Did you specify the argument `%s`?", det$name)
+        if (det$name == "...") {
+          msg %+=% sprintf("Did you specify any arguments that are matched to `...`?", det$name)
+        } else {
+          msg %+=% sprintf("Did you specify the argument `%s`?", det$name)
+        }
       }
       if (det$case == "equal") {
-        msg %+=% sprintf("Did you correctly specify the argument `%s`?", det$name)
-        msg %+=% build_diff(sol = det$solution, stud = det$student,
-                            eq_condition = det$eq_condition,
-                            id = "the object you specified")
+        if (det$name == "...") {
+          msg %+=% "Did you correctly specify the arguments that are matched to `...`?"
+        } else {
+          msg %+=% sprintf("Did you correctly specify the argument `%s`?", det$name)
+          msg %+=% build_diff(sol = det$solution, stud = det$student,
+                              eq_condition = det$eq_condition,
+                              id = "the object you specified")
+        }
       }
     }
     if (det$type == "cond") {

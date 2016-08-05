@@ -61,28 +61,3 @@ test_function <- function(name,
 #' @rdname test_function
 #' @export
 test_function_v2 <- test_function
-  
-has_arguments <- function(call, args, ignore = NULL, allow_extra = TRUE) {
-  if (allow_extra) 
-    all(args %in% names(call)[-1])
-  else {
-    supplied <- setdiff(names(call)[-1], ignore)
-    is_equal(args, supplied)
-  }
-}
-
-# Extract specified arguments from a function call and evaluate if necessary
-extract_arguments <- function(call, args, eval, env) {
-  mapply(function(arg, eval) {
-    object <- call[[arg]]
-    if (eval && (is.name(object) || is.call(object) || is.expression(object))) {
-      object <- try(eval(object, envir = env), silent = TRUE)
-      if (inherits(object, "try-error")) {
-        object <- tryerrorstring
-      }
-    }
-    object
-  }, args, eval, SIMPLIFY = FALSE)
-}
-
-tryerrorstring <- "try-error-in-test-function"

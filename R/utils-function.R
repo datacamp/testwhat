@@ -38,15 +38,32 @@ clean <- function(x) {
 get_args <- function(pd, standard_call) {
   n <- length(standard_call)
   if(n == 1) {
-    return(NULL)
+    return(list())
   }
   
   params <- standard_call[2:n]
-  lapply(params, function(param) {
+  args <- lapply(params, function(param) {
     id <- pd$id[clean(deparse(param)) == clean(pd$text) & pd$token == "expr"]
     list(expr = param, pd = get_sub_pd(pd, id))
   })
+
+  # Some arguments are not named because passed via ...
+  # Group these arguments in a list
+  m <- length(args)
+  if (is.null(names(args))) {
+    # All are unnamed
+    args <- list(`...` = args)
+  } else {
+    hits <- which(names(args) == "")
+    if (length(hits) > 0) {
+      # Some arguments not named
+      args$`...` <- args[hits]
+      args[hits] <- NULL
+    }
+  }
+  return(args)
 }
+
 
 # Expand argument names of a function call (borrowed from pryr standardise_call)
 standardize_call <- function(call, call_string, env) {
