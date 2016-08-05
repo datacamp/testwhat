@@ -12,40 +12,14 @@ State <- R6::R6Class("State",
                   stop(sprintf("Cannot set '%s'; the name is invalid.", names(els[i])))
                 })
       }
-    }
-  ),
-   
-  private = list(
-    pec = NULL,
-    student_code = NULL,
-    student_pd = NULL,
-    student_env = NULL,
-    solution_code = NULL,
-    solution_pd = NULL,
-    solution_env = NULL,
-    output_list = NULL,
-    test_env = NULL
-  )
-)
-
-RootState <- R6::R6Class("RootState", inherit = State,
-  public = list(
-    initialize = function(...) {
-      self$set(...)
     },
     
-    get = function(name) {
-      return(private[[name]])
-    },
-
     # blacklisting stuff
     update_blacklist = function() {
       # first, blacklist earlier work, if any.
       fun_usage <- private$fun_usage
       l <- length(fun_usage)
-      if (l == 0) {
-        # do nothing
-      } else {
+      if (l > 0) {
         if (l == 1) {
           df <- as.data.frame(fun_usage)  
         } else {
@@ -57,32 +31,36 @@ RootState <- R6::R6Class("RootState", inherit = State,
           ind_to_blacklist <- min(passed_stud_indices)
           stopifnot(length(unique(df$name)) == 1)
           stopifnot(length(unique(df$sol_index)) == 1)
-          self$set_used(df$name[1], df$sol_index[1], ind_to_blacklist) 
+          private$set_used(df$name[1], df$sol_index[1], ind_to_blacklist) 
         }
       }
       private$fun_usage <- list()
     },
     
     log = function(index, arg = NULL, success) {
-      if (!is.null(arg)) {
-        private$active_arg <- arg
+      if (is.null(private$fun_usage)) {
+        # fun usage not defined at this level, throw up
+        private$parent$log(index, arg = arg, success)
+      } else {
+        if (!is.null(arg)) {
+          private$active_arg <- arg
+        }
+        private$fun_usage <- c(private$fun_usage,
+                               list(list(name = private$active_name,
+                                         sol_index = private$active_sol_index,
+                                         arg = private$active_arg,
+                                         stud_index = index,
+                                         success = success)))  
       }
-      private$fun_usage <- c(private$fun_usage,
-                             list(list(name = private$active_name,
-                                       sol_index = private$active_sol_index,
-                                       arg = private$active_arg,
-                                       stud_index = index,
-                                       success = success)))
-    },
-    
-    set_used = function(name, sol_index, stud_index) {
-      private$blacklist = c(private$blacklist, 
-                            list(list(name = name, 
-                                      stud_index = stud_index, 
-                                      sol_index = sol_index)))
     },
     
     get_options = function(n_calls) {
+      if (is.null(private$active_name) || 
+          is.null(private$active_sol_index) ||
+          is.null(private$blacklist)) {
+        # required info not at this level, throw up
+        self$parent$get_options()
+      }
       name = private$active_name
       sol_index = private$active_sol_index
       bl <- private$blacklist
@@ -97,15 +75,45 @@ RootState <- R6::R6Class("RootState", inherit = State,
       }
     }
   ),
+   
   private = list(
-    fun_usage = list(),
+    pec = NULL,
+    student_code = NULL,
+    student_pd = NULL,
+    student_env = NULL,
+    solution_code = NULL,
+    solution_pd = NULL,
+    solution_env = NULL,
+    output_list = NULL,
+    test_env = NULL,
+    
+    # fun usage
+    fun_usage = NULL,
     active_name = NULL,
     active_sol_index = NULL,
     active_arg = NULL,
-    blacklist = list()
+    blacklist = list(),
+    set_used = function(name, sol_index, stud_index) {
+      private$blacklist = c(private$blacklist, 
+                            list(list(name = name, 
+                                      stud_index = stud_index, 
+                                      sol_index = sol_index)))
+    }
   )
 )
-   
+
+# State that has no parent
+RootState <- R6::R6Class("RootState", inherit = State,
+  public = list(
+    initialize = function(...) {
+      self$set(...)
+    },
+    
+    get = function(name) {
+      return(private[[name]])
+    }
+  )
+)
                          
 ChildState <- R6::R6Class("ChildState", inherit = State,
   public = list(
@@ -132,10 +140,6 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
       det <- list(...)
       n <- length(private$details)
       private$details[[n]][names(det)] <- det
-    },
-    
-    log = function(...) {
-      private$parent$log(...)
     }
   ),
   
@@ -168,6 +172,9 @@ ControlState <- R6::R6Class("ControlState",
                             public = list(),
                             private = list(student_struct = NULL,
                                            solution_struct = NULL))
+
+SubState <- R6::R6Class("SubState", inherit = ChildState)
+
 ex <- function() {
   return(tw$get("state"))
 }
