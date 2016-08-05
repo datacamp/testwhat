@@ -12,7 +12,6 @@ test_that("backwards comp", {
   expect_equal(get_solution_code(), "abc")
 })
 
-
 #' Get solution environment (backwards compatbility)
 #' @export
 get_solution_env <- function() { tw$get("solution_env") }

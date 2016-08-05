@@ -8,7 +8,7 @@
 #' @export
 test_output_regex <- function(pattern, fixed = FALSE, times = 1, incorrect_msg = NULL) {
   init_tags(fun = "test_output_regex")
-  console_output = get("DM.console.output", envir = globalenv())
+  console_output = get("DM.console.output", envir = tw$get("student_env"))
 
   output_list <- tw$get("output_list")
   output_indices <- which(sapply(output_list, `[[`, "type") %in% c("output", "r-message", "r-warning", "r-error"))

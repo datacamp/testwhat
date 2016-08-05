@@ -22,16 +22,21 @@ test_exercise <- function(sct,
                           pec,
                           student_code,
                           solution_code,
+                          student_env,
                           solution_env,
                           output_list,
                           in_test_mode = FALSE) {
+  # backwards compatibility with older versions of RBackend
+  if (missing(student_env)) {
+    student_env <- globalenv()
+  }
   
   # Store everything that's needed locally (initialize does a full reset)
   tw$clear()
   tw$initialize(list(pec = pec,
                      student_code = student_code,
                      student_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(student_code),
-                     student_env = globalenv(),
+                     student_env = student_env,
                      solution_code = solution_code,
                      solution_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
                      solution_env = solution_env,

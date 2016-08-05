@@ -219,6 +219,7 @@ test_that("test_object inside MarkdownExercise doesn't show line numbers", {
   lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
   
   output <- test_it(lst)
+  print(output)
   passes(output)
   
   lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "# This is a test\n```{r}\nx <- 4\n```\n"))
