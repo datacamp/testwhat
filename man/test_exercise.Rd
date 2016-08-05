@@ -4,8 +4,8 @@
 \alias{test_exercise}
 \title{Run all tests for an exercise}
 \usage{
-test_exercise(sct, ex_type, pec, student_code, solution_code, solution_env,
-  output_list, in_test_mode = FALSE)
+test_exercise(sct, ex_type, pec, student_code, solution_code, student_env,
+  solution_env, output_list, in_test_mode = FALSE)
 }
 \arguments{
 \item{sct}{Submission correctness tests as a character string.}
@@ -17,6 +17,8 @@ test_exercise(sct, ex_type, pec, student_code, solution_code, solution_env,
 \item{student_code}{character string representing the student code}
 
 \item{solution_code}{character string representing the solution code}
+
+\item{student_env}{environment containing the objects defined by the student.}
 
 \item{solution_env}{environment containing the objects defined by solution code}
 

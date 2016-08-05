@@ -49,8 +49,7 @@ test_function <- function(name,
   }
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
-  
-  
+
   fun_state <- ex() %>% test_fun(name, index = index, not_called_msg = not_called_msg)
   for (i in seq_along(args)) {
     fun_state %>% 

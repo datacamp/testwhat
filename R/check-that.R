@@ -95,6 +95,10 @@ invalid_eq_condition <- "eq_condition should be either 'equivalent', 'equal' or 
 #'   errors in machine precision), or \code{"identical"} (exactly identical).
 #' @export
 is_equal <- function(x, y, eq_condition = "equivalent") {
+  UseMethod("is_equal", x)
+}
+
+is_equal.default <- function(x, y, eq_condition = "equivalent") {
   eq_fun <- switch(eq_condition,
                    equivalent = function(x, y) isTRUE(try(all.equal(x, y, check.attributes = FALSE), silent = TRUE)),
                    equal = function(x, y) isTRUE(try(all.equal(x, y), silent = TRUE)),
@@ -102,6 +106,29 @@ is_equal <- function(x, y, eq_condition = "equivalent") {
                    stop(invalid_eq_condition))
   eq_fun(x, y)
 }
+
+is_equal.formula <- function(x, y, eq_condition = "equivalent") {
+  tryCatch({
+    xlst <- convert_formula(x)
+    ylst <- convert_formula(y)
+    isTRUE(all.equal(xlst$target, ylst$target)) &&
+      isTRUE(all.equal(xlst$explan, ylst$explan))
+  }, error = function(e) {
+    # fallback to default equality
+    is_equal.default(x, y, eq_condition)
+  })
+}
+
+convert_formula <- function(form) {
+  n <- length(form)
+  deparsed <- lapply(form, deparse)[2:n]
+  target = deparsed[[1]]
+  explan = deparsed[[2]]
+  explan = sort(trim(strsplit(explan, "\\+")[[1]]))
+  return(list(target = target, explan = explan))
+}
+
+trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
 failure <- function() {
   FALSE

@@ -33,8 +33,8 @@ test_mc <- function(correct, no_selection_msg = NULL, feedback_msgs = NULL) {
     no_selection_msg <- "Please select one of the options!"
   }
   
-  check_that(is_true(exists("DM.result", envir = globalenv())), no_selection_msg)
-  result <- get("DM.result", envir = globalenv())
+  check_that(is_true(exists("DM.result", envir = tw$get("student_env"))), no_selection_msg)
+  result <- get("DM.result", envir =  tw$get("student_env"))
   
   # see if result is correct
   if (!is.null(feedback_msgs) && is.na(feedback_msgs[result])) {

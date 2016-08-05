@@ -127,4 +127,7 @@ test_if_else <- function(index = 1,
   }
 }
 
+#' @rdname test_if_else
+#' @export
+test_if_else_statement <- test_if_else
 

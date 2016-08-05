@@ -2,10 +2,15 @@
 % Please edit documentation in R/test-if-else.R
 \name{test_if_else}
 \alias{test_if_else}
+\alias{test_if_else_statement}
 \title{Test a conditional statement}
 \usage{
 test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
   else_expr_test = NULL, not_found_msg = NULL, missing_else_msg = NULL)
+
+test_if_else_statement(index = 1, if_cond_test = NULL,
+  if_expr_test = NULL, else_expr_test = NULL, not_found_msg = NULL,
+  missing_else_msg = NULL)
 }
 \arguments{
 \item{index}{The index of the control structure to check.}

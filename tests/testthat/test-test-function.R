@@ -378,7 +378,30 @@ test_that("test_function - piped operators", {
   fails(output)
 })
 
-
+test_that("test_function - formulas", {
+  lst <- list()
+  lst$DC_SOLUTION <- "lm(mpg ~ wt + hp, data = mtcars)"
+  lst$DC_SCT <- "test_function('lm', args = 'formula')"
+  
+  lst$DC_CODE <- "lm(mpg ~ wt + hp, data = mtcars)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "lm(mpg ~ hp + wt, data = mtcars)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "lm(mpg ~ wt + hp + drat, data = mtcars)"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst <- list()
+  lst$DC_SOLUTION <- "lm(mpg ~ ., data = mtcars)"
+  lst$DC_CODE <- "lm(mpg ~ ., data = mtcars)"
+  lst$DC_SCT <- "test_function('lm', args = 'formula')"
+  output <- test_it(lst)
+  passes(output)
+})
 
 
 ## STILL ACTIVATE TESTS BELOW
@@ -394,5 +417,6 @@ test_that("test_function - piped operators", {
 #   fails(output)
 #   line_info(output, 2, 2)
 # })
+
 
 
