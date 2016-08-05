@@ -1,7 +1,6 @@
 context("test_object")
 source("helpers.R")
 
-# TODO add tests for automated and for custom messages!
 test_that("test_object step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
