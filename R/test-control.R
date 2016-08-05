@@ -1,5 +1,5 @@
 #' @export
-test_ifelse <- function(state, index = 1, not_found_msg) {
+test_if_else.State <- function(state, index = 1, not_found_msg) {
   
   student_pd <- state$get("student_pd")
   solution_pd <- state$get("solution_pd")

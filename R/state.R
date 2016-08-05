@@ -4,11 +4,6 @@
 #' @importFrom R6 R6Class
 State <- R6::R6Class("State",
   public = list(
-    
-    get = function(name) {
-      return(private[[name]])
-    },
-    
     set = function(...) {
       els <- list(...)
       for (i in seq_along(els)) {
@@ -33,12 +28,16 @@ State <- R6::R6Class("State",
   )
 )
 
-RootState <- R6::R6Class("State", inherit = State,
+RootState <- R6::R6Class("RootState", inherit = State,
   public = list(
     initialize = function(...) {
       self$set(...)
     },
     
+    get = function(name) {
+      return(private[[name]])
+    },
+
     # blacklisting stuff
     update_blacklist = function() {
       # first, blacklist earlier work, if any.
