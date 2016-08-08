@@ -54,6 +54,12 @@ get_num <- function(index) {
          "5" = "five", sprintf("%i", index)) 
 }
 
+get_times <- function(index) {
+  switch(index,
+         "1" = "once", "2" = "twice",
+         sprintf("%i times", get_num(index)))
+}
+
 trunc_str <- function(x,start="c") {
   max_in <- 4
   max_out <- 2

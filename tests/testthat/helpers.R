@@ -68,3 +68,10 @@ line_info <- function(output, line_start, line_end, column_start, column_end) {
   if(!missing(column_start)) expect_equal(sct_payload$column_start, column_start)
   if(!missing(column_end)) expect_equal(sct_payload$column_end, column_end)
 }
+
+print_fb <- function(output) {
+  sct_payload <- get_sct_payload(output)
+  cat("------------------\n")
+  cat(sct_payload$message, "\n")
+  cat("------------------\n")
+}

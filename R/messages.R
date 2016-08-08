@@ -28,7 +28,7 @@ build_feedback <- function(details) {
     }
     if (det$type == "function") {
       if (det$case == "called") {
-        msg %+=% sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it; have another look at your code.",
+        msg %+=% sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it.",
                          get_ord(det$index), det$name)
       }
       if (det$case == "correct") {
@@ -54,10 +54,26 @@ build_feedback <- function(details) {
         }
       }
     }
-    if (det$type == "cond") {
+    if (det$type == "ifelse") {
       if (det$case == "defined") {
-        msg %+=% sprintf("Are you sure you coded %s conditional statement%s?", get_num(index), ifelse(index > 1, "s", ""))  
+        msg %+=% sprintf("Are you sure you coded %s if statement%s?", get_num(det$index), ifelse(det$index > 1, "s", ""))  
       }
+    }
+    if (det$type == "ifcondition") {
+      msg %+=% sprintf("Check the condition of the %s if statement.", get_ord(det$index))
+    }
+    if (det$type == "ifexpression") {
+      msg %+=% sprintf("Check the body of the %s if statement.", get_ord(det$index))
+    }
+    if (det$type == "elseexpression") {
+      if (det$case == "defined") {
+        msg %+=% sprintf("The else part of the %s if statement is missing.", get_ord(det$index))
+      } else if (det$case == "correct") {
+        msg %+=% sprintf("Check the else part of the %s if statement.", get_ord(det$index))
+      }
+    }
+    if (det$type == "typed") {
+      msg %+=% sprintf("The system wanted to find the pattern `%s` %s but didn't.", det$regex, get_times(det$times))
     }
   }
   return(trim(capitalize(msg)))

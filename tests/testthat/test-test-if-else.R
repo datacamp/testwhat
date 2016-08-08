@@ -13,28 +13,29 @@ test_that("test_if - step by step", {
   output <- test_it(lst)
   fails(output)
   
-  lst$DC_CODE <- "x <- 4\nif (x < 3) { print('x is small') }"
+  lst$DC_CODE <- "x <- 4\nif (x < 3) { }"
   output <- test_it(lst)
-  fails(output)
+  fails(output, mess_patt = "Check the condition of the first if statement")
   
   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is small') }"
-  output <- test_it(lst)
-  fails(output)
+  fails(output, mess_patt =  "Check the body of the first if statement")
   
   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') }"
   output <- test_it(lst)
-  fails(output)
+  fails(output, mess_patt = "The else part of the first if statement is missing")
   
   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is big') }"
   output <- test_it(lst)
-  fails(output)
+  fails(output, mess_patt = "Check the else part of the first if statement")
   
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
 })
 
-test_that("test_if - step by step - custom", {})
+test_that("test_if - step by step - custom", {
+  
+})
 
 # test_that("test_if - step by step - backwards compatible", {
 #   lst <- list()
