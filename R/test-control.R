@@ -60,7 +60,7 @@ test_if <- function(state) {
 }
 
 #' @export
-test_else <- function(state, missing_else_msg = NULL) {
+test_else <- function(state, not_found_msg = NULL) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   else_state <- SubState$new(state)
@@ -71,7 +71,7 @@ test_else <- function(state, missing_else_msg = NULL) {
   }
   
   check_that(is_false(is.null(student_struct[["else_part"]])), 
-             feedback = list(message = missing_else_msg,
+             feedback = list(message = not_found_msg,
                              details = else_state$get("details"),
                              pd = state$get("student_pd")))
   

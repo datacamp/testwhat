@@ -175,6 +175,8 @@ ControlState <- R6::R6Class("ControlState",
 
 SubState <- R6::R6Class("SubState", inherit = ChildState)
 
+RegexState <- R6::R6Class("RegexState", inherit = ChildState)
+
 ex <- function() {
   return(tw$get("state"))
 }

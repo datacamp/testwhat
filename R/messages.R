@@ -5,6 +5,7 @@ capitalize <- function(x) {
   x <- paste0(toupper(substring(x, 1, 1)), substring(x, 2), collapse = ". ")
   x <- strsplit(x, split = "\\?\\s")[[1]]
   x <- paste0(toupper(substring(x, 1, 1)), substring(x, 2), collapse = "? ")
+  return(x)
 }
 
 `%+=%` <- function(a, b) {
@@ -76,7 +77,7 @@ build_feedback <- function(details) {
       msg %+=% sprintf("The system wanted to find the pattern `%s` %s but didn't.", det$regex, get_times(det$times))
     }
   }
-  return(trim(capitalize(msg)))
+  return(capitalize(trim(msg)))
 }
 
 build_summary <- function(x, ...) UseMethod("build_summary")

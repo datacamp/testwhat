@@ -59,70 +59,32 @@ test_if_else <- function(index = 1,
                          else_expr_test = NULL,
                          not_found_msg = NULL,
                          missing_else_msg = NULL) {
+
+  old_state <- ex()  
+  test_env <- old_state$get("test_env")
+  on.exit(tw$set(state = old_state))
   
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
-  test_env <- tw$get("test_env")
+  testif <- old_state %>% test_ifelse(index = index, not_found_msg = not_found_msg)
   
-  fun_usage <- tw$get("fun_usage")
-  init_tags(fun = "test_if_else")
   
   if_cond_test <- substitute(if_cond_test)
-  if_expr_test <- substitute(if_expr_test)
-  else_expr_test <- substitute(else_expr_test)
-  
-  student_structs <- extract_if(student_pd)
-  solution_structs <- extract_if(solution_pd)
-  
-  if(length(solution_structs) < index) {
-    stop(sprintf("The solution doesn't contain %s control constructs itself.", index))
-  }
-  
-  sol_str <- solution_structs[[index]]
-  
-  if (!is.null(else_expr_test) && is.null(sol_str[["else_part"]])) {
-      stop(sprintf("The %s control construct in the solution doesn't contain an else part itself.", get_ord(index)))
-  }
-  
-  if(is.null(not_found_msg)) {
-    not_found_msg <- sprintf(paste("The system wants to test if the %s control construct",
-                                  "you coded is correct, but it hasn't found it. Add more code."), 
-                            get_ord(index))
-  }
-  check_that(is_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
-  
-  stud_str <- student_structs[[index]]
-  additionaltext <- sprintf(" in the %s control construct of your submission", get_ord(index))
-
-  on.exit({
-    tw$set(student_pd = student_pd)
-    tw$set(solution_pd = solution_pd)
-    tw$set(student_code = student_code)
-    tw$set(solution_code = solution_code)
-    tw$set(fun_usage = fun_usage)
-  })
-  
-  # IF condition part should always be there
   if (!is.null(if_cond_test)) {
-    prepare_tw(stud_str, sol_str, "cond_part")
+    cond_state <- testif %>% test_cond()
+    tw$set(state = cond_state)
     eval(if_cond_test, envir = test_env)
   }
-      
-  # IF expression part should always be available.
+  
+  if_expr_test <- substitute(if_expr_test)
   if (!is.null(if_expr_test)) {
-    prepare_tw(stud_str, sol_str, "if_part")
+    ifexprstate <- testif %>% test_if()
+    tw$set(state = ifexprstate)
     eval(if_expr_test, envir = test_env)
   }
-      
-  # ELSE expression part is not always be available.
+  
+  else_expr_test <- substitute(else_expr_test)
   if (!is.null(else_expr_test)) {
-    if (is.null(missing_else_msg)) {
-      missing_else_msg = sprintf("The <code>else</code> part%s is missing.", additionaltext)
-    }
-    check_that(is_false(is.null(stud_str[["else_part"]])), missing_else_msg)
-    prepare_tw(stud_str, sol_str, "else_part")
+    elseexprstate <- testif %>% test_else(not_found_msg = missing_else_msg)
+    tw$set(state = elseexprstate)
     eval(else_expr_test, envir = test_env)
   }
 }

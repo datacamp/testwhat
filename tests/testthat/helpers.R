@@ -71,7 +71,5 @@ line_info <- function(output, line_start, line_end, column_start, column_end) {
 
 print_fb <- function(output) {
   sct_payload <- get_sct_payload(output)
-  cat("------------------\n")
-  cat(sct_payload$message, "\n")
-  cat("------------------\n")
+  cat("\n", "FBM: \"", testwhat:::trim(sct_payload$message), "\"\n", sep = "")
 }
