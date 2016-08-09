@@ -9,7 +9,9 @@ test_ifelse <- function(state, index = 1, not_found_msg = NULL) {
   control_state <- ControlState$new(state)
   control_state$add_details(type = "ifelse",
                             case = "defined",
-                            index = index)
+                            index = index,
+                            message = not_found_msg,
+                            pd = NULL)
   
   student_structs <- extract_if(student_pd)
   solution_structs <- extract_if(solution_pd)
@@ -21,9 +23,7 @@ test_ifelse <- function(state, index = 1, not_found_msg = NULL) {
   sol_str <- solution_structs[[index]]
   
   check_that(is_true(length(student_structs) >= index), 
-             feedback = list(message = not_found_msg,
-                             details = control_state$get("details"),
-                             pd = NULL))
+             feedback = control_state$details)
   
   stud_str <- student_structs[[index]]
   
@@ -64,18 +64,21 @@ test_else <- function(state, not_found_msg = NULL) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   else_state <- SubState$new(state)
-  else_state$set_details(type = "elseexpression", case = "defined")
+  else_state$set_details(type = "elseexpression",
+                         case = "defined",
+                         message = not_found_msg,
+                         pd = state$get("student_pd"))
   
   if (is.null(solution_struct[["else_part"]])) {
     stop(sprintf("The %s control construct in the solution doesn't contain an else part itself.", get_ord(index)))
   }
   
   check_that(is_false(is.null(student_struct[["else_part"]])), 
-             feedback = list(message = not_found_msg,
-                             details = else_state$get("details"),
-                             pd = state$get("student_pd")))
+             feedback = else_state$details)
   
-  else_state$set_details(type = "elseexpression", case = "correct")
+  else_state$set_details(type = "elseexpression",
+                         case = "correct",
+                         message = NULL)
   decorate_state(else_state, student_struct, solution_struct, "else_part")
   return(else_state)
 }

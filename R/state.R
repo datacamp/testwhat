@@ -121,7 +121,7 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
     initialize = function(state) {
       private$parent = state
       # copy details from parent
-      private$details = private$parent$get("details")
+      self$details = private$parent$details
     },
     
     get = function(name) {
@@ -133,19 +133,20 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
     },
     
     add_details = function(...) {
-      private$details <- c(private$details, list(list(...)))
+      self$details <- c(self$details, list(list(...)))
     },
     
     set_details = function(...) {
       det <- list(...)
-      n <- length(private$details)
-      private$details[[n]][names(det)] <- det
-    }
+      n <- length(self$details)
+      self$details[[n]][names(det)] <- det
+    },
+    
+    details = list()
   ),
   
   private = list(
-    parent = NULL,
-    details = list()
+    parent = NULL
   )
 )
 

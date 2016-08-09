@@ -9,7 +9,9 @@ test_fun <- function(state, name, index = 1, not_called_msg = NULL) {
   fun_state$add_details(type = "function",
                         case = "called",
                         name = name,
-                        index = index)
+                        index = index,
+                        message = not_called_msg,
+                        pd = NULL)
   
   student_calls <- find_function_calls(student_pd, name, student_env)
   solution_calls <- find_function_calls(solution_pd, name, solution_env)
@@ -19,11 +21,12 @@ test_fun <- function(state, name, index = 1, not_called_msg = NULL) {
   check_sufficient(solution_calls, index, name)
   solution_call <- solution_calls[[index]]
 
-  check_that(is_true(n_student_calls >= index), 
-             feedback = list(message = not_called_msg,
-                             details = fun_state$get("details"),
-                             pd = NULL))
+  check_that(is_true(n_student_calls >= index), feedback = fun_state$details)
   
+  # update the case for future tests
+  state$set_details(case = "correct")
+  
+  # manage blacklisting of functions
   state$update_blacklist()
   state$set(active_name = name)
   state$set(active_sol_index = index)
@@ -40,11 +43,11 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   solution_call <- state$get("solution_call")
   student_calls <- state$get("student_calls")
   
-  state$set_details(case = "correct")
   arg_state <- ArgumentState$new(state)
   arg_state$add_details(type = "argument",
                         case = "specified",
-                        name = arg)
+                        name = arg,
+                        message = arg_not_specfiied_msg)
   
   if (! arg %in% names(solution_call$args)) {
     stop(" Make sure that the arguments you specify are actually specified", 
@@ -52,14 +55,15 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   }
 
   res <- numeric()
-  feedback <- NULL
+  details <- NULL
   for (i in seq_along(student_calls)) {
     student_call <- student_calls[[i]]
     if (is.null(student_call)) next
-    if (is.null(feedback)) {
-      feedback <- list(message = arg_not_specified_msg,
-                       details = arg_state$get("details"),
-                       pd = student_call$function_pd)  
+    
+    # If no hits, use details of the first try
+    if (is.null(details)) {
+      arg_state$set_details(pd = student_call$function_pd)
+      details <- arg_state$details
     }
     
     # Check if the function is called with the right arguments
@@ -71,7 +75,7 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
     }
   }
 
-  check_that(is_gte(length(res), 1), feedback = feedback)
+  check_that(is_gte(length(res), 1), feedback = details)
   
   student_args <- student_calls
   student_args[res] <- lapply(student_args[res], function(x) x$args[[arg]])
@@ -89,7 +93,8 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
   
   state$set_details(case = "equal",
                     eval = eval,
-                    eq_condition = eq_condition)
+                    eq_condition = eq_condition,
+                    message = incorrect_msg)
   
   # Test if the specified arguments are correctly called
   solution_obj <- eval_argument(solution_arg,
@@ -102,19 +107,25 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
   
   seq <- seq_along(student_args)
   res <- numeric()
-  feedback <- NULL
+  details <- NULL
   for (i in seq) {
     student_arg <- student_args[[i]]
     if (is.null(student_arg)) next
     student_obj <- eval_argument(student_arg,
                                  eval = eval,
                                  env = state$get("student_env"))
-    if (is.null(feedback)) {
+    
+    # If no hits, use details of the first try
+    if (is.null(details)) {
+      if (is.list(arg) && ! "expr" %in% names(arg)) {
+        pd <- state$student_calls[[i]]$function_pd
+      } else {
+        pd <- student_arg$pd
+      }
       state$set_details(student = student_obj,
-                        solution = solution_obj)
-      feedback <- list(message = incorrect_msg,
-                       details = state$get("details"),
-                       pd = student_arg$pd)
+                        solution = solution_obj,
+                        pd = pd)
+      details <-state$details
     }
     
     # Check if the function arguments correspond

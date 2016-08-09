@@ -30,11 +30,10 @@ DC_reporter <- R6::R6Class("DC_reporter",
         return(list(correct = TRUE,
                     message = to_html(private$success_msg)))
       } else {
-        msg <- feedback$message
-        if (is.null(feedback$message)) {
-          msg <- build_feedback(feedback$details)
-        }
-        line_info <- get_line_info(feedback$pd)
+        
+        build_feedback_message(feedback)
+        line_info <- get_line_info(feedback)
+        
         if (is.null(line_info)) {
           return(list(correct = FALSE,
                       message = to_html(msg)))
@@ -55,10 +54,21 @@ DC_reporter <- R6::R6Class("DC_reporter",
 )
 
 
-get_line_info <- function(pd) {
+get_line_info <- function(feedback) {
+  
+  # take 'highest pd' in list of feedback
+  pd <- NULL
+  for (i in length(feedback):1) {
+    if (!is.null(feedback[["pd"]])) {
+      pd <- feedback[["pd"]]
+      break
+    }
+  }
+  
   if (is.null(pd) || is.na(pd)) {
     return(NULL)
   }
+  
   id <- pd$id[!(pd$parent %in% pd$id)]
   if (length(id) > 1) {
     return(list(line_start = min(pd$line1),

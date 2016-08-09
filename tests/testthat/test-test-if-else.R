@@ -1,136 +1,136 @@
 context("test_if_else")
 source("helpers.R")
 
-# test_that("test_if - step by step", {
-#   lst <- list()
-#   lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
-#   lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse()
-#                  ifelse %>% test_cond() %>% test_code('>')
-#                  ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
-#                  ifelse %>% test_else() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
-# 
-#   lst$DC_CODE <- ""
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Are you sure you coded one if statement")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x < 3) { }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Check the condition of the first if statement")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is small') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt =  "Check the body of the first if statement")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "The else part of the first if statement is missing")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is big') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Check the else part of the first if statement")
-# 
-#   lst$DC_CODE <- lst$DC_SOLUTION
-#   output <- test_it(lst)
-#   passes(output)
-# })
-# 
-# test_that("test_if - step by step - custom", {
-#   lst <- list()
-#   lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
-#   lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse(not_found_msg = 'notfound')
-#                  ifelse %>% test_cond() %>% test_code('>')
-#                  ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorr')
-#                  ifelse %>% test_else(not_found_msg = 'elsenotfound') %>% test_fun('print') %>% test_arg('x') %>% test_equal('incorr2')"
-# 
-#   lst$DC_CODE <- ""
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "notfound")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x < 3) { }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Check the condition of the first if statement")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is small') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt =  "incorr")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "elsenotfound")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is big') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "incorr2")
-# 
-#   lst$DC_CODE <- lst$DC_SOLUTION
-#   output <- test_it(lst)
-#   passes(output)  
-# })
-# 
-# test_that("test_ifelse - step by step - backwards compatible", {
-#   lst <- list()
-#   lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
-#   # No support for test_student_typed yet!
-#   # lst$DC_SCT <- "test_if_else(if_cond_test = test_student_typed('>'), if_expr_test = test_function('print', 'x'), else_expr_test = test_function('print', 'x'))"
-#   lst$DC_SCT <- "test_if_else(if_expr_test = test_function('print', 'x'), else_expr_test = test_function('print', 'x'))"
-# 
-#   lst$DC_CODE <- ""
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Are you sure you coded one if statement")
-# 
-#   # lst$DC_CODE <- "x <- 4\nif (x < 3) { }"
-#   # output <- test_it(lst)
-#   # fails(output, mess_patt = "Check the condition of the first if statement")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is small') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt =  "Check the body of the first if statement")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "The else part of the first if statement is missing")
-# 
-#   lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is big') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Check the else part of the first if statement")
-# 
-#   lst$DC_CODE <- lst$DC_SOLUTION
-#   output <- test_it(lst)
-#   passes(output)
-# })
-# 
-# test_that("test_ifelse - indexing", {
-#   lst <- list()
-#   lst$DC_SOLUTION <- "x <- 4\nif (x > 4) { print('a') } else { print('b')}\nif(x > 5) { print('c') } else { print('d') }"
-#   lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse(2)
-#                  ifelse %>% test_cond() %>% test_code('>')
-#                  ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
-#                  ifelse %>% test_else() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
-# 
-#   lst$DC_CODE <- ""
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Are you sure you coded two if statements")
-#   
-#   lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x < 3) { }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Check the condition of the second if statement")
-#   
-#   lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x > 3) { print('r') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt =  "Check the body of the second if statement")
-#   
-#   lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x > 3) { print('c') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "The else part of the second if statement is missing")
-#   
-#   lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x > 3) { print('c') } else { print('c') }"
-#   output <- test_it(lst)
-#   fails(output, mess_patt = "Check the else part of the second if statement")
-#   
-#   lst$DC_CODE <- lst$DC_SOLUTION
-#   output <- test_it(lst)
-#   passes(output)
-# })
+test_that("test_if - step by step", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
+  lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse()
+                 ifelse %>% test_cond() %>% test_code('>')
+                 ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
+                 ifelse %>% test_else() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Are you sure you coded one if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x < 3) { }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the condition of the first if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is small') }"
+  output <- test_it(lst)
+  fails(output, mess_patt =  "Check the body of the first if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The else part of the first if statement is missing")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is big') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the else part of the first if statement")
+
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("test_if - step by step - custom", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
+  lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse(not_found_msg = 'notfound')
+                 ifelse %>% test_cond() %>% test_code('>')
+                 ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorr')
+                 ifelse %>% test_else(not_found_msg = 'elsenotfound') %>% test_fun('print') %>% test_arg('x') %>% test_equal('incorr2')"
+
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "notfound")
+
+  lst$DC_CODE <- "x <- 4\nif (x < 3) { }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the condition of the first if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is small') }"
+  output <- test_it(lst)
+  fails(output, mess_patt =  "incorr")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "elsenotfound")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is big') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "incorr2")
+
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("test_ifelse - step by step - backwards compatible", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
+  # No support for test_student_typed yet!
+  # lst$DC_SCT <- "test_if_else(if_cond_test = test_student_typed('>'), if_expr_test = test_function('print', 'x'), else_expr_test = test_function('print', 'x'))"
+  lst$DC_SCT <- "test_if_else(if_expr_test = test_function('print', 'x'), else_expr_test = test_function('print', 'x'))"
+
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Are you sure you coded one if statement")
+
+  # lst$DC_CODE <- "x <- 4\nif (x < 3) { }"
+  # output <- test_it(lst)
+  # fails(output, mess_patt = "Check the condition of the first if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is small') }"
+  output <- test_it(lst)
+  fails(output, mess_patt =  "Check the body of the first if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The else part of the first if statement is missing")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is big') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the else part of the first if statement")
+
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("test_ifelse - indexing", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- 4\nif (x > 4) { print('a') } else { print('b')}\nif(x > 5) { print('c') } else { print('d') }"
+  lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse(2)
+                 ifelse %>% test_cond() %>% test_code('>')
+                 ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
+                 ifelse %>% test_else() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Are you sure you coded two if statements")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x < 3) { }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the condition of the second if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x > 3) { print('r') }"
+  output <- test_it(lst)
+  fails(output, mess_patt =  "Check the body of the second if statement")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x > 3) { print('c') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The else part of the second if statement is missing")
+
+  lst$DC_CODE <- "x <- 4\nif (x > 4) { print('a') }\nif (x > 3) { print('c') } else { print('c') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the else part of the second if statement")
+
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
 
 # TODO: fix messaging!!
 test_that("test_ifelse - nesting", {

@@ -65,15 +65,15 @@ test_obj <- function(state, name, undefined_msg = NULL) {
   obj_state <- ObjectState$new(state)
   obj_state$add_details(type = "object",
                         case = "defined",
-                        name = name)
+                        name = name,
+                        message = undefined_msg,
+                        pd = NULL)
 
   check_defined(name, solution_env)
   solution_object <- get(name, envir = solution_env, inherits = FALSE)
 
   check_that(is_true(exists(name, envir = student_env, inherits = FALSE)),
-             feedback = list(message = undefined_msg,
-                             details = obj_state$get("details"),
-                             pd = NULL))
+             feedback = obj_state$details)
 
   student_object <- get(name, envir = student_env, inherits = FALSE)
 
@@ -90,11 +90,11 @@ test_equal.ObjectState <- function(state, incorrect_msg = NULL, eq_condition = "
   state$set_details(case = "equal",
                     student = student_obj,
                     solution = solution_obj,
-                    eq_condition = eq_condition)
+                    eq_condition = eq_condition,
+                    message = incorrect_msg,
+                    pd = state$get("student_pd"))
 
   check_that(is_equal(student_obj, solution_obj, eq_condition),
-             feedback = list(message = incorrect_msg,
-                             details = state$get("details"),
-                             pd = state$get("student_pd")))
+             feedback = state$details)
   return(state)
 }
