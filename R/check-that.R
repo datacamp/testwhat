@@ -101,6 +101,8 @@ is_equal <- function(x, y, eq_condition = "equivalent") {
   UseMethod("is_equal", x)
 }
 
+#' @rdname is_equal
+#' @export
 is_equal.default <- function(x, y, eq_condition = "equivalent") {
   eq_fun <- switch(eq_condition,
                    equivalent = function(x, y) isTRUE(all.equal(x, y, check.attributes = FALSE)),
@@ -110,6 +112,8 @@ is_equal.default <- function(x, y, eq_condition = "equivalent") {
   eq_fun(x, y)
 }
 
+#' @rdname is_equal
+#' @export
 is_equal.formula <- function(x, y, eq_condition = "equivalent") {
   tryCatch({
     xlst <- convert_formula(x)

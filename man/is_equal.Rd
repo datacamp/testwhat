@@ -2,9 +2,15 @@
 % Please edit documentation in R/check-that.R
 \name{is_equal}
 \alias{is_equal}
+\alias{is_equal.default}
+\alias{is_equal.formula}
 \title{Check equality of two objects}
 \usage{
 is_equal(x, y, eq_condition = "equivalent")
+
+\method{is_equal}{default}(x, y, eq_condition = "equivalent")
+
+\method{is_equal}{formula}(x, y, eq_condition = "equivalent")
 }
 \arguments{
 \item{x}{object to test}
