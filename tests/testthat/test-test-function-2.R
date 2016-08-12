@@ -28,15 +28,15 @@ test_that("test_function step by step - custom", {
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
-  fails(output, mess_patt = "notcalled")
+  fails(output, mess_patt = "Notcalled")
 
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
-  fails(output, mess_patt = "notspecified")
+  fails(output, mess_patt = "Notspecified")
 
   lst$DC_CODE <- "mean(1:3, na.rm = FALSE)"
   output <- test_it(lst)
-  fails(output, mess_patt = "incorrect")
+  fails(output, mess_patt = "Incorrect")
 
   lst$DC_CODE <- "mean(1:3, na.rm = TRUE)"
   output <- test_it(lst)
@@ -49,19 +49,19 @@ test_that("test_function step by step - custom - 2", {
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
-  fails(output, mess_patt = "notcalled")
+  fails(output, mess_patt = "Notcalled")
 
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
-  fails(output, mess_patt = "notspecified")
+  fails(output, mess_patt = "Notspecified")
 
   lst$DC_CODE <- "mean(1:2, na.rm = FALSE)"
   output <- test_it(lst)
-  fails(output, mess_patt = "incorrect1")
+  fails(output, mess_patt = "Incorrect1")
 
   lst$DC_CODE <- "mean(1:3, na.rm = FALSE)"
   output <- test_it(lst)
-  fails(output, mess_patt = "incorrect2")
+  fails(output, mess_patt = "Incorrect2")
 
   lst$DC_CODE <- "mean(1:3, na.rm = TRUE)"
   output <- test_it(lst)

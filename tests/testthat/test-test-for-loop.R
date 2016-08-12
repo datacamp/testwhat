@@ -1,77 +1,167 @@
 context("test_for_loop")
 source("helpers.R")
 
-test_that("test_for works in basic form", {
+test_that("test_for - step by step", {
   lst <- list()
-  lst$DC_CODE <- "for (i in 1:10) {\n    rpois(10,i)\n  }"
-  lst$DC_SOLUTION <- "for (i in 1:3) {\n    rnorm(10,i)\n  }"
-  lst$DC_SCT <- "test_for_loop()"
-  output <- test_it(lst)
-  passes(output)
-  
-  lst <- list()
+  lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }"
+  lst$DC_SCT <- "forloop <- ex() %>% test_for()
+                 forloop %>% test_cond() %>% test_code('10')
+                 forloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+
   lst$DC_CODE <- ""
-  lst$DC_SOLUTION <- "for (i in 1:3) {\n    rnorm(10,i)\n  }"
-  lst$DC_SCT <- "test_for_loop()"
   output <- test_it(lst)
-  fails(output)
-})
+  fails(output, mess_patt = "Are you sure you coded one for statement")
 
-test_that("test_for works with cond_test", {
-  lst <- list()
-  lst$DC_CODE <- "for (i in 1:10) {\n    rpois(10,i)\n  }"
-  lst$DC_SOLUTION <- "for (i in 1:10) {\n    rpois(10,i)\n  }"
-  lst$DC_SCT <- "test_for_loop(cond_test = test_student_typed('i in 1:10'))"
+  lst$DC_CODE <- "for (i in 1:5) { print('abc') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the first for statement")
+  fails(output, mess_patt = "Check the condition")
+
+  lst$DC_CODE <- "for (i in 1:10) { print('abc') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the first for statement")
+  fails(output, mess_patt = "Check the body")
+  fails(output, mess_patt = "Check your call of <code>print\\(\\)</code>")
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code>")
+
+  lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
-  
-  lst$DC_SCT <- "test_for_loop(cond_test = test_student_typed('rettketet'))"
-  output <- test_it(lst)
-  fails(output)
-  
-  lst$DC_SCT <- "test_for_loop(cond_test = test_student_typed('retteketet', not_typed_msg = 'retteketet not found'))"
-  output <- test_it(lst)
-  fails(output, mess_patt = "retteketet not found")
 })
 
-test_that("test_for works with expr_test", {
+
+test_that("test_for - step by step - custom", {
   lst <- list()
-  lst$DC_CODE <- "for (i in 1:10) {\n    rpois(10,i)\n  }"
-  lst$DC_SOLUTION <- "for (i in 1:10) {\n    rpois(10,i)\n  }"
-  lst$DC_SCT = "test_for_loop(expr_test = test_function('rpois', args = c('n', 'lambda')))"
+  lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }"
+  lst$DC_SCT <- "forloop <- ex() %>% test_for(not_found_msg = 'notfound')
+                 forloop %>% test_cond() %>% test_code('10', not_typed_msg = 'nottyped')
+                 forloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorrect')"
+
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Notfound")
+
+  lst$DC_CODE <- "for (i in 1:5) { print('abc') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the first for statement")
+  fails(output, mess_patt = "Check the condition")
+  fails(output, mess_patt = "Nottyped")
+
+  lst$DC_CODE <- "for (i in 1:10) { print('abc') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the first for statement")
+  fails(output, mess_patt = "Check the body")
+  fails(output, mess_patt = "Check your call of <code>print\\(\\)</code>")
+  fails(output, mess_patt = "Incorrect")
+
+  lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
-  
-  lst <- list()
-  lst$DC_CODE <- "for (i in 1:10) {\n    rpois(3,i)\n  }"
-  lst$DC_SOLUTION <- "for (i in 1:10) {\n    rpois(10,i)\n    rnorm(10,i)\n  }"
-  lst$DC_SCT = "test_for_loop(expr_test = test_function('rpois', args = c('n', 'lambda')))"
-  output <- test_it(lst)
-  fails(output)
-  
-  lst$DC_SCT = "test_for_loop(expr_test = test_function('rpois', args = c('n', 'lambda'), incorrect_msg = 'wrong'))"
-  output <- test_it(lst)
-  fails(output, mess_patt = "wrong")
-  
-  lst$DC_SCT = "test_for_loop(expr_test = test_function(\"rnorm\"))"
-  output <- test_it(lst)
-  fails(output)
 })
 
-test_that("test_for works with indexes", {
+test_that("test_for - backwards compatibility", {
   lst <- list()
-  lst$DC_CODE <- "for (i in 3:8) {\n    rpois(2,i)\n  }\n  a <- \"some code here\"\n  for (n in 3:5) {\n    rnorm(5, n*n)\n  }"
-  lst$DC_SOLUTION <- "for (i in 1:10) {\n    rpois(10,i)\n  }\n  for (n in 3:5) {\n    rnorm(5, n*n)\n  }\n\nfor(x in 1:5) print(x)"
+  lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }"
+  lst$DC_SCT <- "test_for_loop(index = 1, cond_test = test_student_typed('10'), expr_test = test_function('print', 'x'))"
   
-  lst$DC_SCT <- "test_for_loop(2, cond_test = test_object(\"n\"), expr_test = test_function(\"rnorm\", c(\"n\")))"
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Are you sure you coded one for statement")
+  
+  lst$DC_CODE <- "for (i in 1:5) { print('abc') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the first for statement")
+  fails(output, mess_patt = "Check the condition")
+
+  lst$DC_CODE <- "for (i in 1:10) { print('abc') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the first for statement")
+  fails(output, mess_patt = "Check the body")
+  fails(output, mess_patt = "Check your call of <code>print\\(\\)</code>")
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code>")
+
+  lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
+})
+
+
+test_that("test_for - indexing", {
+  lst <- list()
+  lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }\nfor (i in 1:5) { print('abc') }"
+  lst$DC_SCT <- "forloop <- ex() %>% test_for(2)
+                 forloop %>% test_cond() %>% test_code('5')
+                 forloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
   
-  lst$DC_SCT <- "test_for_loop(1, expr_test = test_function(\"rpois\", c(\"n\", \"lambda\")))"
+  lst$DC_CODE <- "for (i in 1:10) {}"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Are you sure you coded two for statements")
+  
+  lst$DC_CODE <- "for (i in 1:10) {}\nfor (i in 1:10) { print('test') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the second for statement")
+  fails(output, mess_patt = "Check the condition")
+  
+  lst$DC_CODE <- "for (i in 1:10) {}\nfor (i in 1:5) { print('test') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check the second for statement")
+  fails(output, mess_patt = "Check the body")
+  fails(output, mess_patt = "Check your call of <code>print\\(\\)</code>")
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code>")
+  
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
+
+# TODO add messaging tests
+test_that("test_for - nesting", {
+  lst <- list()
+  lst$DC_SOLUTION <- "for (i in 1:10) { for (j in 1:5) { print('abcde') }}"
+  lst$DC_SCT <- "forloop <- ex() %>% test_for()
+                 forloop %>% test_cond() %>% test_code('10')
+                 forloop2 <- forloop %>% test_body() %>% test_for()
+                 forloop2 %>% test_cond() %>% test_code('5')
+                 forloop2 %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  
+  lst$DC_CODE <- ""
   output <- test_it(lst)
   fails(output)
   
-  lst$DC_SCT <- "test_for_loop(3, not_found_msg = \"Too much looooooops\")"
+  lst$DC_CODE <- "for (i in 1:5) { }"
   output <- test_it(lst)
-  fails(output, mess_patt = "Too much looooooops")
+  fails(output)
+  
+  lst$DC_CODE <- "for (i in 1:10) { }"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "for (i in 1:10) { for (j in 1:11) { }}"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "for (i in 1:10) { for (j in 1:10) { }}"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "for (i in 1:10) { for (j in 1:10) { print('test') }}"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("test_for - test_ifelse inside", {
+  # TODO  
+})
+
+test_that("test_for - highlighting", {
+  # TODO
+})
+
+test_that("test_for - errs appropriately", {
+  # TODO
 })

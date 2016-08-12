@@ -27,35 +27,35 @@ test_student_typed <- function(strings,
                                fixed = TRUE,
                                times = 1,
                                not_typed_msg = NULL) {
-  
-  student_code <- tw$get("student_code")
-  init_tags(fun = "test_student_typed")
-  
-  if (is.null(not_typed_msg)) {
-    not_typed_msg <- sprintf("The solution expects you to type %s at the appropriate location%s.", 
-                             collapse_args(strings, conn = " or "), if (length(strings) == 1) "" else "s")
-  }
-  
-  # Clean up both string and student code
-  student_code <- gsub("[[:space:]]|;|\n", "", student_code)
-  strings <- gsub("[[:space:]]|;|\n", "", strings)
-  student_code <- gsub("=", "<-", student_code)
-  strings <- gsub("=", "<-", strings)
-  student_code <- gsub("FALSE", "F", student_code)
-  strings <- gsub("FALSE", "F", strings)
-  student_code <- gsub("TRUE", "T", student_code)
-  strings <- gsub("TRUE", "T", strings)
-  student_code <- gsub("\"", "'", student_code)
-  strings <- gsub("\"", "'", strings)
-  
-  counts <- sapply(strings, function(patt) {
-    res <- gregexpr(patt, text = student_code, fixed = fixed)[[1]]
-    if (any(res == -1)) {
-      return(0L)
-    } else {
-      return(length(res))
-    }
-  }, USE.NAMES = FALSE)
-  
-  check_that(is_gte(sum(counts), times), feedback = list(message = not_typed_msg))
+  ex() %>% test_code(strings, fixed = fixed, times = times, not_typed_msg = not_typed_msg)
+  # student_code <- tw$get("student_code")
+  # init_tags(fun = "test_student_typed")
+  # 
+  # if (is.null(not_typed_msg)) {
+  #   not_typed_msg <- sprintf("The solution expects you to type %s at the appropriate location%s.", 
+  #                            collapse_args(strings, conn = " or "), if (length(strings) == 1) "" else "s")
+  # }
+  # 
+  # # Clean up both string and student code
+  # student_code <- gsub("[[:space:]]|;|\n", "", student_code)
+  # strings <- gsub("[[:space:]]|;|\n", "", strings)
+  # student_code <- gsub("=", "<-", student_code)
+  # strings <- gsub("=", "<-", strings)
+  # student_code <- gsub("FALSE", "F", student_code)
+  # strings <- gsub("FALSE", "F", strings)
+  # student_code <- gsub("TRUE", "T", student_code)
+  # strings <- gsub("TRUE", "T", strings)
+  # student_code <- gsub("\"", "'", student_code)
+  # strings <- gsub("\"", "'", strings)
+  # 
+  # counts <- sapply(strings, function(patt) {
+  #   res <- gregexpr(patt, text = student_code, fixed = fixed)[[1]]
+  #   if (any(res == -1)) {
+  #     return(0L)
+  #   } else {
+  #     return(length(res))
+  #   }
+  # }, USE.NAMES = FALSE)
+  # 
+  # check_that(is_gte(sum(counts), times), feedback = list(message = not_typed_msg))
 }

@@ -26,11 +26,11 @@ test_that("test_object step by step - custom - 1", {
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
-  fails(output, mess_patt = "undef")
+  fails(output, mess_patt = "Undef")
 
   lst$DC_CODE <- "x <- 4"
   output <- test_it(lst)
-  fails(output, mess_patt = "incorr")
+  fails(output, mess_patt = "Incorr")
 
   lst$DC_CODE <- "x <- 5"
   output <- test_it(lst)
@@ -44,11 +44,11 @@ test_that("test_object step by step - custom - 2", {
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
-  fails(output, mess_patt = "undef")
+  fails(output, mess_patt = "Undef")
 
   lst$DC_CODE <- "x <- 4"
   output <- test_it(lst)
-  fails(output, mess_patt = "incorr")
+  fails(output, mess_patt = "Incorr")
 
   lst$DC_CODE <- "x <- 5"
   output <- test_it(lst)
@@ -73,15 +73,15 @@ test_that("test_object - eq_condition = equivalent", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- c(a = 1, b = 2)"
   lst$DC_SCT <- "test_object('x')"
-  
+
   lst$DC_CODE <- ""
   output <- test_it(lst)
   fails(output)
-  
+
   lst$DC_CODE <- "x <- c(a = 1, c = 3)"
   output <- test_it(lst)
   fails(output)
-  
+
   lst$DC_CODE <- "x <- c(a = 1, c = 2)"
   output <- test_it(lst)
   passes(output)

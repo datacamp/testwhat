@@ -59,7 +59,11 @@ test_while_loop <- function(index = 1,
                             not_found_msg = NULL) {
   cond_test <- substitute(cond_test)
   expr_test <- substitute(expr_test)
-  test_loop(type = "while", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg)
+  test_loop(index = index, 
+            cond_test = cond_test,
+            expr_test = expr_test,
+            not_found_msg = not_found_msg,
+            fun = test_while)
 }
 
 #' @rdname test_loop
@@ -70,60 +74,29 @@ test_for_loop <- function(index = 1,
                           not_found_msg = NULL) {
   cond_test <- substitute(cond_test)
   expr_test <- substitute(expr_test)
-  test_loop(type = "for", index = index, cond_test = cond_test, expr_test = expr_test, not_found_msg = not_found_msg)
+  test_loop(index = index, 
+            cond_test = cond_test,
+            expr_test = expr_test,
+            not_found_msg = not_found_msg,
+            fun = test_for)
 }
 
-
-test_loop <- function(type = c("while", "for"), index, cond_test, expr_test, not_found_msg, env) {
-  type <- match.arg(type)
+test_loop <- function(index, cond_test, expr_test, not_found_msg, fun) {
+  old_state <- ex()
+  test_env <- old_state$get("test_env")
+  on.exit(tw$set(state = old_state))
   
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
-  test_env <- tw$get("test_env")
-  fun_usage <- tw$get("fun_usage")
-  init_tags(fun = sprintf("test_%s_loop", type))
+  testloop <- old_state %>% fun(index = index, not_found_msg = not_found_msg)
   
-  if (type == "for") {
-    extract_fun <- extract_for
-  } else {
-    extract_fun <- extract_while
-  }
-  student_structs <- extract_fun(student_pd)
-  solution_structs <- extract_fun(solution_pd)
-  
-  if (length(solution_structs) < index) {
-    stop(sprintf("The solution doesn't contain %s (internal) %s loops itself.", index, type))
-  }
-  
-  if (is.null(not_found_msg)) {
-    not_found_msg <- sprintf(paste("The system wants to test if the %s `%s` loop",
-                                   "you coded is correct, but it hasn't found it. Add more code."), 
-                             get_ord(index), type)
-  }
-  check_that(is_true(length(student_structs) >= index), feedback = list(message = not_found_msg))
-  
-  student_struct <- student_structs[[index]]
-  solution_struct <- solution_structs[[index]]
-  
-  on.exit({
-    tw$set(student_pd = student_pd)
-    tw$set(solution_pd = solution_pd)
-    tw$set(student_code = student_code)
-    tw$set(solution_code = solution_code)
-    tw$set(fun_usage = fun_usage)
-  })
-  
-  # WHILE condition part should always be there
   if (!is.null(cond_test)) {
-    prepare_tw(student_struct, solution_struct, "cond_part")
+    cond_state <- testloop %>% test_cond()
+    tw$set(state = cond_state)
     eval(cond_test, envir = test_env)
   }
-  
-  # IF expression part should always be available.
+
   if (!is.null(expr_test)) {
-    prepare_tw(student_struct, solution_struct, "expr_part")
+    body_state <- testloop %>% test_body()
+    tw$set(state = body_state)
     eval(expr_test, envir = test_env)
   }
 }

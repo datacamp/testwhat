@@ -12,10 +12,14 @@ capitalize <- function(x) {
   eval.parent(substitute(a <- paste(a, b)))
 }
 
-build_feedback <- function(details) {
+build_feedback_message <- function(details) {
   msg <- ""
 
   for (det in details) {
+    if (!is.null(det$message)) {
+      msg %+=% det$message
+      next
+    }
     if (det$type == "object") {
       if (det$case == "defined") {
         msg %+=% sprintf("Did you define the variable `%s` without errors?", det$name)
@@ -55,22 +59,27 @@ build_feedback <- function(details) {
         }
       }
     }
-    if (det$type == "ifelse") {
+    if (det$type %in% c("if", "for", "while")) {
       if (det$case == "defined") {
-        msg %+=% sprintf("Are you sure you coded %s if statement%s?", get_num(det$index), ifelse(det$index > 1, "s", ""))  
+        msg %+=% sprintf("Are you sure you coded %s %s statement%s?", get_num(det$index), det$type, ifelse(det$index > 1, "s", ""))  
+      } else if (det$case == "correct") {
+        msg %+=% sprintf("Check the %s %s statement.", get_ord(det$index), det$type)
       }
     }
-    if (det$type == "ifcondition") {
-      msg %+=% sprintf("Check the condition of the %s if statement.", get_ord(det$index))
+    if (det$type == "condition") {
+      msg %+=% sprintf("Check the condition.")
+    }
+    if (det$type == "body") {
+      msg %+=% sprintf("Check the body.")
     }
     if (det$type == "ifexpression") {
-      msg %+=% sprintf("Check the body of the %s if statement.", get_ord(det$index))
+      msg %+=% sprintf("Check the if part.")
     }
     if (det$type == "elseexpression") {
       if (det$case == "defined") {
-        msg %+=% sprintf("The else part of the %s if statement is missing.", get_ord(det$index))
+        msg %+=% sprintf("The else part is missing.")
       } else if (det$case == "correct") {
-        msg %+=% sprintf("Check the else part of the %s if statement.", get_ord(det$index))
+        msg %+=% sprintf("Check the else part.")
       }
     }
     if (det$type == "typed") {

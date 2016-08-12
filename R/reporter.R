@@ -31,7 +31,7 @@ DC_reporter <- R6::R6Class("DC_reporter",
                     message = to_html(private$success_msg)))
       } else {
         
-        build_feedback_message(feedback)
+        msg <- build_feedback_message(feedback)
         line_info <- get_line_info(feedback)
         
         if (is.null(line_info)) {
@@ -59,8 +59,8 @@ get_line_info <- function(feedback) {
   # take 'highest pd' in list of feedback
   pd <- NULL
   for (i in length(feedback):1) {
-    if (!is.null(feedback[["pd"]])) {
-      pd <- feedback[["pd"]]
+    if (!is.null(feedback[[i]][["pd"]])) {
+      pd <- feedback[[i]][["pd"]]
       break
     }
   }

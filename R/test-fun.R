@@ -24,7 +24,8 @@ test_fun <- function(state, name, index = 1, not_called_msg = NULL) {
   check_that(is_true(n_student_calls >= index), feedback = fun_state$details)
   
   # update the case for future tests
-  state$set_details(case = "correct")
+  fun_state$set_details(case = "correct",
+                        message = NULL)
   
   # manage blacklisting of functions
   state$update_blacklist()
@@ -47,7 +48,7 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   arg_state$add_details(type = "argument",
                         case = "specified",
                         name = arg,
-                        message = arg_not_specfiied_msg)
+                        message = arg_not_specified_msg)
   
   if (! arg %in% names(solution_call$args)) {
     stop(" Make sure that the arguments you specify are actually specified", 
@@ -117,7 +118,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     
     # If no hits, use details of the first try
     if (is.null(details)) {
-      if (is.list(arg) && ! "expr" %in% names(arg)) {
+      if (is_dots(student_arg)) {
         pd <- state$student_calls[[i]]$function_pd
       } else {
         pd <- student_arg$pd
@@ -125,7 +126,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
       state$set_details(student = student_obj,
                         solution = solution_obj,
                         pd = pd)
-      details <-state$details
+      details <- state$details
     }
     
     # Check if the function arguments correspond
@@ -137,7 +138,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     }
   }
   
-  check_that(is_gte(length(res), 1), feedback = feedback)
+  check_that(is_gte(length(res), 1), feedback = details)
   
   return(state)
 }
@@ -145,7 +146,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
 tryerrorstring <- "try-error-in-test-function"
 
 eval_argument <- function(arg, eval, env) {
-  if (is.list(arg) && ! "expr" %in% names(arg)) {
+  if (is_dots(arg)) {
     return(lapply(arg, eval_argument, eval, env))
   }
   if (eval) {
@@ -157,6 +158,10 @@ eval_argument <- function(arg, eval, env) {
     obj <- stringify(arg$expr)
   }
   return(obj)
+}
+
+is_dots <- function(arg) {
+  is.list(arg) && ! "expr" %in% names(arg)
 }
 
 stringify <- function(arg) {

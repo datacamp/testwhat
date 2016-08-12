@@ -59,13 +59,11 @@ test_if_else <- function(index = 1,
                          else_expr_test = NULL,
                          not_found_msg = NULL,
                          missing_else_msg = NULL) {
-
   old_state <- ex()  
   test_env <- old_state$get("test_env")
   on.exit(tw$set(state = old_state))
   
   testif <- old_state %>% test_ifelse(index = index, not_found_msg = not_found_msg)
-  
   
   if_cond_test <- substitute(if_cond_test)
   if (!is.null(if_cond_test)) {
