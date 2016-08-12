@@ -1,5 +1,4 @@
 # context("test_function_result")
-# source("helpers.R")
 # 
 # test_that("test_function_result fails correctly", {
 #   lst <- list()

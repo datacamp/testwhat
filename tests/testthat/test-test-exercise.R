@@ -1,5 +1,4 @@
 context("test_exercise")
-source("helpers.R")
 
 test_that("basic exercise", {
   lst <- list()

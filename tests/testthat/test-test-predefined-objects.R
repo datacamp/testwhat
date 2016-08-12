@@ -1,5 +1,4 @@
 context("test-predefined-objects")
-source("helpers.R")
 
 test_that("test_predefined_objects works", {
   lst <- list()

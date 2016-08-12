@@ -1,5 +1,4 @@
 context("test_object")
-source("helpers.R")
 
 test_that("test_object step by step", {
   lst <- list()

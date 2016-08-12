@@ -1,5 +1,4 @@
 context("test_rmd_group")
-source("helpers.R")
 
 test_that("test_rmd_group works", {
   lst <- list()

@@ -1,5 +1,4 @@
 context("test_library_function")
-source("helpers.R")
 
 test_that("test_library_function works 1", {
   lst <- list()

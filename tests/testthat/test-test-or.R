@@ -1,5 +1,4 @@
 context("test_or")
-source("helpers.R")
 
 test_that("test_or works", {
   lst <- list()

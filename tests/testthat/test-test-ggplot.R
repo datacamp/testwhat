@@ -1,5 +1,4 @@
 context("test_ggplot")
-source("helpers.R")
 
 test_that("test_ggplot works 1", {
   lst <- list()

@@ -1,5 +1,4 @@
 # context("test_function_definition")
-# source("helpers.R")
 # 
 # test_that("test_function_definition incorrect use", {
 #   lst <- list()

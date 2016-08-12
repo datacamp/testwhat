@@ -1,5 +1,4 @@
 context("test_correct")
-source("helpers.R")
 
 test_that("test_correct works", {
   lst <- list()

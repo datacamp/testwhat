@@ -1,5 +1,4 @@
 context("test_mc")
-source("helpers.R")
 
 test_that("test_mc works", {
   lst <- list()

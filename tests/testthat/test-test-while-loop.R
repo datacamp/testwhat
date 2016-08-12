@@ -1,5 +1,4 @@
 context("test_while_loop")
-source("helpers.R")
 
 test_that("test_while - step by step", {
   lst <- list()

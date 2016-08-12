@@ -1,5 +1,4 @@
 context("test_yaml_header")
-source("helpers.R")
 
 test_that("test_yaml_header works", {
   lst <- list()

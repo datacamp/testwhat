@@ -1,5 +1,4 @@
 context("test_operator")
-source("helpers.R")
 
 test_that("test_operator errors correctly", {
   lst <- list()

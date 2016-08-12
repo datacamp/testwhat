@@ -1,5 +1,4 @@
 context("test_for_loop")
-source("helpers.R")
 
 test_that("test_for - step by step", {
   lst <- list()

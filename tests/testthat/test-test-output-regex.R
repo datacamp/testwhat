@@ -1,5 +1,4 @@
 context("test_output_regex")
-source("helpers.R")
 
 test_that("test_output_regex works", {
   lst <- list()

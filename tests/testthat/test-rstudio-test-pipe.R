@@ -1,5 +1,4 @@
 context("test_pipe")
-source("helpers.R")
 
 test_that("test_pipe works", {
   lst <- list()

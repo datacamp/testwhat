@@ -1,5 +1,4 @@
 context("test_function")
-source("helpers.R")
 
 test_that("test_function step by step", {
   lst <- list(DC_SOLUTION = "mean(1:3, na.rm = TRUE)",

@@ -1,5 +1,4 @@
 context("test_expression_result")
-source("helpers.R")
 
 test_that("test_expression_result works", {
   lst <- list()

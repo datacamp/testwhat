@@ -1,5 +1,4 @@
 context("test_output_contains")
-source("helpers.R")
 
 test_that("basic test_output_contains", {
   lst <- list()

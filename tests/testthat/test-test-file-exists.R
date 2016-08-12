@@ -1,5 +1,4 @@
 context("test_file_exists")
-source("helpers.R")
 
 test_that("test_file_exists works", {
   lst <- list()

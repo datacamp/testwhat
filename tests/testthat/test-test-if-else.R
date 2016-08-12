@@ -1,5 +1,4 @@
 context("test_if_else")
-source("helpers.R")
 
 test_that("test_if - step by step", {
   lst <- list()
