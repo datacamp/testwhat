@@ -83,6 +83,10 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   student_args[-res] <- NULL
   arg_state$set(student_args = student_args)
   arg_state$set(solution_arg = solution_call$args[[arg]])
+  
+  arg_state$set_details(case = "correct",
+                        message = NULL)
+  
   return(arg_state)
 }
 
@@ -92,7 +96,8 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
   solution_arg <- state$get("solution_arg")
   student_args <- state$get("student_args")
   
-  state$set_details(case = "equal",
+  state$add_details(type = "argument",
+                    case = "equal",
                     eval = eval,
                     eq_condition = eq_condition,
                     message = incorrect_msg)
@@ -120,12 +125,15 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     if (is.null(details)) {
       if (is_dots(student_arg)) {
         pd <- state$student_calls[[i]]$function_pd
+        is_dots <- TRUE
       } else {
         pd <- student_arg$pd
+        is_dots <- FALSE
       }
       state$set_details(student = student_obj,
                         solution = solution_obj,
-                        pd = pd)
+                        pd = pd,
+                        is_dots = is_dots)
       details <- state$details
     }
     

@@ -208,7 +208,7 @@ test_that("test_function - diff messages - 1", {
   lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
 
   mess_patt1 <- "Check your call of <code>mean\\(\\)</code>\\. Did you correctly specify the argument <code>x</code>?"
-  mess_patt2 <- "The object you specified has length 10, while it should have length 20"
+  mess_patt2 <- "It has length 10, while it should have length 20"
 
   # match by pos
   lst$DC_CODE <- "mean(1:10,\ntrim = 0.1,\nna.rm = TRUE)"
@@ -273,12 +273,12 @@ test_that("test_function - diff messages - 2", {
   lst$DC_CODE <- "print(123)"
   output <- test_it(lst)
   fails(output, mess_patt = mess_patt1)
-  fails(output, "The object you specified is a number, while it should be a character string")
+  fails(output, "It is a number, while it should be a character string")
 
   lst$DC_CODE <- "print(c('this is', 'a serious thing'))"
   output <- test_it(lst)
   fails(output, mess_patt = mess_patt1)
-  fails(output, "The object you specified has length 2, while it should have length 1")
+  fails(output, "It has length 2, while it should have length 1")
 
   lst$DC_CODE <- "print('this is a serious thing!')"
   output <- test_it(lst)
@@ -300,12 +300,12 @@ test_that("test_function - diff messages - 3", {
   lst$DC_CODE <- "print(c(T, F))"
   output <- test_it(lst)
   fails(output, mess_patt = mess_patt1)
-  fails(output, "The object you specified is a logical vector, while it should be a number")
+  fails(output, "It is a logical vector, while it should be a number")
 
   lst$DC_CODE <- "print(c(123, 123))"
   output <- test_it(lst)
   fails(output, mess_patt = mess_patt1)
-  fails(output, "The object you specified has length 2, while it should have length 1")
+  fails(output, "It has length 2, while it should have length 1")
 
   lst$DC_CODE <- "print(c(a = 123))"
   output <- test_it(lst)
@@ -436,7 +436,7 @@ test_that("test_function - ...", {
   fails(output, mess_patt = "Did you correctly specify the arguments that are matched to <code>...</code>")
 })
 
-## STILL ACTIVATE TESTS BELOW
+# TODO activate test below
 
 # test_that("test_function works appropriately inside test_corect", {
 #   lst <- list()

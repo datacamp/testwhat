@@ -12,6 +12,10 @@ capitalize <- function(x) {
   eval.parent(substitute(a <- paste(a, b)))
 }
 
+`%+=0%` <- function(a, b) {
+  eval.parent(substitute(a <- paste0(a, b)))
+}
+
 build_feedback_message <- function(details) {
   msg <- ""
 
@@ -23,12 +27,14 @@ build_feedback_message <- function(details) {
     if (det$type == "object") {
       if (det$case == "defined") {
         msg %+=% sprintf("Did you define the variable `%s` without errors?", det$name)
+      } 
+      if (det$case == "correct") {
+        msg %+=% sprintf("The contents of the variable `%s` aren't correct.", det$name)
       }
       if (det$case == "equal") {
-        msg %+=% sprintf("The contents of the variable `%s` aren't correct.", det$name)
         msg %+=% build_diff(sol = det$solution, stud = det$student,
                             eq_condition = det$eq_condition,
-                            id = sprintf("`%s`", det$name))
+                            id = "it")
       }
     }
     if (det$type == "function") {
@@ -48,14 +54,18 @@ build_feedback_message <- function(details) {
           msg %+=% sprintf("Did you specify the argument `%s`?", det$name)
         }
       }
-      if (det$case == "equal") {
+      if (det$case == "correct") {
         if (det$name == "...") {
           msg %+=% "Did you correctly specify the arguments that are matched to `...`?"
         } else {
           msg %+=% sprintf("Did you correctly specify the argument `%s`?", det$name)
+        }
+      }
+      if (det$case == "equal") {
+        if (!det$is_dots) {
           msg %+=% build_diff(sol = det$solution, stud = det$student,
                               eq_condition = det$eq_condition,
-                              id = "the object you specified")
+                              id = "it")  
         }
       }
     }
@@ -85,9 +95,36 @@ build_feedback_message <- function(details) {
     if (det$type == "typed") {
       msg %+=% sprintf("The system wanted to find the pattern `%s` %s but didn't.", det$regex, get_times(det$times))
     }
+    if (det$type == "fundef") {
+      if (det$case == "defined") {
+        msg %+=% sprintf("Did you define the function <code>%s()</code>?", det$name)
+      }
+      if (det$case == "correct") {
+        msg %+=% sprintf("Did you correctly define the function <code>%s()</code>?", det$name)
+      }
+      if (det$case == "arguments") {
+        msg %+=% "Did you specify the correct number of arguments?"
+      }
+      if (det$case == "coded") {
+        msg %+=% sprintf("The system couldn't the definition in your code")
+      }
+      
+    }
   }
   return(capitalize(trim(msg)))
 }
+
+# check_that(is_false(is.null(student_fun_def)), 
+#            feedback = sprintf("A proper definition of `%s` could not be found in your submission. Make sure to use the `%s <- function() { ... }` recipe.", name, name))
+
+# if (is.null(undefined_msg)) {
+#   undefined_msg <- sprintf("Did you define the function <code>%s()</code>?", name)
+# }
+# 
+# if (is.null(incorrect_number_arguments_msg)) {
+#   incorrect_number_arguments_msg <- sprintf()
+# }
+# 
 
 build_summary <- function(x, ...) UseMethod("build_summary")
 

@@ -262,11 +262,11 @@ test_that("test_object - diff messages", {
 
   lst$DC_SCT <- "test_object('a')"
   output <- test_it(lst)
-  fails(output, mess_patt = "<code>a</code> is a number, while it should be a character string.")
+  fails(output, mess_patt = "It is a number, while it should be a character string.")
 
   lst$DC_SCT <- "test_object('b')"
   output <- test_it(lst)
-  fails(output, mess_patt = "<code>b</code> has length 20, while it should have length 10")
+  fails(output, mess_patt = "It has length 20, while it should have length 10")
 
   lst$DC_SCT <- "test_object('c')"
   output <- test_it(lst)
@@ -277,6 +277,8 @@ test_that("test_object - diff messages", {
   fails(output, mess_patt = "Are you sure the attributes")
 })
 
+
+# TODO activate test below
 
 # test_that("test_object inside MarkdownExercise doesn't show line numbers", {
 #   lst <- list()

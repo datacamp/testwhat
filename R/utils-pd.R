@@ -88,7 +88,7 @@ extract_function_definition <- function(pd, name) {
   # body of the function is the last brother of the function keyword
   sub_pds <- extract_assignments(pd, name)
   if(length(sub_pds) == 1) {
-    pd <- sub_pds[[1]]$pd
+    pd <- sub_pds[[1]]
     function_parent <- pd$parent[pd$token == "FUNCTION"]
     if (length(function_parent) == 1) {
       last_brother <- tail(pd$id[pd$parent == function_parent], 1)

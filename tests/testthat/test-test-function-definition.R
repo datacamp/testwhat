@@ -1,5 +1,38 @@
-# context("test_function_definition")
-# 
+context("test_function_definition")
+
+test_that("test_fundef - step by step", {
+  lst <- list()
+  lst$DC_SOLUTION <- "my_fun <- function(x, y) { stopifnot(is.numeric(x)); print(x + y); return(x + y) }"
+  lst$DC_SCT <- "fundef <- ex() %>% test_fun_def('my_fun')
+                 fundef %>% test_arguments()
+                 body <- fundef %>% test_body() %>% test_fun('print') %>% test_arg('x')
+                 fundef %>% test_result(x = 2, y = 3)
+                 fundef %>% test_output(x = 2, y = 3)
+                 fundef %>% test_error(x = 'a', y = 3)"
+  
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "my_fun <- 123"
+  output <- test_it(lst)
+  fails(output)
+
+  lst$DC_CODE <- "my_fun <- function(x) { return(x) }"
+  output <- test_it(lst)
+  print(output)
+  fails(output)
+    
+  lst$DC_CODE <- "my_fun <- function(x, y) { return(x + y) }"
+  output <- test_it(lst)
+  fails(output)
+  
+  #fails(output)
+  
+  
+  
+})
+
 # test_that("test_function_definition incorrect use", {
 #   lst <- list()
 #   lst$DC_SCT <- "test_function_definition('my_func')"
@@ -166,4 +199,4 @@
 #   capture.output(output <- test_it(lst))
 #   passes(output)
 # })
-# 
+

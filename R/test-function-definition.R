@@ -30,85 +30,118 @@ test_function_definition <- function(name,
                                      body_test = NULL,
                                      undefined_msg = NULL, 
                                      incorrect_number_arguments_msg = NULL) {
-  
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  test_env <- tw$get("test_env")
+}
 
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
-  fun_usage <- tw$get("fun_usage")
-  init_tags(fun = "test_function_definition")
-  
-  on.exit({
-    tw$set(student_pd = student_pd)
-    tw$set(solution_pd = solution_pd)
-    tw$set(student_code = student_code)
-    tw$set(solution_code = solution_code)
-    tw$set(fun_usage = fun_usage)
-  })
-  
-  check_defined(name, solution_env)
-  sol_function <- get(name, envir = solution_env, inherits = FALSE)
+#' @export
+test_fun_def <- function(state, name, undefined_msg = NULL) {
+  fundef_state <- test_defined(state, name, undefined_msg, type = "fundef")
+  fundef_state$set(name = name)
+  return(fundef_state)
+}
 
-  function_test <- substitute(function_test)
-  body_test <- substitute(body_test)
+test_arguments <- function(state, incorrect_number_args_msg = NULL) {
+  stud_arguments <- as.list(formals(state$get("student_object")))
+  sol_arguments <- as.list(formals(state$get("solution_object")))
   
-  if (is.null(undefined_msg)) {
-    undefined_msg <- sprintf("Did you define the function <code>%s()</code>?", name)
-  }
+  fundefargs_state <- FunDefArgsState$new(state)
+  
+  fundefargs_state$add_details(type = "fundef",
+                               case = "arguments",
+                               message = incorrect_number_args_msg,
+                               pd = NULL)
+  
+  check_that(is_equal(length(stud_arguments), length(sol_arguments)), 
+             feedback = fundefargs_state$details)
+  return(fundefargs_state)
+}
 
-  if (is.null(incorrect_number_arguments_msg)) {
-    incorrect_number_arguments_msg <- sprintf("Did you specify the correct number of arguments in the function <code>%s()</code>?", name)
-  }
+#' @export
+test_body.FunDefState <- function(state, not_found_msg = NULL) {
+  name <- state$get("name")
+  student_pd <- state$get("student_pd")
+  solution_pd <- state$get("solution_pd")
   
-  defined <- exists(name, envir = student_env, inherits = FALSE)
-  check_that(is_true(defined), undefined_msg)
+  body_state <- SubState$new(state)
   
-  rep <- get_rep()
-  rep$be_silent()
-  passes <- run_until_fail(function_test)
-  rep$be_loud()
+  body_state$add_details(type = "fundef",
+                         case = "coded",
+                         message = not_found_msg,
+                         pd = NULL)
   
   solution_fun_def <- extract_function_definition(solution_pd, name)
-  student_fun_def <- extract_function_definition(student_pd, name)
-  
   if (is.null(solution_fun_def)) {
     stop(sprintf("The function definition of %s was not found in the solution code", name))
   }
   
-  if (!passes) {
-    check_that(is_false(is.null(student_fun_def)), 
-              feedback = sprintf("A proper definition of `%s` could not be found in your submission. Make sure to use the `%s <- function() { ... }` recipe.", name, name))
-  }
-    
-  stud_function <- get(name, envir = student_env, inherits = FALSE)
-  stud_arguments <- as.list(formals(stud_function))
-  sol_arguments <- as.list(formals(sol_function))
-
-  if (!passes) {
-    check_that(is_equal(length(stud_arguments), length(sol_arguments)), incorrect_number_arguments_msg)
-  } 
+  student_fun_def <- extract_function_definition(student_pd, name)
+  check_that(is_false(is.null(student_fun_def)), feedback = body_state$details)
   
-    
-  if (!is.null(body_test)) {
-    tw$set(student_pd = student_fun_def$pd)
-    tw$set(solution_pd = solution_fun_def$pd)
-    tw$set(student_code = student_fun_def$code)
-    tw$set(solution_code = solution_fun_def$code)
-    if (!passes) {
-      eval(body_test, envir = test_env)  
+  body_state$set_details(type = "body", pd = student_fun_def$pd)
+  decorate_state(body_state, student_fun_def, solution_fun_def)
+  return(body_state)
+}
+
+#' @export
+test_result <- function(state, ...) {
+  # build fun call with ...
+  sol_res <- tryCatch(do.call(state$get("name"), list(...), envir = state$get("solution_env")),
+                      error = function(e) e)
+  if (inherits(sol_res, 'error')) {
+    stop("Running ... gave an error")
+  }
+  
+  stud_res <- tryCatch(do.call(state$get("name"), list(...), envir = state$get("student_env")),
+                       error = function(e) e)
+  
+  check_that(is_false(inherits(stud_res, 'error')),
+             feedback = state$details)
+  
+  # call test_equal
+  return(test)
+}
+
+build_arg_str <- function(...) {
+  arg_list <- list(...)
+  nms <- names(arg_list)
+  if (is.null(names)) {
+    nms <- rep("", length(arg_lst))
+  }
+  arg_str <- "("
+  for (i in seq_along(arg_list)) {
+    if (nms[i] == "") {
+      arg_str %+=0% arg_list[[i]]
     } else {
-      # run body_test for blacklisting
-      rep$be_silent()
-      run_until_fail(body_test)
-      rep$be_loud()
+      arg_str %+=0% sprintf("%s = %s", nms[i], arg_list[[i]])
     }
   }
-  
-  if (!passes) {
-    eval(function_test, envir = test_env)  
+  arg_str <- 
+  if (is.null(nms)) {
+    # no names at all
+    argstr <- paste
   }
 }
+
+#' @export
+test_output <- function(state, ...) {
+  # build fun call with ...
+  
+  # do the call
+  
+  # call test_equal
+}
+
+#' @export
+test_error <- function(state, ...) {
+  # build fun call with arguments
+  
+  # do the call
+  
+  # call test_equal
+}
+
+
+
+
+
+
+

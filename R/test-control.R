@@ -1,8 +1,15 @@
-decorate_state <- function(state, stud, sol, el) {
-  state$set(student_pd = stud[[el]]$pd,
-            solution_pd = sol[[el]]$pd,
-            student_code = stud[[el]]$code,
-            solution_code = sol[[el]]$code)
+decorate_state <- function(state, stud, sol, el = NULL) {
+  if (is.null(el)) {
+    state$set(student_pd = stud$pd,
+              solution_pd = sol$pd,
+              student_code = stud$code,
+              solution_code = sol$code)
+  } else {
+    state$set(student_pd = stud[[el]]$pd,
+              solution_pd = sol[[el]]$pd,
+              student_code = stud[[el]]$code,
+              solution_code = sol[[el]]$code)  
+  }
 }
 
 
@@ -74,6 +81,11 @@ test_cond <- function(state) {
 
 #' @export
 test_body <- function(state) {
+  UseMethod("test_body", state) 
+}
+
+#' @export
+test_body.default <- function(state) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   body_state <- SubState$new(state)
