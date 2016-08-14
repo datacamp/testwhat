@@ -175,7 +175,10 @@ FunDefState <- R6::R6Class("FunDefState", inherit = ChildState,
                                           solution_object = NULL))
 
 FunDefArgsState <- R6::R6Class("FunDefArgsState", inherit = FunDefState)
-
+FunDefResultState <- R6::R6Class("FunDefResultState", inherit = FunDefState)
+FunDefOutputState <- R6::R6Class("FunDefOutputState", inherit = FunDefState)
+FunDefErrorState <- R6::R6Class("FunDefErrorState", inherit = FunDefState)
+  
 ControlState <- R6::R6Class("ControlState",
                             inherit = ChildState,
                             public = list(),
@@ -185,6 +188,7 @@ ControlState <- R6::R6Class("ControlState",
 SubState <- R6::R6Class("SubState", inherit = ChildState)
 
 RegexState <- R6::R6Class("RegexState", inherit = ChildState)
+
 
 ex <- function() {
   return(tw$get("state"))

@@ -108,7 +108,38 @@ build_feedback_message <- function(details) {
       if (det$case == "coded") {
         msg %+=% sprintf("The system couldn't the definition in your code")
       }
-      
+      if (det$case == "result_runs") {
+        msg %+=% sprintf("Running %s generated an error.", det$callstr)
+      }
+      if (det$case == "result_correct") {
+        msg %+=% sprintf("Calling %s didn't give the correct result.", det$callstr)
+      }
+      if (det$case == "result_equal") {
+        msg %+=% build_diff(sol = det$solution, stud = det$student,
+                            eq_condition = det$eq_condition,
+                            id = "the result")
+      }
+      if (det$case == "output_runs") {
+        msg %+=% sprintf("Running %s generated an error.", det$callstr)
+      }
+      if (det$case == "output_correct") {
+        msg %+=% sprintf("Calling %s didn't generate the correct output.", det$callstr)
+      }
+      if (det$case == "output_equal") {
+        msg %+=% sprintf("Expected %s, but got %s",
+                         ifelse(length(det$solution) == 0, "no output", sprintf("`%s`", det$solution)),
+                         ifelse(length(det$student) == 0, "no output", sprintf("`%s`", det$student)))
+      }
+      if (det$case == "error_fails") {
+        msg %+=% sprintf("Running %s didn't generate an error, but it should.", det$callstr)
+      }
+      if (det$case == "error_correct") {
+        msg %+=% sprintf("Calling %s didn't generate the correct error.", det$callstr)
+      }
+      if (det$case == "error_equal") {
+        msg %+=% sprintf("Expected the error `%s`, but instead got the error `%s`",
+                         det$solution, det$student)
+      }
     }
   }
   return(capitalize(trim(msg)))
