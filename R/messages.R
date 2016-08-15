@@ -1,4 +1,7 @@
-trim <- function(x) gsub("^\\s+|\\s+$", "", x)
+trim <- function(x) {
+  x <- gsub("^\\s+|\\s+$", "", x)
+  x <- gsub("  ", " ", x) # This is dangerous, watch out.
+}
 
 capitalize <- function(x) {
   x <- strsplit(x, split = "\\.\\s")[[1]]
@@ -39,8 +42,8 @@ build_feedback_message <- function(details) {
     }
     if (det$type == "function") {
       if (det$case == "called") {
-        msg %+=% sprintf("The system wants to check the %s call of `%s()`, but it hasn't found it.",
-                         get_ord(det$index), det$name)
+        msg %+=% sprintf("Have you called `%s()`%s?",
+                         det$name, ifelse(det$index == 1, "", paste0(" ", get_times(det$index))))
       }
       if (det$case == "correct") {
         msg %+=% sprintf("Check your call of `%s()`.", det$name)

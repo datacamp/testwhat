@@ -32,7 +32,6 @@ check_that <- function(code, feedback, env = parent.frame()) {
   res <- try(eval(code, envir = env), silent = TRUE)
   if (!isTRUE(res)) {
     get_rep()$register_feedback(feedback)
-    stop(sct_failed_msg)
   }
 }
 

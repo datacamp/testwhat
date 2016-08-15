@@ -57,3 +57,23 @@ test_correct <- function(check_code, diagnose_code) {
     rep$be_loud()
   }
 }
+
+
+#' @export
+check <- function(state) {
+  get_rep()$init_check()
+  state$be_silent()
+  return(state)
+}
+
+#' @export
+diagnose <- function(state) {
+  state$be_loud()
+  return(state)
+}
+
+#' @export
+done <- function(state) {
+  get_rep()$end_diagnose()
+  return(state)
+}

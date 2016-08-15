@@ -76,6 +76,9 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
     }
   }
 
+  if (is.null(details)) {
+    details <- arg_state$details
+  }
   check_that(is_gte(length(res), 1), feedback = details)
   
   student_args <- student_calls
@@ -144,6 +147,10 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     } else {
       state$log(index = i, success = FALSE)
     }
+  }
+  
+  if (is.null(details)) {
+    details <- state$details
   }
   
   check_that(is_gte(length(res), 1), feedback = details)
