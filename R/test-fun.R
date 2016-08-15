@@ -1,3 +1,4 @@
+#' @export
 test_fun <- function(state, name, index = 1, not_called_msg = NULL) {
 
   student_pd <- state$get("student_pd")
@@ -39,6 +40,7 @@ test_fun <- function(state, name, index = 1, not_called_msg = NULL) {
   return(fun_state)
 }
 
+#' @export
 test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   
   solution_call <- state$get("solution_call")
@@ -93,7 +95,7 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   return(arg_state)
 }
 
-
+#' @export
 test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, eq_condition = "equivalent") {
   
   solution_arg <- state$get("solution_arg")

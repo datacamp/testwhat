@@ -54,6 +54,7 @@ test_object <- function(name, eq_condition = "equivalent",
 
 #' Test R object existence
 #'
+#' @rdname test_object
 #' @export
 test_obj <- function(state, name, undefined_msg = NULL) {
   obj_state <- test_defined(state, name, undefined_msg, type = "object")
@@ -61,6 +62,8 @@ test_obj <- function(state, name, undefined_msg = NULL) {
   return(obj_state)
 }
 
+#' @rdname test_object
+#' @export
 test_equal.ObjectState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent") {
   student_obj <- state$get("student_object")
   solution_obj <- state$get("solution_object")
