@@ -99,6 +99,9 @@ build_feedback_message <- function(details) {
       if (det$case == "defined") {
         msg %+=% sprintf("Did you define the function <code>%s()</code>?", det$name)
       }
+      if (det$case == "correcttype") {
+        msg %+=% sprintf("Are you sure that <code>%s</code> is a function?", det$name)
+      }
       if (det$case == "correct") {
         msg %+=% sprintf("Did you correctly define the function <code>%s()</code>?", det$name)
       }

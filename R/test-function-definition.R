@@ -34,10 +34,41 @@ test_function_definition <- function(name,
 }
 
 #' @export
-test_fun_def <- function(state, name, undefined_msg = NULL) {
-  fundef_state <- test_defined(state, name, undefined_msg, type = "fundef")
-  # fundef_state$set_details(pd = extract_function_definition(state$get("student_pd"), name))
-  fundef_state$set(name = name)
+test_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NULL) {
+  student_env <- state$get("student_env")
+  solution_env <- state$get("solution_env")
+  
+  fundef_state <- FunDefState$new(state)
+  fundef_state$add_details(type = "fundef",
+                          case = "defined",
+                          name = name,
+                          message = undefined_msg,
+                          pd = NULL)
+  
+  check_defined(name, solution_env)
+  solution_object <- get(name, envir = solution_env, inherits = FALSE)
+  if (!inherits(solution_object, "function")) {
+    stop("%s is not a user-defined function in the solution code.", name)
+  }
+  
+  check_that(is_true(exists(name, envir = student_env, inherits = FALSE)), feedback = fundef_state$details)
+  student_object <- get(name, envir = student_env, inherits = FALSE)
+  
+  fundef_state$set_details(case = "correcttype",
+                           message = no_fundef_msg
+                           #pd = extract_function_definition(state$get("student_pd"), name))
+                           )
+  
+  check_that(is_true(inherits(student_object, "function")),
+             feedback = fundef_state$details)
+  
+  fundef_state$set_details(case = "correct",
+                           message = NULL)
+  
+  fundef_state$set(name = name,
+                   student_object = student_object,
+                   solution_object = solution_object)
+  
   return(fundef_state)
 }
 
@@ -156,7 +187,7 @@ test_error <- function(state, ..., no_error_msg = NULL) {
 
 #' @export
 test_equal.FunDefResultState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent") {
-  fundef_test_equal_helper(state, incorrect_msg, eq_condition, type = "output")
+  fundef_test_equal_helper(state, incorrect_msg, eq_condition, type = "result")
 }
 
 #' @export
