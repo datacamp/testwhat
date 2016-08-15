@@ -24,7 +24,7 @@ check_that <- function(code, feedback, env = parent.frame()) {
   
   # feedback can be a character string
   if (is.character(feedback)) {
-    feedback <- list(message = feedback)
+    feedback <- list(list(message = feedback))
   }
   
   stopifnot(is.list(feedback))

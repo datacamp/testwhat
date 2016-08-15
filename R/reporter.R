@@ -7,7 +7,7 @@ DC_reporter <- R6::R6Class("DC_reporter",
     initialize = function() {},
   
     register_feedback = function(feedback) {
-      if (is_loud(feedback)) {
+      if (private$silent == 0) {
         if (is.null(private$silent_pass) || !private$silent_pass) {
           private$feedback <- feedback
           stop(sct_failed_msg)
@@ -20,11 +20,6 @@ DC_reporter <- R6::R6Class("DC_reporter",
       }
     },
     
-    init_check = function() {
-      private$silent_feedback <- NULL
-      private$silent_pass <- TRUE
-    },
-    
     set_success_msg = function(msg) {
       private$success_msg <- msg
     },
@@ -33,7 +28,7 @@ DC_reporter <- R6::R6Class("DC_reporter",
       feedback <- private$feedback
       if (is.null(feedback)) {
         return(list(correct = TRUE,
-                    message = to_html(private$success_msg)))
+                    message = to_html(capitalize(trim(private$success_msg)))))
       } else {
         
         msg <- build_feedback_message(feedback)
@@ -50,6 +45,17 @@ DC_reporter <- R6::R6Class("DC_reporter",
       }
     },
     
+    
+    be_loud = function() {
+      private$silent <- max(0, private$silent - 1)
+    },
+    
+    be_silent = function() {
+      private$silent <- private$silent + 1
+      private$silent_feedback <- NULL
+      private$silent_pass <- TRUE
+    },
+    
     end_diagnose = function() {
       if (!is.null(private$silent_feedback)) {
         private$feedback <- private$silent_feedback
@@ -64,7 +70,8 @@ DC_reporter <- R6::R6Class("DC_reporter",
     success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
     feedback = NULL,
     silent_feedback = NULL,
-    silent_pass = NULL
+    silent_pass = NULL,
+    silent = 0
   )
 )
 

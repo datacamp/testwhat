@@ -61,14 +61,13 @@ test_correct <- function(check_code, diagnose_code) {
 
 #' @export
 check <- function(state) {
-  get_rep()$init_check()
-  state$be_silent()
+  get_rep()$be_silent()
   return(state)
 }
 
 #' @export
 diagnose <- function(state) {
-  state$be_loud()
+  get_rep()$be_loud()
   return(state)
 }
 

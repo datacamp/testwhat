@@ -73,14 +73,6 @@ State <- R6::R6Class("State",
       } else {
         setdiff(1:n_calls, sapply(bl, `[[`, "stud_index"))
       }
-    },
-    
-    be_silent = function() {
-      private$silent <- private$silent + 1
-    },
-    
-    be_loud = function() {
-      private$silent <- max(0, private$silent - 1)
     }
   ),
    
@@ -106,10 +98,7 @@ State <- R6::R6Class("State",
                             list(list(name = name, 
                                       stud_index = stud_index, 
                                       sol_index = sol_index)))
-    },
-    
-    # check - diagnose
-    silent = 0
+    }
   )
 )
 
@@ -144,7 +133,7 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
     },
     
     add_details = function(...) {
-      self$details <- c(self$details, list(list(silent = private$silent, ...)))
+      self$details <- c(self$details, list(list(...)))
     },
     
     set_details = function(...) {
