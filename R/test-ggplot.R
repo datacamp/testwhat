@@ -49,11 +49,11 @@ test_ggplot <- function(index = 1,
                         check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
   
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
-  predefined_code <- tw$get("pec")
+  student_env <- ex()$get("student_env")
+  solution_env <- ex()$get("solution_env")
+  student_code <- ex()$get("student_code")
+  solution_code <- ex()$get("solution_code")
+  predefined_code <- ex()$get("pec")
   init_tags(fun = "test_ggplot")
   
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")

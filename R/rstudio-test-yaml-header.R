@@ -11,10 +11,10 @@
 #'
 #' @export
 test_yaml_header <- function(options = NULL,
-                               check_equality = TRUE,
-                               allow_extra = TRUE,
-                               not_called_msg = NULL,
-                               incorrect_msg = NULL) {
+                             check_equality = TRUE,
+                             allow_extra = TRUE,
+                             not_called_msg = NULL,
+                             incorrect_msg = NULL) {
   
   chunk_number <- tw$get("chunk_number")
   student_code <- tw$get("student_code")
