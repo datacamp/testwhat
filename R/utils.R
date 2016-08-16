@@ -9,7 +9,7 @@ check_defined <- function(name, sol_env) {
 
 check_sufficient <- function(calls, index, name) {
   if (index > length(calls)) {
-    stop(sprintf("Fix either the index argument or the solution code; currently, there aren't %s calls of %s() available in the solution.", index, name))
+    stop(sprintf("Fix either the index argument or the solution code; currently, there aren't %s calls of %s available in the solution.", index, name))
   }
 }
 

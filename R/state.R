@@ -151,26 +151,25 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
 )
 
 FunctionState <- R6::R6Class("FunctionState", inherit = ChildState,
-  private = list(
-    student_calls = NULL,
-    solution_call = NULL
-  )
-)
+                             private = list(student_calls = NULL,
+                                            solution_call = NULL))
+
+OperationState <- R6::R6Class("OperationState", inherit = ChildState,
+                              private = list(student_ops = NULL,
+                                             solution_op = NULL))
+
 
 ArgumentState <- R6::R6Class("ArgumentState", 
                              inherit = ChildState,
-                             public = list(),
                              private = list(student_args = NULL,
                                             solution_arg = NULL))
 
 ObjectState <- R6::R6Class("ObjectState", inherit = ChildState,
-                           public = list(),
                            private = list(name = NULL,
                                           student_object = NULL,
                                           solution_object = NULL))
 
 FunDefState <- R6::R6Class("FunDefState", inherit = ChildState,
-                           public = list(),
                            private = list(student_object = NULL,
                                           solution_object = NULL))
 
@@ -181,7 +180,6 @@ FunDefErrorState <- R6::R6Class("FunDefErrorState", inherit = FunDefState)
   
 ControlState <- R6::R6Class("ControlState",
                             inherit = ChildState,
-                            public = list(),
                             private = list(student_struct = NULL,
                                            solution_struct = NULL))
 

@@ -48,6 +48,7 @@ build_feedback_message <- function(details) {
         msg %+=% sprintf("The column `%s` doesn't seem to be correct.", det$name)
       }
       if (det$case == "equal") {
+        msg %+=% "The result of the operation isn't as expected."
         # do nothing, for now.
       }
     }
@@ -58,6 +59,20 @@ build_feedback_message <- function(details) {
       }
       if (det$case == "correct") {
         msg %+=% sprintf("Check your call of `%s()`.", det$name)
+      }
+    }
+    if (det$type == "operator") {
+      if (det$case == "called") {
+        msg %+=% sprintf("Have you used the `%s` operator%s?",
+                         det$name, ifelse(det$index == 1, "", paste0(" ", get_times(det$index))))
+      }
+      if (det$case == "correct") {
+        msg %+=% sprintf("Have you correctly used the `%s` operator?", det$name)
+      }
+      if (det$case == "equal") {
+        msg %+=% build_diff(sol = det$solution, stud = det$student,
+                            eq_condition = det$eq_condition,
+                            id = "the result")
       }
     }
     if (det$type == "argument") {

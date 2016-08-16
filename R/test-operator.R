@@ -30,68 +30,105 @@ test_operator <- function(name,
                           eq_condition = "equivalent",
                           not_called_msg = NULL,
                           incorrect_msg = NULL) {
+  op <- ex() %>% test_op(name, index = index, not_called_msg = not_called_msg)
+  if (eval) {
+    op %>% test_equal(eq_condition = eq_condition, 
+                      incorrect_msg = incorrect_msg)
+  }
+}
+
+test_op <- function(state, name, index = 1, not_called_msg = NULL) {
+  student_env <- state$get("student_env")
+  solution_env <- state$get("solution_env")
+  student_pd <- state$get("student_pd")
+  solution_pd <- state$get("solution_pd")
   
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  init_tags(fun = "test_operator")
+  
+  op_state <- OperationState$new(state)
+  op_state$add_details(type = "operator",
+                        case = "called",
+                        name = name,
+                        index = index,
+                        message = not_called_msg,
+                        pd = NULL)
   
   student_ops <- find_operator(student_pd, name)
   solution_ops <- find_operator(solution_pd, name)
-  n_student_ops <- length(student_ops)
-  n_solution_ops <- length(solution_ops)
   
-  if  (index > length(solution_ops)) {
-    stop(sprintf("There aren't %s %s operators available in the solution.", index, name))
-  }
+  check_sufficient(solution_ops, index, name)
   solution_op <- solution_ops[[index]]
   
-  if (eval) {
-    sol_result <- try(base::eval(parse(text = solution_op$call), envir = solution_env), silent = TRUE)
-    if (inherits(sol_result, "try-error")) {
-      stop("Running ", solution_op$call, " generated an error: ", attr(sol_result, "cond")$message)
-    }
-  }
+  check_that(is_true(length(student_ops) >= index), feedback = op_state$details)
   
-  if (is.null(not_called_msg)) {
-    not_called_msg <- sprintf("The system wants to check the %s `%s` operator in your code, but hasn't found it.", get_ord(index), name)
-  }
-  check_that(is_gte(n_student_ops, index), list(message = not_called_msg))
+  # update the case for future tests
+  op_state$set_details(case = "correct",
+                       message = NULL)
   
-  if (eval) {
-    
-    seq <- get_seq(name, stud_indices = 1:n_student_ops, sol_index = index)
-    passed <- FALSE
-    feedback <- NULL
+  # manage blacklisting of operators
+  state$update_blacklist()
+  state$set(active_name = name)
+  state$set(active_sol_index = index)
+  options <- state$get_options(length(student_ops))
   
-    for (i in seq) {
-      student_op <- student_ops[[i]]
-      
-      stud_result <- try(base::eval(parse(text = student_op$call), envir = student_env), silent = TRUE)
+  student_ops[-options] <- NULL
+  op_state$set(solution_op = solution_op)
+  op_state$set(student_ops = student_ops)
+  return(op_state)
+}
 
-      if (!inherits(stud_result, "try-error") && is_equal(stud_result, sol_result, eq_condition)) {
-        set_used(name, stud_index = i, sol_index = index)
-        passed <- TRUE
-        break
-      } else {
-        if (is.null(feedback)) {
-          if (is.null(incorrect_msg)) {
-            incorrect_msg <- sprintf("Have you correctly used the `%s` operator? The result isn't what we expected.", name)
-          }
-          feedback <- list(message = incorrect_msg,
-                           line_start = student_op$line1,
-                           line_end = student_op$line2,
-                           column_start = student_op$col1,
-                           column_end = student_op$col2)
-        }
-      }
+#' @export
+test_equal.OperationState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL) {
+  
+  
+  solution_op <- state$get("solution_op")
+  student_ops <- state$get("student_ops")
+  student_env <- state$get("student_env")
+  solution_env <- state$get("solution_env")
+  
+  state$add_details(type = "operator",
+                    case = "equal",
+                    eval = eval,
+                    eq_condition = eq_condition,
+                    message = incorrect_msg)
+  
+  
+  # Test if the specified arguments are correctly called
+  sol_res <- tryCatch(base::eval(parse(text = solution_op$call), envir = solution_env), error = function(e) e)
+  if (inherits(sol_res, 'error')) {
+    stop(sprintf("Running %s gave an error: %s", solution_op$call, sol_res$message))
+  }
+  
+  res <- numeric()
+  details <- NULL
+  for (i in seq_along(student_ops)) {
+    student_op <- student_ops[[i]]
+    if (is.null(student_op)) next
+    
+    stud_res <- tryCatch(base::eval(parse(text = student_op$call), envir = student_env), error = function(e) tryerrorstring)
+    
+    # If no hits, use details of the first try
+    if (is.null(details)) {
+      state$set_details(student = stud_res,
+                        solution = sol_res,
+                        pd = student_op$pd)
+      details <- state$details
     }
     
-    if (!passed) {
-      check_that(failure(), feedback = feedback)
+    # Check if the function arguments correspond
+    if (is_equal(stud_res, sol_res, eq_condition)) {
+      state$log(index = i, arg = 'none', success = TRUE)
+      res <- c(res, i)
+    } else {
+      state$log(index = i, arg = 'none', success = FALSE)
     }
   }
+  
+  if (is.null(details)) {
+    details <- state$details
+  }
+  
+  check_that(is_gte(length(res), 1), feedback = details)
+  return(state)
 }
 
 # Find all operators in the parse data
@@ -100,7 +137,8 @@ find_operator <- function(pd, name) {
   parent_ids <- pd$parent[pd$text == name]
   lapply(parent_ids, function(id) {
     call <- getParseText(pd, id)
-    line_info <- as.list(pd[pd$id == id, c("line1", "col1", "line2", "col2")])
-    c(call = call, line_info)
+    pd <- pd[pd$id == id, ]
+    list(call = call, pd = pd)
   })
 }
+
