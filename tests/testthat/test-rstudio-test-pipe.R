@@ -6,9 +6,9 @@ test_that("test_pipe works", {
   lst$DC_SCT <- "test_pipe(1)"
   output <- test_it(lst)
   fails(output)
-  lst$DC_SCT <- "test_pipe(1, absent_msg = 'missing!')"
+  lst$DC_SCT <- "test_pipe(1, insuf_msg = 'missing')"
   output <- test_it(lst)
-  fails(output, mess_patt = "missing!")
+  fails(output, mess_patt = "Missing")
   
   lst$DC_CODE <- "-5:6 %>% abs() %>% mean()"
   lst$DC_SCT <- "test_pipe(1)"
@@ -22,5 +22,5 @@ test_that("test_pipe works", {
   fails(output)
   lst$DC_SCT <- "test_pipe(3, insuf_msg = 'not enough man!')"
   output <- test_it(lst)
-  fails(output, mess_patt = "not enough man!")
+  fails(output, mess_patt = "Not enough man!")
 })
