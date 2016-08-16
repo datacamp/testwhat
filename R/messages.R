@@ -40,6 +40,17 @@ build_feedback_message <- function(details) {
                             id = "it")
       }
     }
+    if (det$type == "column") {
+      if (det$case == "defined") {
+        msg %+=% sprintf("Does it contain a column `%s`?", det$name)
+      }
+      if (det$case == "correct") {
+        msg %+=% sprintf("The column `%s` doesn't seem to be correct.", det$name)
+      }
+      if (det$case == "equal") {
+        # do nothing, for now.
+      }
+    }
     if (det$type == "function") {
       if (det$case == "called") {
         msg %+=% sprintf("Have you called `%s()`%s?",

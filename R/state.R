@@ -165,13 +165,13 @@ ArgumentState <- R6::R6Class("ArgumentState",
 
 ObjectState <- R6::R6Class("ObjectState", inherit = ChildState,
                            public = list(),
-                           private = list(student_object = NULL,
+                           private = list(name = NULL,
+                                          student_object = NULL,
                                           solution_object = NULL))
 
 FunDefState <- R6::R6Class("FunDefState", inherit = ChildState,
                            public = list(),
-                           private = list(name = NULL,
-                                          student_object = NULL,
+                           private = list(student_object = NULL,
                                           solution_object = NULL))
 
 FunDefArgsState <- R6::R6Class("FunDefArgsState", inherit = FunDefState)

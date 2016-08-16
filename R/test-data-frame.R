@@ -30,49 +30,51 @@
 #' @export
 test_data_frame <- function(name, columns = NULL, 
                             eq_condition = "equivalent",
-                            undefined_msg = NULL, 
+                            undefined_msg = NULL,
                             undefined_cols_msg = NULL, 
                             incorrect_msg = NULL) {
-  
-  # Get needed elements from tw
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  init_tags(fun = "test_data_frame")
-  
-  check_defined(name, solution_env)
-  solution <- get(name, envir = solution_env, inherits = FALSE)
+  obj_state <- ex() %>% test_obj(name = name, undefined_msg = undefined_msg)
   
   if (is.null(columns)) {
-    columns <- names(get(name, envir = solution_env, inherits = FALSE))
+    columns <- names(obj_state$get("solution_object"))
   }
   
-  quoted_name <- paste0("<code>",name,"</code>")
-  col_names <- collapse_props(columns)
-  if (is.null(undefined_msg)) {
-    undefined_msg <- sprintf("Did you define %s?", quoted_name)
-  }
-  if (is.null(undefined_cols_msg)) {
-    undefined_cols_msg <- sprintf("Make sure to specify the column%s %s inside %s.", if(length(columns) > 1) "s" else "", col_names, quoted_name)
-  }
-  if (is.null(incorrect_msg)) {
-    if(length(columns) == 1) {
-      incorrect_msg <- sprintf("It looks like you didn't correctly set the column %s inside %s.", col_names, quoted_name)  
-    } else {
-      incorrect_msg <- sprintf("It looks like you didn't correctly set one or more of the columns %s inside %s.", col_names, quoted_name)  
-    }
-  }
-  defined <- exists(name, envir = student_env, inherits = FALSE)
-  check_that(is_true(defined), undefined_msg)
-  if (defined) {
-    student <- get(name, envir = student_env, inherits = FALSE)
-    
-    columns_defined <- all(columns %in% names(student))
-    check_that(is_true(columns_defined), undefined_cols_msg)
-    
-    if (columns_defined) {
-      for(col in columns) {
-        check_that(is_equal(student[col], solution[col], eq_condition), feedback = incorrect_msg)
-      }
-    }
+  for (col in columns) {
+    obj_state %>% 
+      test_col(col, col_missing_msg = undefined_cols_msg) %>% 
+      test_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg)
   }
 }
+
+test_col <- function(state, col, col_missing_msg = NULL) {
+  student_object <- state$get("student_object")
+  solution_object <- state$get("solution_object")
+  
+  if (!col %in% names(solution_object)) {
+    stop(sprintf("The column %s is not available", col))
+  }
+  
+  col_state <- ObjectState$new(state)
+  col_state$add_details(type = "column",
+                        case = "defined",
+                        name = col,
+                        message = col_missing_msg)
+  
+  check_that(is_true(col %in% names(student_object)), feedback = col_state$details)
+  
+  col_state$set_details(type = "column",
+                        case = "correct",
+                        message = NULL)
+  
+  col_state$set(student_object = student_object[[col]],
+                solution_object = solution_object[[col]])
+  
+  return(col_state)
+}
+
+
+#' @export
+test_equal.ObjectSubState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent") {
+  test_equal_helper(state, incorrect_msg = incorrect_msg, eq_condition = eq_condition, type = "column")
+}
+

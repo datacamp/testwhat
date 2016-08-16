@@ -1,9 +1,9 @@
-context("test_object")
+context("test_obj")
 
-test_that("test_object step by step", {
+test_that("test_obj step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
-  lst$DC_SCT <- "test_object('x')"
+  lst$DC_SCT <- "ex() %>% test_obj('x') %>% test_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -18,10 +18,10 @@ test_that("test_object step by step", {
   passes(output)
 })
 
-test_that("test_object step by step - custom - 1", {
+test_that("test_obj step by step - custom - 1", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
-  lst$DC_SCT <- "test_object('x', undefined_msg = 'undef', incorrect_msg = 'incorr')"
+  lst$DC_SCT <- "ex() %>% test_obj('x', undefined_msg = 'undef') %>% test_equal(incorrect_msg = 'incorr')"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -36,10 +36,12 @@ test_that("test_object step by step - custom - 1", {
   passes(output)
 })
 
-test_that("test_object step by step - custom - 2", {
+test_that("test_obj step by step - custom - 2", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
-  lst$DC_SCT <- "undef <- 'undef'\nincorr <- 'incorr'\ntest_object('x', undefined_msg = undef, incorrect_msg = incorr)"
+  lst$DC_SCT <- "undef <- 'undef'
+                 incorr <- 'incorr'
+                 ex() %>% test_obj('x', undefined_msg = undef) %>% test_equal(incorrect_msg = incorr)"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -53,6 +55,27 @@ test_that("test_object step by step - custom - 2", {
   output <- test_it(lst)
   passes(output)
 })
+
+
+test_that("test_obj - backwards compatible", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- 5"
+  lst$DC_SCT <- "test_object('x')"
+  
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you define")
+  
+  lst$DC_CODE <- "x <- 4"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of")
+  
+  lst$DC_CODE <- "x <- 5"
+  output <- test_it(lst)
+  passes(output)
+})
+
+
 
 test_that("test_object - eval", {
   lst <- list()

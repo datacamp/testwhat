@@ -6,7 +6,7 @@ test_that("test_function step by step", {
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
-  fails(output, mess_patt = "The system wants to check the first call")
+  fails(output, mess_patt = "Have you called <code>mean\\(\\)</code>")
 
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)

@@ -1,70 +1,132 @@
 context("test_data_frame")
 
-test_that("test_data_frame works", {
+test_that("test_df - step by step", {
   lst <- list()
-  lst$DC_CODE <- "df.equiv <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"))\n  df.not_equiv <- data.frame(a = c(1, 4, 3), b = c(\"a\", \"b\", \"c\"))"
-  lst$DC_SOLUTION <- "df.equiv <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"))\n  df.not_equiv <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"), c = c(1, 1, 1))\n  df.not_here <- data.frame(a = c(7, 8, 9), b = c(\"a\", \"b\", \"c\"\n))"
-  lst$DC_SCT <- "test_data_frame(\"df.equiv\")"
+  lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
+  lst$DC_SCT <- "dfstate <- ex() %>% test_obj('df')
+                 dfstate %>% test_col('a') %>% test_equal()
+                 dfstate %>% test_col('b') %>% test_equal()"
+  
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you define the variable")
+  
+  lst$DC_CODE <- "df <- data.frame(c = c(4, 5, 6))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Does it contain a column <code>a</code>")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(4, 5, 6))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "The column <code>a</code> doesn&#39;t seem to be correct")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Does it contain a column <code>b</code>")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3), b = c('r', 's', 't'))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "The column <code>b</code> doesn&#39;t seem to be correct")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
   output <- test_it(lst)
   passes(output)
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_equiv\", columns = \"b\")"
-  output <- test_it(lst)
-  passes(output)
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_equiv\")"
-  output <- test_it(lst)
-  fails(output)
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_equiv\", columns = \"a\")"
-  output <- test_it(lst)
-  fails(output)
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_here\", undefined_msg = \"data frame not here\")"
-  output <- test_it(lst)
-  fails(output, mess_patt = "data frame not here")
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_equiv\", columns = c(\"c\", \"b\"), undefined_cols_msg = \"data frame column not here\")"
-  output <- test_it(lst)
-  fails(output, mess_patt = "data frame column not here")
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_equiv\", columns = c(\"a\", \"b\"), incorrect_msg = \"data frame column not correct\")"
-  output <- test_it(lst)
-  fails(output, mess_patt = "data frame column not correct")
 })
 
-test_that("test_data_frame works with eq_condition", {
+test_that("test_df - step by step - custom", {
   lst <- list()
-  lst$DC_CODE <- "df.equal <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"))\n  df.not_equal <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"\n))\n  rownames(df.not_equal) <- c(\"one\", \"two\", \"three\")"
-  lst$DC_SOLUTION <- "df.equal <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"))\n  df.not_equal <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"\n))\n  rownames(df.not_equal) <- c(\"one\", \"oops\", \"three\")"
+  lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
+  lst$DC_SCT <- "dfstate <- ex() %>% test_obj('df', undefined_msg = 'undefined')
+  dfstate %>% test_col('a', col_missing_msg = 'missinga') %>% test_equal(incorrect_msg = 'incorra')
+  dfstate %>% test_col('b', col_missing_msg = 'missingb') %>% test_equal(incorrect_msg = 'incorrb')"
+  
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Undefined")
+  
+  lst$DC_CODE <- "df <- data.frame(c = c(4, 5, 6))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Missinga")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(4, 5, 6))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Incorra")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Missingb")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3), b = c('r', 's', 't'))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Incorrb")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
+  output <- test_it(lst)
+  passes(output)
+})
 
-  lst$DC_SCT <- "test_data_frame(\"df.not_equal\")"
+test_that("test_df - backwards compatibility", {
+  lst <- list()
+  lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
+  lst$DC_SCT <- "test_data_frame('df')"
+  
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you define the variable")
+  
+  lst$DC_CODE <- "df <- data.frame(c = c(4, 5, 6))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Does it contain a column <code>a</code>")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(4, 5, 6))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "The column <code>a</code> doesn&#39;t seem to be correct")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "Does it contain a column <code>b</code>")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3), b = c('r', 's', 't'))"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable")
+  fails(output, mess_patt = "The column <code>b</code> doesn&#39;t seem to be correct")
+  
+  lst$DC_CODE <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("test_df - eq_condition", {
+  lst <- list()
+  lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
+  lst$DC_CODE <- "df <- data.frame(a = c(1 + 4.4e-9, 2, 3), b = c('x', 'y', 'z'), row.names = c('r', 's', 't'))"
+
+  lst$DC_SCT <- "ex() %>% test_obj('df') %>% test_col('a') %>% test_equal(eq_condition = 'equivalent')"
   output <- test_it(lst)
   passes(output)
   
-  lst$DC_SCT <- "test_data_frame(\"df.equal\", eq_condition = \"equal\")"
+  # Maybe the different row names should cause a fail here... ?
+  lst$DC_SCT <- "ex() %>% test_obj('df') %>% test_col('a') %>% test_equal(eq_condition = 'equal')"
   output <- test_it(lst)
   passes(output)
   
-  lst$DC_SCT <- "test_data_frame(\"df.not_equal\", eq_condition = \"equal\")"
+  lst$DC_SCT <- "ex() %>% test_obj('df') %>% test_col('a') %>% test_equal(eq_condition = 'identical')"
   output <- test_it(lst)
   fails(output)
 })
 
-test_that("test_data_frame works with eq_condition", {
-  lst <- list()
-  lst$DC_CODE <- "df.iden <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"))\n  df.not_iden <- data.frame(a = c(1 + 4.4e-9, 2, 3), b = c(\"a\", \"b\", \"c\"\n))"
-  lst$DC_SOLUTION <- "df.iden <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"))\n  df.not_iden <- data.frame(a = c(1, 2, 3), b = c(\"a\", \"b\", \"c\"\n))"
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_iden\")"
-  output <- test_it(lst)
-  passes(output)
-  
-  lst$DC_SCT <- "test_data_frame(\"df.iden\", eq_condition = \"identical\")"
-  output <- test_it(lst)
-  passes(output)
-  
-  lst$DC_SCT <- "test_data_frame(\"df.not_iden\", eq_condition = \"identical\")"
-  output <- test_it(lst)
-  fails(output)
+test_that("test_df - line numbers", {
+  # TODO
 })
+
+
