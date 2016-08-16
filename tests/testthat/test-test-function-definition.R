@@ -6,9 +6,9 @@ test_that("test_fundef - step by step", {
   lst$DC_SCT <- "fundef <- ex() %>% test_fun_def('my_fun')
                  fundef %>% test_arguments()
                  fundef %>% test_body() %>% test_fun('print') %>% test_arg('x')
-                 fundef %>% test_result(x = 2, y = 3) %>% test_equal()
-                 fundef %>% test_output(x = 2, y = 3L) %>% test_equal()
-                 fundef %>% test_error(x = 2L, y = 3L) %>% test_equal()"
+                 fundef %>% test_call_result(x = 2, y = 3) %>% test_equal()
+                 fundef %>% test_call_output(x = 2, y = 3L) %>% test_equal()
+                 fundef %>% test_call_error(x = 2L, y = 3L) %>% test_equal()"
   
   lst$DC_CODE <- ""
   capture.output(output <- test_it(lst))
@@ -69,9 +69,9 @@ test_that("test_fundef - step by step - custom", {
   lst$DC_SCT <- "fundef <- ex() %>% test_fun_def('my_fun', undefined_msg = 'notdefined', no_fundef_msg = 'nofundef')
   fundef %>% test_arguments(incorrect_number_args_msg = 'incorrectnumargs')
   fundef %>% test_body() %>% test_fun('print') %>% test_arg('x', arg_not_specified_msg = 'test')
-  fundef %>% test_result(x = 2, y = 3, error_msg = 'error1') %>% test_equal(incorrect_msg = 'incorr1')
-  fundef %>% test_output(x = 2, y = 3L, error_msg = 'error2') %>% test_equal(incorrect_msg = 'incorr2')
-  fundef %>% test_error(x = 2L, y = 3L, no_error_msg = 'error3') %>% test_equal(incorrect_msg = 'incorr3')"
+  fundef %>% test_call_result(x = 2, y = 3, error_msg = 'error1') %>% test_equal(incorrect_msg = 'incorr1')
+  fundef %>% test_call_output(x = 2, y = 3L, error_msg = 'error2') %>% test_equal(incorrect_msg = 'incorr2')
+  fundef %>% test_call_error(x = 2L, y = 3L, no_error_msg = 'error3') %>% test_equal(incorrect_msg = 'incorr3')"
   
   lst$DC_CODE <- ""
   capture.output(output <- test_it(lst))
@@ -134,7 +134,7 @@ test_that("test_fundef - backwards compatibility", {
   # TODO (test_correct system should work!)
 })
 
-test_that("test_fundef - test_output but no output", {
+test_that("test_fundef - test_call_output but no output", {
   # TODO
 })
 

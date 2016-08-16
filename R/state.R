@@ -188,8 +188,8 @@ ControlState <- R6::R6Class("ControlState",
 SubState <- R6::R6Class("SubState", inherit = ChildState)
 
 RegexState <- R6::R6Class("RegexState", inherit = ChildState)
-
 FileState <- R6::R6Class("FileState", inherit = ChildState)
+ErrorState <- R6::R6Class("ErrorState", inherit = ChildState)
 
 ex <- function() {
   return(tw$get("state"))
