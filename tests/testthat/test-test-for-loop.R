@@ -33,7 +33,7 @@ test_that("test_for - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }"
   lst$DC_SCT <- "forloop <- ex() %>% test_for(not_found_msg = 'notfound')
-                 forloop %>% test_cond() %>% test_code('10', not_typed_msg = 'nottyped')
+                 forloop %>% test_cond() %>% test_code('10', missing_msg = 'nottyped')
                  forloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorrect')"
 
   lst$DC_CODE <- ""

@@ -56,8 +56,8 @@ get_num <- function(index) {
 
 get_times <- function(index) {
   switch(index,
-         "1" = "once", "2" = "twice",
-         sprintf("%i times", get_num(index)))
+         "1" = "", "2" = " twice",
+         sprintf(" %s times", get_num(index)))
 }
 
 trunc_str <- function(x,start="c") {

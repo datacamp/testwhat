@@ -42,7 +42,7 @@ test_that("test_if - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
   lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse(not_found_msg = 'notfound')
-                 ifelse %>% test_cond() %>% test_code('>', not_typed_msg = 'nottyped')
+                 ifelse %>% test_cond() %>% test_code('>', missing_msg = 'nottyped')
                  ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorr')
                  ifelse %>% test_else(not_found_msg = 'elsenotfound') %>% test_fun('print') %>% test_arg('x') %>% test_equal('incorr2')"
 

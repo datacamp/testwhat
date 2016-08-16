@@ -54,8 +54,7 @@ build_feedback_message <- function(details) {
     }
     if (det$type == "function") {
       if (det$case == "called") {
-        msg %+=% sprintf("Have you called `%s()`%s?",
-                         det$name, ifelse(det$index == 1, "", paste0(" ", get_times(det$index))))
+        msg %+=% sprintf("Have you called `%s()`%s?", det$name, get_times(det$index))
       }
       if (det$case == "correct") {
         msg %+=% sprintf("Check your call of `%s()`.", det$name)
@@ -63,8 +62,7 @@ build_feedback_message <- function(details) {
     }
     if (det$type == "operator") {
       if (det$case == "called") {
-        msg %+=% sprintf("Have you used the `%s` operator%s?",
-                         det$name, ifelse(det$index == 1, "", paste0(" ", get_times(det$index))))
+        msg %+=% sprintf("Have you used the `%s` operator%s?", det$name, get_times(det$index))
       }
       if (det$case == "correct") {
         msg %+=% sprintf("Have you correctly used the `%s` operator?", det$name)
@@ -122,7 +120,12 @@ build_feedback_message <- function(details) {
       }
     }
     if (det$type == "typed") {
-      msg %+=% sprintf("The system wanted to find the pattern `%s` %s but didn't.", det$regex, get_times(det$times))
+      if (det$fixed) {
+        msg %+=% sprintf("Have you typed %s%s?", collapse_args(det$regex, conn = " or "), get_times(det$times))
+      } else {
+        msg %+=% sprintf("The system wanted to find the pattern `%s`%s but didn't.", det$regex, get_times(det$times))  
+      }
+      
     }
     if (det$type == "fundef") {
       if (det$case == "defined") {
@@ -180,6 +183,14 @@ build_feedback_message <- function(details) {
         } else {
           msg %+=% sprintf("The file <code>%s</code> does not appear to be inside the folder `%s` in your working directory.", det$file, det$folder)
         }
+      }
+    }
+    if (det$type == "output") {
+      if (det$case == "regex") {
+        msg %+=% "The output that your code generated doesn't contain the pattern we're looking for."  
+      }
+      if (det$case == "expr") {
+        msg %+=% sprintf("Is the output of <code>%s</code> in your script?", det$expr)
       }
     }
   }

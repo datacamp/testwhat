@@ -32,7 +32,7 @@ test_that("test_while - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "i <- 1\nwhile (i < 10) { print('test'); i <- i + 1 }"
   lst$DC_SCT <- "whileloop <- ex() %>% test_while(not_found_msg = 'notfound')
-                 whileloop %>% test_cond() %>% test_code('10', not_typed_msg = 'nottyped')
+                 whileloop %>% test_cond() %>% test_code('10', missing_msg = 'nottyped')
                  whileloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorr')"
                   
   lst$DC_CODE <- ""
