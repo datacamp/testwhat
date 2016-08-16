@@ -24,12 +24,11 @@ test_props <- function(index = 1,
                        not_called_msg = NULL,
                        incorrect_msg = NULL,
                        error_msg = NULL) {
-  
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  init_tags(fun = "test_props")
+  state <- ex()
+  student_pd <- state$get("student_pd")
+  solution_pd <- state$get("solution_pd")
+  student_env <- state$get("student_env")
+  solution_env <- state$get("solution_env")
   
   ggvis_pds_stud <- find_ggvis_pds(student_pd)
   ggvis_pds_sol <- find_ggvis_pds(solution_pd)
