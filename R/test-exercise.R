@@ -46,6 +46,7 @@ test_exercise <- function(sct,
   tw$set(state = state, reporter = DC_reporter$new())
   on.exit(tw$clear())
 
+  
   # Execute sct with the DataCamp reporter such that it collects test results
   run_until_fail(parse(text = sct))
   outcome <- get_rep()$generate_feedback()

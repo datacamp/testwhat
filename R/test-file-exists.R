@@ -14,10 +14,16 @@
 #' 
 #' @export
 test_file_exists <- function(path, incorrect_msg = NULL) {
-  init_tags(fun = "test_file_exists")
-  
-  if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("The file <code>%s</code> does not appear to be in your working directory; make sure you don't delete it!", path)
-  }
-  check_that(is_true(file.exists(path)), incorrect_msg)
+  ex() %>% test_wd(path = path, missing_msg = incorrect_msg)
+}
+
+#' @export
+test_wd <- function(state, path, missing_msg = NULL) {
+  file_state <- FileState$new(state)
+  file_state$add_details(type = 'file',
+                         case = 'available',
+                         file = basename(path),
+                         folder = dirname(path),
+                         message = missing_msg)
+  check_that(is_true(file.exists(path)), feedback = file_state$details)
 }

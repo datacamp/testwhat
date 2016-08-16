@@ -158,6 +158,15 @@ build_feedback_message <- function(details) {
                          det$solution, det$student)
       }
     }
+    if (det$type == "file") {
+      if (det$case == "available") {
+        if (det$folder == ".") {
+          msg %+=% sprintf("The file <code>%s</code> does not appear to be in your working directory.", det$file)
+        } else {
+          msg %+=% sprintf("The file <code>%s</code> does not appear to be inside the folder `%s` in your working directory.", det$file, det$folder)
+        }
+      }
+    }
   }
   return(capitalize(trim(msg)))
 }
