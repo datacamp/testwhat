@@ -26,8 +26,7 @@ test_function_result <- function(name = NULL,
   solution_pd <- tw$get("solution_pd")
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
-  init_tags(fun = "test_subexpr_result")
-  
+
   # Find all function calls in the student and solution code
   student_calls <- find_function_calls(student_pd, name, student_env)
   solution_calls <- find_function_calls(solution_pd, name, solution_env)

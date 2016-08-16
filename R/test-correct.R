@@ -36,29 +36,7 @@
 #'  # test_object("x") is automatically run again to generate a fail if test_function passed.
 #' })
 #' }
-#'
-#' @export
-test_correct <- function(check_code, diagnose_code) {
-  test_env <- tw$get("test_env")
-  
-  check_code <- substitute(check_code)
-  diagnose_code <- substitute(diagnose_code)
-  rep <- get_rep()
-  rep$be_silent()
-  ok <- run_until_fail(check_code)
-  
-  if (!ok) {
-    rep$be_loud()
-    eval(diagnose_code, envir = test_env)
-    eval(check_code, envir = test_env)
-  } else {
-    # Execute this part to deal with 'blacklisting' of function calls
-    run_until_fail(diagnose_code)
-    rep$be_loud()
-  }
-}
-
-
+#' TODO REDO DOCUMENTATION
 #' @export
 check <- function(state) {
   get_rep()$be_silent()

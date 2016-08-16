@@ -14,5 +14,5 @@ test_pipe <- function(num = 1, absent_msg = NULL, insuf_msg = NULL) {
   if (is.null(insuf_msg)) {
     insuf_msg = sprintf("You should use the pipe operator at least %i times in total in your solution code",num)
   }
-  ex() %>% test_code(regex = "%>%", times = num, not_typed_msg = insuf_msg)
+  ex() %>% test_code(regex = "%>%", times = num, missing_msg = insuf_msg)
 }

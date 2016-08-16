@@ -16,17 +16,17 @@ test_text <- function(text,
                       freq = 1,
                       not_called_msg = NULL,
                       incorrect_msg = NULL) {
-
-  inline_number <- tw$get("inline_number")
-  student_inline <- tw$get("student_ds_part")
-  solution_inline <- tw$get("solution_ds_part")
-  init_tags(fun = "test_text")
+  state <- ex()
+  inline_number <- state$get("inline_number")
+  student_inline <- state$get("student_ds_part")
+  solution_inline <- state$get("solution_ds_part")
   
   # First, check if both student and solution chunk are 'inline' class
   if(class(solution_inline) != "inline") {
     stop("The specified rmd group is not of 'inline' class.")
   }
-  check_that(is_equal(class(student_inline), "inline"), "The student rmd group is not inline!")
+  check_that(is_equal(class(student_inline), "inline"), 
+             feedback = "The student rmd group is not inline!")
         
   # Set up default messages
   # message if text was not found
@@ -42,9 +42,9 @@ test_text <- function(text,
   }
   
   # first, check if text is found in student_inline
-  hits = gregexpr(pattern = text, student_inline$input)[[1]]
-  check_that(is_false(hits[1] == -1), not_called_msg)
-  check_that(is_gte(length(hits), freq), not_called_msg)
+  hits <- gregexpr(pattern = text, student_inline$input)[[1]]
+  check_that(is_false(hits[1] == -1), feedback = not_called_msg)
+  check_that(is_gte(length(hits), freq), feedback = not_called_msg)
   
   if(hits[1] == -1 || length(hits) < freq) {
     return(FALSE)
@@ -64,6 +64,6 @@ test_text <- function(text,
   }
 
   hits = gregexpr(pattern = patt, student_inline$input)[[1]]
-  check_that(is_false(hits[1] == -1), incorrect_msg)
-  check_that(is_gte(length(hits), freq), not_called_msg)
+  check_that(is_false(hits[1] == -1), feedback = incorrect_msg)
+  check_that(is_gte(length(hits), freq), feedback = not_called_msg)
 }

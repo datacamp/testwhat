@@ -24,7 +24,7 @@ DC_reporter <- R6::R6Class("DC_reporter",
       private$success_msg <- msg
     },
     
-    generate_feedback = function() {
+    generate_feedback = function(ex_type) {
       feedback <- private$feedback
       if (is.null(feedback)) {
         return(list(correct = TRUE,
@@ -34,7 +34,7 @@ DC_reporter <- R6::R6Class("DC_reporter",
         msg <- build_feedback_message(feedback)
         line_info <- get_line_info(feedback)
         
-        if (is.null(line_info)) {
+        if (is.null(line_info) || ex_type == "MarkdownExercise") {
           return(list(correct = FALSE,
                       message = to_html(msg)))
         } else {

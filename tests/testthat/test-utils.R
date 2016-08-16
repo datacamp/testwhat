@@ -12,17 +12,6 @@ test_that("backwards comp", {
   expect_equal(get_solution_code(), "abc")
 })
 
-#' Get solution environment (backwards compatbility)
-#' @export
-get_solution_env <- function() { tw$get("solution_env") }
-
-#' Get solution environment (backwards comp)
-#' @export
-get_student_code <- function() { tw$get("student_code") }
-
-#' Get solution environment (backwards comp)
-#' @export
-get_solution_code <- function() { tw$get("solution_code") }
 
 test_that("accessor works", {
   tw <- tw_accessors()

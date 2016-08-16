@@ -301,22 +301,20 @@ test_that("test_object - diff messages", {
 })
 
 
-# TODO activate test below
+test_that("test_object inside MarkdownExercise doesn't show line numbers", {
+  lst <- list()
+  lst$DC_TYPE <- "MarkdownExercise"
+  lst$DC_SOLUTION <- rjson::toJSON(list(my_solution.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n"))
+  lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n"))
+  lst$DC_SCT <- "test_rmd_group(2, test_object('x'))\nsuccess_msg(\"OK\")"
+  lst$DC_FORMAT <- "PDF"
+  lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
 
-# test_that("test_object inside MarkdownExercise doesn't show line numbers", {
-#   lst <- list()
-#   lst$DC_TYPE <- "MarkdownExercise"
-#   lst$DC_SOLUTION <- rjson::toJSON(list(my_solution.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n"))
-#   lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n"))
-#   lst$DC_SCT <- "test_rmd_group(2, test_object('x'))\nsuccess_msg(\"OK\")"
-#   lst$DC_FORMAT <- "PDF"
-#   lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
-#
-#   output <- test_it(lst)
-#   passes(output)
-#
-#   lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "# This is a test\n```{r}\nx <- 4\n```\n"))
-#   output <- test_it(lst)
-#   fails(output)
-#   line_info(output, NULL, NULL)
-# })
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "# This is a test\n```{r}\nx <- 4\n```\n"))
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, NULL, NULL)
+})

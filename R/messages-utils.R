@@ -25,18 +25,8 @@ collapse_funs <- function(x, conn = " and ") {
 #' 
 #' @param lang shorthand notation for the language. Currently, "en", "fr" and "es" are supported
 #' @export
-set_language <- function(lang = c("en", "fr", "es")) {
-  lang <- match.arg(lang)
-  tw$set(language = lang)
-}
-
-reset_language <- function() {
-  tw$set(language = NULL)
-}
-
-get_language <- function() {
-  lang <- tw$get("language")
-  ifelse(is.null(lang), "en", lang)
+set_language <- function(lang) {
+  message("Different languages are no longer supported in testwhat")
 }
 
 get_ord <- function(index) {

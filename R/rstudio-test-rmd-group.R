@@ -7,29 +7,22 @@
 #'
 #' @export
 test_rmd_group <- function(group_number, code) {
-  
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
-  test_env <- tw$get("test_env")
-  solution_ds <- tw$get("solution_ds")
-  student_ds <- tw$get("student_ds")
-  init_tags(fun = "test_rmd_group")
-  
-  # get the entire student code and solution code and reset it on exit.
-  on.exit({ 
-    tw$set(student_code = student_code)
-    tw$set(solution_code = solution_code)
-    tw$set(student_pd = NULL)
-    tw$set(solution_pd = NULL)
-  })
-  
-  passed <- parse_docs()
-  if (!isTRUE(passed)) {
-    return(FALSE)
-  }
+  old_state <- ex()
+  on.exit(tw$set(state = old_state))
+  test_env <- old_state$get("test_env")
+  tw$set(state = get_rmd_group(old_state, group_number))
+  eval(substitute(code), envir = test_env)
+}
 
-  solution_ds <- tw$get("solution_ds")
-  student_ds <- tw$get("student_ds")
+get_rmd_group <- function(state, group_number) {
+  student_code <- state$get("student_code")
+  solution_code <- state$get("solution_code")
+
+  group_state <- MarkdownState$new(state)
+  group_state <- parse_docs(group_state)
+  
+  solution_ds <- group_state$get("solution_ds")
+  student_ds <- group_state$get("student_ds")
   
   if (group_number > length(solution_ds)) {
     stop(sprintf("Invalid group_number (%s), while solution contains only %s parts",
@@ -38,20 +31,19 @@ test_rmd_group <- function(group_number, code) {
   
   student_ds_part <- student_ds[[group_number]]
   solution_ds_part <- solution_ds[[group_number]]
-  tw$set(student_ds_part = student_ds_part)
-  tw$set(solution_ds_part = solution_ds_part)
-  tw$set(student_code = student_ds_part$input)
-  tw$set(solution_code = solution_ds_part$input)
+  group_state$set(student_ds_part = student_ds_part,
+                  solution_ds_part = solution_ds_part,
+                  student_code = student_ds_part$input,
+                  solution_code = solution_ds_part$input)
   
   # set numbers, to be used in default messages of tests
   if (class(student_ds_part) == "block") {
-    tw$set(chunk_number = group_number - sum(sapply(student_ds[1:group_number],class) == "inline"))
-    tw$set(student_pd = build_pd(student_ds_part$input))
-    tw$set(solution_pd = build_pd(solution_ds_part$input))
+    group_state$set(chunk_number = group_number - sum(sapply(student_ds[1:group_number],class) == "inline"),
+                    student_pd = build_pd(student_ds_part$input),
+                    solution_pd = build_pd(solution_ds_part$input))
   } else if (class(student_ds_part) == "inline") {
-    tw$set(inline_number = group_number - sum(sapply(student_ds[1:group_number],class) == "block"))
+    group_state$set(inline_number = group_number - sum(sapply(student_ds[1:group_number],class) == "block"))
   }
-  
-  code <- substitute(code)
-  eval(code, envir = test_env)
+  return(group_state)
 }
+

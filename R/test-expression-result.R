@@ -28,8 +28,7 @@ test_expression_result <- function(expr,
   
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
-  init_tags(fun = "test_expression_result")
-  
+
   result_sol <- try(eval(parse(text = expr), envir = solution_env), silent = TRUE)
   if (length(result_sol) == 0) {
     result_sol <- NULL

@@ -54,8 +54,7 @@ test_ggplot <- function(index = 1,
   student_code <- ex()$get("student_code")
   solution_code <- ex()$get("solution_code")
   predefined_code <- ex()$get("pec")
-  init_tags(fun = "test_ggplot")
-  
+
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   
   sol_ggplot_info <- get_ggplot_solution_info(solution_code, predefined_code, solution_env)

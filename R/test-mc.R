@@ -26,8 +26,7 @@
 #'
 #' @export
 test_mc <- function(correct, no_selection_msg = NULL, feedback_msgs = NULL) {
-  init_tags(fun = "test_mc")
-  
+
   # see if DM.result exists
   if (is.null(no_selection_msg)) {
     no_selection_msg <- "Please select one of the options!"

@@ -24,8 +24,7 @@ test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NUL
   
   student_env <- tw$get("student_env")
   solution_env <- tw$get("solution_env")
-  init_tags(fun = "test_expression_output")
-  
+
   if (is.null(no_error_msg)) {
     no_error_msg <- sprintf("It seems that running `%s` does not generate an error while it should.", expr)
   }

@@ -189,6 +189,13 @@ RegexState <- R6::R6Class("RegexState", inherit = ChildState)
 FileState <- R6::R6Class("FileState", inherit = ChildState)
 ErrorState <- R6::R6Class("ErrorState", inherit = ChildState)
 
+MarkdownState <- R6::R6Class("MarkdownState", inherit = ChildState,
+                             private = list(student_ds = NULL,
+                                            solution_ds = NULL,
+                                            student_ds_part = NULL,
+                                            solution_ds_part = NULL,
+                                            inline_number = NULL,
+                                            chunk_number = NULL))
 ex <- function() {
   return(tw$get("state"))
 }

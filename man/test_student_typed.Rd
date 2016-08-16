@@ -4,8 +4,7 @@
 \alias{test_student_typed}
 \title{Test student's submission as text}
 \usage{
-test_student_typed(strings, fixed = FALSE, times = 1,
-  not_typed_msg = NULL)
+test_student_typed(strings, fixed = TRUE, times = 1, not_typed_msg = NULL)
 }
 \arguments{
 \item{strings}{A set of strings that should be available in the student code.}
