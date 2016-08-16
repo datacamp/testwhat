@@ -27,7 +27,7 @@ check_that <- function(code, feedback, env = parent.frame()) {
     feedback <- list(list(message = feedback))
   }
   
-  stopifnot(is.list(feedback))
+  stopifnot(is.list(feedback), is.list(feedback[[1]]))
 
   res <- try(eval(code, envir = env), silent = TRUE)
   if (!isTRUE(res)) {

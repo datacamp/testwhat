@@ -7,7 +7,7 @@ test_that("test diff general", {
   expect_equal(build_diff(sol = list('a'), stud = 'blergh'), NULL)
   
   # stud is try-error
-  expect_equal(build_diff(sol = 'anything', stud = tryerrorstring), " Evaluating the expression you specified caused an error.")
+  expect_equal(build_diff(sol = 'anything', stud = tryerrorstring), "evaluating the expression you specified caused an error.")
   
   # if class-specific implementation: need more info!
   expect_error(build_diff(sol = "test"), stud = 'blergh')
@@ -15,7 +15,7 @@ test_that("test diff general", {
   expect_error(build_diff(sol = "test", stud = TRUE, eq_condition = 'test'))
   expect_error(build_diff(sol = "test", stud = TRUE, eq_condition = 'equivalent'))
   res <- build_diff(sol = "test", stud = TRUE, eq_condition = 'equivalent', id = 'test')
-  expect_equal(res, " Test is a logical, while it should be a character string.")
+  expect_equal(res, "test is a logical, while it should be a character string.")
 })
 
 test_that("test diff helpers", {

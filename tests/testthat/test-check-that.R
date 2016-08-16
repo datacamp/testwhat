@@ -8,12 +8,6 @@ test_that("check_that works as it should", {
   expect_error(run_until_fail(check_that(is_true(TRUE), feedback = NULL)))
 
   tw$set(reporter = DC_reporter$new())
-  expect_error(run_until_fail(check_that(is_true(TRUE), feedback = "")))
-
-  tw$set(reporter = DC_reporter$new())
-  expect_error(run_until_fail(check_that(is_true(TRUE), feedback = 1234)))
-
-  tw$set(reporter = DC_reporter$new())
   expect_error(run_until_fail(check_that(is_true(TRUE), feedback = list(not_message = "test"))))
 
   tw$set(reporter = DC_reporter$new())
