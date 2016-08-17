@@ -6,9 +6,7 @@
 #' This package contains a bunch of high-level functions to test objects, function
 #' calls, output, function definition, control structures and many more.
 #' 
-#' For more information, see \url{docs.datacamp.com/teach/sct-design-r.html}.
-#' 
-#' For a bunch of SCT examples, see \url{www.github.com/data-camp/introduction_to_R}.
+#' Learn more about testwhat on the wiki: \url{www.github.com/datacamp/testwhat/wiki}.
 #'
 #' @docType package
 #' @name testwhat

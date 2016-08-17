@@ -57,7 +57,7 @@ get_rep <- function() {
 }
 
 run_until_fail <- function(code) {
-  eval_fail <- try(eval(code, envir = tw$get("test_env")), silent = TRUE)
+  eval_fail <- try(eval(code, envir = ex()$get("test_env")), silent = TRUE)
   if (inherits(eval_fail, "try-error")) {
     cond <- attr(eval_fail, "condition")$message
     if (identical(cond, sct_failed_msg)) {

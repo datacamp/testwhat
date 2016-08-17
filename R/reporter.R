@@ -8,16 +8,16 @@ DC_reporter <- R6::R6Class("DC_reporter",
   
     register_feedback = function(feedback) {
       if (private$silent == 0) {
-        if (is.null(private$silent_pass) || !private$silent_pass) {
+        if (isTRUE(private$silent_pass)) {
+          # do nothing, the check part passed!
+        } else {
           private$feedback <- feedback
-          stop(sct_failed_msg)
         }
       } else {
-        if (is.null(private$silent_feedback)) {
-          private$silent_feedback <- feedback
-          private$silent_pass <- FALSE
-        }
+        private$silent_feedback <- feedback
+        private$silent_pass <- FALSE
       }
+      stop(sct_failed_msg)
     },
     
     set_success_msg = function(msg) {
@@ -45,7 +45,6 @@ DC_reporter <- R6::R6Class("DC_reporter",
       }
     },
     
-    
     be_loud = function() {
       private$silent <- max(0, private$silent - 1)
     },
@@ -57,10 +56,19 @@ DC_reporter <- R6::R6Class("DC_reporter",
     },
     
     end_diagnose = function() {
-      if (!is.null(private$silent_feedback)) {
-        private$feedback <- private$silent_feedback
+      if (isTRUE(private$silent_pass)) {
+        # do nothing, all went fine
+      } else {
+        if (!is.null(private$feedback)) {
+          # do nothing, diagnose code did its job
+        } else {
+          if (is.null(private$silent_feedback)) {
+            stop("There should be silent feedback now!")
+          }
+          private$feedback <- private$silent_feedback
+        }
         private$silent_feedback <- NULL
-        private$silent_pass <- NULL
+        private$silent_pass <- TRUE
         stop(sct_failed_msg)
       }
     }
