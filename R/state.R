@@ -169,15 +169,18 @@ ObjectState <- R6::R6Class("ObjectState", inherit = ChildState,
                                           student_object = NULL,
                                           solution_object = NULL))
 
-FunDefState <- R6::R6Class("FunDefState", inherit = ChildState,
-                           private = list(student_object = NULL,
-                                          solution_object = NULL))
-
+FunDefState <- R6::R6Class("FunDefState", inherit = ChildState, private = list(name = NULL, student_object = NULL, solution_object = NULL))
 FunDefArgsState <- R6::R6Class("FunDefArgsState", inherit = FunDefState)
-FunDefResultState <- R6::R6Class("FunDefResultState", inherit = FunDefState)
-FunDefOutputState <- R6::R6Class("FunDefOutputState", inherit = FunDefState)
-FunDefErrorState <- R6::R6Class("FunDefErrorState", inherit = FunDefState)
-  
+ExprState <- R6::R6Class("ExprState", inherit = ChildState, private = list(expr = NULL))
+
+ExprEvalState <- R6::R6Class("ExprState", inherit = ChildState, private = list(student_object = NULL, solution_object = NULL))
+FunDefResultState <- R6::R6Class("FunDefResultState", inherit = ExprEvalState)
+FunDefOutputState <- R6::R6Class("FunDefOutputState", inherit = ExprEvalState)
+FunDefErrorState <- R6::R6Class("FunDefErrorState", inherit = ExprEvalState)
+ExprResultState <- R6::R6Class("ExprResultState", inherit = ExprEvalState)
+ExprOutputState <- R6::R6Class("ExprOutputState", inherit = ExprEvalState)
+ExprErrorState <- R6::R6Class("ExprErrorState", inherit = ExprEvalState)
+
 ControlState <- R6::R6Class("ControlState",
                             inherit = ChildState,
                             private = list(student_struct = NULL,

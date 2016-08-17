@@ -161,13 +161,15 @@ build_feedback_message <- function(details) {
         msg %+=% "Did you specify the correct number of arguments?"
       }
       if (det$case == "coded") {
-        msg %+=% sprintf("The system couldn't the definition in your code")
+        msg %+=% sprintf("The system couldn't find the function definition in your code.")
       }
+    }
+    if (det$type  == "expr") {
       if (det$case == "result_runs") {
-        msg %+=% sprintf("Running %s generated an error.", det$callstr)
+        msg %+=% sprintf("Running `%s` generated an error.", det$expr_str)
       }
       if (det$case == "result_correct") {
-        msg %+=% sprintf("Calling %s didn't give the correct result.", det$callstr)
+        msg %+=% sprintf("Running `%s` didn't give the correct result.", det$expr_str)
       }
       if (det$case == "result_equal") {
         msg %+=% build_diff(sol = det$solution, stud = det$student,
@@ -175,10 +177,10 @@ build_feedback_message <- function(details) {
                             id = "the result")
       }
       if (det$case == "output_runs") {
-        msg %+=% sprintf("Running %s generated an error.", det$callstr)
+        msg %+=% sprintf("Running `%s` generated an error.", det$expr_str)
       }
       if (det$case == "output_correct") {
-        msg %+=% sprintf("Calling %s didn't generate the correct output.", det$callstr)
+        msg %+=% sprintf("Running `%s` didn't generate the correct output.", det$expr_str)
       }
       if (det$case == "output_equal") {
         msg %+=% sprintf("Expected %s, but got %s",
@@ -186,10 +188,10 @@ build_feedback_message <- function(details) {
                          ifelse(length(det$student) == 0, "no output", sprintf("`%s`", det$student)))
       }
       if (det$case == "error_fails") {
-        msg %+=% sprintf("Running %s didn't generate an error, but it should.", det$callstr)
+        msg %+=% sprintf("Running `%s` didn't generate an error, but it should.", det$expr_str)
       }
       if (det$case == "error_correct") {
-        msg %+=% sprintf("Calling %s didn't generate the correct error.", det$callstr)
+        msg %+=% sprintf("Running `%s` didn't generate the correct error.", det$expr_str)
       }
       if (det$case == "error_equal") {
         msg %+=% sprintf("Expected the error `%s`, but instead got the error `%s`",

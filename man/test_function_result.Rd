@@ -5,7 +5,8 @@
 \title{Check the result of a function call}
 \usage{
 test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
-  not_called_msg = NULL, error_msg = NULL, incorrect_msg = NULL)
+  not_called_msg = NULL, eval_error_msg = NULL, ordered = TRUE,
+  incorrect_msg = NULL)
 }
 \arguments{
 \item{name}{name of the function whose output you would like to check.}
@@ -17,9 +18,9 @@ comparison for each argument. See \code{\link{is_equal}}}
 
 \item{not_called_msg}{feedback message in case the function is not retrieved.}
 
-\item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution.}
-
 \item{eval_error_msg}{feedback message in case the student function call at the mentioned index generated an error.}
+
+\item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution.}
 }
 \description{
 \code{test_function_result} finds a function specified by \code{name} in both the

@@ -7,7 +7,7 @@ test_that("test_fundef - step by step", {
                  fundef %>% test_arguments()
                  fundef %>% test_body() %>% test_fun('print') %>% test_arg('x')
                  fundef %>% test_result(x = 2, y = 3) %>% test_equal()
-                 fundef %>% test_call_output(x = 2, y = 3L) %>% test_equal()
+                 fundef %>% test_output(x = 2, y = 3L) %>% test_equal()
                  fundef %>% test_error(x = 2L, y = 3L) %>% test_equal()"
   
   lst$DC_CODE <- ""
@@ -26,17 +26,17 @@ test_that("test_fundef - step by step", {
   lst$DC_CODE <- "my_fun <- function(x, y) { return(x + y) }"
   capture.output(output <- test_it(lst))
   fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Check the body.*?The system wants to check the first call of")
+  fails(output, mess_patt = "Check the body.*?Have you called <code>print\\(\\)</code>")
 
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); stop('test') }"
   capture.output(output <- test_it(lst))
   fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
   fails(output, mess_patt = "Running .*? generated an error")
-  
+
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); return(x + c(y, y)) }"
   capture.output(output <- test_it(lst))
   fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Calling .*? correct result.*?The result has length 2, while it should have length 1")
+  fails(output, mess_patt = "Running .*? correct result.*?The result has length 2, while it should have length 1")
   
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); stopifnot(is.double(y)); return(x + y) }"
   capture.output(output <- test_it(lst))
@@ -46,7 +46,7 @@ test_that("test_fundef - step by step", {
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); return(x + y) }"
   capture.output(output <- test_it(lst))
   fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Calling .*? correct output\\. Expected <code>\\[1\\] 5</code>, but got <code>\\[1\\] &quot;a&quot;</code>")
+  fails(output, mess_patt = "Running .*? correct output\\. Expected <code>\\[1\\] 5</code>, but got <code>\\[1\\] &quot;a&quot;</code>")
   
   lst$DC_CODE <- "my_fun <- function(x, y) { print(x + y); return(x + y) }"
   capture.output(output <- test_it(lst))
@@ -70,7 +70,7 @@ test_that("test_fundef - step by step - custom", {
   fundef %>% test_arguments(incorrect_number_args_msg = 'incorrectnumargs')
   fundef %>% test_body() %>% test_fun('print') %>% test_arg('x', arg_not_specified_msg = 'test')
   fundef %>% test_result(x = 2, y = 3, error_msg = 'error1') %>% test_equal(incorrect_msg = 'incorr1')
-  fundef %>% test_call_output(x = 2, y = 3L, error_msg = 'error2') %>% test_equal(incorrect_msg = 'incorr2')
+  fundef %>% test_output(x = 2, y = 3L, error_msg = 'error2') %>% test_equal(incorrect_msg = 'incorr2')
   fundef %>% test_error(x = 2L, y = 3L, no_error_msg = 'error3') %>% test_equal(incorrect_msg = 'incorr3')"
   
   lst$DC_CODE <- ""
@@ -90,7 +90,7 @@ test_that("test_fundef - step by step - custom", {
   capture.output(output <- test_it(lst))
   fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
   fails(output, mess_patt = "Check the body")
-  fails(output, mess_patt = "wants to check the first call of <code>print\\(\\)</code>")
+  fails(output, mess_patt = "Have you called <code>print\\(\\)</code>")
   
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); stop('test') }"
   capture.output(output <- test_it(lst))
@@ -100,7 +100,7 @@ test_that("test_fundef - step by step - custom", {
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); return(x + c(y, y)) }"
   capture.output(output <- test_it(lst))
   fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Calling my_fun\\(x = 2, y = 3\\)")
+  fails(output, mess_patt = "Running <code>my_fun\\(x = 2, y = 3\\)</code>")
   fails(output, mess_patt = "Incorr1")
 
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); stopifnot(is.double(y)); return(x + y) }"
@@ -134,10 +134,6 @@ test_that("test_fundef - backwards compatibility", {
   # TODO (test_correct system should work!)
 })
 
-test_that("test_fundef - test_call_output but no output", {
-  # TODO
-})
-
 test_that("test_fundef - test_ifelse inside", {
   # TODO
 })
@@ -151,22 +147,18 @@ test_that("test_fundef - errs appropriately", {
 })
 
 
-
-
-
-
 # test_that("test_function_definition incorrect use", {
 #   lst <- list()
 #   lst$DC_SCT <- "test_function_definition('my_func')"
 # 
 #   lst$DC_SOLUTION <- ""
 #   lst$DC_CODE <- ""
-#   output <- test_it(lst)
+#   capture.output(output <- test_it(lst))
 #   error(output)
 # 
 #   lst$DC_SOLUTION <- "my_func <- 2"
 #   lst$DC_CODE <- "my_func <- 2"
-#   output <- test_it(lst)
+#   capture.output(output <- test_it(lst))
 #   error(output)
 # })
 # 
