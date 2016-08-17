@@ -26,11 +26,43 @@
 #' 
 #' @export
 test_function_definition <- function(name, 
-                                     function_test = NULL, 
+                                     function_test = NULL,
                                      body_test = NULL,
                                      undefined_msg = NULL, 
                                      incorrect_number_arguments_msg = NULL) {
+  body_test <- substitute(body_test)
+  function_test <- substitute(function_test)
+  fundef <- ex() %>% test_fun_def(name, undefined_msg)
   
+  fun_passed <- TRUE
+  if (!is.null(function_test)) {
+    fun_passed <- run_until_fail(function_test)
+    fun_feedback <- get_rep()$get_feedback()
+  }
+
+  if (!fun_passed) {
+    fundef %>% test_arguments(incorrect_number_args_msg = incorrect_number_arguments_msg)  
+  }
+  
+  body_passed <- TRUE
+  if (!is.null(body_test)) {
+    oldstate <- ex()
+    on.exit(tw$set(state = oldstate))
+    body_state <- test_body(fundef)
+    tw$set(state = body_state)
+    body_passed <- run_until_fail(body_test)
+    body_feedback <- get_rep()$get_feedback()
+  }
+  
+  if (fun_passed) {
+    # all good
+  } else {
+    if (body_passed) {
+      check_that(failure(), feedback = fun_feedback)
+    } else {
+      check_that(failure(), feedback = body_feedback)
+    }
+  }
 }
 
 #' @export
