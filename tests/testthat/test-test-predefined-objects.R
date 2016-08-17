@@ -35,18 +35,18 @@ test_that("test_predefined_objects works", {
   
   lst$DC_SCT <- "test_predefined_objects(c('a', 'b', 'c'), eq_condition = 'equal', incorrect_msg = 'notok')"
   output <- test_it(lst)
-  fails(output, 'notok')
+  fails(output, 'Notok')
   
   lst$DC_SCT <- "test_predefined_objects(c('a', 'b', 'c'), eq_condition = 'equal', incorrect_msg = c('anotok', 'bnotok', 'cnotok'))"
   output <- test_it(lst)
-  fails(output, 'cnotok')
+  fails(output, 'Cnotok')
   
   lst$DC_SCT <- "test_predefined_objects(c('a', 'b', 'c', 'd'), undefined_msg = 'notok')"
   output <- test_it(lst)
-  fails(output, 'notok')
+  fails(output, 'Notok')
   
   lst$DC_SCT <- "test_predefined_objects(c('a', 'b', 'c', 'd'), undefined_msg = c('anotok', 'bnotok', 'cnotok', 'dnotok'))"
   output <- test_it(lst)
-  fails(output, 'dnotok')
+  fails(output, 'Dnotok')
   
 })
