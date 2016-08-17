@@ -148,17 +148,17 @@ fundefcall_helper <- function(state, ..., error_msg = NULL, type = c("result", "
 
 
 #' @export
-test_call_result <- function(state, ..., error_msg = NULL) {
+test_result.FunDefState <- function(state, ..., error_msg = NULL) {
   fundefcall_helper(state, ..., error_msg = error_msg, type = "result")
 }
 
 #' @export
-test_call_output <- function(state, ..., error_msg = NULL) {
+test_output.FunDefState <- function(state, ..., error_msg = NULL) {
   fundefcall_helper(state, ..., error_msg = error_msg, type = "output")
 }
 
 #' @export
-test_call_error <- function(state, ..., no_error_msg = NULL) {
+test_error.FunDefState <- function(state, ..., no_error_msg = NULL) {
   name <- state$get("name")
   funcallstr <- gsub("list", name, deparse(substitute(list(...))))
   

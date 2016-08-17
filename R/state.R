@@ -150,14 +150,14 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
   )
 )
 
-FunctionState <- R6::R6Class("FunctionState", inherit = ChildState,
-                             private = list(student_calls = NULL,
-                                            solution_call = NULL))
+CallState <- R6::R6Class("FunctionState", inherit = ChildState,
+                             private = list(student_calls = NULL, solution_call = NULL))
+FunctionState <- R6::R6Class("FunctionState", inherit = CallState)
+OperationState <- R6::R6Class("OperationState", inherit = CallState)
 
-OperationState <- R6::R6Class("OperationState", inherit = ChildState,
-                              private = list(student_ops = NULL,
-                                             solution_op = NULL))
-
+CallResultState <- R6::R6Class("CallResultState", inherit = CallState)
+FunctionResultState <- R6::R6Class("FunctionResultState", inherit = CallResultState)
+OperationResultState <- R6::R6Class("OperationResultState", inherit = CallResultState)
 
 ArgumentState <- R6::R6Class("ArgumentState", 
                              inherit = ChildState,

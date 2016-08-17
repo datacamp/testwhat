@@ -62,6 +62,17 @@ build_feedback_message <- function(details) {
       if (det$case == "correct") {
         msg %+=% sprintf("Check your call of `%s()`.", det$name)
       }
+      if (det$case == "result_runs") {
+        msg %+=% sprintf("Running it again threw an error.")
+      }
+      if (det$case == "result_correct") {
+        msg %+=% sprintf("Running it again doesn't give the correct result.")
+      }
+      if (det$case == "result_equal") {
+        msg %+=% build_diff(sol = det$solution, stud = det$student,
+                            eq_condition = det$eq_condition,
+                            id = "the result")
+      }
     }
     if (det$type == "operator") {
       if (det$case == "called") {
@@ -70,7 +81,13 @@ build_feedback_message <- function(details) {
       if (det$case == "correct") {
         msg %+=% sprintf("Have you correctly used the `%s` operator?", det$name)
       }
-      if (det$case == "equal") {
+      if (det$case == "result_runs") {
+        msg %+=% sprintf("Running the operation again threw an error.")
+      }
+      if (det$case == "result_correct") {
+        msg %+=% sprintf("Running the operation again doesn't give the correct result.")
+      }
+      if (det$case == "result_equal") {
         msg %+=% build_diff(sol = det$solution, stud = det$student,
                             eq_condition = det$eq_condition,
                             id = "the result")

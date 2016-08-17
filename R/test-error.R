@@ -13,12 +13,16 @@
 #' }
 #'
 #' @export
-test_error <- function() {
-  test_err(ex())
+test_error <- function(state, ...) {
+  if (missing(state)) {
+    test_error(ex())
+  } else {
+    UseMethod("test_error", state)  
+  }
 }
 
 #' @export
-test_err <- function(state) {
+test_error.default <- function(state) {
   output_list <- state$get("output_list")
   student_pd <- state$get("student_pd")
   

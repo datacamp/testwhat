@@ -1,108 +1,52 @@
-#' Test whether a student correctly called a function 
-#'
-#' Test whether a student called a function, possibly with certain arguments, 
-#' correctly. Note that \code{test_function} and \code{test_function_v2} are now
-#' identical and either can be used, although the latter is likely to be phased
-#' out in the future.
-#' 
-#' @param name  name of the function to test.
-#' @param args  character vector of argument names that the student should have
-#' supplied in the function calls.
-#' @param index  integer that specifies which call of \code{name} in the solution 
-#' code will be checked.
-#' @param eval  logical vector indicating whether the corresponding argument
-#' should be evaluated before testing. Setting this to \code{FALSE} can be
-#' useful, e.g., to test whether the student supplied a large predefined
-#' object, as only the corresponding \code{\link{name}} is compared in this
-#' case (use with care!).
-#' @param eq_condition  character vector indicating how to perform the
-#' comparison for each argument. See \code{\link{is_equal}}
-#' @param not_called_msg custom feedback message in case the student did not call the
-#' function often enough.
-#' @param args_not_specified_msg custom feedback message in case the student did call the function
-#' with the arguments listed in \code{args}
-#' @param incorrect_msg custom feedback message in case the student did not call the
-#' function with the same argument values as in the sample solution. 
-#' You can specify a vector of arguments with the same length as \code{args}, to have
-#' argument-specific custom feedback.
-#' 
-#' @examples
-#' \dontrun{
-#' # Suppose the solution contains: mean(1:3, na.rm = TRUE)
-#' # To test this submission, provide the following in the sct
-#' test_function("mean", c("x", "na.rm"))
-#' }
-#'
-#' @export
-test_function <- function(name, 
-                          args = NULL, 
-                          index = 1,
-                          eval = TRUE,
-                          eq_condition = "equivalent",
-                          not_called_msg = NULL, 
-                          args_not_specified_msg = NULL,
-                          incorrect_msg = NULL) {
-  
-  n_args <- length(args)
-  if (!is.null(incorrect_msg) && length(incorrect_msg) < n_args) {
-    incorrect_msg <- rep(incorrect_msg[1], n_args)
-  }
-  eval <- rep(eval, length.out = n_args)
-  eq_condition <- rep(eq_condition, length.out = n_args)
-  
-  fun_state <- ex() %>% test_fun(name, index = index, not_called_msg = not_called_msg)
-  for (i in seq_along(args)) {
-    fun_state %>% 
-      test_arg(args[i], arg_not_specified_msg = args_not_specified_msg) %>% 
-      test_equal(incorrect_msg = incorrect_msg[i], eval = eval[i], eq_condition = eq_condition[i])
-  }
-}
-
-#' @rdname test_function
-#' @export
-test_function_v2 <- test_function
-
-
 #' @export
 test_fun <- function(state, name, index = 1, not_called_msg = NULL) {
+  test_call(state, name = name, index = index, not_called_msg = not_called_msg, type = "function")
+}
+
+#' @export
+test_op <- function(state, name, index = 1, not_called_msg = NULL) {
+  test_call(state, name = name, index = index, not_called_msg = not_called_msg, type = "operator")
+}
+
+test_call <- function(state, name, index, not_called_msg, type = c("function", "operator")) {
+  type <- match.arg(type)
+  finder <- switch(type, `function` = find_function_calls, operator = find_operators)
+  CallState <- switch(type, `function` = FunctionState, operator = OperationState)
   
-  student_pd <- state$get("student_pd")
-  solution_pd <- state$get("solution_pd")
-  student_env <- state$get("student_env")
-  solution_env <- state$get("solution_env")
+  call_state <- CallState$new(state)
+  call_state$add_details(type = type,
+                         case = "called",
+                         name = name,
+                         index = index,
+                         message = not_called_msg,
+                         pd = NULL)
   
-  fun_state <- FunctionState$new(state)
-  fun_state$add_details(type = "function",
-                        case = "called",
-                        name = name,
-                        index = index,
-                        message = not_called_msg,
-                        pd = NULL)
-  
-  student_calls <- find_function_calls(student_pd, name, student_env)
-  solution_calls <- find_function_calls(solution_pd, name, solution_env)
-  n_student_calls <- length(student_calls)
-  n_solution_calls <- length(solution_calls)
+  student_calls <- finder(pd = state$get("student_pd"), 
+                          name = name, 
+                          env = state$get("student_env"))
+  solution_calls <- finder(pd = state$get("solution_pd"),
+                           name = name,
+                           env = state$get("solution_env"))
   
   check_sufficient(solution_calls, index, name)
   solution_call <- solution_calls[[index]]
   
-  check_that(is_true(n_student_calls >= index), feedback = fun_state$details)
+  check_that(is_true(length(student_calls) >= index), feedback = call_state$details)
   
   # update the case for future tests
-  fun_state$set_details(case = "correct",
-                        message = NULL)
+  call_state$set_details(case = "correct",
+                         message = NULL)
   
-  # manage blacklisting of functions
+  # manage blacklisting of operators
   state$update_blacklist()
   state$set(active_name = name)
   state$set(active_sol_index = index)
   options <- state$get_options(length(student_calls))
   
   student_calls[-options] <- NULL
-  fun_state$set(solution_call = solution_call)
-  fun_state$set(student_calls = student_calls)
-  return(fun_state)
+  call_state$set(solution_call = solution_call)
+  call_state$set(student_calls = student_calls)
+  return(call_state)
 }
 
 #' @export
@@ -130,7 +74,7 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
     
     # If no hits, use details of the first try
     if (is.null(details)) {
-      arg_state$set_details(pd = student_call$function_pd)
+      arg_state$set_details(pd = student_call$pd)
       details <- arg_state$details
     }
     
@@ -193,7 +137,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     # If no hits, use details of the first try
     if (is.null(details)) {
       if (is_dots(student_arg)) {
-        pd <- state$student_calls[[i]]$function_pd
+        pd <- state$student_calls[[i]]$pd
         is_dots <- TRUE
       } else {
         pd <- student_arg$pd

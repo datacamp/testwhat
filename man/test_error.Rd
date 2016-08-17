@@ -4,7 +4,7 @@
 \alias{test_error}
 \title{Check whether the student's submission threw an error.}
 \usage{
-test_error()
+test_error(state, ...)
 }
 \description{
 With information gathered from the R Backend, \code{test_error} detects

@@ -18,9 +18,10 @@ test_code <- function(state, regex, fixed = FALSE, times = 1, missing_msg = NULL
   check_that(is_gte(num_hits, times), feedback = regex_state$details)
 }
 
+
 #' Test output for regex
 #' @export
-test_output <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, missing_msg = NULL) {
+test_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, missing_msg = NULL) {
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "output",
                           case = "regex",

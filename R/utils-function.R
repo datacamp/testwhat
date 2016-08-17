@@ -26,9 +26,21 @@ find_function_calls <- function(pd, name, env) {
     standard_call <- standardize_call(original_call, expr_string, env)
     function_pd <- get_sub_pd(pd = pd, expr_id)
     arg_pds <- get_args(function_pd, standard_call)
-    list(call = standard_call, function_pd = function_pd, args = arg_pds)
+    list(call = standard_call, pd = function_pd, args = arg_pds)
   })
 }
+
+# Find all operators in the parse data
+#' @importFrom utils getParseText
+find_operators <- function(pd, name, env) {
+  parent_ids <- pd$parent[pd$text == name]
+  lapply(parent_ids, function(id) {
+    call <- getParseText(pd, id)
+    pd <- pd[pd$id == id, ]
+    list(call = parse(text = call), pd = pd)
+  })
+}
+
 
 clean <- function(x) {
   x <- gsub("\\s", "", x)
