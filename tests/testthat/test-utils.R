@@ -2,13 +2,11 @@ context("utils")
 
 test_that("backwards comp", {
   e <- new.env(globalenv())
-  tw$set(solution_env = e)
+  tw$set(state = RootState$new(solution_env = e,
+                               student_code = "abc",
+                               solution_code = "abc"))
   expect_equal(get_solution_env(), e)
-
-  tw$set(student_code = "abc")
   expect_equal(get_student_code(), "abc")
-
-  tw$set(solution_code = "abc")
   expect_equal(get_solution_code(), "abc")
 })
 
