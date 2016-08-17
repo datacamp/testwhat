@@ -7,16 +7,7 @@ DC_reporter <- R6::R6Class("DC_reporter",
     initialize = function() {},
   
     register_feedback = function(feedback) {
-      if (private$silent == 0) {
-        if (isTRUE(private$silent_pass)) {
-          # do nothing, the check part passed!
-        } else {
-          private$feedback <- feedback
-        }
-      } else {
-        private$silent_feedback <- feedback
-        private$silent_pass <- FALSE
-      }
+      private$feedback <- feedback
       stop(sct_failed_msg)
     },
     
@@ -24,67 +15,32 @@ DC_reporter <- R6::R6Class("DC_reporter",
       private$success_msg <- msg
     },
     
-    generate_feedback = function(ex_type) {
-      feedback <- private$feedback
-      if (is.null(feedback)) {
-        return(list(correct = TRUE,
-                    message = to_html(capitalize(trim(private$success_msg)))))
-      } else {
-        
-        msg <- build_feedback_message(feedback)
-        line_info <- get_line_info(feedback)
-        
-        if (is.null(line_info) || ex_type == "MarkdownExercise") {
-          return(list(correct = FALSE,
-                      message = to_html(msg)))
-        } else {
-          return(c(list(correct = FALSE,
-                        message = to_html(msg)),
-                        line_info))
-        }
-      }
-    },
-    
-    be_loud = function() {
-      private$silent <- max(0, private$silent - 1)
-    },
-    
-    be_silent = function() {
-      private$silent <- private$silent + 1
-      private$silent_feedback <- NULL
-      private$silent_pass <- TRUE
-    },
-    
-    end_diagnose = function() {
-      if (isTRUE(private$silent_pass)) {
-        # do nothing, all went fine
-      } else {
-        if (!is.null(private$feedback)) {
-          # do nothing, diagnose code did its job
-        } else {
-          if (is.null(private$silent_feedback)) {
-            stop("There should be silent feedback now!")
-          }
-          private$feedback <- private$silent_feedback
-        }
-        private$silent_feedback <- NULL
-        private$silent_pass <- TRUE
-        stop(sct_failed_msg)
-      }
+    get_feedback = function() {
+      feedback <- private$feedback %||% private$success_msg
+      private$feedback <- NULL
+      return(feedback)
     }
   ),
   
   private = list(
     success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
-    feedback = NULL,
-    silent_feedback = NULL,
-    silent_pass = NULL,
-    silent = 0
+    feedback = NULL
   )
 )
 
-is_loud <- function(feedback) {
-  feedback[[length(feedback)]]$silent == 0
+generate_payload <- function(feedback, correct, ex_type) {
+  msg <- to_html(build_feedback_message(feedback))
+  payload <- list(correct = correct,
+                  message = msg)
+  
+  if (!correct && ex_type != "MarkdownExercise") {
+    line_info <- get_line_info(feedback)  
+    if (!is.null(line_info)) {
+      payload <- c(payload, line_info)
+    }
+  }
+  
+  return(payload)
 }
 
 get_line_info <- function(feedback) {

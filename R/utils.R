@@ -66,3 +66,6 @@ merge_list <- function(x, y) {
 
 tw <- tw_accessors()
 
+`%||%` <- function(a, b) {
+  if (!is.null(a)) a else b
+}

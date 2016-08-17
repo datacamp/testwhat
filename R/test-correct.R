@@ -39,11 +39,19 @@
 #' @export
 test_correct <- function(check_code, diagnose_code) {
   rep <- get_rep()
-  rep$be_silent()
-  run_until_fail(substitute(check_code))
-  rep$be_loud()
-  run_until_fail(substitute(diagnose_code))
-  rep$end_diagnose()
+  check_passed <- run_until_fail(substitute(check_code))
+  check_feedback <- rep$get_feedback()
+  diagnose_passed <- run_until_fail(substitute(diagnose_code))
+  diagnose_feedback <- rep$get_feedback()
+  if (check_passed) {
+    # all good
+  } else {
+    if (diagnose_passed) {
+      check_that(failure(), feedback = check_feedback)
+    } else {
+      check_that(failure(), feedback = diagnose_feedback)
+    }
+  }
 }
 
 #' Test if one of the given sct parts are correct. 
@@ -78,21 +86,20 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
   len <- length(input) 
   
   passes <- logical(len)
+  feedback <- list()
   rep <- get_rep()
   
-  for (i in 1:len) {
+  for (i in seq_along(input)) {
     code <- input[[i]]
-    rep$be_silent()
     passes[i] <- run_until_fail(code)
-    rep$be_loud()
+    feedback[[i]] <- rep$get_feedback()
   }
   
   if (!any(passes)) {
     if (is.null(incorrect_msg)) {
-      failing_test <- input[[choose_feedback]]
-      eval(failing_test, envir = test_env)
+      check_that(failure(), feedback = feedback[[choose_feedback]])
     } else {
-      check_that(failure(), incorrect_msg)
+      check_that(failure(), feedback = incorrect_msg)
     }
   }
 }

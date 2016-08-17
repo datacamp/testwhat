@@ -47,9 +47,11 @@ test_exercise <- function(sct,
   on.exit(tw$clear())
 
   # Execute sct with the DataCamp reporter such that it collects test results
-  run_until_fail(parse(text = sct))
-  outcome <- get_rep()$generate_feedback(ex_type = ex_type)
-  return(outcome)
+  correct <- run_until_fail(parse(text = sct))
+  feedback <- get_rep()$get_feedback()
+  return(generate_payload(feedback = feedback,
+                          correct = correct,
+                          ex_type = ex_type))
 }
 
 get_rep <- function() {

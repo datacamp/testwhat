@@ -20,8 +20,11 @@ capitalize <- function(x) {
 }
 
 build_feedback_message <- function(details) {
+  if (is.character(details)) {
+    return(capitalize(trim(details)))
+  }
+  
   msg <- ""
-
   for (det in details) {
     if (!is.null(det$message)) {
       msg %+=% det$message
