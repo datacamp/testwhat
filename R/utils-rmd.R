@@ -1,7 +1,4 @@
-#' build R markdown document structure, using knitr functions
-#' 
 #' @importFrom knitr pat_md knit_patterns opts_knit
-#' @param text text representing an R Markdown document
 build_doc_structure <- function(text) {
   
   # Fix markdown format
@@ -37,9 +34,6 @@ build_doc_structure <- function(text) {
   return(content)
 }
 
-#' Parse both the student and solution document
-#' 
-#' @inheritParams test_function
 parse_docs <- function(state) {
   student_code <- state$get("student_code")
   solution_code <- state$get("solution_code")

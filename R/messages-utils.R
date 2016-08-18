@@ -23,7 +23,9 @@ collapse_funs <- function(x, conn = " and ") {
 
 #' Specify the language for the automated feedback
 #' 
-#' @param lang shorthand notation for the language. Currently, "en", "fr" and "es" are supported
+#' Functionality for different languages is no longer supported
+#' 
+#' @param lang shorthand notation for the language.
 #' @export
 set_language <- function(lang) {
   message("Different languages are no longer supported in testwhat")

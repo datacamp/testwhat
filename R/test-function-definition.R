@@ -147,35 +147,6 @@ test_body.FunDefState <- function(state, not_found_msg = NULL) {
 }
 
 
-#' @export
-test_result.FunDefState <- function(state, ..., error_msg = NULL) {
-  expr_str <- gsub("list", state$get("name"), deparse(substitute(list(...))))
-  run_expr_helper(state, 
-                  expr = parse(text = expr_str),
-                  expr_str = expr_str,
-                  error_msg = error_msg,
-                  case = "result")
-}
-
-#' @export
-test_output.FunDefState <- function(state, ..., error_msg = NULL) {
-  expr_str <- gsub("list", state$get("name"), deparse(substitute(list(...))))
-  run_expr_helper(state, 
-                  expr = parse(text = expr_str),
-                  expr_str = expr_str,
-                  error_msg = error_msg,
-                  case = "output")
-}
-
-#' @export
-test_error.FunDefState <- function(state, ..., no_error_msg = NULL) {
-  expr_str <- gsub("list", state$get("name"), deparse(substitute(list(...))))
-  run_expr_error_helper(state, 
-                        expr = parse(text = expr_str),
-                        expr_str = expr_str,
-                        no_error_msg = no_error_msg)
-}
-
 
 
 

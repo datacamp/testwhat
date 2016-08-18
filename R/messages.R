@@ -51,7 +51,17 @@ build_feedback_message <- function(details) {
         msg %+=% sprintf("The column `%s` doesn't seem to be correct.", det$name)
       }
       if (det$case == "equal") {
-        msg %+=% "The result of the operation isn't as expected."
+        # do nothing, for now.
+      }
+    }
+    if (det$type == "element") {
+      if (det$case == "defined") {
+        msg %+=% sprintf("Does it contain an element `%s`?", det$name)
+      }
+      if (det$case == "correct") {
+        msg %+=% sprintf("The element `%s` doesn't seem to be correct.", det$name)
+      }
+      if (det$case == "equal") {
         # do nothing, for now.
       }
     }

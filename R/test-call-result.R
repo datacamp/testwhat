@@ -1,13 +1,3 @@
-#' @export
-test_result.OperationState <- function(state, error_msg = NULL) {
-  test_call_result(state, error_msg = error_msg, type = "operator")
-}
-
-#' @export
-test_result.FunctionState <- function(state, error_msg = NULL) {
-  test_call_result(state, error_msg = error_msg, type = "function")
-}
-
 test_call_result <- function(state, error_msg, type = c("function", "operator")) {
   type <- match.arg(type)
   CallResultState <- switch(type, `function` = FunctionResultState, operator = OperationResultState)
@@ -67,15 +57,6 @@ test_call_result <- function(state, error_msg, type = c("function", "operator"))
 }
 
 
-#' @export
-test_equal.FunctionResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL) {
-  test_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, type = "function")
-}
-
-#' @export
-test_equal.OperationResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL) {
-  test_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, type = "operator")
-}
 
 test_call_result_equal <- function(state, eq_condition, incorrect_msg, type = c("function", "operator")) {
   type <- match.arg(type)

@@ -154,8 +154,7 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
   )
 )
 
-CallState <- R6::R6Class("FunctionState", inherit = ChildState,
-                             private = list(student_calls = NULL, solution_call = NULL))
+CallState <- R6::R6Class("FunctionState", inherit = ChildState, private = list(student_calls = NULL, solution_call = NULL))
 FunctionState <- R6::R6Class("FunctionState", inherit = CallState)
 OperationState <- R6::R6Class("OperationState", inherit = CallState)
 
@@ -163,15 +162,11 @@ CallResultState <- R6::R6Class("CallResultState", inherit = CallState)
 FunctionResultState <- R6::R6Class("FunctionResultState", inherit = CallResultState)
 OperationResultState <- R6::R6Class("OperationResultState", inherit = CallResultState)
 
-ArgumentState <- R6::R6Class("ArgumentState", 
-                             inherit = ChildState,
-                             private = list(student_args = NULL,
-                                            solution_arg = NULL))
+ArgumentState <- R6::R6Class("ArgumentState", inherit = ChildState, private = list(student_args = NULL, solution_arg = NULL))
 
-ObjectState <- R6::R6Class("ObjectState", inherit = ChildState,
-                           private = list(name = NULL,
-                                          student_object = NULL,
-                                          solution_object = NULL))
+ObjectState <- R6::R6Class("ObjectState", inherit = ChildState, private = list(name = NULL, student_object = NULL, solution_object = NULL))
+ObjectColumnState <- R6::R6Class("ObjectColumnState", inherit = ObjectState)
+ObjectElementState <- R6::R6Class("ObjectElementState", inherit = ObjectState)
 
 FunDefState <- R6::R6Class("FunDefState", inherit = ChildState, private = list(name = NULL, student_object = NULL, solution_object = NULL))
 FunDefArgsState <- R6::R6Class("FunDefArgsState", inherit = FunDefState)
@@ -185,10 +180,7 @@ ExprResultState <- R6::R6Class("ExprResultState", inherit = ExprEvalState)
 ExprOutputState <- R6::R6Class("ExprOutputState", inherit = ExprEvalState)
 ExprErrorState <- R6::R6Class("ExprErrorState", inherit = ExprEvalState)
 
-ControlState <- R6::R6Class("ControlState",
-                            inherit = ChildState,
-                            private = list(student_struct = NULL,
-                                           solution_struct = NULL))
+ControlState <- R6::R6Class("ControlState", inherit = ChildState, private = list(student_struct = NULL, solution_struct = NULL))
 
 SubState <- R6::R6Class("SubState", inherit = ChildState)
 
@@ -203,6 +195,23 @@ MarkdownState <- R6::R6Class("MarkdownState", inherit = ChildState,
                                             solution_ds_part = NULL,
                                             inline_number = NULL,
                                             chunk_number = NULL))
+#' Get the main state
+#' 
+#' @export
 ex <- function() {
   return(tw$get("state"))
+}
+
+decorate_state <- function(state, stud, sol, el = NULL) {
+  if (is.null(el)) {
+    state$set(student_pd = stud$pd,
+              solution_pd = sol$pd,
+              student_code = stud$code,
+              solution_code = sol$code)
+  } else {
+    state$set(student_pd = stud[[el]]$pd,
+              solution_pd = sol[[el]]$pd,
+              student_code = stud[[el]]$code,
+              solution_code = sol[[el]]$code)  
+  }
 }

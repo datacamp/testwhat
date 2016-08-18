@@ -15,24 +15,6 @@ test_result.ExprState <- function(state, error_msg = NULL) {
                   case = "result")
 }
 
-#' @export
-test_output.ExprState <- function(state, error_msg = NULL) {
-  expr <- state$get("expr")
-  run_expr_helper(state, 
-                  expr = expr,
-                  expr_str = as.character(expr),
-                  error_msg = error_msg,
-                  case = "output")
-}
-
-#' @export
-test_error.ExprState <- function(state, no_error_msg = NULL) {
-  expr <- state$get("expr")
-  run_expr_error_helper(state, 
-                        expr = expr,
-                        expr_str = as.character(expr),
-                        no_error_msg = no_error_msg)
-}
 
 run_expr_helper <- function(state, expr, expr_str, error_msg = NULL, case = c("result", "output")) {
   case <- match.arg(case)
@@ -88,20 +70,7 @@ run_expr_error_helper <- function(state, expr, expr_str, no_error_msg = NULL) {
 }
 
 
-#' @export
-test_equal.ExprResultState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent") {
-  fundef_test_equal_helper(state, incorrect_msg, eq_condition, type = "result")
-}
 
-#' @export
-test_equal.ExprOutputState <- function(state, incorrect_msg = NULL) {
-  return(fundef_test_equal_helper(state, incorrect_msg, type = "output"))
-}
-
-#' @export
-test_equal.ExprErrorState <- function(state, incorrect_msg = NULL) {
-  return(fundef_test_equal_helper(state, incorrect_msg, type = "error"))
-}
 
 fundef_test_equal_helper <- function(state, incorrect_msg, eq_condition = "equivalent", type = c("result", "output", "error")) {
   type <- match.arg(type)

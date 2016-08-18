@@ -1,28 +1,27 @@
-decorate_state <- function(state, stud, sol, el = NULL) {
-  if (is.null(el)) {
-    state$set(student_pd = stud$pd,
-              solution_pd = sol$pd,
-              student_code = stud$code,
-              solution_code = sol$code)
-  } else {
-    state$set(student_pd = stud[[el]]$pd,
-              solution_pd = sol[[el]]$pd,
-              student_code = stud[[el]]$code,
-              solution_code = sol[[el]]$code)  
-  }
-}
+#' Test if student coded a control statement
+#' 
+#' The \code{state} to start from is typically \code{ex()}, unless you're testing nested control statements.
+#' 
+#' @param state state to start from 
+#' @param index Number of that particular control statement to check
+#' @param not_found_msg Custom message in case the control statement was not found
+#' 
+#' @name test_control
 
 
+#' @rdname test_control
 #' @export
 test_ifelse <- function(state, index = 1, not_found_msg = NULL) {
   test_control(state, index, not_found_msg, type = "if")
 }
 
+#' @rdname test_control
 #' @export
 test_while <- function(state, index = 1, not_found_msg = NULL) {
   test_control(state, index, not_found_msg, type = "while")
 }
 
+#' @rdname test_control
 #' @export
 test_for <- function(state, index = 1, not_found_msg = NULL) {
   test_control(state, index, not_found_msg, type = "for")
@@ -69,6 +68,11 @@ test_control <- function(state, index, not_found_msg, type = c("if", "while", "f
   return(control_state)
 }
 
+#' Test elements of control statements
+#' 
+#' @param state state to start from
+#' @name test_control_parts
+
 #' @export
 test_cond <- function(state) {
   student_struct <- state$get("student_struct")
@@ -79,13 +83,9 @@ test_cond <- function(state) {
   return(cond_state)
 }
 
+#' @rdname test_control_parts
 #' @export
-test_body <- function(state) {
-  UseMethod("test_body", state) 
-}
-
-#' @export
-test_body.default <- function(state) {
+test_body.ControlState <- function(state) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   body_state <- SubState$new(state)
@@ -94,6 +94,7 @@ test_body.default <- function(state) {
   return(body_state)
 }
 
+#' @rdname test_control_parts
 #' @export
 test_if <- function(state) {
   student_struct <- state$get("student_struct")
@@ -104,6 +105,8 @@ test_if <- function(state) {
   return(if_state)
 }
 
+#' @rdname test_control_parts
+#' @param not_found_msg custom message if the else part is not found
 #' @export
 test_else <- function(state, not_found_msg = NULL) {
   student_struct <- state$get("student_struct")

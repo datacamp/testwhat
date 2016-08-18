@@ -2,9 +2,25 @@
 % Please edit documentation in R/test-error.R
 \name{test_error}
 \alias{test_error}
+\alias{test_error.ExprState}
+\alias{test_error.FunDefState}
+\alias{test_error.default}
 \title{Check whether the student's submission threw an error.}
 \usage{
 test_error(state, ...)
+
+\method{test_error}{default}(state)
+
+\method{test_error}{ExprState}(state, no_error_msg = NULL)
+
+\method{test_error}{FunDefState}(state, ..., no_error_msg = NULL)
+}
+\arguments{
+\item{state}{state to start from (can be missing)}
+
+\item{...}{arguments that are used to build a function definition call}
+
+\item{no_error_msg}{custom message in case the expression or function call didn't generate an error}
 }
 \description{
 With information gathered from the R Backend, \code{test_error} detects

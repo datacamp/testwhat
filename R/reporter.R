@@ -75,7 +75,3 @@ to_html <- function(x) {
   html <- markdownToHTML(text = x, fragment.only = TRUE)
   gsub("<p>(.*?)</p>", "\\1", html) #remove <p> tags, coded by front end.
 }
-
-select_info <- function(x, col) {
-  sapply(x, `[[`, col)
-}
