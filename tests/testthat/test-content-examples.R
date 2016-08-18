@@ -61,9 +61,9 @@ test_error()
 success_msg('Good job!')
   "
   lst$DC_SOLUTION <- "
-qplot(factor(cyl), data = mtcars) 
+qplot(factor(cyl), data = mtcars)
 qplot(factor(cyl), factor(vs), data = mtcars)
-qplot(factor(cyl), factor(vs), data = mtcars, geom = 'jitter') 
+qplot(factor(cyl), factor(vs), data = mtcars, geom = 'jitter')
   "
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
@@ -82,18 +82,19 @@ test_that("exercise ggplot2 - v2", {
   "
   lst$DC_SOLUTION <- "
   # qplot() with x only
-  qplot(factor(cyl), data = mtcars) 
-  
+  qplot(factor(cyl), data = mtcars)
+
   # qplot() with x and y
-  qplot(factor(cyl), factor(vs), data = mtcars) 
-  
+  qplot(factor(cyl), factor(vs), data = mtcars)
+
   # qplot() with geom set to jitter manually
-  qplot(factor(cyl), factor(vs), data = mtcars, geom = 'jitter') 
+  qplot(factor(cyl), factor(vs), data = mtcars, geom = 'jitter')
   "
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
 })
+
 
 ## NOT FIXED!
 # test_that("exercise cleaning data", {
