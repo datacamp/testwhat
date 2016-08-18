@@ -1,14 +1,14 @@
 #' @export
 test_fun <- function(state, name, index = 1, not_called_msg = NULL) {
-  test_call(state, name = name, index = index, not_called_msg = not_called_msg, type = "function")
+  test_call_helper(state, name = name, index = index, not_called_msg = not_called_msg, type = "function")
 }
 
 #' @export
 test_op <- function(state, name, index = 1, not_called_msg = NULL) {
-  test_call(state, name = name, index = index, not_called_msg = not_called_msg, type = "operator")
+  test_call_helper(state, name = name, index = index, not_called_msg = not_called_msg, type = "operator")
 }
 
-test_call <- function(state, name, index, not_called_msg, type = c("function", "operator")) {
+test_call_helper <- function(state, name, index, not_called_msg, type = c("function", "operator")) {
   type <- match.arg(type)
   finder <- switch(type, `function` = find_function_calls, operator = find_operators)
   CallState <- switch(type, `function` = FunctionState, operator = OperationState)
@@ -43,7 +43,7 @@ test_call <- function(state, name, index, not_called_msg, type = c("function", "
   state$set(active_sol_index = index)
   options <- state$get_options(length(student_calls))
   
-  student_calls[-options] <- NULL
+  student_calls[-options] <- NA
   call_state$set(solution_call = solution_call)
   call_state$set(student_calls = student_calls)
   return(call_state)
@@ -66,11 +66,11 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
          " by the corresponding function call in the solution code.")
   }
   
-  res <- numeric()
+  res <- logical(length(student_calls))
   details <- NULL
   for (i in seq_along(student_calls)) {
     student_call <- student_calls[[i]]
-    if (is.null(student_call)) next
+    if (isTRUE(is.na(student_call))) next
     
     # If no hits, use details of the first try
     if (is.null(details)) {
@@ -81,7 +81,7 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
     # Check if the function is called with the right arguments
     if (arg %in% names(student_call$args)) {
       arg_state$log(index = i, arg = arg, success = TRUE)
-      res <- c(res, i)
+      res[i] <- TRUE
     } else {
       arg_state$log(index = i, arg = arg, success = FALSE)
     }
@@ -90,11 +90,11 @@ test_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   if (is.null(details)) {
     details <- arg_state$details
   }
-  check_that(is_gte(length(res), 1), feedback = details)
+  check_that(is_gte(sum(res), 1), feedback = details)
   
   student_args <- student_calls
   student_args[res] <- lapply(student_args[res], function(x) x$args[[arg]])
-  student_args[-res] <- NULL
+  student_args[!res] <- NA
   arg_state$set(student_args = student_args)
   arg_state$set(solution_arg = solution_call$args[[arg]])
   
@@ -125,11 +125,11 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     stop("test_equal() found an argument that causes an error when evaluated.")
   }
 
-  res <- numeric()
+  res <- logical(length(student_args))
   details <- NULL
   for (i in seq_along(student_args)) {
     student_arg <- student_args[[i]]
-    if (is.null(student_arg)) next
+    if (isTRUE(is.na(student_arg))) next
     student_obj <- eval_argument(student_arg,
                                  eval = eval,
                                  env = state$get("student_env"))
@@ -153,7 +153,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     # Check if the function arguments correspond
     if (is_equal(student_obj, solution_obj, eq_condition)) {
       state$log(index = i, success = TRUE)
-      res <- c(res, i)
+      res[i] <- TRUE
     } else {
       state$log(index = i, success = FALSE)
     }
@@ -163,7 +163,7 @@ test_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, e
     details <- state$details
   }
   
-  check_that(is_gte(length(res), 1), feedback = details)
+  check_that(is_gte(sum(res), 1), feedback = details)
   
   return(state)
 }

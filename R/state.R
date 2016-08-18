@@ -94,10 +94,14 @@ State <- R6::R6Class("State",
     active_arg = NULL,
     blacklist = list(),
     set_used = function(name, sol_index, stud_index) {
-      private$blacklist = c(private$blacklist, 
-                            list(list(name = name, 
-                                      stud_index = stud_index, 
-                                      sol_index = sol_index)))
+      add <- list(name = name, 
+                  stud_index = stud_index, 
+                  sol_index = sol_index)
+      if (any(sapply(private$blacklist, function(x) isTRUE(try(all.equal(add, x)))))) {
+        # don't add
+      } else {
+        private$blacklist = c(private$blacklist, list(add))  
+      }
     }
   )
 )

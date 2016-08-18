@@ -28,11 +28,11 @@ test_call_result <- function(state, error_msg, type = c("function", "operator"))
   }
   solution_call$result <- sol_res
   
-  res <- numeric()
+  res <- logical(length(student_calls))
   details <- NULL
   for (i in seq_along(student_calls)) {
     student_call <- student_calls[[i]]
-    if (is.null(student_call)) next
+    if (isTRUE(is.na(student_call))) next
     
     # If no hits, use details of the first try
     if (is.null(details)) {
@@ -46,7 +46,7 @@ test_call_result <- function(state, error_msg, type = c("function", "operator"))
     if (!inherits(stud_res, 'error')) {
       callresult_state$log(index = i, arg = 'none', success = TRUE)
       student_calls[[i]]$result <- stud_res
-      res <- c(res, i)
+      res[i] <- TRUE
     } else {
       callresult_state$log(index = i, arg = 'none', success = FALSE)
     }
@@ -55,9 +55,9 @@ test_call_result <- function(state, error_msg, type = c("function", "operator"))
   if (is.null(details)) {
     details <- callresult_state$details
   }
-  check_that(is_gte(length(res), 1), feedback = details)
+  check_that(is_gte(sum(res), 1), feedback = details)
   
-  student_calls[-res] <- NULL
+  student_calls[!res] <- NA
   callresult_state$set(student_calls = student_calls,
                        solution_call = solution_call)
   
@@ -88,11 +88,11 @@ test_call_result_equal <- function(state, eq_condition, incorrect_msg, type = c(
   
   sol_res <- solution_call$result
   
-  res <- numeric()
+  res <- logical(length(student_calls))
   details <- NULL
   for (i in seq_along(student_calls)) {
     student_call <- student_calls[[i]]
-    if (is.null(student_call)) next
+    if (isTRUE(is.na(student_call))) next
     stud_res <- student_call$result
     
     # If no hits, use details of the first try
@@ -106,7 +106,7 @@ test_call_result_equal <- function(state, eq_condition, incorrect_msg, type = c(
     # Check if the function arguments correspond
     if (is_equal(stud_res, sol_res, eq_condition)) {
       state$log(index = i, success = TRUE)
-      res <- c(res, i)
+      res[i] <- TRUE
     } else {
       state$log(index = i, success = FALSE)
     }
@@ -116,7 +116,7 @@ test_call_result_equal <- function(state, eq_condition, incorrect_msg, type = c(
     details <- state$details
   }
   
-  check_that(is_gte(length(res), 1), feedback = details)
+  check_that(is_gte(sum(res), 1), feedback = details)
   return(state)
 }
 
