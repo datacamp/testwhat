@@ -43,9 +43,7 @@ test_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times
 test_output_expr <- function(state, expr, times = 1, missing_msg = NULL) {
   expr_output <- tryCatch(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), 
                           error = function(e) e$message)
-  if(identical(expr_output, character(0))) {
-    stop(sprintf("Running `%s` in the student environment didn't generate any output, but it should, for `test_output_expr()` to make sense.", expr))
-  }
+
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "output",
                           case = "expr",
