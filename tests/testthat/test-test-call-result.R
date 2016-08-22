@@ -4,7 +4,7 @@ test_that("test call result - functions - step by step", {
   lst <- list()
   lst$DC_PEC <- "library(dplyr)"
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
-  lst$DC_SCT <- "ex() %>% test_fun('summarise') %>% test_result() %>% test_equal()"
+lst$DC_SCT <- "ex() %>% check_function('summarise') %>% check_result() %>% check_equal()"
 
   lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
   output <- test_it(lst)
@@ -29,7 +29,7 @@ test_that("test call result - functions - step by step - custom", {
   lst <- list()
   lst$DC_PEC <- "library(dplyr)"
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
-  lst$DC_SCT <- "ex() %>% test_fun('summarise', not_called_msg = 'notcalled') %>% test_result(error_msg = 'error') %>% test_equal(incorrect_msg = 'incorrect')"
+  lst$DC_SCT <- "ex() %>% check_function('summarise', not_called_msg = 'notcalled') %>% check_result(error_msg = 'error') %>% check_equal(incorrect_msg = 'incorrect')"
 
   lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
   output <- test_it(lst)
@@ -84,8 +84,8 @@ test_that("test call result - functions - indexing", {
   lst <- list()
   lst$DC_PEC <- "library(dplyr)"
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))\nmtcars %>% summarise(min = min(mpg), sd = sd(mpg))"
-  lst$DC_SCT <- "ex() %>% test_fun('summarise', index = 1) %>% test_result() %>% test_equal()
-                 ex() %>% test_fun('summarise', index = 2) %>% test_result() %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_function('summarise', index = 1) %>% check_result() %>% check_equal()
+                 ex() %>% check_function('summarise', index = 2) %>% check_result() %>% check_equal()"
 
   lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
   output <- test_it(lst)
@@ -117,10 +117,10 @@ test_that("test call result - functions - indexing", {
 
 context("test_call_result - operators")
 
-test_that("test_op - step by step", {
+test_that("check_operator - step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "7 + 8"
-  lst$DC_SCT <- "ex() %>% test_op('+') %>% test_result() %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_operator('+') %>% check_result() %>% check_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -139,10 +139,10 @@ test_that("test_op - step by step", {
   passes(output)
 })
 
-test_that("test_op - step by step - custom", {
+test_that("check_operator - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "7 + 8"
-  lst$DC_SCT <- "ex() %>% test_op('+', not_called_msg = 'notcalled') %>% test_result(error_msg = 'error') %>% test_equal(incorrect_msg = 'incorrect')"
+  lst$DC_SCT <- "ex() %>% check_operator('+', not_called_msg = 'notcalled') %>% check_result(error_msg = 'error') %>% check_equal(incorrect_msg = 'incorrect')"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -163,10 +163,10 @@ test_that("test_op - step by step - custom", {
 })
 
 
-test_that("arithmetic operators and logical operators:", {
+test_that("check_operator - arithmetic/relational/logical", {
   lst <- list()
   lst$DC_SOLUTION <- "7 + 8"
-  lst$DC_SCT <- "test_operator('+')"
+  lst$DC_SCT <- "ex() %>% check_operator('+') %>% check_result() %>% check_equal()"
 
   lst$DC_CODE <- "7 + 8"
   output <- test_it(lst)
@@ -204,9 +204,7 @@ test_that("arithmetic operators and logical operators:", {
   lst <- list()
   lst$DC_CODE <- "1 + 1\n8 - 3\n2 * 2\n3 / 4\n4 ^ 4\n56 %% 43\n"
   lst$DC_SOLUTION <- "1 + 1\n8 - 3\n2 * 2\n3 / 4\n4 ^ 4\n56 %% 43\n"
-  lst$DC_SCT <- paste("test_operator('+')", "test_operator('-')",
-                      "test_operator('/')", "test_operator('*')",
-                      "test_operator('^')", "test_operator('%%')", sep = "\n")
+  lst$DC_SCT <- paste0("ex() %>% check_operator('",c("+", "-", "/", "*", "^", "%%"),"') %>% check_result() %>% check_equal()", collapse = "\n")
   output <- test_it(lst)
   passes(output)
 
@@ -214,9 +212,7 @@ test_that("arithmetic operators and logical operators:", {
   lst <- list()
   lst$DC_CODE <- "1 < 2\n1 > 5\n1 <= 5\nmean(c(1,2,4)) >= 9\n4 == 4\n5 != 7"
   lst$DC_SOLUTION <- "1 < 2\n1 > 5\n1 <= 5\nmean(c(1,2,4)) >= 9\n4 == 4\n5 != 7"
-  lst$DC_SCT <- paste("test_operator('<')", "test_operator('>')",
-                      "test_operator('<=')", "test_operator('>=')",
-                      "test_operator('==')", "test_operator('!=')", sep = "\n")
+  lst$DC_SCT <- paste0("ex() %>% check_operator('",c("<", ">", "<=", ">=", "==", "!="),"') %>% check_result() %>% check_equal()", collapse = "\n")
   output <- test_it(lst)
   passes(output)
 
@@ -224,57 +220,16 @@ test_that("arithmetic operators and logical operators:", {
   lst <- list()
   lst$DC_CODE <- "1 < 2\n1 > 5\n1 <= 5\nmean(c(1,2,4)) >= 9\nc(T, T) & c(F, F)\nTRUE && (4 < 3)\nc(T, T) | (4 < 3)\nTRUE || FALSE\n !TRUE"
   lst$DC_SOLUTION <- "1 < 2\n1 > 5\n1 <= 5\nmean(c(1,2,4)) >= 9\nc(T, T) & c(F, F)\nTRUE && (4 < 3)\nc(T, T) | (4 < 3)\nTRUE || FALSE\n !TRUE"
-  lst$DC_SCT <- paste("test_operator('&')", "test_operator('|')",
-                      "test_operator('&&')", "test_operator('||')",
-                      "test_operator('!')", sep = "\n")
+  lst$DC_SCT <- paste0("ex() %>% check_operator('",c("&", "|", "&&", "||", "!"),"') %>% check_result() %>% check_equal()", collapse = "\n")
   output <- test_it(lst)
   passes(output)
 })
 
-test_that("test_operator messaging", {
-  lst <- list()
-  lst$DC_SOLUTION <- "7 + 8"
-
-  lst$DC_CODE <- ""
-  lst$DC_SCT <- "test_operator('+')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Have you used the <code>\\+</code> operator")
-
-  lst$DC_SCT <- "test_operator('+', not_called_msg = 'test')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Test")
-
-  lst$DC_CODE <- "4 + 5"
-  lst$DC_SCT <- "test_operator('+')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Have you correctly used")
-  line_info(output, 1, 1)
-
-  lst$DC_SCT <- "test_operator('+', incorrect_msg = 'wrong')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Wrong")
-  line_info(output, 1, 1)
-})
-
-test_that("test_operator with eval", {
-  lst <- list()
-  lst$DC_SOLUTION <- "7 + 8"
-  lst$DC_CODE <- "4 + 5"
-
-  lst$DC_SCT <- "test_operator('+')"
-  output <- test_it(lst)
-  fails(output)
-
-  lst$DC_SCT <- "test_operator('+', eval = FALSE)"
-  output <- test_it(lst)
-  passes(output)
-})
-
-test_that("test_operator with indexes", {
+test_that("check_operator - index", {
   lst <- list()
   lst$DC_SOLUTION <- "4 + 5\n10 + 20"
-  lst$DC_SCT <- paste("test_operator('+', index = 1, not_called_msg = 'ncm1', incorrect_msg = 'icm1')",
-                      "test_operator('+', index = 2, not_called_msg = 'ncm2', incorrect_msg = 'icm2')", sep = "\n")
+  lst$DC_SCT <- paste("ex() %>% check_operator('+', index = 1, not_called_msg = 'ncm1') %>% check_result() %>% check_equal(incorrect_msg = 'icm1')",
+                      "ex() %>% check_operator('+', index = 2, not_called_msg = 'ncm2') %>% check_result() %>% check_equal(incorrect_msg = 'icm2')", sep = "\n")
 
   lst$DC_CODE <- "4 + 5\n10 + 20"
   output <- test_it(lst)
@@ -303,9 +258,9 @@ test_that("test_operator with indexes", {
   line_info(output, 1, 1)
 })
 
-test_that("test_operator errs correctly", {
+test_that("check_operator - errs correctly", {
   lst <- list()
-  lst$DC_SCT <- "test_operator('+')"
+  lst$DC_SCT <- "ex() %>% check_operator('+')"
 
   lst$DC_SOLUTION <- ""
   output <- test_it(lst)

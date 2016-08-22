@@ -1,11 +1,11 @@
-context("test_while_loop")
+context("check_while_loop")
 
-test_that("test_while - step by step", {
+test_that("check_while - step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "i <- 1\nwhile (i < 10) { print('test'); i <- i + 1 }"
-  lst$DC_SCT <- "whileloop <- ex() %>% test_while()
-                 whileloop %>% test_cond() %>% test_code('10')
-                 whileloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  lst$DC_SCT <- "whileloop <- ex() %>% check_while()
+                 whileloop %>% check_cond() %>% check_code('10')
+                 whileloop %>% check_body() %>% check_function('print') %>% check_arg('x') %>% check_equal()"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -28,12 +28,12 @@ test_that("test_while - step by step", {
   passes(output)
 })
 
-test_that("test_while - step by step - custom", {
+test_that("check_while - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "i <- 1\nwhile (i < 10) { print('test'); i <- i + 1 }"
-  lst$DC_SCT <- "whileloop <- ex() %>% test_while(not_found_msg = 'notfound')
-                 whileloop %>% test_cond() %>% test_code('10', missing_msg = 'nottyped')
-                 whileloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorr')"
+  lst$DC_SCT <- "whileloop <- ex() %>% check_while(not_found_msg = 'notfound')
+                 whileloop %>% check_cond() %>% check_code('10', missing_msg = 'nottyped')
+                 whileloop %>% check_body() %>% check_function('print') %>% check_arg('x') %>% check_equal(incorrect_msg = 'incorr')"
                   
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -57,7 +57,7 @@ test_that("test_while - step by step - custom", {
   passes(output)
 })
 
-test_that("test_while - backwards compatibility", {
+test_that("check_while - backwards compatibility", {
   lst <- list()
   lst$DC_SOLUTION <- "i <- 1\nwhile (i < 10) { print('test'); i <- i + 1 }"
   lst$DC_SCT <- "test_while_loop(cond_test = test_student_typed('10'), expr_test = test_function('print', 'x'))"
@@ -84,24 +84,24 @@ test_that("test_while - backwards compatibility", {
 })
 
 
-test_that("test_while - indexing", {
+test_that("check_while - indexing", {
   # TODO
 })
 
 
 # TODO add messaging tests
-test_that("test_while - nesting", {
+test_that("check_while - nesting", {
   # TODO
 })
 
-test_that("test_while - test_ifelse inside", {
+test_that("check_while - test_ifelse inside", {
   # TODO  
 })
 
-test_that("test_while - highlighting", {
+test_that("check_while - highlighting", {
   # TODO
 })
 
-test_that("test_while - errs appropriately", {
+test_that("check_while - errs appropriately", {
   # TODO
 })

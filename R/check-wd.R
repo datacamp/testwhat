@@ -1,24 +1,32 @@
 #' Test whether a file exists
 #' 
 #' @param path Path to the file you want to check
-#' @param incorrect_msg Optional feedback message in case the file does not exist
+#' @param incorrect_msg Custom feedback message in case the file does not exist
+#' @param missing_msg Custom feedback message in case the file is missing
+#' @param state the state to start from
 #' 
 #' @examples
 #' \dontrun{
 #' # Example 1 solution code:
 #' # write("hello", file = "test.txt")
 #' 
-#' # SCT to test if file exists
+#' # SCT Option 1 to test if file exists
 #' test_file_exists("test.txt")
-#' }
 #' 
+#' # SCT Option 2 to test if file exists
+#' ex() %>% check_wd("test.txt")
+#' }
+#' @name test_wd
+
+#' @rdname test_wd
 #' @export
 test_file_exists <- function(path, incorrect_msg = NULL) {
-  ex() %>% test_wd(path = path, missing_msg = incorrect_msg)
+  ex() %>% check_wd(path = path, missing_msg = incorrect_msg)
 }
 
+#' @rdname test_wd
 #' @export
-test_wd <- function(state, path, missing_msg = NULL) {
+check_wd <- function(state, path, missing_msg = NULL) {
   file_state <- FileState$new(state)
   file_state$add_details(type = 'file',
                          case = 'available',

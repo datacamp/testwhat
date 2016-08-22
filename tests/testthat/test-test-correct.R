@@ -3,8 +3,8 @@ context("test_correct")
 test_that("test_correct - 1", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- mean(1:11)"
-  lst$DC_SCT <- "test_correct(ex() %>% test_obj('x') %>% test_equal(),
-                              ex() %>% test_fun('mean') %>% test_arg('x') %>% test_equal())"
+  lst$DC_SCT <- "test_correct(ex() %>% check_object('x') %>% check_equal(),
+                              ex() %>% check_function('mean') %>% check_arg('x') %>% check_equal())"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -36,9 +36,9 @@ test_that("test_correct - 1", {
 test_that("test_correct - 2", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- mean(1:11) + mean(1:123)"
-  lst$DC_SCT <- "test_correct(ex() %>% test_obj('x') %>% test_equal(), {
-                                ex() %>% test_fun('mean', index = 1) %>% test_arg('x') %>% test_equal()
-                                ex() %>% test_fun('mean', index = 2) %>% test_arg('x') %>% test_equal()
+  lst$DC_SCT <- "test_correct(ex() %>% check_object('x') %>% check_equal(), {
+                                ex() %>% check_function('mean', index = 1) %>% check_arg('x') %>% check_equal()
+                                ex() %>% check_function('mean', index = 2) %>% check_arg('x') %>% check_equal()
                               })"
 
   lst$DC_CODE <- ""

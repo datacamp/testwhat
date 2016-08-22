@@ -16,6 +16,6 @@ calls, output, function definition, control structures and many more.
 Learn more about testwhat on the wiki: \url{www.github.com/datacamp/testwhat/wiki}.
 }
 \references{
-\url{www.DataCamp.com}
+\url{www.datacamp.com}
 }
 

@@ -11,5 +11,5 @@
 #' @docType package
 #' @name testwhat
 #'
-#' @references \url{www.DataCamp.com}
+#' @references \url{www.datacamp.com}
 NULL

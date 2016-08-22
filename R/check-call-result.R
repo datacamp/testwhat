@@ -1,4 +1,67 @@
-test_call_result <- function(state, error_msg, type = c("function", "operator")) {
+#' Check the result of a function call/operation
+#' 
+#' 
+#' @param name name of the function whose output you would like to check.
+#' @param index Ordinal number of the call you want to check (both student and solution!).
+#' @param not_called_msg feedback message in case the function is not retrieved.
+#' @param error_msg feedback message in case the student function call at the mentioned index generated an error.
+#' @param incorrect_msg  feedback message in case the evaluation was not the same as in the solution.
+#' @param eq_condition how to compare student and solution.
+#' @param state the state to start from (for \code{check_} functions)
+#' @param ... S3 stuff
+#'
+#' @examples
+#' \dontrun{
+#' # Example 1
+#' mean(1:3)
+#' 
+#' # SCT option 1
+#' test_function_result("mean")
+#' 
+#' # SCT option 2
+#' ex() %>% check_function("mean") %>% check_result() %>% check_equal()
+#' }
+#' @name test_call_result
+
+#' @rdname test_call_result
+#' @export
+test_function_result <- function(name = NULL,
+                                 index = 1,
+                                 eq_condition = "equivalent",
+                                 not_called_msg = NULL,
+                                 error_msg = NULL,
+                                 incorrect_msg = NULL) {
+  ex() %>% 
+    check_function(name, index = index, not_called_msg = not_called_msg) %>% 
+    check_result(error_msg = error_msg) %>%
+    check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg)
+}
+
+#' @rdname test_call_result
+#' @export
+check_result.OperationState <- function(state, error_msg = NULL, ...) {
+  check_call_result(state, error_msg = error_msg, type = "operator")
+}
+
+#' @rdname test_call_result
+#' @export
+check_result.FunctionState <- function(state, error_msg = NULL, ...) {
+  check_call_result(state, error_msg = error_msg, type = "function")
+}
+
+#' @rdname test_call_result
+#' @export
+check_equal.FunctionResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, ...) {
+  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, type = "function")
+}
+
+#' @rdname test_call_result
+#' @export
+check_equal.OperationResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, ...) {
+  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, type = "operator")
+}
+
+check_call_result <- function(state, error_msg, type = c("function", "operator")) {
   type <- match.arg(type)
   CallResultState <- switch(type, `function` = FunctionResultState, operator = OperationResultState)
   
@@ -58,7 +121,7 @@ test_call_result <- function(state, error_msg, type = c("function", "operator"))
 
 
 
-test_call_result_equal <- function(state, eq_condition, incorrect_msg, type = c("function", "operator")) {
+check_call_result_equal <- function(state, eq_condition, incorrect_msg, type = c("function", "operator")) {
   type <- match.arg(type)
   solution_call <- state$get("solution_call")
   student_calls <- state$get("student_calls")

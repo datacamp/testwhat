@@ -1,9 +1,9 @@
 context("test_obj")
 
-test_that("test_obj step by step", {
+test_that("check_object step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
-  lst$DC_SCT <- "ex() %>% test_obj('x') %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_object('x') %>% check_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -18,10 +18,10 @@ test_that("test_obj step by step", {
   passes(output)
 })
 
-test_that("test_obj step by step - custom - 1", {
+test_that("check_object step by step - custom - 1", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
-  lst$DC_SCT <- "ex() %>% test_obj('x', undefined_msg = 'undef') %>% test_equal(incorrect_msg = 'incorr')"
+  lst$DC_SCT <- "ex() %>% check_object('x', undefined_msg = 'undef') %>% check_equal(incorrect_msg = 'incorr')"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -36,12 +36,12 @@ test_that("test_obj step by step - custom - 1", {
   passes(output)
 })
 
-test_that("test_obj step by step - custom - 2", {
+test_that("check_object step by step - custom - 2", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
   lst$DC_SCT <- "undef <- 'undef'
                  incorr <- 'incorr'
-                 ex() %>% test_obj('x', undefined_msg = undef) %>% test_equal(incorrect_msg = incorr)"
+                 ex() %>% check_object('x', undefined_msg = undef) %>% check_equal(incorrect_msg = incorr)"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -57,10 +57,10 @@ test_that("test_obj step by step - custom - 2", {
 })
 
 
-test_that("test_obj - backwards compatible", {
+test_that("check_object - backwards compatible", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 5"
-  lst$DC_SCT <- "test_object('x')"
+lst$DC_SCT <- "test_object('x')"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -319,14 +319,14 @@ test_that("test_object inside MarkdownExercise doesn't show line numbers", {
   line_info(output, NULL, NULL)
 })
 
-context("test_data_frame")
+context("test_column")
 
-test_that("test_df - step by step", {
+test_that("test_column - step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
-  lst$DC_SCT <- "dfstate <- ex() %>% test_obj('df')
-  dfstate %>% test_col('a') %>% test_equal()
-  dfstate %>% test_col('b') %>% test_equal()"
+  lst$DC_SCT <- "dfstate <- ex() %>% check_object('df')
+  dfstate %>% check_column('a') %>% check_equal()
+  dfstate %>% check_column('b') %>% check_equal()"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -357,12 +357,12 @@ test_that("test_df - step by step", {
   passes(output)
 })
 
-test_that("test_df - step by step - custom", {
+test_that("test_column - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
-  lst$DC_SCT <- "dfstate <- ex() %>% test_obj('df', undefined_msg = 'undefined')
-  dfstate %>% test_col('a', col_missing_msg = 'missinga') %>% test_equal(incorrect_msg = 'incorra')
-  dfstate %>% test_col('b', col_missing_msg = 'missingb') %>% test_equal(incorrect_msg = 'incorrb')"
+  lst$DC_SCT <- "dfstate <- ex() %>% check_object('df', undefined_msg = 'undefined')
+  dfstate %>% check_column('a', col_missing_msg = 'missinga') %>% check_equal(incorrect_msg = 'incorra')
+  dfstate %>% check_column('b', col_missing_msg = 'missingb') %>% check_equal(incorrect_msg = 'incorrb')"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -393,7 +393,7 @@ test_that("test_df - step by step - custom", {
   passes(output)
 })
 
-test_that("test_df - backwards compatibility", {
+test_that("test_column - backwards compatibility", {
   lst <- list()
   lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
   lst$DC_SCT <- "test_data_frame('df')"
@@ -427,38 +427,38 @@ test_that("test_df - backwards compatibility", {
   passes(output)
 })
 
-test_that("test_df - eq_condition", {
+test_that("test_column - eq_condition", {
   lst <- list()
   lst$DC_SOLUTION <- "df <- data.frame(a = c(1, 2, 3), b = c('x', 'y', 'z'))"
   lst$DC_CODE <- "df <- data.frame(a = c(1 + 4.4e-9, 2, 3), b = c('x', 'y', 'z'), row.names = c('r', 's', 't'))"
   
-  lst$DC_SCT <- "ex() %>% test_obj('df') %>% test_col('a') %>% test_equal(eq_condition = 'equivalent')"
+  lst$DC_SCT <- "ex() %>% check_object('df') %>% check_column('a') %>% check_equal(eq_condition = 'equivalent')"
   output <- test_it(lst)
   passes(output)
   
   # Maybe the different row names should cause a fail here... ?
-  lst$DC_SCT <- "ex() %>% test_obj('df') %>% test_col('a') %>% test_equal(eq_condition = 'equal')"
+  lst$DC_SCT <- "ex() %>% check_object('df') %>% check_column('a') %>% check_equal(eq_condition = 'equal')"
   output <- test_it(lst)
   passes(output)
   
-  lst$DC_SCT <- "ex() %>% test_obj('df') %>% test_col('a') %>% test_equal(eq_condition = 'identical')"
+  lst$DC_SCT <- "ex() %>% check_object('df') %>% check_column('a') %>% check_equal(eq_condition = 'identical')"
   output <- test_it(lst)
   fails(output)
 })
 
-test_that("test_df - line numbers", {
+test_that("test_column - line numbers", {
   # TODO
 })
 
 
-context("test_el")
+context("test_element")
 
-test_that("test_el - step by step", {
+test_that("test_element - step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "lst <- list(a = 1, b = 2)"
-  lst$DC_SCT <- "lststate <- ex() %>% test_obj('lst') 
-                 lststate %>% test_el('a') %>% test_equal()
-                 lststate %>% test_el('b') %>% test_equal()"
+  lst$DC_SCT <- "lststate <- ex() %>% check_object('lst') 
+                 lststate %>% check_element('a') %>% check_equal()
+                 lststate %>% check_element('b') %>% check_equal()"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)

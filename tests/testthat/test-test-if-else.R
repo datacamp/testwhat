@@ -1,12 +1,12 @@
 context("test_if_else")
 
-test_that("test_if - step by step", {
+test_that("check_if - step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
-  lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse()
-                 ifelse %>% test_cond() %>% test_code('>')
-                 ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
-                 ifelse %>% test_else() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  lst$DC_SCT <- "ifelse <- ex() %>% check_if_else()
+                 ifelse %>% check_cond() %>% check_code('>')
+                 ifelse %>% check_if() %>% check_function('print') %>% check_arg('x') %>% check_equal()
+                 ifelse %>% check_else() %>% check_function('print') %>% check_arg('x') %>% check_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -38,13 +38,13 @@ test_that("test_if - step by step", {
   passes(output)
 })
 
-test_that("test_if - step by step - custom", {
+test_that("check_if - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
-  lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse(not_found_msg = 'notfound')
-                 ifelse %>% test_cond() %>% test_code('>', missing_msg = 'nottyped')
-                 ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorr')
-                 ifelse %>% test_else(not_found_msg = 'elsenotfound') %>% test_fun('print') %>% test_arg('x') %>% test_equal('incorr2')"
+  lst$DC_SCT <- "ifelse <- ex() %>% check_if_else(not_found_msg = 'notfound')
+                 ifelse %>% check_cond() %>% check_code('>', missing_msg = 'nottyped')
+                 ifelse %>% check_if() %>% check_function('print') %>% check_arg('x') %>% check_equal(incorrect_msg = 'incorr')
+                 ifelse %>% check_else(not_found_msg = 'elsenotfound') %>% check_function('print') %>% check_arg('x') %>% check_equal('incorr2')"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -71,7 +71,7 @@ test_that("test_if - step by step - custom", {
   passes(output)
 })
 
-test_that("test_ifelse - step by step - backwards compatible", {
+test_that("check_if_else - step by step - backwards compatible", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 4\nif (x > 3) { print('x is big') } else { print('x is small') }"
   lst$DC_SCT <- "test_if_else(if_cond_test = test_student_typed('>'), if_expr_test = test_function('print', 'x'), else_expr_test = test_function('print', 'x'))"
@@ -105,13 +105,13 @@ test_that("test_ifelse - step by step - backwards compatible", {
   passes(output)
 })
 
-test_that("test_ifelse - indexing", {
+test_that("check_if_else - indexing", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 4\nif (x > 4) { print('a') } else { print('b')}\nif(x > 5) { print('c') } else { print('d') }"
-  lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse(2)
-                 ifelse %>% test_cond() %>% test_code('>')
-                 ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
-                 ifelse %>% test_else() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  lst$DC_SCT <- "ifelse <- ex() %>% check_if_else(2)
+                 ifelse %>% check_cond() %>% check_code('>')
+                 ifelse %>% check_if() %>% check_function('print') %>% check_arg('x') %>% check_equal()
+                 ifelse %>% check_else() %>% check_function('print') %>% check_arg('x') %>% check_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -143,16 +143,16 @@ test_that("test_ifelse - indexing", {
 })
 
 # TODO add messaging tests
-test_that("test_ifelse - nesting", {
+test_that("check_if_else - nesting", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- 4\nif (x > 4) { print('a') } else if (x > 5) { print('b') } else { print('c') }"
-  lst$DC_SCT <- "ifelse <- ex() %>% test_ifelse()
-                 ifelse %>% test_cond() %>% test_code('>')
-                 ifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
-                 subifelse <- ifelse %>% test_else() %>% test_ifelse()
-                 subifelse %>% test_cond() %>% test_code('>')
-                 subifelse %>% test_if() %>% test_fun('print') %>% test_arg('x') %>% test_equal()
-                 subifelse %>% test_else() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  lst$DC_SCT <- "ifelse <- ex() %>% check_if_else()
+                 ifelse %>% check_cond() %>% check_code('>')
+                 ifelse %>% check_if() %>% check_function('print') %>% check_arg('x') %>% check_equal()
+                 subifelse <- ifelse %>% check_else() %>% check_if_else()
+                 subifelse %>% check_cond() %>% check_code('>')
+                 subifelse %>% check_if() %>% check_function('print') %>% check_arg('x') %>% check_equal()
+                 subifelse %>% check_else() %>% check_function('print') %>% check_arg('x') %>% check_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)

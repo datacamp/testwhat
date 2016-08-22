@@ -54,6 +54,10 @@ test_correct <- function(check_code, diagnose_code) {
   }
 }
 
+#' @rdname test_correct
+#' @export
+check_correct <- test_correct
+
 #' Test if one of many test sets pass.
 #' 
 #' @param ... a set of tests, each set separated by a comma. Only one of these tests should pass
@@ -98,3 +102,7 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
     }
   }
 }
+
+#' @rdname test_or
+#' @export
+check_or <- test_or

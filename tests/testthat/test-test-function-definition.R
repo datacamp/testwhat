@@ -1,14 +1,14 @@
-context("test_function_definition")
+context("check_fun_def")
 
-test_that("test_fundef - step by step", {
+test_that("check_fun_def - step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "my_fun <- function(x, y) { stopifnot(is.double(x)); print(x + y); return(x + y) }"
-  lst$DC_SCT <- "fundef <- ex() %>% test_fun_def('my_fun')
-                 fundef %>% test_arguments()
-                 fundef %>% test_body() %>% test_fun('print') %>% test_arg('x')
-                 fundef %>% test_result(x = 2, y = 3) %>% test_equal()
-                 fundef %>% test_output(x = 2, y = 3L) %>% test_equal()
-                 fundef %>% test_error(x = 2L, y = 3L) %>% test_equal()"
+  lst$DC_SCT <- "fundef <- ex() %>% check_fun_def('my_fun')
+                 fundef %>% check_arguments()
+                 fundef %>% check_body() %>% check_function('print') %>% check_arg('x')
+                 fundef %>% check_call(x = 2, y = 3) %>% check_result() %>% check_equal()
+                 fundef %>% check_call(x = 2, y = 3L) %>% check_output() %>% check_equal()
+                 fundef %>% check_call(x = 2L, y = 3L) %>% check_error() %>% check_equal()"
   
   lst$DC_CODE <- ""
   capture.output(output <- test_it(lst))
@@ -63,16 +63,16 @@ test_that("test_fundef - step by step", {
   passes(output)
 })
 
-test_that("test_fundef - step by step - custom", {
+test_that("check_fun_def - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "my_fun <- function(x, y) { stopifnot(is.double(x)); print(x + y); return(x + y) }"
-  lst$DC_SCT <- "fundef <- ex() %>% test_fun_def('my_fun', undefined_msg = 'notdefined', no_fundef_msg = 'nofundef')
-                 fundef %>% test_arguments(incorrect_number_args_msg = 'incorrectnumargs')
-                 fundef %>% test_body() %>% test_fun('print') %>% test_arg('x', arg_not_specified_msg = 'test')
-                 fundef %>% test_result(x = 2, y = 3, error_msg = 'error1') %>% test_equal(incorrect_msg = 'incorr1')
-                 fundef %>% test_output(x = 2, y = 3L, error_msg = 'error2') %>% test_equal(incorrect_msg = 'incorr2')
-                 fundef %>% test_error(x = 2L, y = 3L, no_error_msg = 'error3') %>% test_equal(incorrect_msg = 'incorr3')"
-                
+  lst$DC_SCT <- "fundef <- ex() %>% check_fun_def('my_fun', undefined_msg = 'notdefined', no_fundef_msg = 'nofundef')
+                 fundef %>% check_arguments(incorrect_number_arguments_msg = 'incorrectnumargs')
+                 fundef %>% check_body() %>% check_function('print') %>% check_arg('x', arg_not_specified_msg = 'test')
+                 fundef %>% check_call(x = 2, y = 3) %>% check_result(error_msg = 'error1') %>% check_equal(incorrect_msg = 'incorr1')
+                 fundef %>% check_call(x = 2, y = 3L) %>% check_output(error_msg = 'error2') %>% check_equal(incorrect_msg = 'incorr2')
+                 fundef %>% check_call(x = 2L, y = 3L) %>% check_error(no_error_msg = 'error3') %>% check_equal(incorrect_msg = 'incorr3')"
+
   lst$DC_CODE <- ""
   capture.output(output <- test_it(lst))
   fails(output, mess_patt = "Notdefined")
@@ -130,7 +130,7 @@ test_that("test_fundef - step by step - custom", {
   passes(output)
 })
 
-test_that("test_fundef - backwards compatibility", {
+test_that("check_fun_def - backwards compatibility", {
   lst <- list()
   lst$DC_SOLUTION <- "my_fun <- function(x, y) { stopifnot(is.double(x)); print(x + y); return(x + y) }"
   lst$DC_SCT <- "test_function_definition('my_fun',
@@ -190,15 +190,15 @@ test_that("test_fundef - backwards compatibility", {
   passes(output)
 })
 
-test_that("test_fundef - test_ifelse inside", {
+test_that("check_fun_def - test_ifelse inside", {
   # TODO
 })
 
-test_that("test_fundef - highlighting", {
+test_that("check_fun_def - highlighting", {
   # TODO
 })
 
-test_that("test_fundef - errs appropriately", {
+test_that("check_fun_def - errs appropriately", {
   # TODO
 })
 

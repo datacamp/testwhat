@@ -1,6 +1,19 @@
-context("test_error")
+context("check_error")
 
-test_that("basic test_error", {
+test_that("check_error", {
+  lst <- list()
+  lst$DC_SCT <- "ex () %>% check_error()"
+  
+  lst$DC_CODE <- "3 + 3"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "\"a\" + 3"
+  output <- test_it(lst)
+  fails(output)
+})
+
+test_that("check_error - backwards compatible", {
   lst <- list()
   lst$DC_SCT <- "test_error()"
   
@@ -13,9 +26,9 @@ test_that("basic test_error", {
   fails(output)
 })
 
-test_that("test_error passed the correct line of error", {
+test_that("check_error - line of error", {
   lst <- list()
-  lst$DC_SCT <- "test_error()"
+  lst$DC_SCT <- "ex() %>% check_error()"
   lst$DC_ECHO <- TRUE # This is important here!
   
   lst$DC_CODE <- "a <- b"

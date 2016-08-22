@@ -1,33 +1,33 @@
 #' Check whether the student's submission threw an error.
 #'
-#' With information gathered from the R Backend, \code{test_error} detects
-#' whether the student's submission generated an error. Automatically, a feedback is generated,
-#' which can be appended with an additional incorrect_msg.
+#' With information gathered from the R Backend, detect
+#' whether the student's submission generated an error.
 #'
-#' @param state state to start from (can be missing)
-#' @param ... arguments that are used to build a function definition call
-#' @param no_error_msg custom message in case the expression or function call didn't generate an error
+#' @param state State to start from (for \code{check_error})
+#' @param ... S3 stuff
 #' 
 #' @examples
 #' \dontrun{
 #' # Example student code: x <- 4 + "a"
 #' 
-#' # R error message as feedback:
+#' # SCT option 1
 #' test_error()
+#' 
+#' # SCT option 2
+#' ex() %>% check_error()
 #' }
 #'
+#' @rdname test_error
+
+#' @rdname test_error
 #' @export
-test_error <- function(state, ...) {
-  if (missing(state)) {
-    test_error(ex())
-  } else {
-    UseMethod("test_error", state)  
-  }
+test_error <- function() {
+  ex() %>% check_error()
 }
 
 #' @rdname test_error
 #' @export
-test_error.default <- function(state) {
+check_error.default <- function(state, ...) {
   output_list <- state$get("output_list")
   student_pd <- state$get("student_pd")
   
@@ -69,25 +69,4 @@ test_error.default <- function(state) {
   error_state$add_details(type = "error", message = fb_msg, pd = pd)
   check_that(is_true(length(error_indices) == 0), feedback = error_state$details)
   return(error_state)
-}
-
-
-#' @rdname test_error
-#' @export
-test_error.ExprState <- function(state, no_error_msg = NULL) {
-  expr <- state$get("expr")
-  run_expr_error_helper(state, 
-                        expr = expr,
-                        expr_str = as.character(expr),
-                        no_error_msg = no_error_msg)
-}
-
-#' @rdname test_error
-#' @export
-test_error.FunDefState <- function(state, ..., no_error_msg = NULL) {
-  expr_str <- gsub("list", state$get("name"), deparse(substitute(list(...))))
-  run_expr_error_helper(state, 
-                        expr = parse(text = expr_str),
-                        expr_str = expr_str,
-                        no_error_msg = no_error_msg)
 }

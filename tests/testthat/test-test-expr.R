@@ -1,9 +1,9 @@
 context("test_expression")
 
-test_that("text_expression - result", {
+test_that("check_expr - result", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))"
-  lst$DC_SCT <- "ex() %>% test_expr('x$a') %>% test_result() %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_expr('x$a') %>% check_result() %>% check_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -19,10 +19,10 @@ test_that("text_expression - result", {
   passes(output)
 })
 
-test_that("text_expression - result - custom", {
+test_that("check_expr - result - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))"
-  lst$DC_SCT <- "ex() %>% test_expr('x$a') %>% test_result(error_msg = 'error') %>% test_equal(incorrect_msg = 'incorrect')"
+  lst$DC_SCT <- "ex() %>% check_expr('x$a') %>% check_result(error_msg = 'error') %>% check_equal(incorrect_msg = 'incorrect')"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -38,10 +38,10 @@ test_that("text_expression - result - custom", {
   passes(output)
 })
 
-test_that("text_expression - output", {
+test_that("check_expr - output", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))"
-  lst$DC_SCT <- "ex() %>% test_expr('x$a') %>% test_output() %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_expr('x$a') %>% check_output() %>% check_equal()"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -57,10 +57,10 @@ test_that("text_expression - output", {
   passes(output)
 })
 
-test_that("test_expression - output - custom", {
+test_that("check_expr - output - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))"
-  lst$DC_SCT <- "ex() %>% test_expr('x$a') %>% test_output(error_msg = 'error') %>% test_equal(incorrect_msg = 'incorrect')"
+  lst$DC_SCT <- "ex() %>% check_expr('x$a') %>% check_output(error_msg = 'error') %>% check_equal(incorrect_msg = 'incorrect')"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -76,26 +76,26 @@ test_that("test_expression - output - custom", {
   passes(output)
 })
 
-test_that("test_expression - no output", {
+test_that("check_expr - no output", {
   lst <- list()
   lst$DC_SOLUTION <- "my_fun <- function() { return(invisible(3)) }"
   lst$DC_CODE <- "my_fun <- function(x) { return(3) }"
   
-  lst$DC_SCT <- "ex() %>% test_expr('my_fun()') %>% test_output() %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_expr('my_fun()') %>% check_output() %>% check_equal()"
   output <- test_it(lst)
   fails(output, mess_patt = "Running <code>my_fun\\(\\)</code> .*? generate the correct output")
   fails(output, mess_patt = "Expected no output, but got <code>\\[1\\] 3</code>")
   
-  lst$DC_SCT <- "ex() %>% test_expr('my_fun()') %>% test_result() %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_expr('my_fun()') %>% check_result() %>% check_equal()"
   output <- test_it(lst)
   passes(output)
 })
 
 
-test_that("test_expression - error", {
+test_that("check_expr - error", {
   lst <- list()
   lst$DC_SOLUTION <- "my_fun <- function(x) { stopifnot(is.numeric(x)); return(x) }"
-  lst$DC_SCT <- "ex() %>% test_expr('my_fun(NA)') %>% test_error() %>% test_equal()"
+  lst$DC_SCT <- "ex() %>% check_expr('my_fun(NA)') %>% check_error() %>% check_equal()"
   
   lst$DC_CODE <- "my_fun <- function(x) { return(x) }"
   output <- test_it(lst)
@@ -111,10 +111,10 @@ test_that("test_expression - error", {
   passes(output)
 })
 
-test_that("test_expression - error - custom", {
+test_that("check_expr - error - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "my_fun <- function(x) { stopifnot(is.numeric(x)); return(x) }"
-  lst$DC_SCT <- "ex() %>% test_expr('my_fun(NA)') %>% test_error(no_error_msg = 'noerror') %>% test_equal(incorrect_msg = 'incorrect')"
+  lst$DC_SCT <- "ex() %>% check_expr('my_fun(NA)') %>% check_error(no_error_msg = 'noerror') %>% check_equal(incorrect_msg = 'incorrect')"
   
   lst$DC_CODE <- "my_fun <- function(x) { return(x) }"
   output <- test_it(lst)

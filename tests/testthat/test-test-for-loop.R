@@ -1,11 +1,11 @@
 context("test_for_loop")
 
-test_that("test_for - step by step", {
+test_that("check_for - step by step", {
   lst <- list()
   lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }"
-  lst$DC_SCT <- "forloop <- ex() %>% test_for()
-                 forloop %>% test_cond() %>% test_code('10')
-                 forloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  lst$DC_SCT <- "forloop <- ex() %>% check_for()
+                 forloop %>% check_cond() %>% check_code('10')
+                 forloop %>% check_body() %>% check_function('print') %>% check_arg('x') %>% check_equal()"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -29,12 +29,12 @@ test_that("test_for - step by step", {
 })
 
 
-test_that("test_for - step by step - custom", {
+test_that("check_for - step by step - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }"
-  lst$DC_SCT <- "forloop <- ex() %>% test_for(not_found_msg = 'notfound')
-                 forloop %>% test_cond() %>% test_code('10', missing_msg = 'nottyped')
-                 forloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal(incorrect_msg = 'incorrect')"
+  lst$DC_SCT <- "forloop <- ex() %>% check_for(not_found_msg = 'notfound')
+                 forloop %>% check_cond() %>% check_code('10', missing_msg = 'nottyped')
+                 forloop %>% check_body() %>% check_function('print') %>% check_arg('x') %>% check_equal(incorrect_msg = 'incorrect')"
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -58,7 +58,7 @@ test_that("test_for - step by step - custom", {
   passes(output)
 })
 
-test_that("test_for - backwards compatibility", {
+test_that("check_for - backwards compatibility", {
   lst <- list()
   lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }"
   lst$DC_SCT <- "test_for_loop(index = 1, cond_test = test_student_typed('10'), expr_test = test_function('print', 'x'))"
@@ -85,12 +85,12 @@ test_that("test_for - backwards compatibility", {
 })
 
 
-test_that("test_for - indexing", {
+test_that("check_for - indexing", {
   lst <- list()
   lst$DC_SOLUTION <- "for (i in 1:10) { print('test') }\nfor (i in 1:5) { print('abc') }"
-  lst$DC_SCT <- "forloop <- ex() %>% test_for(2)
-                 forloop %>% test_cond() %>% test_code('5')
-                 forloop %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  lst$DC_SCT <- "forloop <- ex() %>% check_for(2)
+                 forloop %>% check_cond() %>% check_code('5')
+                 forloop %>% check_body() %>% check_function('print') %>% check_arg('x') %>% check_equal()"
   
   lst$DC_CODE <- "for (i in 1:10) {}"
   output <- test_it(lst)
@@ -115,14 +115,14 @@ test_that("test_for - indexing", {
 
 
 # TODO add messaging tests
-test_that("test_for - nesting", {
+test_that("check_for - nesting", {
   lst <- list()
   lst$DC_SOLUTION <- "for (i in 1:10) { for (j in 1:5) { print('abcde') }}"
-  lst$DC_SCT <- "forloop <- ex() %>% test_for()
-                 forloop %>% test_cond() %>% test_code('10')
-                 forloop2 <- forloop %>% test_body() %>% test_for()
-                 forloop2 %>% test_cond() %>% test_code('5')
-                 forloop2 %>% test_body() %>% test_fun('print') %>% test_arg('x') %>% test_equal()"
+  lst$DC_SCT <- "forloop <- ex() %>% check_for()
+                 forloop %>% check_cond() %>% check_code('10')
+                 forloop2 <- forloop %>% check_body() %>% check_for()
+                 forloop2 %>% check_cond() %>% check_code('5')
+                 forloop2 %>% check_body() %>% check_function('print') %>% check_arg('x') %>% check_equal()"
   
   lst$DC_CODE <- ""
   output <- test_it(lst)
