@@ -66,7 +66,7 @@ check_error.default <- function(state, ...) {
       pd <- NULL
     }
   }
-  error_state$add_details(type = "error", message = fb_msg, pd = pd)
+  error_state$add_details(type = "error", message = fb_msg, pd = pd, append = TRUE)
   check_that(is_true(length(error_indices) == 0), feedback = error_state$details)
   return(error_state)
 }

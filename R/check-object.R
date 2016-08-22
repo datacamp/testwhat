@@ -20,6 +20,7 @@
 #' @param col name of column to check
 #' @param el_missing_msg Custom message in case element is messing.
 #' @param el name of element to check
+#' @param append Whether or not to append the feedback to feedback built in previous states
 #' @param ... S3 stuff
 #' 
 #' @examples
@@ -65,9 +66,13 @@
 test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
                         undefined_msg = NULL, incorrect_msg = NULL) {
-  obj_state <- ex() %>% check_object(name, undefined_msg = undefined_msg)
+  obj_state <- ex() %>% check_object(name, 
+                                     undefined_msg = undefined_msg,
+                                     append = is.null(undefined_msg))
   if (eval) {
-    obj_state %>% check_equal(incorrect_msg = incorrect_msg, eq_condition = eq_condition)  
+    obj_state %>% check_equal(incorrect_msg = incorrect_msg, 
+                              eq_condition = eq_condition,
+                              append = is.null(incorrect_msg))
   }
 }
 
@@ -79,7 +84,9 @@ test_data_frame <- function(name, columns = NULL,
                             undefined_msg = NULL,
                             undefined_cols_msg = NULL, 
                             incorrect_msg = NULL) {
-  obj_state <- ex() %>% check_object(name = name, undefined_msg = undefined_msg)
+  obj_state <- ex() %>% check_object(name = name, 
+                                     undefined_msg = undefined_msg,
+                                     append = is.null(undefined_msg))
   
   if (is.null(columns)) {
     columns <- names(obj_state$get("solution_object"))
@@ -87,14 +94,14 @@ test_data_frame <- function(name, columns = NULL,
   
   for (col in columns) {
     obj_state %>% 
-      check_column(col, col_missing_msg = undefined_cols_msg) %>% 
-      check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg)
+      check_column(col, col_missing_msg = undefined_cols_msg, append = is.null(undefined_cols_msg)) %>% 
+      check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
   }
 }
 
 #' @rdname test_object
 #' @export
-check_object <- function(state, name, undefined_msg = NULL) {
+check_object <- function(state, name, undefined_msg = NULL, append = TRUE) {
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")
   
@@ -103,6 +110,7 @@ check_object <- function(state, name, undefined_msg = NULL) {
                         case = "defined",
                         name = name,
                         message = undefined_msg,
+                        append = append,
                         pd = NULL)
   
   check_defined(name, solution_env)
@@ -121,20 +129,18 @@ check_object <- function(state, name, undefined_msg = NULL) {
 
 #' @rdname test_object
 #' @export
-check_column <- function(state, col, col_missing_msg = NULL) {
-  check_sub_helper(state, sub = col, sub_missing_msg = col_missing_msg, type = "column")
+check_column <- function(state, col, col_missing_msg = NULL, append = TRUE) {
+  check_sub_helper(state, sub = col, sub_missing_msg = col_missing_msg, append = append, type = "column")
 }
 
 #' @rdname test_object 
 #' @export
-check_element <- function(state, el, el_missing_msg = NULL) {
-  check_sub_helper(state, sub = el, sub_missing_msg = el_missing_msg, type = "element")
+check_element <- function(state, el, el_missing_msg = NULL, append = TRUE) {
+  check_sub_helper(state, sub = el, sub_missing_msg = el_missing_msg, append = append, type = "element")
 }
 
 
-## HELPERS
-
-check_sub_helper <- function(state, sub, sub_missing_msg = NULL, type = c("column", "element")) {
+check_sub_helper <- function(state, sub, sub_missing_msg, append, type = c("column", "element")) {
   type <- match.arg(type)
   ObjectSubState <- switch(type, column = ObjectColumnState, element = ObjectElementState)
   student_object <- state$get("student_object")
@@ -148,7 +154,8 @@ check_sub_helper <- function(state, sub, sub_missing_msg = NULL, type = c("colum
   object_sub_state$add_details(type = type,
                                case = "defined",
                                name = sub,
-                               message = sub_missing_msg)
+                               message = sub_missing_msg,
+                               append = append)
   
   check_that(is_true(sub %in% names(student_object)), feedback = object_sub_state$details)
   
@@ -161,7 +168,25 @@ check_sub_helper <- function(state, sub, sub_missing_msg = NULL, type = c("colum
   return(object_sub_state)
 }
 
-check_equal_helper <- function(state, incorrect_msg, eq_condition, type = c("object", "column", "element"), ...) {
+#' @rdname test_object
+#' @export
+check_equal.ObjectState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
+  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, type = "object")
+}
+
+#' @rdname test_object
+#' @export
+check_equal.ObjectColumnState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
+  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, type = "column")
+}
+
+#' @rdname test_object
+#' @export
+check_equal.ObjectElementState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
+  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, type = "element")
+}
+
+check_equal_helper <- function(state, incorrect_msg, eq_condition, append, type = c("object", "column", "element"), ...) {
   type <- match.arg(type)
   student_obj <- state$get("student_object")
   solution_obj <- state$get("solution_object")
@@ -170,27 +195,10 @@ check_equal_helper <- function(state, incorrect_msg, eq_condition, type = c("obj
                     student = student_obj,
                     solution = solution_obj,
                     eq_condition = eq_condition,
-                    message = incorrect_msg)
+                    message = incorrect_msg,
+                    append = append)
   
   check_that(is_equal(student_obj, solution_obj, eq_condition),
              feedback = state$details)
   return(state)
-}
-
-#' @rdname test_object
-#' @export
-check_equal.ObjectState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent", ...) {
-  check_equal_helper(state, incorrect_msg = incorrect_msg, eq_condition = eq_condition, type = "object")
-}
-
-#' @rdname test_object
-#' @export
-check_equal.ObjectColumnState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent", ...) {
-  check_equal_helper(state, incorrect_msg = incorrect_msg, eq_condition = eq_condition, type = "column")
-}
-
-#' @rdname test_object
-#' @export
-check_equal.ObjectElementState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent", ...) {
-  check_equal_helper(state, incorrect_msg = incorrect_msg, eq_condition = eq_condition, type = "element")
 }

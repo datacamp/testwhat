@@ -4,21 +4,23 @@ test_that("test call result - functions - step by step", {
   lst <- list()
   lst$DC_PEC <- "library(dplyr)"
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
-lst$DC_SCT <- "ex() %>% check_function('summarise') %>% check_result() %>% check_equal()"
+  lst$DC_SCT <- "ex() %>% check_function('summarise') %>% check_result() %>% check_equal()"
 
   lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Have you called <code>summarise\\(\\)</code>")
+  fails(output)
+  fb_contains(output, "Have you called <code>summarise()</code>")
 
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(non_existing))"
   output <- test_it(lst)
-  fails(output, mess_patt = "Check your call of <code>summarise\\(\\)</code>")
-  fails(output, mess_patt = "Running it again threw an error.")
+  fails(output)
+  fb_contains(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Running it again threw an error.")
 
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(mpg))"
   output <- test_it(lst)
-  fails(output, mess_patt = "Check your call of <code>summarise\\(\\)</code>")
-  fails(output, mess_patt = "Running it again doesn")
+  fb_contains(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Running it again doesn")
 
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
@@ -33,18 +35,21 @@ test_that("test call result - functions - step by step - custom", {
 
   lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Notcalled")
+  fails(output)
+  fb_contains(output, mess_patt = "Notcalled")
 
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(non_existing))"
   output <- test_it(lst)
-  fails(output, mess_patt = "Check your call of <code>summarise\\(\\)</code>")
-  fails(output, mess_patt = "Error")
+  fails(output)
+  fb_contains(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Error")
 
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(mpg))"
   output <- test_it(lst)
-  fails(output, mess_patt = "Check your call of <code>summarise\\(\\)</code>")
-  fails(output, mess_patt = "Running it again doesn")
-  fails(output, mess_patt = "Incorrect")
+  fails(output)
+  fb_contains(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Running it again doesn")
+  fb_contains(output, "Incorrect")
 
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
@@ -59,25 +64,62 @@ test_that("test call result - functions - backwards compatbile", {
 
   lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Have you called <code>summarise\\(\\)</code>?")
+  fails(output)
+  fb_contains(output, "Have you called <code>summarise()</code>?")
 
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(non_existing))"
   output <- test_it(lst)
-  fails(output, mess_patt = "Check your call of <code>summarise\\(\\)</code>")
-  fails(output, mess_patt = "Running it again threw an error.")
+  fails(output)
+  fb_contains(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Running it again threw an error.")
 
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(mpg))"
   output <- test_it(lst)
-  fails(output, mess_patt = "Check your call of <code>summarise\\(\\)</code>")
-  fails(output, mess_patt = "Running it again doesn")
+  fails(output)
+  fb_contains(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Running it again doesn&#39;t give the correct result.")
 
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
 })
 
+test_that("test call result - functions - backwards compatbile - custom", {
+  lst <- list()
+  lst$DC_PEC <- "library(dplyr)"
+  lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
+  lst$DC_SCT <- "test_function_result('summarise', not_called_msg = 'notcalled', error_msg = 'error', incorrect_msg = 'incorrect')"
+  
+  lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
+  output <- test_it(lst)
+  fails(output)
+  fb_contains(output, "Notcalled")
+  
+  lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(non_existing))"
+  output <- test_it(lst)
+  fails(output)
+  fb_excludes(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Error")
+  
+  lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(mpg))"
+  output <- test_it(lst)
+  fails(output)
+  fb_excludes(output, "Check your call of <code>summarise()</code>")
+  fb_contains(output, "Incorrect")
+  
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
 test_that("test call result - functions - errs appropriately", {
-  # TODO
+  lst <- list()
+  lst$DC_PEC <- "library(dplyr)"
+  lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
+  lst$DC_SCT <- "test_function_result('mutate')"
+  
+  output <- test_it(lst)
+  error(output)
 })
 
 test_that("test call result - functions - indexing", {

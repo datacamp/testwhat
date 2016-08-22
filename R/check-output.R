@@ -13,7 +13,8 @@
 #' @param times how often should the pattern/expression output be found?
 #' @param missing_msg Custom message in case the pattern or output wasn't found often enough.
 #' @param ... S3 stuff
-#' 
+#' @param append Whether or not to append the feedback to feedback built in previous states
+#'
 #' @param expr The expression (as string) for which the output should be in the student's console output.
 #' @param incorrect_msg Custom message in case the output of the expression wasn't found often enough in the student's output.
 #' 
@@ -40,13 +41,14 @@
 
 #' @rdname test_output
 #' @export
-check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, missing_msg = NULL, ...) {
+check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, missing_msg = NULL, append = TRUE, ...) {
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "output",
                           case = "regex",
                           regex = regex,
                           times = times,
                           message = missing_msg,
+                          append = append,
                           pd = NULL)
   console_output <- convert_output_list(state$get("output_list"))
   if (trim) {
@@ -60,12 +62,12 @@ check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, time
 #' @rdname test_output
 #' @export
 test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
-  ex() %>% check_output_expr(expr = expr, times = times, missing_msg = incorrect_msg)
+  ex() %>% check_output_expr(expr = expr, times = times, missing_msg = incorrect_msg, append = is.null(incorrect_msg))
 }
 
 #' @rdname test_output
 #' @export
-check_output_expr <- function(state, expr, times = 1, missing_msg = NULL) {
+check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
   expr_output <- tryCatch(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), 
                           error = function(e) e$message)
   
@@ -75,6 +77,7 @@ check_output_expr <- function(state, expr, times = 1, missing_msg = NULL) {
                           expr = expr,
                           times = times,
                           message = missing_msg,
+                          append = append,
                           pd = NULL)
   
   console_output <- trim_output(convert_output_list(state$get("output_list")))

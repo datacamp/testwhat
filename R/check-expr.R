@@ -13,6 +13,7 @@
 #'   \code{\link{is_equal}}.
 #' @param incorrect_msg custom message in case the result, output or error of
 #'   the expression does not correspond with the solution
+#' @param append Whether or not to append the feedback to feedback built in previous states
 #' @param ... S3 stuff
 #' 
 #' @rdname test_expr
@@ -45,7 +46,7 @@ test_expression_result <- function(expr,
   ex() %>% 
     check_expr(expr) %>% 
     check_result() %>% 
-    check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg)
+    check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
 }
 
 #' @rdname test_expr
@@ -54,7 +55,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
   ex() %>% 
     check_expr(expr) %>% 
     check_output() %>% 
-    check_equal(incorrect_msg = incorrect_msg)
+    check_equal(incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
 }
 
 #' @rdname test_expr
@@ -62,8 +63,8 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
 test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NULL) {
   ex() %>% 
     check_expr(expr) %>% 
-    check_error(no_error_msg = no_error_msg) %>% 
-    check_equal(incorrect_msg = incorrect_msg)
+    check_error(no_error_msg = no_error_msg, append = is.null(no_error_msg)) %>% 
+    check_equal(incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
 }
 
 #' @rdname test_expr
@@ -76,56 +77,59 @@ check_expr <- function(state, expr) {
 
 #' @rdname test_expr
 #' @export
-check_result.ExprState <- function(state, error_msg = NULL, ...) {
+check_result.ExprState <- function(state, error_msg = NULL, append = TRUE, ...) {
   expr <- state$get("expr")
   run_expr_helper(state, 
                   expr = expr,
                   expr_str = as.character(expr),
                   error_msg = error_msg,
+                  append = append,
                   case = "result")
 }
 
 
 #' @rdname test_expr
 #' @export
-check_output.ExprState <- function(state, error_msg = NULL, ...) {
+check_output.ExprState <- function(state, error_msg = NULL, append = TRUE, ...) {
   expr <- state$get("expr")
   run_expr_helper(state, 
                   expr = expr,
                   expr_str = as.character(expr),
                   error_msg = error_msg,
+                  append = append,
                   case = "output")
 }
 
 #' @rdname test_expr
 #' @export
-check_error.ExprState <- function(state, no_error_msg = NULL, ...) {
+check_error.ExprState <- function(state, no_error_msg = NULL, append = TRUE, ...) {
   expr <- state$get("expr")
   run_expr_error_helper(state, 
                         expr = expr,
                         expr_str = as.character(expr),
-                        no_error_msg = no_error_msg)
+                        no_error_msg = no_error_msg,
+                        append = append)
 }
 
 #' @rdname test_expr
 #' @export
-check_equal.ExprResultState <- function(state, incorrect_msg = NULL, eq_condition = "equivalent", ...) {
-  fundef_check_equal_helper(state, incorrect_msg, eq_condition, type = "result")
+check_equal.ExprResultState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
+  fundef_check_equal_helper(state, incorrect_msg, eq_condition, append = append, type = "result")
 }
 
 #' @rdname test_expr
 #' @export
-check_equal.ExprOutputState <- function(state, incorrect_msg = NULL, ...) {
-  return(fundef_check_equal_helper(state, incorrect_msg, type = "output"))
+check_equal.ExprOutputState <- function(state, incorrect_msg = NULL, append = TRUE, ...) {
+  return(fundef_check_equal_helper(state, incorrect_msg, append = append, type = "output"))
 }
 
 #' @rdname test_expr
 #' @export
-check_equal.ExprErrorState <- function(state, incorrect_msg = NULL, ...) {
-  return(fundef_check_equal_helper(state, incorrect_msg, type = "error"))
+check_equal.ExprErrorState <- function(state, incorrect_msg = NULL, append = TRUE, ...) {
+  return(fundef_check_equal_helper(state, incorrect_msg, append = append, type = "error"))
 }
 
-run_expr_helper <- function(state, expr, expr_str, error_msg = NULL, case = c("result", "output")) {
+run_expr_helper <- function(state, expr, expr_str, error_msg, append, case = c("result", "output")) {
   case <- match.arg(case)
   converter <- switch(case, result = identity, output = capture.output)
   StateType <- switch(case, result = ExprResultState, output = ExprOutputState)
@@ -135,6 +139,7 @@ run_expr_helper <- function(state, expr, expr_str, error_msg = NULL, case = c("r
                              case = sprintf("%s_runs", case),
                              expr_str = expr_str,
                              message = error_msg,
+                             append = append,
                              pd = NULL)
   
   sol_res <- tryCatch(converter(eval(expr, envir = state$get("solution_env"))), error = function(e) e)
@@ -155,14 +160,15 @@ run_expr_helper <- function(state, expr, expr_str, error_msg = NULL, case = c("r
 
 
 
-run_expr_error_helper <- function(state, expr, expr_str, no_error_msg = NULL) {
+run_expr_error_helper <- function(state, expr, expr_str, no_error_msg, append) {
 
   exprerror_state <- ExprErrorState$new(state)
   exprerror_state$add_details(type = "expr",
-                                case = "error_fails",
-                                expr_str = expr_str,
-                                message = no_error_msg,
-                                pd = NULL)
+                              case = "error_fails",
+                              expr_str = expr_str,
+                              message = no_error_msg,
+                              append = append,
+                              pd = NULL)
   
   sol_res <- tryCatch(eval(expr, envir = state$get("solution_env")), error = function(e) e)
   if (!inherits(sol_res, 'error')) {
@@ -181,9 +187,7 @@ run_expr_error_helper <- function(state, expr, expr_str, no_error_msg = NULL) {
 }
 
 
-
-
-fundef_check_equal_helper <- function(state, incorrect_msg, eq_condition = "equivalent", type = c("result", "output", "error")) {
+fundef_check_equal_helper <- function(state, incorrect_msg, eq_condition = "equivalent", append, type = c("result", "output", "error")) {
   type <- match.arg(type)
   student_obj <- state$get("student_object")
   solution_obj <- state$get("solution_object")
@@ -192,7 +196,8 @@ fundef_check_equal_helper <- function(state, incorrect_msg, eq_condition = "equi
                     eq_condition = eq_condition,
                     student = student_obj,
                     solution = solution_obj,
-                    message = incorrect_msg)
+                    message = incorrect_msg,
+                    append = append)
   
   check_that(is_equal(student_obj, solution_obj, eq_condition),
              feedback = state$details)

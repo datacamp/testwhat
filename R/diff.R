@@ -2,7 +2,12 @@ build_diff <- function(sol, stud, ...) {
   if (isTRUE(all.equal(stud, tryerrorstring))) {
     return("evaluating the expression you specified caused an error.")
   }
-  get_diff(sol, stud, ...)
+  diff <- get_diff(sol, stud, ...)
+  if(is.null(diff)) {
+    return("")
+  } else {
+    return(diff)
+  }
 }
 
 get_diff <- function(sol, ...) {

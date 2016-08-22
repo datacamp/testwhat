@@ -23,6 +23,8 @@
 #' function with the same argument values as in the sample solution. 
 #' You can specify a vector of arguments with the same length as \code{args}, to have
 #' argument-specific custom feedback.
+#' @param append Whether or not to append the feedback to feedback built in previous states
+#' 
 #' @param ... S3 stuff
 #' 
 #' @param state state to start from (for \code{check_} functions)
@@ -71,7 +73,6 @@ test_function <- function(name,
                           not_called_msg = NULL, 
                           args_not_specified_msg = NULL,
                           incorrect_msg = NULL) {
-  
   n_args <- length(args)
   if (!is.null(incorrect_msg) && length(incorrect_msg) < n_args) {
     incorrect_msg <- rep(incorrect_msg[1], n_args)
@@ -79,11 +80,11 @@ test_function <- function(name,
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
   
-  fun_state <- ex() %>% check_function(name, index = index, not_called_msg = not_called_msg)
+  fun_state <- ex() %>% check_function(name, index = index, not_called_msg = not_called_msg, append = is.null(not_called_msg))
   for (i in seq_along(args)) {
     fun_state %>% 
-      check_arg(args[i], arg_not_specified_msg = args_not_specified_msg) %>% 
-      check_equal(incorrect_msg = incorrect_msg[i], eval = eval[i], eq_condition = eq_condition[i])
+      check_arg(args[i], arg_not_specified_msg = args_not_specified_msg, append = is.null(args_not_specified_msg)) %>% 
+      check_equal(incorrect_msg = incorrect_msg[i], eval = eval[i], eq_condition = eq_condition[i], append = is.null(incorrect_msg[i]))
   }
 }
 
@@ -95,17 +96,17 @@ test_function_v2 <- test_function
 
 #' @rdname test_call
 #' @export
-check_function <- function(state, name, index = 1, not_called_msg = NULL) {
-  check_call_helper(state, name = name, index = index, not_called_msg = not_called_msg, type = "function")
+check_function <- function(state, name, index = 1, not_called_msg = NULL, append = TRUE) {
+  check_call_helper(state, name = name, index = index, not_called_msg = not_called_msg, append = append, type = "function")
 }
 
 #' @rdname test_call
 #' @export
-check_operator <- function(state, name, index = 1, not_called_msg = NULL) {
-  check_call_helper(state, name = name, index = index, not_called_msg = not_called_msg, type = "operator")
+check_operator <- function(state, name, index = 1, append = TRUE, not_called_msg = NULL) {
+  check_call_helper(state, name = name, index = index, not_called_msg = not_called_msg, append = append, type = "operator")
 }
 
-check_call_helper <- function(state, name, index, not_called_msg, type = c("function", "operator")) {
+check_call_helper <- function(state, name, index, not_called_msg, append, type = c("function", "operator")) {
   type <- match.arg(type)
   finder <- switch(type, `function` = find_function_calls, operator = find_operators)
   CallState <- switch(type, `function` = FunctionState, operator = OperationState)
@@ -116,6 +117,7 @@ check_call_helper <- function(state, name, index, not_called_msg, type = c("func
                          name = name,
                          index = index,
                          message = not_called_msg,
+                         append = append,
                          pd = NULL)
   
   student_calls <- finder(pd = state$get("student_pd"), 
@@ -151,7 +153,7 @@ check_call_helper <- function(state, name, index, not_called_msg, type = c("func
 
 #' @rdname test_call
 #' @export
-check_arg <- function(state, arg, arg_not_specified_msg = NULL) {
+check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   
   solution_call <- state$get("solution_call")
   student_calls <- state$get("student_calls")
@@ -160,7 +162,8 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL) {
   arg_state$add_details(type = "argument",
                         case = "specified",
                         name = arg,
-                        message = arg_not_specified_msg)
+                        message = arg_not_specified_msg,
+                        append = append)
   
   if (! arg %in% names(solution_call$args)) {
     stop(" Make sure that the arguments you specify are actually specified", 
@@ -208,7 +211,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL) {
 
 #' @rdname test_call
 #' @export
-check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, eq_condition = "equivalent", ...) {
+check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, eq_condition = "equivalent", append = TRUE, ...) {
   
   solution_arg <- state$get("solution_arg")
   student_args <- state$get("student_args")
@@ -217,7 +220,8 @@ check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, 
                     case = "equal",
                     eval = eval,
                     eq_condition = eq_condition,
-                    message = incorrect_msg)
+                    message = incorrect_msg,
+                    append = append)
   
   # Test if the specified arguments are correctly called
   solution_obj <- eval_argument(solution_arg,

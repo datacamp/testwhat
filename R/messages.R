@@ -24,222 +24,221 @@ build_feedback_message <- function(details) {
     return(capitalize(trim(details)))
   }
   
-  msg <- ""
+  total_msg <- ""
   for (det in details) {
     if (!is.null(det$message)) {
-      msg %+=% det$message
-      next
-    }
-    if (det$type == "object") {
-      if (det$case == "defined") {
-        msg %+=% sprintf("Did you define the variable `%s` without errors?", det$name)
-      } 
-      if (det$case == "correct") {
-        msg %+=% sprintf("The contents of the variable `%s` aren't correct.", det$name)
-      }
-      if (det$case == "equal") {
-        msg %+=% build_diff(sol = det$solution, stud = det$student,
-                            eq_condition = det$eq_condition,
-                            id = "it")
-      }
-    }
-    if (det$type == "column") {
-      if (det$case == "defined") {
-        msg %+=% sprintf("Does it contain a column `%s`?", det$name)
-      }
-      if (det$case == "correct") {
-        msg %+=% sprintf("The column `%s` doesn't seem to be correct.", det$name)
-      }
-      if (det$case == "equal") {
-        # do nothing, for now.
-      }
-    }
-    if (det$type == "element") {
-      if (det$case == "defined") {
-        msg %+=% sprintf("Does it contain an element `%s`?", det$name)
-      }
-      if (det$case == "correct") {
-        msg %+=% sprintf("The element `%s` doesn't seem to be correct.", det$name)
-      }
-      if (det$case == "equal") {
-        # do nothing, for now.
-      }
-    }
-    if (det$type == "function") {
-      if (det$case == "called") {
-        msg %+=% sprintf("Have you called `%s()`%s?", det$name, get_times(det$index))
-      }
-      if (det$case == "correct") {
-        msg %+=% sprintf("Check your call of `%s()`.", det$name)
-      }
-      if (det$case == "result_runs") {
-        msg %+=% sprintf("Running it again threw an error.")
-      }
-      if (det$case == "result_correct") {
-        msg %+=% sprintf("Running it again doesn't give the correct result.")
-      }
-      if (det$case == "result_equal") {
-        msg %+=% build_diff(sol = det$solution, stud = det$student,
-                            eq_condition = det$eq_condition,
-                            id = "the result")
-      }
-    }
-    if (det$type == "operator") {
-      if (det$case == "called") {
-        msg %+=% sprintf("Have you used the `%s` operator%s?", det$name, get_times(det$index))
-      }
-      if (det$case == "correct") {
-        msg %+=% sprintf("Have you correctly used the `%s` operator?", det$name)
-      }
-      if (det$case == "result_runs") {
-        msg %+=% sprintf("Running the operation again threw an error.")
-      }
-      if (det$case == "result_correct") {
-        msg %+=% sprintf("Running the operation again doesn't give the correct result.")
-      }
-      if (det$case == "result_equal") {
-        msg %+=% build_diff(sol = det$solution, stud = det$student,
-                            eq_condition = det$eq_condition,
-                            id = "the result")
-      }
-    }
-    if (det$type == "argument") {
-      if (det$case == "specified") {
-        if (det$name == "...") {
-          msg %+=% sprintf("Did you specify any arguments that are matched to `...`?", det$name)
-        } else {
-          msg %+=% sprintf("Did you specify the argument `%s`?", det$name)
+      msg <- det$message
+    } else {
+      msg <- ""
+      if (det$type == "object") {
+        if (det$case == "defined") {
+          msg <- sprintf("Did you define the variable `%s` without errors?", det$name)
+        } 
+        if (det$case == "correct") {
+          msg <- sprintf("The contents of the variable `%s` aren't correct.", det$name)
         }
-      }
-      if (det$case == "correct") {
-        if (det$name == "...") {
-          msg %+=% "Did you correctly specify the arguments that are matched to `...`?"
-        } else {
-          msg %+=% sprintf("Did you correctly specify the argument `%s`?", det$name)
-        }
-      }
-      if (det$case == "equal") {
-        if (!det$is_dots) {
-          msg %+=% build_diff(sol = det$solution, stud = det$student,
+        if (det$case == "equal") {
+          msg <- build_diff(sol = det$solution, stud = det$student,
                               eq_condition = det$eq_condition,
-                              id = "it")  
+                              id = "it")
         }
       }
-    }
-    if (det$type %in% c("if", "for", "while")) {
-      if (det$case == "defined") {
-        msg %+=% sprintf("Are you sure you coded %s %s statement%s?", get_num(det$index), det$type, ifelse(det$index > 1, "s", ""))  
-      } else if (det$case == "correct") {
-        msg %+=% sprintf("Check the %s %s statement.", get_ord(det$index), det$type)
+      if (det$type == "column") {
+        if (det$case == "defined") {
+          msg <- sprintf("Does it contain a column `%s`?", det$name)
+        }
+        if (det$case == "correct") {
+          msg <- sprintf("The column `%s` doesn't seem to be correct.", det$name)
+        }
+        if (det$case == "equal") {
+          # do nothing, for now.
+        }
       }
-    }
-    if (det$type == "condition") {
-      msg %+=% sprintf("Check the condition.")
-    }
-    if (det$type == "body") {
-      msg %+=% sprintf("Check the body.")
-    }
-    if (det$type == "ifexpression") {
-      msg %+=% sprintf("Check the if part.")
-    }
-    if (det$type == "elseexpression") {
-      if (det$case == "defined") {
-        msg %+=% sprintf("The else part is missing.")
-      } else if (det$case == "correct") {
-        msg %+=% sprintf("Check the else part.")
+      if (det$type == "element") {
+        if (det$case == "defined") {
+          msg <- sprintf("Does it contain an element `%s`?", det$name)
+        }
+        if (det$case == "correct") {
+          msg <- sprintf("The element `%s` doesn't seem to be correct.", det$name)
+        }
+        if (det$case == "equal") {
+          # do nothing, for now.
+        }
       }
-    }
-    if (det$type == "typed") {
-      if (det$fixed) {
-        msg %+=% sprintf("Have you typed %s%s?", collapse_args(det$regex, conn = " or "), get_times(det$times))
-      } else {
-        msg %+=% sprintf("The system wanted to find the pattern `%s`%s but didn't.", det$regex, get_times(det$times))  
+      if (det$type == "function") {
+        if (det$case == "called") {
+          msg <- sprintf("Have you called `%s()`%s?", det$name, get_times(det$index))
+        }
+        if (det$case == "correct") {
+          msg <- sprintf("Check your call of `%s()`.", det$name)
+        }
+        if (det$case == "result_runs") {
+          msg <- sprintf("Running it again threw an error.")
+        }
+        if (det$case == "result_correct") {
+          msg <- sprintf("Running it again doesn't give the correct result.")
+        }
+        if (det$case == "result_equal") {
+          msg <- build_diff(sol = det$solution, stud = det$student,
+                              eq_condition = det$eq_condition,
+                              id = "the result")
+        }
       }
-      
-    }
-    if (det$type == "fundef") {
-      if (det$case == "defined") {
-        msg %+=% sprintf("Did you define the function <code>%s()</code>?", det$name)
+      if (det$type == "operator") {
+        if (det$case == "called") {
+          msg <- sprintf("Have you used the `%s` operator%s?", det$name, get_times(det$index))
+        }
+        if (det$case == "correct") {
+          msg <- sprintf("Have you correctly used the `%s` operator?", det$name)
+        }
+        if (det$case == "result_runs") {
+          msg <- sprintf("Running the operation again threw an error.")
+        }
+        if (det$case == "result_correct") {
+          msg <- sprintf("Running the operation again doesn't give the correct result.")
+        }
+        if (det$case == "result_equal") {
+          msg <- build_diff(sol = det$solution, stud = det$student,
+                              eq_condition = det$eq_condition,
+                              id = "the result")
+        }
       }
-      if (det$case == "correcttype") {
-        msg %+=% sprintf("Are you sure that <code>%s</code> is a function?", det$name)
+      if (det$type == "argument") {
+        if (det$case == "specified") {
+          if (det$name == "...") {
+            msg <- sprintf("Did you specify any arguments that are matched to `...`?", det$name)
+          } else {
+            msg <- sprintf("Did you specify the argument `%s`?", det$name)
+          }
+        }
+        if (det$case == "correct") {
+          if (det$name == "...") {
+            msg <- "Did you correctly specify the arguments that are matched to `...`?"
+          } else {
+            msg <- sprintf("Did you correctly specify the argument `%s`?", det$name)
+          }
+        }
+        if (det$case == "equal") {
+          if (!det$is_dots) {
+            msg <- build_diff(sol = det$solution, stud = det$student,
+                                eq_condition = det$eq_condition,
+                                id = "it")  
+          }
+        }
       }
-      if (det$case == "correct") {
-        msg %+=% sprintf("Did you correctly define the function <code>%s()</code>?", det$name)
+      if (det$type %in% c("if", "for", "while")) {
+        if (det$case == "defined") {
+          msg <- sprintf("Are you sure you coded %s %s statement%s?", get_num(det$index), det$type, ifelse(det$index > 1, "s", ""))  
+        } else if (det$case == "correct") {
+          msg <- sprintf("Check the %s %s statement.", get_ord(det$index), det$type)
+        }
       }
-      if (det$case == "arguments") {
-        msg %+=% "Did you specify the correct number of arguments?"
+      if (det$type == "condition") {
+        msg <- sprintf("Check the condition.")
       }
-      if (det$case == "coded") {
-        msg %+=% sprintf("The system couldn't find the function definition in your code.")
+      if (det$type == "body") {
+        msg <- sprintf("Check the body.")
       }
-    }
-    if (det$type  == "expr") {
-      if (det$case == "result_runs") {
-        msg %+=% sprintf("Running `%s` generated an error.", det$expr_str)
+      if (det$type == "ifexpression") {
+        msg <- sprintf("Check the if part.")
       }
-      if (det$case == "result_correct") {
-        msg %+=% sprintf("Running `%s` didn't give the correct result.", det$expr_str)
+      if (det$type == "elseexpression") {
+        if (det$case == "defined") {
+          msg <- sprintf("The else part is missing.")
+        } else if (det$case == "correct") {
+          msg <- sprintf("Check the else part.")
+        }
       }
-      if (det$case == "result_equal") {
-        msg %+=% build_diff(sol = det$solution, stud = det$student,
-                            eq_condition = det$eq_condition,
-                            id = "the result")
-      }
-      if (det$case == "output_runs") {
-        msg %+=% sprintf("Running `%s` generated an error.", det$expr_str)
-      }
-      if (det$case == "output_correct") {
-        msg %+=% sprintf("Running `%s` didn't generate the correct output.", det$expr_str)
-      }
-      if (det$case == "output_equal") {
-        msg %+=% sprintf("Expected %s, but got %s",
-                         ifelse(length(det$solution) == 0, "no output", sprintf("`%s`", det$solution)),
-                         ifelse(length(det$student) == 0, "no output", sprintf("`%s`", det$student)))
-      }
-      if (det$case == "error_fails") {
-        msg %+=% sprintf("Running `%s` didn't generate an error, but it should.", det$expr_str)
-      }
-      if (det$case == "error_correct") {
-        msg %+=% sprintf("Running `%s` didn't generate the correct error.", det$expr_str)
-      }
-      if (det$case == "error_equal") {
-        msg %+=% sprintf("Expected the error `%s`, but instead got the error `%s`",
-                         det$solution, det$student)
-      }
-    }
-    if (det$type == "file") {
-      if (det$case == "available") {
-        if (det$folder == ".") {
-          msg %+=% sprintf("The file <code>%s</code> does not appear to be in your working directory.", det$file)
+      if (det$type == "typed") {
+        if (det$fixed) {
+          msg <- sprintf("Have you typed %s%s?", collapse_args(det$regex, conn = " or "), get_times(det$times))
         } else {
-          msg %+=% sprintf("The file <code>%s</code> does not appear to be inside the folder `%s` in your working directory.", det$file, det$folder)
+          msg <- sprintf("The system wanted to find the pattern %s%s but didn't.", collapse_args(det$regex, conn = " or "), get_times(det$times))  
+        }
+        
+      }
+      if (det$type == "fundef") {
+        if (det$case == "defined") {
+          msg <- sprintf("Did you define the function <code>%s()</code>?", det$name)
+        }
+        if (det$case == "correcttype") {
+          msg <- sprintf("Are you sure that <code>%s</code> is a function?", det$name)
+        }
+        if (det$case == "correct") {
+          msg <- sprintf("Did you correctly define the function <code>%s()</code>?", det$name)
+        }
+        if (det$case == "arguments") {
+          msg <- "Did you specify the correct number of arguments?"
+        }
+        if (det$case == "coded") {
+          msg <- sprintf("The system couldn't find the function definition in your code.")
+        }
+      }
+      if (det$type  == "expr") {
+        if (det$case == "result_runs") {
+          msg <- sprintf("Running `%s` generated an error.", det$expr_str)
+        }
+        if (det$case == "result_correct") {
+          msg <- sprintf("Running `%s` didn't give the correct result.", det$expr_str)
+        }
+        if (det$case == "result_equal") {
+          msg <- build_diff(sol = det$solution, stud = det$student,
+                              eq_condition = det$eq_condition,
+                              id = "the result")
+        }
+        if (det$case == "output_runs") {
+          msg <- sprintf("Running `%s` generated an error.", det$expr_str)
+        }
+        if (det$case == "output_correct") {
+          msg <- sprintf("Running `%s` didn't generate the correct output.", det$expr_str)
+        }
+        if (det$case == "output_equal") {
+          msg <- sprintf("Expected %s, but got %s",
+                           ifelse(length(det$solution) == 0, "no output", sprintf("`%s`", det$solution)),
+                           ifelse(length(det$student) == 0, "no output", sprintf("`%s`", det$student)))
+        }
+        if (det$case == "error_fails") {
+          msg <- sprintf("Running `%s` didn't generate an error, but it should.", det$expr_str)
+        }
+        if (det$case == "error_correct") {
+          msg <- sprintf("Running `%s` didn't generate the correct error.", det$expr_str)
+        }
+        if (det$case == "error_equal") {
+          msg <- sprintf("Expected the error `%s`, but instead got the error `%s`",
+                           det$solution, det$student)
+        }
+      }
+      if (det$type == "file") {
+        if (det$case == "available") {
+          if (det$folder == ".") {
+            msg <- sprintf("The file <code>%s</code> does not appear to be in your working directory.", det$file)
+          } else {
+            msg <- sprintf("The file <code>%s</code> does not appear to be inside the folder `%s` in your working directory.", det$file, det$folder)
+          }
+        }
+      }
+      if (det$type == "output") {
+        if (det$case == "regex") {
+          msg <- "The output that your code generated doesn't contain the pattern we're looking for."  
+        }
+        if (det$case == "expr") {
+          msg <- sprintf("Is the output of <code>%s</code> in your script?", det$expr)
         }
       }
     }
-    if (det$type == "output") {
-      if (det$case == "regex") {
-        msg %+=% "The output that your code generated doesn't contain the pattern we're looking for."  
-      }
-      if (det$case == "expr") {
-        msg %+=% sprintf("Is the output of <code>%s</code> in your script?", det$expr)
+    
+    # only do something if msg is actually a message
+    if (nchar(msg) > 0) {
+      if (isTRUE(det$append)) {
+        total_msg %+=% msg
+      } else {
+        total_msg <- msg  
       }
     }
   }
-  return(capitalize(trim(msg)))
+  return(capitalize(trim(total_msg)))
 }
 
-# check_that(is_false(is.null(student_fun_def)), 
-#            feedback = sprintf("A proper definition of `%s` could not be found in your submission. Make sure to use the `%s <- function() { ... }` recipe.", name, name))
-
-# if (is.null(undefined_msg)) {
-#   undefined_msg <- sprintf("Did you define the function <code>%s()</code>?", name)
-# }
-# 
-# if (is.null(incorrect_number_arguments_msg)) {
-#   incorrect_number_arguments_msg <- sprintf()
-# }
-# 
 
 build_summary <- function(x, ...) UseMethod("build_summary")
 

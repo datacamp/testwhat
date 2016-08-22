@@ -20,23 +20,29 @@ test_that("check_fun_def - step by step", {
 
   lst$DC_CODE <- "my_fun <- function(x) { return(x) }"
   capture.output(output <- test_it(lst))
-  fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Did you specify the correct number of arguments")
+  fails(output)
+  fb_contains(output, "Did you correctly define the function <code>my_fun()</code>")
+  fb_contains(output, "Did you specify the correct number of arguments")
 
   lst$DC_CODE <- "my_fun <- function(x, y) { return(x + y) }"
   capture.output(output <- test_it(lst))
-  fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Check the body.*?Have you called <code>print\\(\\)</code>")
+  fails(output)
+  fb_contains(output, "Did you correctly define the function <code>my_fun()</code>?")
+  fb_contains(output, "Check the body.")
+  fb_contains(output, "Have you called <code>print()</code>?")
 
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); stop('test') }"
   capture.output(output <- test_it(lst))
-  fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Running .*? generated an error")
+  fails(output)
+  fb_contains(output, "Did you correctly define the function <code>my_fun()</code>")
+  fb_contains(output, "Running <code>my_fun(x = 2, y = 3)</code> generated an error")
 
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); return(x + c(y, y)) }"
   capture.output(output <- test_it(lst))
-  fails(output, mess_patt = "Did you correctly define the function <code>my_fun\\(\\)</code>")
-  fails(output, mess_patt = "Running .*? correct result.*?The result has length 2, while it should have length 1")
+  fails(output)
+  fb_contains(output, "Did you correctly define the function <code>my_fun()</code>")
+  fb_contains(output, "Running <code>my_fun(x = 2, y = 3)</code> didn&#39;t give the correct result. ")
+  fb_contains(output, "The result has length 2, while it should have length 1")
   
   lst$DC_CODE <- "my_fun <- function(x, y) { print('a'); stopifnot(is.double(y)); return(x + y) }"
   capture.output(output <- test_it(lst))

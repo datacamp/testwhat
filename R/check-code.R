@@ -20,6 +20,8 @@
 #' @param state the state to start from
 #' @param missing_msg Custom feedback in case the pattern is not contained often
 #'   enough in the student's submission.
+#' @param append Whether or not to append the feedback to feedback built in previous states
+#' 
 #' @examples
 #' \dontrun{
 #' # Example 1
@@ -49,18 +51,19 @@ test_student_typed <- function(strings,
                                fixed = TRUE,
                                times = 1,
                                not_typed_msg = NULL) {
-  ex() %>% check_code(strings, fixed = fixed, times = times, missing_msg = not_typed_msg)
+  ex() %>% check_code(strings, fixed = fixed, times = times, missing_msg = not_typed_msg, append = is.null(not_typed_msg))
 }
 
 #' @rdname test_code
 #' @export
-check_code <- function(state, regex, fixed = FALSE, times = 1, missing_msg = NULL) {
+check_code <- function(state, regex, fixed = FALSE, times = 1, missing_msg = NULL, append = TRUE) {
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "typed",
                           regex = regex,
                           fixed = fixed,
                           times = times,
                           message = missing_msg,
+                          append = append,
                           pd = NULL)
   student_code <- state$get("student_code")
   if (fixed) {

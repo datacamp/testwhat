@@ -8,6 +8,7 @@
 #' @param incorrect_msg  feedback message in case the evaluation was not the same as in the solution.
 #' @param eq_condition how to compare student and solution.
 #' @param state the state to start from (for \code{check_} functions)
+#' @param append Whether or not to append the feedback to feedback built in previous states
 #' @param ... S3 stuff
 #'
 #' @examples
@@ -32,36 +33,36 @@ test_function_result <- function(name = NULL,
                                  error_msg = NULL,
                                  incorrect_msg = NULL) {
   ex() %>% 
-    check_function(name, index = index, not_called_msg = not_called_msg) %>% 
-    check_result(error_msg = error_msg) %>%
-    check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg)
+    check_function(name, index = index, not_called_msg = not_called_msg, append = is.null(not_called_msg)) %>% 
+    check_result(error_msg = error_msg, append = is.null(error_msg)) %>%
+    check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
 }
 
 #' @rdname test_call_result
 #' @export
-check_result.OperationState <- function(state, error_msg = NULL, ...) {
-  check_call_result(state, error_msg = error_msg, type = "operator")
+check_result.OperationState <- function(state, error_msg = NULL, append = TRUE, ...) {
+  check_call_result(state, error_msg = error_msg, append = append, type = "operator")
 }
 
 #' @rdname test_call_result
 #' @export
-check_result.FunctionState <- function(state, error_msg = NULL, ...) {
-  check_call_result(state, error_msg = error_msg, type = "function")
+check_result.FunctionState <- function(state, error_msg = NULL, append = TRUE, ...) {
+  check_call_result(state, error_msg = error_msg, append = append, type = "function")
 }
 
 #' @rdname test_call_result
 #' @export
-check_equal.FunctionResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, ...) {
-  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, type = "function")
+check_equal.FunctionResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, append = TRUE, ...) {
+  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = append, type = "function")
 }
 
 #' @rdname test_call_result
 #' @export
-check_equal.OperationResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, ...) {
-  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, type = "operator")
+check_equal.OperationResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, append = TRUE, ...) {
+  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = append, type = "operator")
 }
 
-check_call_result <- function(state, error_msg, type = c("function", "operator")) {
+check_call_result <- function(state, error_msg, append, type = c("function", "operator")) {
   type <- match.arg(type)
   CallResultState <- switch(type, `function` = FunctionResultState, operator = OperationResultState)
   
@@ -73,7 +74,8 @@ check_call_result <- function(state, error_msg, type = c("function", "operator")
   callresult_state <- CallResultState$new(state)
   callresult_state$add_details(type = type,
                                case = "result_runs",
-                               message = error_msg)
+                               message = error_msg,
+                               append = append)
   
   sol_res <- tryCatch(base::eval(solution_call$call, envir = solution_env), error = function(e) e)
   if (inherits(sol_res, 'error')) {
@@ -121,14 +123,15 @@ check_call_result <- function(state, error_msg, type = c("function", "operator")
 
 
 
-check_call_result_equal <- function(state, eq_condition, incorrect_msg, type = c("function", "operator")) {
+check_call_result_equal <- function(state, eq_condition, incorrect_msg, append, type = c("function", "operator")) {
   type <- match.arg(type)
   solution_call <- state$get("solution_call")
   student_calls <- state$get("student_calls")
   state$add_details(type = type,
                     case = "result_equal",
                     eq_condition = eq_condition,
-                    message = incorrect_msg)
+                    message = incorrect_msg,
+                    append = append)
   
   sol_res <- solution_call$result
   

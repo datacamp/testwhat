@@ -36,6 +36,6 @@ test_library_function <- function(package,
     incorrect_msg <- sprintf("Have you correctly called the <code>library()</code> function to load the <code>%s</code> package?", package)
   }
   
-  ex() %>% check_code(regex = "(library|require)\\(", missing_msg = not_called_msg)
-  ex() %>% check_code(regex = sprintf("(library|require)\\s*\\(\\s*[\"']?%s[\"']?\\s*\\)",package), missing_msg = incorrect_msg)
+  ex() %>% check_code(regex = "(library|require)\\(", missing_msg = not_called_msg, append = is.null(not_called_msg))
+  ex() %>% check_code(regex = sprintf("(library|require)\\s*\\(\\s*[\"']?%s[\"']?\\s*\\)",package), missing_msg = incorrect_msg, append = is.null(incorrect_msg))
 }

@@ -1,4 +1,4 @@
-context("test_obj")
+context("check_object")
 
 test_that("check_object step by step", {
   lst <- list()

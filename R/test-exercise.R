@@ -43,7 +43,7 @@ test_exercise <- function(sct,
                          solution_env = solution_env,
                          output_list = output_list,
                          test_env = new.env(parent = environment()))
-  tw$set(state = state, reporter = DC_reporter$new())
+  tw$set(state = state, reporter = DC_reporter$new(), stack = TRUE)
   on.exit(tw$clear())
 
   # Execute sct with the DataCamp reporter such that it collects test results

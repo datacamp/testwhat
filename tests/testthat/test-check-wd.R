@@ -1,4 +1,4 @@
-context("test_file_exists")
+context("check_wd")
 
 ## Really funky stuff with these tests...
 

@@ -13,6 +13,7 @@
 #'   function does not have the correct number of arguments.
 #' @param ... arguments to pass to the user-defined function to test result, output or error in a later stage
 #' @param state the state to start from
+#' @param append Whether or not to append the feedback to feedback built in previous states
 #' 
 #' @examples
 #' \dontrun{
@@ -50,7 +51,9 @@ test_function_definition <- function(name,
                                      incorrect_number_arguments_msg = NULL) {
   body_test <- substitute(body_test)
   function_test <- substitute(function_test)
-  fundef <- ex() %>% check_fun_def(name, undefined_msg)
+  fundef <- ex() %>% check_fun_def(name, 
+                                   undefined_msg = undefined_msg, 
+                                   append = is.null(undefined_msg))
   
   fun_passed <- TRUE
   if (!is.null(function_test)) {
@@ -59,7 +62,8 @@ test_function_definition <- function(name,
   }
 
   if (!fun_passed) {
-    fundef %>% check_arguments(incorrect_number_arguments_msg = incorrect_number_arguments_msg)  
+    fundef %>% check_arguments(incorrect_number_arguments_msg = incorrect_number_arguments_msg, 
+                               append = is.null(incorrect_number_arguments_msg))  
   }
   
   body_passed <- TRUE
@@ -85,7 +89,7 @@ test_function_definition <- function(name,
 
 #' @rdname test_fun_def
 #' @export
-check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NULL) {
+check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NULL, append = TRUE) {
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")
   
@@ -94,6 +98,7 @@ check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NUL
                           case = "defined",
                           name = name,
                           message = undefined_msg,
+                          append = append,
                           pd = NULL)
   
   check_defined(name, solution_env)
@@ -125,7 +130,7 @@ check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NUL
 
 #' @rdname test_fun_def
 #' @export
-check_arguments <- function(state, incorrect_number_arguments_msg = NULL) {
+check_arguments <- function(state, incorrect_number_arguments_msg = NULL, append = TRUE) {
   stud_arguments <- as.list(formals(state$get("student_object")))
   sol_arguments <- as.list(formals(state$get("solution_object")))
   
@@ -134,6 +139,7 @@ check_arguments <- function(state, incorrect_number_arguments_msg = NULL) {
   fundefargs_state$add_details(type = "fundef",
                                case = "arguments",
                                message = incorrect_number_arguments_msg,
+                               append = append,
                                pd = NULL)
   
   check_that(is_equal(length(stud_arguments), length(sol_arguments)), 
@@ -143,7 +149,7 @@ check_arguments <- function(state, incorrect_number_arguments_msg = NULL) {
 
 #' @rdname test_fun_def
 #' @export
-check_body.FunDefState <- function(state, not_found_msg = NULL, ...) {
+check_body.FunDefState <- function(state, not_found_msg = NULL, append = TRUE, ...) {
   name <- state$get("name")
   student_pd <- state$get("student_pd")
   solution_pd <- state$get("solution_pd")
@@ -153,6 +159,7 @@ check_body.FunDefState <- function(state, not_found_msg = NULL, ...) {
   body_state$add_details(type = "fundef",
                          case = "coded",
                          message = not_found_msg,
+                         append = append,
                          pd = NULL)
   
   solution_fun_def <- extract_function_definition(solution_pd, name)

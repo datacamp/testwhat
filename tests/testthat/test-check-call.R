@@ -1,5 +1,61 @@
 context("test_function")
 
+test_that("check_function - step by step", {
+  lst <- list(DC_SOLUTION = "mean(1:3, na.rm = TRUE)",
+              DC_SCT = "fun <- ex() %>% check_function('mean')
+                        fun %>% check_arg('x') %>% check_equal()
+                        fun %>% check_arg('na.rm') %>% check_equal()")
+
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output)
+  fb_contains(output, "Have you called <code>mean()</code>")
+
+  lst$DC_CODE <- "mean(1:3)"
+  output <- test_it(lst)
+  fails(output)
+  fb_contains(output, "Check your call of <code>mean()</code>")
+  fb_contains(output, "Did you specify the argument <code>na.rm</code>?")
+
+  lst$DC_CODE <- "mean(1:3, na.rm = FALSE)"
+  output <- test_it(lst)
+  fails(output)
+  fb_contains(output, "Check your call of <code>mean()</code>.")
+  fb_contains(output, "Did you correctly specify the argument <code>na.rm</code>?")
+
+  lst$DC_CODE <- "mean(1:3, na.rm = TRUE)"
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("check_function - step by step - append", {
+  lst <- list(DC_SOLUTION = "mean(1:3, na.rm = TRUE)",
+              DC_SCT = "fun <- ex() %>% check_function('mean', append = FALSE)
+                        fun %>% check_arg('x', append = FALSE) %>% check_equal(append = FALSE)
+                        fun %>% check_arg('na.rm', append = FALSE) %>% check_equal(append = FALSE)")
+  
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output)
+  fb_contains(output, "Have you called <code>mean()</code>")
+  
+  lst$DC_CODE <- "mean(1:3)"
+  output <- test_it(lst)
+  fails(output)
+  fb_excludes(output, "Check your call of <code>mean()</code>")
+  fb_contains(output, "Did you specify the argument <code>na.rm</code>?")
+  
+  lst$DC_CODE <- "mean(1:3, na.rm = FALSE)"
+  output <- test_it(lst)
+  fails(output)
+  fb_excludes(output, "Check your call of <code>mean()</code>.")
+  fb_contains(output, "Did you correctly specify the argument <code>na.rm</code>?")
+  
+  lst$DC_CODE <- "mean(1:3, na.rm = TRUE)"
+  output <- test_it(lst)
+  passes(output)
+})
+
 test_that("test_function step by step", {
   lst <- list(DC_SOLUTION = "mean(1:3, na.rm = TRUE)",
               DC_SCT = "test_function('mean', args = c('x', 'na.rm'))")
@@ -31,12 +87,16 @@ test_that("test_function step by step - custom", {
 
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Notspecified")
+  fails(output)
+  fb_contains(output, "Notspecified")
+  fb_excludes(output, "Check your call of <code>mean()</code>")
 
   lst$DC_CODE <- "mean(1:3, na.rm = FALSE)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect")
-
+  fails(output)
+  fb_contains(output, "Incorrect")
+  fb_excludes(output, "Check your call of <code>mean()</code>")
+  
   lst$DC_CODE <- "mean(1:3, na.rm = TRUE)"
   output <- test_it(lst)
   passes(output)
@@ -48,15 +108,16 @@ test_that("test_function step by step - custom - 2", {
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
-  fails(output, mess_patt = "Notcalled")
+  fails(output)
+  fb_contains(output, "Notcalled")
 
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Notspecified")
+  fails(output, "Notspecified")
 
   lst$DC_CODE <- "mean(1:2, na.rm = FALSE)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect1")
+  fails(output, "Incorrect1")
 
   lst$DC_CODE <- "mean(1:3, na.rm = FALSE)"
   output <- test_it(lst)

@@ -10,6 +10,7 @@
 #' @param missing_else_msg Custom message in case the else part is missing (for \code{test_if_else})
 #' @param cond_test sub-SCT to perform on the condition part (for \code{test_for_loop} or \code{test_while_loop})
 #' @param expr_test sub-SCT to perform on the expression part (for \code{test_for_loop} or \code{test_while_loop})
+#' @param append Whether or not to append the feedback to feedback built in previous states
 #' @param ... S3 stuff
 #' 
 #' @examples
@@ -103,7 +104,7 @@ test_if_else <- function(index = 1,
   test_env <- old_state$get("test_env")
   on.exit(tw$set(state = old_state))
   
-  testif <- old_state %>% check_if_else(index = index, not_found_msg = not_found_msg)
+  testif <- old_state %>% check_if_else(index = index, not_found_msg = not_found_msg, append = is.null(not_found_msg))
   
   if_cond_test <- substitute(if_cond_test)
   if (!is.null(if_cond_test)) {
@@ -121,7 +122,7 @@ test_if_else <- function(index = 1,
   
   else_expr_test <- substitute(else_expr_test)
   if (!is.null(else_expr_test)) {
-    elseexprstate <- testif %>% check_else(not_found_msg = missing_else_msg)
+    elseexprstate <- testif %>% check_else(not_found_msg = missing_else_msg, append = is.null(missing_else_msg))
     tw$set(state = elseexprstate)
     eval(else_expr_test, envir = test_env)
   }
@@ -163,7 +164,7 @@ test_loop <- function(index, cond_test, expr_test, not_found_msg, fun) {
   test_env <- old_state$get("test_env")
   on.exit(tw$set(state = old_state))
   
-  testloop <- old_state %>% fun(index = index, not_found_msg = not_found_msg)
+  testloop <- old_state %>% fun(index = index, not_found_msg = not_found_msg, append = is.null(not_found_msg))
   
   if (!is.null(cond_test)) {
     cond_state <- testloop %>% check_cond()
@@ -183,24 +184,24 @@ test_loop <- function(index, cond_test, expr_test, not_found_msg, fun) {
 
 #' @rdname test_control
 #' @export
-check_if_else <- function(state, index = 1, not_found_msg = NULL) {
-  check_control(state, index, not_found_msg, type = "if")
+check_if_else <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
+  check_control(state, index, not_found_msg, append = append, type = "if")
 }
 
 #' @rdname test_control
 #' @export
-check_while <- function(state, index = 1, not_found_msg = NULL) {
-  check_control(state, index, not_found_msg, type = "while")
+check_while <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
+  check_control(state, index, not_found_msg, append = append, type = "while")
 }
 
 #' @rdname test_control
 #' @export
-check_for <- function(state, index = 1, not_found_msg = NULL) {
-  check_control(state, index, not_found_msg, type = "for")
+check_for <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
+  check_control(state, index, not_found_msg, append = append, type = "for")
 }
 
 
-check_control <- function(state, index, not_found_msg, type = c("if", "while", "for")) {
+check_control <- function(state, index, not_found_msg, append, type = c("if", "while", "for")) {
   type <- match.arg(type)
   student_pd <- state$get("student_pd")
   solution_pd <- state$get("solution_pd")
@@ -212,6 +213,7 @@ check_control <- function(state, index, not_found_msg, type = c("if", "while", "
                             case = "defined",
                             index = index,
                             message = not_found_msg,
+                            append = append,
                             pd = NULL)
 
   extract_fun <- switch(type,
@@ -246,7 +248,7 @@ check_cond <- function(state) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   cond_state <- SubState$new(state)
-  cond_state$add_details(type = "condition", pd = student_struct[["cond_part"]]$pd)
+  cond_state$add_details(type = "condition", pd = student_struct[["cond_part"]]$pd, append = TRUE)
   decorate_state(cond_state, student_struct, solution_struct, "cond_part")
   return(cond_state)
 }
@@ -257,7 +259,7 @@ check_body.ControlState <- function(state, ...) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   body_state <- SubState$new(state)
-  body_state$add_details(type = "body", pd = student_struct[["expr_part"]]$pd)
+  body_state$add_details(type = "body", pd = student_struct[["expr_part"]]$pd, append = TRUE)
   decorate_state(body_state, student_struct, solution_struct, "expr_part")
   return(body_state)
 }
@@ -268,20 +270,21 @@ check_if <- function(state) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   if_state <- SubState$new(state)
-  if_state$add_details(type = "ifexpression", pd = student_struct[["if_part"]]$pd)
+  if_state$add_details(type = "ifexpression", pd = student_struct[["if_part"]]$pd, append = TRUE)
   decorate_state(if_state, student_struct, solution_struct, "if_part")
   return(if_state)
 }
 
 #' @rdname test_control
 #' @export
-check_else <- function(state, not_found_msg = NULL) {
+check_else <- function(state, not_found_msg = NULL, append = TRUE) {
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   else_state <- SubState$new(state)
   else_state$add_details(type = "elseexpression",
                          case = "defined",
                          message = not_found_msg,
+                         append = append,
                          pd = state$get("student_pd"))
   
   if (is.null(solution_struct[["else_part"]])) {

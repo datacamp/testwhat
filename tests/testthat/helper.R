@@ -53,6 +53,16 @@ fails <- function(output, mess_patt = NULL) {
   }
 }
 
+fb_contains <- function(output, mess_patt, fixed = TRUE) {
+  sct_payload <- get_sct_payload(output)
+  expect_true(grepl(mess_patt, sct_payload$message, fixed = fixed))
+}
+
+fb_excludes <- function(output, mess_patt, fixed = TRUE) {
+  sct_payload <- get_sct_payload(output)
+  expect_false(grepl(mess_patt, sct_payload$message, fixed = fixed))
+}
+
 error <- function(output, mess_patt = NULL) {
   error_payload <- get_error_payload(output)
   expect_false(is.null(error_payload))
