@@ -1,6 +1,3 @@
-#' State object
-#'
-#' @export
 #' @importFrom R6 R6Class
 State <- R6::R6Class("State",
   public = list(
@@ -209,10 +206,19 @@ decorate_state <- function(state, stud, sol, el = NULL) {
     state$set(student_pd = stud[[el]]$pd,
               solution_pd = sol[[el]]$pd,
               student_code = stud[[el]]$code,
-              solution_code = sol[[el]]$code)  
+              solution_code = sol[[el]]$code)
   }
 }
 
+#' Override the solution code and pd in a state
+#' 
+#' Produces a new state with a custom solution code. Mostly useful inside
+#' \code{test_or}, if you want to test for different cases.
+#' 
+#' @param state the state to create a substate from
+#' @param code the solution code to put into the state
+#'   
+#' @export
 override_solution <- function(state, code) {
   sub_state <- SubState$new(state)
   sub_state$set(solution_code = code, solution_pd = build_pd(code))
