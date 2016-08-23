@@ -68,8 +68,8 @@ test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
 #' @rdname test_output
 #' @export
 check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
-  expr_output <- tryCatch(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), 
-                          error = function(e) e$message)
+  expr_output <- paste(tryCatch(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), 
+                                error = function(e) e$message), collapse = "\n")
   
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "output",
@@ -98,18 +98,22 @@ trim_output <- function(x) {
 }
 
 get_num_hits <- function(regex, x, fixed) {
-  counts <- sapply(regex, function(patt) {
-    res <- gregexpr(patt, text = x, fixed = fixed)[[1]]
-    if (any(res == -1)) {
-      return(0L)
-    } else {
-      return(length(res))
-    }
-  }, USE.NAMES = FALSE)
-  if (length(counts) == 0) {
+  if (length(regex) == 0 || (length(regex) == 1 && nchar(regex) == 0)) {
     return(0)
   } else {
-    return(sum(counts))
+    counts <- sapply(regex, function(patt) {
+      res <- gregexpr(patt, text = x, fixed = fixed)[[1]]
+      if (any(res == -1)) {
+        return(0L)
+      } else {
+        return(length(res))
+      }
+    }, USE.NAMES = FALSE)
+    if (length(counts) == 0) {
+      return(0)
+    } else {
+      return(sum(counts))
+    }  
   }
 }
 
