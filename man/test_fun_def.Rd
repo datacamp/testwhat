@@ -12,11 +12,13 @@
 test_function_definition(name, function_test = NULL, body_test = NULL,
   undefined_msg = NULL, incorrect_number_arguments_msg = NULL)
 
-check_fun_def(state, name, undefined_msg = NULL, no_fundef_msg = NULL)
+check_fun_def(state, name, undefined_msg = NULL, no_fundef_msg = NULL,
+  append = TRUE)
 
-check_arguments(state, incorrect_number_arguments_msg = NULL)
+check_arguments(state, incorrect_number_arguments_msg = NULL, append = TRUE)
 
-\method{check_body}{FunDefState}(state, not_found_msg = NULL, ...)
+\method{check_body}{FunDefState}(state, not_found_msg = NULL, append = TRUE,
+  ...)
 
 check_call(state, ...)
 }
@@ -37,6 +39,8 @@ function does not have the correct number of arguments.}
 \item{state}{the state to start from}
 
 \item{no_fundef_msg}{Custom message in case the function specified in \code{name} is not a function.}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 
 \item{not_found_msg}{Custom feedback message if function definition was not
 found.}

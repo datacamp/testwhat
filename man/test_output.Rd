@@ -8,11 +8,12 @@
 \title{Check whether the student printed something to the console}
 \usage{
 \method{check_output}{default}(state, regex, fixed = FALSE, trim = FALSE,
-  times = 1, missing_msg = NULL, ...)
+  times = 1, missing_msg = NULL, append = TRUE, ...)
 
 test_output_contains(expr, times = 1, incorrect_msg = NULL)
 
-check_output_expr(state, expr, times = 1, missing_msg = NULL)
+check_output_expr(state, expr, times = 1, missing_msg = NULL,
+  append = TRUE)
 }
 \arguments{
 \item{state}{the state to start from}
@@ -26,6 +27,8 @@ check_output_expr(state, expr, times = 1, missing_msg = NULL)
 \item{times}{how often should the pattern/expression output be found?}
 
 \item{missing_msg}{Custom message in case the pattern or output wasn't found often enough.}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 
 \item{...}{S3 stuff}
 

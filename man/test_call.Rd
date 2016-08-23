@@ -18,14 +18,16 @@ test_function_v2(name, args = NULL, index = 1, eval = TRUE,
   eq_condition = "equivalent", not_called_msg = NULL,
   args_not_specified_msg = NULL, incorrect_msg = NULL)
 
-check_function(state, name, index = 1, not_called_msg = NULL)
+check_function(state, name, index = 1, not_called_msg = NULL,
+  append = TRUE)
 
-check_operator(state, name, index = 1, not_called_msg = NULL)
+check_operator(state, name, index = 1, append = TRUE,
+  not_called_msg = NULL)
 
-check_arg(state, arg, arg_not_specified_msg = NULL)
+check_arg(state, arg, arg_not_specified_msg = NULL, append = TRUE)
 
 \method{check_equal}{ArgumentState}(state, incorrect_msg = NULL,
-  eval = TRUE, eq_condition = "equivalent", ...)
+  eval = TRUE, eq_condition = "equivalent", append = TRUE, ...)
 }
 \arguments{
 \item{name}{name of the function/operator as a string, e.g. \code{"mean"} or \code{"+"}}
@@ -57,6 +59,8 @@ You can specify a vector of arguments with the same length as \code{args}, to ha
 argument-specific custom feedback.}
 
 \item{state}{state to start from (for \code{check_} functions)}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 
 \item{arg}{name of argument to specify (for \code{check_arg})}
 

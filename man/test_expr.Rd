@@ -22,18 +22,23 @@ test_expression_error(expr, no_error_msg = NULL, incorrect_msg = NULL)
 
 check_expr(state, expr)
 
-\method{check_result}{ExprState}(state, error_msg = NULL, ...)
+\method{check_result}{ExprState}(state, error_msg = NULL, append = TRUE,
+  ...)
 
-\method{check_output}{ExprState}(state, error_msg = NULL, ...)
+\method{check_output}{ExprState}(state, error_msg = NULL, append = TRUE,
+  ...)
 
-\method{check_error}{ExprState}(state, no_error_msg = NULL, ...)
+\method{check_error}{ExprState}(state, no_error_msg = NULL, append = TRUE,
+  ...)
 
 \method{check_equal}{ExprResultState}(state, incorrect_msg = NULL,
-  eq_condition = "equivalent", ...)
+  append = TRUE, eq_condition = "equivalent", ...)
 
-\method{check_equal}{ExprOutputState}(state, incorrect_msg = NULL, ...)
+\method{check_equal}{ExprOutputState}(state, incorrect_msg = NULL,
+  append = TRUE, ...)
 
-\method{check_equal}{ExprErrorState}(state, incorrect_msg = NULL, ...)
+\method{check_equal}{ExprErrorState}(state, incorrect_msg = NULL,
+  append = TRUE, ...)
 }
 \arguments{
 \item{expr}{the expression to run}
@@ -51,6 +56,8 @@ error while it should}
 
 \item{error_msg}{custom message in case the expression throws an error while
 it shouldn't}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 
 \item{...}{S3 stuff}
 }

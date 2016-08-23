@@ -8,7 +8,8 @@
 \usage{
 test_student_typed(strings, fixed = TRUE, times = 1, not_typed_msg = NULL)
 
-check_code(state, regex, fixed = FALSE, times = 1, missing_msg = NULL)
+check_code(state, regex, fixed = FALSE, times = 1, missing_msg = NULL,
+  append = TRUE)
 }
 \arguments{
 \item{strings}{A set of strings/regexes that should be in the student code.}
@@ -27,6 +28,8 @@ often enough in the student's submission.}
 
 \item{missing_msg}{Custom feedback in case the pattern is not contained often
 enough in the student's submission.}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 }
 \description{
 Some rudimentary string cleaning is performed to allow for different ways of

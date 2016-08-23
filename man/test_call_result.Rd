@@ -12,15 +12,17 @@
 test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
   not_called_msg = NULL, error_msg = NULL, incorrect_msg = NULL)
 
-\method{check_result}{OperationState}(state, error_msg = NULL, ...)
+\method{check_result}{OperationState}(state, error_msg = NULL,
+  append = TRUE, ...)
 
-\method{check_result}{FunctionState}(state, error_msg = NULL, ...)
+\method{check_result}{FunctionState}(state, error_msg = NULL, append = TRUE,
+  ...)
 
 \method{check_equal}{FunctionResultState}(state, eq_condition = "equivalent",
-  incorrect_msg = NULL, ...)
+  incorrect_msg = NULL, append = TRUE, ...)
 
 \method{check_equal}{OperationResultState}(state, eq_condition = "equivalent",
-  incorrect_msg = NULL, ...)
+  incorrect_msg = NULL, append = TRUE, ...)
 }
 \arguments{
 \item{name}{name of the function whose output you would like to check.}
@@ -36,6 +38,8 @@ test_function_result(name = NULL, index = 1, eq_condition = "equivalent",
 \item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution.}
 
 \item{state}{the state to start from (for \code{check_} functions)}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 
 \item{...}{S3 stuff}
 }

@@ -17,20 +17,20 @@ test_object(name, eq_condition = "equivalent", eval = TRUE,
 test_data_frame(name, columns = NULL, eq_condition = "equivalent",
   undefined_msg = NULL, undefined_cols_msg = NULL, incorrect_msg = NULL)
 
-check_object(state, name, undefined_msg = NULL)
+check_object(state, name, undefined_msg = NULL, append = TRUE)
 
-check_column(state, col, col_missing_msg = NULL)
+check_column(state, col, col_missing_msg = NULL, append = TRUE)
 
-check_element(state, el, el_missing_msg = NULL)
+check_element(state, el, el_missing_msg = NULL, append = TRUE)
 
 \method{check_equal}{ObjectState}(state, incorrect_msg = NULL,
-  eq_condition = "equivalent", ...)
+  append = TRUE, eq_condition = "equivalent", ...)
 
 \method{check_equal}{ObjectColumnState}(state, incorrect_msg = NULL,
-  eq_condition = "equivalent", ...)
+  append = TRUE, eq_condition = "equivalent", ...)
 
 \method{check_equal}{ObjectElementState}(state, incorrect_msg = NULL,
-  eq_condition = "equivalent", ...)
+  append = TRUE, eq_condition = "equivalent", ...)
 }
 \arguments{
 \item{name}{name of the object to test.}
@@ -54,6 +54,8 @@ not the same as in the sample solution.}
 columns of were found in the student's data frame.}
 
 \item{state}{the state to start from}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 
 \item{col}{name of column to check}
 

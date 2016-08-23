@@ -5,18 +5,23 @@
 \alias{test_error}
 \title{Check whether the student's submission threw an error.}
 \usage{
-test_error()
+test_error(incorrect_msg = NULL)
 
-\method{check_error}{default}(state, ...)
+\method{check_error}{default}(state, incorrect_msg = NULL, ...)
 }
 \arguments{
+\item{incorrect_msg}{additional message that is appended to the automatically
+generated feedback message.}
+
 \item{state}{State to start from (for \code{check_error})}
 
 \item{...}{S3 stuff}
 }
 \description{
-With information gathered from the R Backend, detect
-whether the student's submission generated an error.
+With information gathered from the R Backend, detect whether the student's
+submission generated an error. If this is the case a feedback message will be
+generated that contains the R error in a formatted style. You can use
+\code{incorrect_msg} to add a custom message to this error.
 }
 \examples{
 \dontrun{

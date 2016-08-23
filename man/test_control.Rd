@@ -23,11 +23,11 @@ test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
 test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
   not_found_msg = NULL)
 
-check_if_else(state, index = 1, not_found_msg = NULL)
+check_if_else(state, index = 1, not_found_msg = NULL, append = TRUE)
 
-check_while(state, index = 1, not_found_msg = NULL)
+check_while(state, index = 1, not_found_msg = NULL, append = TRUE)
 
-check_for(state, index = 1, not_found_msg = NULL)
+check_for(state, index = 1, not_found_msg = NULL, append = TRUE)
 
 check_cond(state)
 
@@ -35,7 +35,7 @@ check_cond(state)
 
 check_if(state)
 
-check_else(state, not_found_msg = NULL)
+check_else(state, not_found_msg = NULL, append = TRUE)
 }
 \arguments{
 \item{index}{Number of that particular control statement to check}
@@ -55,6 +55,8 @@ check_else(state, not_found_msg = NULL)
 \item{expr_test}{sub-SCT to perform on the expression part (for \code{test_for_loop} or \code{test_while_loop})}
 
 \item{state}{state to start from (for \code{check_} functions)}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
 
 \item{...}{S3 stuff}
 }

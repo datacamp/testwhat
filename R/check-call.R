@@ -24,9 +24,7 @@
 #' You can specify a vector of arguments with the same length as \code{args}, to have
 #' argument-specific custom feedback.
 #' @param append Whether or not to append the feedback to feedback built in previous states
-#' 
 #' @param ... S3 stuff
-#' 
 #' @param state state to start from (for \code{check_} functions)
 #' @param arg_not_specified_msg custom message in case argument was not specified (for \code{check_arg})
 #' @param arg name of argument to specify (for \code{check_arg})
