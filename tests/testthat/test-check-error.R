@@ -51,3 +51,18 @@ test_that("check_error - line of error", {
   fails(output)
   line_info(output, 1, 3)
 })
+
+test_that("check_error - incorrect_msg", {
+  lst <- list()
+  lst$DC_SCT <- "test_error(incorrect_msg = 'additionalmessage')"
+  
+  lst$DC_CODE <- "3 + 3"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "\"a\" + 3"
+  output <- test_it(lst)
+  fb_contains(output, "non-numeric argument to binary operator")
+  fb_contains(output, "additionalmessage")
+  fails(output)  
+})

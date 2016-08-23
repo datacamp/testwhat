@@ -1,11 +1,15 @@
 #' Check whether the student's submission threw an error.
-#'
-#' With information gathered from the R Backend, detect
-#' whether the student's submission generated an error.
-#'
-#' @param state State to start from (for \code{check_error})
-#' @param ... S3 stuff
 #' 
+#' With information gathered from the R Backend, detect whether the student's
+#' submission generated an error. If this is the case a feedback message will be
+#' generated that contains the R error in a formatted style. You can use
+#' \code{incorrect_msg} to add a custom message to this error.
+#' 
+#' @param state State to start from (for \code{check_error})
+#' @param incorrect_msg additional message that is appended to the automatically
+#'   generated feedback message.
+#' @param ... S3 stuff
+#'   
 #' @examples
 #' \dontrun{
 #' # Example student code: x <- 4 + "a"
@@ -16,18 +20,18 @@
 #' # SCT option 2
 #' ex() %>% check_error()
 #' }
-#'
+#' 
 #' @rdname test_error
 
 #' @rdname test_error
 #' @export
-test_error <- function() {
-  ex() %>% check_error()
+test_error <- function(incorrect_msg = NULL) {
+  ex() %>% check_error(incorrect_msg = incorrect_msg)
 }
 
 #' @rdname test_error
 #' @export
-check_error.default <- function(state, ...) {
+check_error.default <- function(state, incorrect_msg = NULL, ...) {
   output_list <- state$get("output_list")
   student_pd <- state$get("student_pd")
   
@@ -44,6 +48,7 @@ check_error.default <- function(state, ...) {
                     "```",
                     error,
                     "```",
+                    ifelse(is.null(incorrect_msg), "", incorrect_msg),
                     sep = "\n")
     
     line_info <- NULL
