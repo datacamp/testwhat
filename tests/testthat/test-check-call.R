@@ -408,8 +408,23 @@ test_that("test_function - S3 functions", {
 
   lst <- list()
   lst$DC_SOLUTION <- "mean(c(1:10, NA), 0.1, TRUE)"
-  lst$DC_CODE <- "mean(c(1:10, NA), 0.1, TRUE)"
+  lst$DC_CODE <- lst$DC_SOLUTION
   lst$DC_SCT <- "test_function('mean', args = c('x', 'trim', 'na.rm'))"
+  output <- test_it(lst)
+  passes(output)
+
+  lst <- list()
+  lst$DC_PEC <- "x <- seq(0, 2*pi, 0.01); y <- sin(x)"
+  lst$DC_SOLUTION <- "plot(y ~ x, main = 'test', lwd = 4)"
+  lst$DC_CODE <- lst$DC_SOLUTION
+  lst$DC_SCT <- "test_function('plot', args = c('formula', 'main', 'lwd'))"
+  output <- test_it(lst)
+  passes(output)
+
+  lst <- list()
+  lst$DC_SOLUTION <- "plot(wt ~ mpg, data = mtcars)"
+  lst$DC_CODE <- lst$DC_SOLUTION
+  lst$DC_SCT <- "test_function('plot', args = c('formula', 'data'))"
   output <- test_it(lst)
   passes(output)
 })
@@ -465,17 +480,47 @@ test_that("test_function - formulas", {
 
 test_that("test_function - plot calls", {
   lst <- list()
-  lst$DC_PEC <- "x <- seq(0, 2*pi, 0.01); y <- sin(x)"
-  lst$DC_SOLUTION <- "plot(y ~ x, main = 'test', lwd = 4)"
-  lst$DC_SCT <- "test_function('plot', args = c('x', 'main', 'lwd'))"
+  lst$DC_PEC <- "df <- data.frame(time = seq(0, 2*pi, 0.01)); df$res <- sin(df$time)"
+  lst$DC_SOLUTION <- "plot(df$time, df$res)"
+  lst$DC_SCT <- "test_or({
+    fun <- ex() %>% check_function('plot')
+    fun %>% check_arg('x') %>% check_equal()
+    fun %>% check_arg('y') %>% check_equal()
+  }, {
+    fun <- ex() %>% override_solution('plot(res ~ time, data = df)') %>% check_function('plot')
+    fun %>% check_arg('formula') %>% check_equal()
+    fun %>% check_arg('data') %>% check_equal()
+  }, {
+    ex() %>% override_solution('plot(df$res ~ df$time)') %>% check_function('plot') %>% check_arg('formula') %>% check_equal()
+  })"
 
-  lst$DC_CODE <- "plot(x ~ y, main = 'test', lwd = 4)"
-  output <- test_it(lst)
-  fails(output)
-
-  lst$DC_CODE <- "plot(y ~ x, main = 'test', lwd = 4)"
+  lst$DC_CODE <- "plot(df$time, df$res)"
   output <- test_it(lst)
   passes(output)
+
+  lst$DC_CODE <- "plot(df[['time']], df[['res']])"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "plot(res ~ time, data = df)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "plot(df$res ~ df$time)"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_CODE <- "plot(df$res, df$time)"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "plot(df$time ~ df$res)"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "plot(time ~ res, data = df)"
+  output <- test_it(lst)
+  fails(output)
 })
 
 test_that("test_function - ...", {
@@ -531,6 +576,3 @@ test_that("test_function works appropriately inside test_corect", {
   fails(output)
   line_info(output, 2, 2)
 })
-
-
-

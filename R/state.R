@@ -212,3 +212,9 @@ decorate_state <- function(state, stud, sol, el = NULL) {
               solution_code = sol[[el]]$code)  
   }
 }
+
+override_solution <- function(state, code) {
+  sub_state <- SubState$new(state)
+  sub_state$set(solution_code = code, solution_pd = build_pd(code))
+  return(sub_state)
+}

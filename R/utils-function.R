@@ -85,7 +85,7 @@ standardize_call <- function(call, call_string, env) {
   
   e <- try(match.call(f, call), silent = TRUE)
   
-  e <- find_S3_call(e, env = env)
+  e <- find_S3_call(matched_call = e, call = call, env = env)
   
   if (inherits(e, "try-error")) {
     check_that(failure(), 
@@ -98,7 +98,7 @@ standardize_call <- function(call, call_string, env) {
 }
 
 #' @importFrom utils getAnywhere methods
-find_S3_call <- function(matched_call, env) {
+find_S3_call <- function(matched_call, call, env) {
   if (inherits(matched_call, "try-error")) {
     return(matched_call)
   }
@@ -115,7 +115,7 @@ find_S3_call <- function(matched_call, env) {
     if (inherits(call_class, "try-error")) {
       return(matched_call)
     }
-    call_dispatched <- paste(call_method,call_class, sep = ".")
+    call_dispatched <- paste(call_method, call_class, sep = ".")
     find_call <- rep(FALSE, length(met))
     for (one_call in call_dispatched) {
       find_call <- met == one_call
@@ -141,11 +141,7 @@ find_S3_call <- function(matched_call, env) {
     } else {
       f <- args(getAnywhere(call_dispatched)[1])
     }
-    # Nothing is done with this structure yet
-    return(try(match.call(f, matched_call), silent = TRUE))
-    #     return(structure(try(match.call(f, matched_call), silent = TRUE),
-    #                      s3_class = call_dispatched,
-    #                      s3_arg_name = as.character(names(matched_call)[[2]])))
+    return(try(match.call(f, call), silent = TRUE))
   }
 }
 
