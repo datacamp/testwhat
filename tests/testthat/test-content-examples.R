@@ -95,7 +95,6 @@ test_that("exercise ggplot2 - v2", {
   passes(output)
 })
 
-
 ## NOT FIXED!
 # test_that("exercise cleaning data", {
 #   lst <- list()
