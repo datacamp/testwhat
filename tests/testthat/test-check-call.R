@@ -225,40 +225,46 @@ test_that("test_function - eq_condition", {
 
 test_that("test_function - eval", {
   lst <- list()
-  lst$DC_CODE <- "df.equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  var(df.equiv)\n  df.not_equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  lm(df.not_equiv)"
-  lst$DC_SOLUTION <- "df.equiv <- data.frame(c = c(1, 2, 3), d = c(4, 5, 6))\n  var(df.equiv)\n  df.not_equiv <- data.frame(c = c(7, 8, 9), d = c(4, 5, 6))\n  lm(df.not_equiv)"
-
-  lst$DC_SCT <- "test_function(\"var\", \"x\")"
-  output <- test_it(lst)
-  passes(output)
-
-  lst$DC_SCT <- "test_function(\"var\", eval = FALSE)"
-  output <- test_it(lst)
-  passes(output)
-
-  lst$DC_SCT <- "test_function(\"lm\", eval = FALSE)"
-  output <- test_it(lst)
-  passes(output)
-
-  lst$DC_SCT <- "test_function(\"var\", eval = FALSE, eq_condition = \"equal\")"
-  output <- test_it(lst)
-  passes(output)
-
-  lst$DC_SCT <- "test_function(\"lm\", eval = FALSE, eq_condition = \"equal\")"
-  output <- test_it(lst)
-  passes(output)
-
-  lst$DC_SCT <- "test_function(\"lm\", \"formula\")"
+  lst$DC_SOLUTION <- "mean(1:3)"
+  
+  # eval = TRUE (the default)
+  lst$DC_SCT <- "test_function('mean', args = 'x')"
+  lst$DC_CODE <- "mean(1:2)"
   output <- test_it(lst)
   fails(output)
-
-  lst$DC_SCT <- "test_function(\"var\", \"x\", eq_condition = \"equal\")"
+  lst$DC_CODE <- "mean(c(1, 2, 3))"
+  output <- test_it(lst)
+  passes(output)
+  lst$DC_CODE <- "mean(1:3)"
+  output <- test_it(lst)
+  passes(output)
+  
+  # eval = FALSE
+  lst$DC_SCT <- "test_function('mean', args = 'x', eval = FALSE)"
+  lst$DC_CODE <- "mean(1:2)"
   output <- test_it(lst)
   fails(output)
-
-  lst$DC_SCT <- "test_function(\"lm\", \"formula\", eq_condition = \"equal\")"
+  lst$DC_CODE <- "mean(c(1, 2, 3))"
   output <- test_it(lst)
   fails(output)
+  lst$DC_CODE <- "mean(1 : 3)"
+  output <- test_it(lst)
+  passes(output)
+  lst$DC_CODE <- "mean(1:3)"
+  output <- test_it(lst)
+  passes(output)
+  
+  # eval = NA
+  lst$DC_SCT <- "test_function('mean', args = 'x', eval = NA)"
+  lst$DC_CODE <- "mean(1:2)"
+  output <- test_it(lst)
+  passes(output)
+  lst$DC_CODE <- "mean(c(1, 2, 3))"
+  output <- test_it(lst)
+  passes(output)
+  lst$DC_CODE <- "mean(1:3)"
+  output <- test_it(lst)
+  passes(output)
 })
 
 # test_that("test_function errs correctly", {})
