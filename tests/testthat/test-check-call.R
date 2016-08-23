@@ -33,24 +33,24 @@ test_that("check_function - step by step - append", {
               DC_SCT = "fun <- ex() %>% check_function('mean', append = FALSE)
                         fun %>% check_arg('x', append = FALSE) %>% check_equal(append = FALSE)
                         fun %>% check_arg('na.rm', append = FALSE) %>% check_equal(append = FALSE)")
-  
+
   lst$DC_CODE <- ""
   output <- test_it(lst)
   fails(output)
   fb_contains(output, "Have you called <code>mean()</code>")
-  
+
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
   fails(output)
   fb_excludes(output, "Check your call of <code>mean()</code>")
   fb_contains(output, "Did you specify the argument <code>na.rm</code>?")
-  
+
   lst$DC_CODE <- "mean(1:3, na.rm = FALSE)"
   output <- test_it(lst)
   fails(output)
   fb_excludes(output, "Check your call of <code>mean()</code>.")
   fb_contains(output, "Did you correctly specify the argument <code>na.rm</code>?")
-  
+
   lst$DC_CODE <- "mean(1:3, na.rm = TRUE)"
   output <- test_it(lst)
   passes(output)
@@ -96,7 +96,7 @@ test_that("test_function step by step - custom", {
   fails(output)
   fb_contains(output, "Incorrect")
   fb_excludes(output, "Check your call of <code>mean()</code>")
-  
+
   lst$DC_CODE <- "mean(1:3, na.rm = TRUE)"
   output <- test_it(lst)
   passes(output)
@@ -463,6 +463,21 @@ test_that("test_function - formulas", {
   passes(output)
 })
 
+test_that("test_function - plot calls", {
+  lst <- list()
+  lst$DC_PEC <- "x <- seq(0, 2*pi, 0.01); y <- sin(x)"
+  lst$DC_SOLUTION <- "plot(y ~ x, main = 'test', lwd = 4)"
+  lst$DC_SCT <- "test_function('plot', args = c('x', 'main', 'lwd'))"
+
+  lst$DC_CODE <- "plot(x ~ y, main = 'test', lwd = 4)"
+  output <- test_it(lst)
+  fails(output)
+
+  lst$DC_CODE <- "plot(y ~ x, main = 'test', lwd = 4)"
+  output <- test_it(lst)
+  passes(output)
+})
+
 test_that("test_function - ...", {
   lst <- list()
   lst$DC_SOLUTION <- "sum(1, 2, 3, 4, NA, na.rm = TRUE)"
@@ -476,11 +491,19 @@ test_that("test_function - ...", {
   output <- test_it(lst)
   passes(output)
 
+  lst$DC_CODE <- "sum(na.rm = TRUE, 1, 1 + 1, 1 + 1 + 1, 4, NA)"
+  output <- test_it(lst)
+  passes(output)
+
   lst$DC_CODE <- "sum(1, 2, 3, 4, NA, na.rm = FALSE)"
   output <- test_it(lst)
   fails(output, mess_patt = "Check your call of <code>sum\\(\\)</code>\\. Did you correctly specify the argument <code>na\\.rm</code>")
 
   lst$DC_CODE <- "sum(1, 2, 3, NA, na.rm = TRUE)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Did you correctly specify the arguments that are matched to <code>...</code>")
+
+  lst$DC_CODE <- "sum(1, 2, 4, 3, NA, na.rm = TRUE)"
   output <- test_it(lst)
   fails(output, mess_patt = "Did you correctly specify the arguments that are matched to <code>...</code>")
 
