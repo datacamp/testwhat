@@ -42,7 +42,7 @@ test_that("exercise intermediate r", {
   lst$DC_SCT <- "test_output_contains('invisible(lapply(linkedin,print))')"
   output <- test_it(lst)
   fails(output)
-  
+
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)

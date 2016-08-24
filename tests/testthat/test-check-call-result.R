@@ -1,4 +1,4 @@
-context("test_call_result - functions")
+context("check_call_result - functions")
 
 test_that("test call result - functions - step by step", {
   lst <- list()
@@ -157,7 +157,7 @@ test_that("test call result - functions - indexing", {
 })
 
 
-context("test_call_result - operators")
+context("check_call_result - operators")
 
 test_that("check_operator - step by step", {
   lst <- list()

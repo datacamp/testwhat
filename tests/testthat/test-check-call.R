@@ -1,4 +1,4 @@
-context("test_function")
+context("check_function")
 
 test_that("check_function - step by step", {
   lst <- list(DC_SOLUTION = "mean(1:3, na.rm = TRUE)",

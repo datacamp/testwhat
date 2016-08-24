@@ -68,8 +68,12 @@ test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
 #' @rdname test_output
 #' @export
 check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
-  expr_output <- paste(tryCatch(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), 
-                                error = function(e) e$message), collapse = "\n")
+  
+  expr_output <- try(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), silent = TRUE)
+  if (inherits(expr_output, "try-error")) {
+    expr_output <- ""
+  }
+  expr_output <- paste(expr_output, collapse = "\n")
   
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "output",
@@ -80,7 +84,7 @@ check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append
                           append = append,
                           pd = NULL)
   
-  console_output <- trim_output(convert_output_list(state$get("output_list")))
+  console_output <- trim_output(convert_output_list(state$get("output_list"), output_only = TRUE))
   num_hits <- get_num_hits(regex = trim_output(expr_output), x = console_output, fixed = TRUE)
   check_that(is_gte(num_hits, times), feedback = regex_state$details)
   return(regex_state)
@@ -88,8 +92,9 @@ check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append
 
 # Helper functions
 
-convert_output_list <- function(x) {
-  output_indices <- which(sapply(x, `[[`, "type") %in% c("output", "r-message", "r-warning", "r-error"))
+convert_output_list <- function(x, output_only = FALSE) {
+  types <- if(output_only) "output" else c("output", "r-message", "r-warning", "r-error")
+  output_indices <- which(sapply(x, `[[`, "type") %in% types)
   paste(sapply(x[output_indices], `[[`, "payload"), collapse = "\n")
 }
 

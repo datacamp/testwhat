@@ -46,7 +46,7 @@ test_that("check_output - basic", {
   fails(output, 'Not correct')
 })
 
-test_that("check_output_regex - errors", {
+test_that("check_output - errors", {
   lst <- list()
   lst$DC_ECHO <- TRUE
 
@@ -72,11 +72,11 @@ context("check_output_expr")
 test_that("check_output_expr - basic", {
   lst <- list()
   lst$DC_SCT <- "ex() %>% check_output_expr('print(123)')"
-  
+
   lst$DC_CODE <- "print(12)"
   output <- test_it(lst)
   fails(output, mess_patt = "Is the output of <code>print\\(123\\)</code> in your script")
-  
+
   lst$DC_CODE <- "print(123)"
   output <- test_it(lst)
   passes(output)
@@ -85,11 +85,11 @@ test_that("check_output_expr - basic", {
 test_that("check_output_expr - basic - custom", {
   lst <- list()
   lst$DC_SCT <- "ex() %>% check_output_expr('print(123)', missing_msg = 'missing')"
-  
+
   lst$DC_CODE <- "print(12)"
   output <- test_it(lst)
   fails(output, mess_patt = "Missing")
-  
+
   lst$DC_CODE <- "print(123)"
   output <- test_it(lst)
   passes(output)
@@ -98,11 +98,11 @@ test_that("check_output_expr - basic - custom", {
 test_that("check_output_expr - times", {
   lst <- list()
   lst$DC_SCT <- "ex() %>% check_output_expr('print(123)', times = 3)"
-  
+
   lst$DC_CODE <- "print(123); print(123)"
   output <- test_it(lst)
   fails(output)
-  
+
   lst$DC_CODE <- "print(123); print(123); print(123)"
   output <- test_it(lst)
   passes(output)
@@ -119,12 +119,13 @@ test_that("check_output_expr - error", {
 test_that("check_output_expr - backwards compatatibility", {
   lst <- list()
   lst$DC_SCT <- "test_output_contains('print(123)')"
-  
+
   lst$DC_CODE <- "print(12)"
   output <- test_it(lst)
   fails(output, mess_patt = "Is the output of <code>print\\(123\\)</code> in your script")
-  
+
   lst$DC_CODE <- "print(123)"
   output <- test_it(lst)
   passes(output)
 })
+
