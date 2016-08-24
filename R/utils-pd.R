@@ -1,9 +1,7 @@
 #' @importFrom utils getParseData
 build_pd <- function(code) {
-  if(is.null(code)) {
-    stop("code can't be NULL if you want to parse it")
-  }
-  getParseData(parse(text = code, keep.source = TRUE), includeText = TRUE)  
+  tryCatch(getParseData(parse(text = code, keep.source = TRUE), includeText = TRUE),
+           error = function(e) return(NULL))
 }
 
 get_children <- function(pd, ids) {
@@ -17,19 +15,6 @@ get_children <- function(pd, ids) {
   }
   sapply(ids, childs)
   return(all_childs)
-}
-
-get_line_info <- function(pd) {
-  if (is.null(pd)) {
-    return(NULL)
-  }
-  id <- pd$id[!(pd$parent %in% pd$id)]
-  if (length(id) > 1) {
-    return(NULL)
-  }
-  x <- as.list(pd[pd$id == id, c("line1", "col1", "line2", "col2")])
-  names(x) <- c("line_start", "column_start", "line_end", "column_end")
-  x
 }
 
 get_sub_pd <- function(pd, ids) {
@@ -49,11 +34,7 @@ extract_assignments <- function(pd, name) {
     valid_ids <- get_valid_ids(pd, assign, symbols)
     if(is.null(valid_ids)) next
     sub_pd <- get_sub_pd(pd, ids = valid_ids)
-    line_info <- list(line_start = min(sub_pd$line1), 
-                      column_start = min(sub_pd$col1),
-                      line_end = max(sub_pd$line2),
-                      column_end = max(sub_pd$col2))
-    sub_pds <- c(sub_pds, list(list(pd = sub_pd, line_info = line_info)))
+    sub_pds <- c(sub_pds, list(sub_pd))
   }
   
   return(sub_pds)
@@ -96,9 +77,9 @@ get_valid_ids <- function(pd, assign, symbols) {
 extract_object_assignment <- function(pd, name) {
   sub_pds <- extract_assignments(pd, name)
   if(length(sub_pds) == 1) {
-    return(sub_pds[[1]]$line_info)
+    return(sub_pds[[1]])
   } else {
-    return(NULL)
+    return(NA)
   }
 }
 
@@ -107,7 +88,7 @@ extract_function_definition <- function(pd, name) {
   # body of the function is the last brother of the function keyword
   sub_pds <- extract_assignments(pd, name)
   if(length(sub_pds) == 1) {
-    pd <- sub_pds[[1]]$pd
+    pd <- sub_pds[[1]]
     function_parent <- pd$parent[pd$token == "FUNCTION"]
     if (length(function_parent) == 1) {
       last_brother <- tail(pd$id[pd$parent == function_parent], 1)

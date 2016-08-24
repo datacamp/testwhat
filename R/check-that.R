@@ -24,21 +24,14 @@ check_that <- function(code, feedback, env = parent.frame()) {
   
   # feedback can be a character string
   if (is.character(feedback)) {
-    feedback <- list(message = feedback)
-  } 
-  
-  if (!is.list(feedback) || 
-      !("message" %in% names(feedback)) || 
-      is.null(feedback$message) || 
-      !is.character(feedback$message) || 
-      nchar(feedback$message) == 0) {
-    stop("The feedback you specified in check_that() isn't in the correct format")
+    feedback <- list(list(message = feedback))
   }
+  
+  stopifnot(is.list(feedback), is.list(feedback[[1]]))
 
   res <- try(eval(code, envir = env), silent = TRUE)
   if (!isTRUE(res)) {
-    get_rep()$set_feedback(c(feedback, list(tags = tw$get("tags"))))
-    stop(sct_failed_msg)
+    get_rep()$register_feedback(feedback)
   }
 }
 
@@ -105,8 +98,8 @@ is_equal <- function(x, y, eq_condition = "equivalent") {
 #' @export
 is_equal.default <- function(x, y, eq_condition = "equivalent") {
   eq_fun <- switch(eq_condition,
-                   equivalent = function(x, y) isTRUE(all.equal(x, y, check.attributes = FALSE)),
-                   equal = function(x, y) isTRUE(all.equal(x, y)),
+                   equivalent = function(x, y) isTRUE(try(all.equal(x, y, check.attributes = FALSE), silent = TRUE)),
+                   equal = function(x, y) isTRUE(try(all.equal(x, y), silent = TRUE)),
                    identical = identical,
                    stop(invalid_eq_condition))
   eq_fun(x, y)

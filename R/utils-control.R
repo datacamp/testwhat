@@ -37,13 +37,4 @@ extract_while <- function(pd) {
   extract_control(pd, keyword = "WHILE", elnames = c("cond_part", "expr_part"))
 }
 
-prepare_tw <- function(stud, sol, part) {
-  tw$set(student_pd = stud[[part]][["pd"]])
-  tw$set(solution_pd = sol[[part]][["pd"]])
-  tw$set(student_code = stud[[part]][["code"]])
-  tw$set(solution_code = sol[[part]][["code"]])
-  tw$set(fun_usage = NULL)
-}
-
-
 

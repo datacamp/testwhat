@@ -9,21 +9,25 @@ check_defined <- function(name, sol_env) {
 
 check_sufficient <- function(calls, index, name) {
   if (index > length(calls)) {
-    stop(sprintf("Fix either the index argument or the solution code; currently, there aren't %s calls of %s() available in the solution.", index, name))
+    stop(sprintf("Fix either the index argument or the solution code; currently, there aren't %s calls of %s available in the solution.", index, name))
   }
 }
 
+#' @importFrom magrittr %>%
+#' @export
+magrittr::`%>%`
+
 #' Get solution environment (backwards compatbility)
 #' @export
-get_solution_env <- function() { tw$get("solution_env") }
+get_solution_env <- function() { ex()$get("solution_env") }
 
 #' Get solution environment (backwards comp)
 #' @export
-get_student_code <- function() { tw$get("student_code") }
+get_student_code <- function() { ex()$get("student_code") }
 
 #' Get solution environment (backwards comp)
 #' @export
-get_solution_code <- function() { tw$get("solution_code") }
+get_solution_code <- function() { ex()$get("solution_code") }
 
 tw_accessors <- function() {
   tw_data <- list()
@@ -62,10 +66,6 @@ merge_list <- function(x, y) {
 
 tw <- tw_accessors()
 
-init_tags <- function(...) {
-  tw$set(tags = list(...))
-}
-
-set_tags <- function(...) {
-  tw$set(tags = merge_list(tw$get("tags"), list(...)))
+`%||%` <- function(a, b) {
+  if (!is.null(a)) a else b
 }

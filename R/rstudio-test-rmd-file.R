@@ -13,20 +13,17 @@
 test_rmd_file <- function(code, 
                           student_file = NULL, 
                           solution_file = NULL) {
+  old_state <- ex()
+  on.exit(tw$set(state = old_state))
+  test_env <- old_state$get("test_env")
   
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
-  test_env <- tw$get("test_env")
-  
-  init_tags(fun = "test_rmd_file")
-  
-  # get the entire student code and solution code and reset it on exit.
-  on.exit({ 
-    tw$set(student_code = student_code)
-    tw$set(solution_code = solution_code)
-    tw$set(student_ds = NULL)
-    tw$set(solution_ds = NULL)
-  })
+  tw$set(state = get_rmd_file(old_state, student_file, solution_file))
+  eval(substitute(code), envir = test_env)
+}
+
+get_rmd_file <- function(state, student_file, solution_file) {
+  student_code <- state$get("student_code")
+  solution_code <- state$get("solution_code")
   
   if (is.null(student_file)) {
     student_file <- names(student_code)[grepl(".rmd|.Rmd", names(student_code))]
@@ -34,22 +31,24 @@ test_rmd_file <- function(code,
       stop("no or too many .Rmd files were found in the student code.")
     }
   }
+  
   if (is.null(solution_file)) {
     solution_file <- names(solution_code)[grepl(".rmd|.Rmd", names(solution_code))]
     if (length(solution_file) != 1) {
       stop("no or too many .Rmd files were found in the solution code.")
     }
   }
-
+  
   if (!student_file %in% names(student_code)) {
     stop("student file name was not found in student code")
-  } 
+  }
+  
   if (!solution_file %in% names(solution_code)) {
     stop("solution file name was not found in solution code")
   }
   
-  tw$set(student_code = student_code[student_file])
-  tw$set(solution_code = solution_code[solution_file])
-  
-  eval(substitute(code), envir = test_env)
+  file_state <- SubState$new(state)
+  file_state$set(student_code = student_code[student_file],
+                 solution_code = solution_code[solution_file])
+  return(file_state)
 }

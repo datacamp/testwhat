@@ -26,22 +26,22 @@
 #'
 #' @export
 test_mc <- function(correct, no_selection_msg = NULL, feedback_msgs = NULL) {
-  init_tags(fun = "test_mc")
-  
+
   # see if DM.result exists
   if (is.null(no_selection_msg)) {
     no_selection_msg <- "Please select one of the options!"
   }
   
-  check_that(is_true(exists("DM.result", envir = tw$get("student_env"))), no_selection_msg)
-  result <- get("DM.result", envir =  tw$get("student_env"))
+  check_that(is_true(exists("DM.result", envir = ex()$get("student_env"))), feedback = no_selection_msg)
+  result <- get("DM.result", envir = ex()$get("student_env"))
   
   # see if result is correct
   if (!is.null(feedback_msgs) && is.na(feedback_msgs[result])) {
     stop("There is no feedback message available for this user input! Make sure you define enough feedback messages.")
   }
   
-  check_that(is_true(result %in% correct), feedback = ifelse(is.null(feedback_msgs), "Your answer is incorrect. Try again.", feedback_msgs[result]))
+  check_that(is_true(result %in% correct), 
+             feedback = ifelse(is.null(feedback_msgs), "Your answer is incorrect. Try again.", feedback_msgs[result]))
 
   success_msg(ifelse(is.null(feedback_msgs), "Good job! Continue to the next exercise.", feedback_msgs[correct]))
 }

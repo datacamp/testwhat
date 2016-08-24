@@ -23,28 +23,33 @@ collapse_funs <- function(x, conn = " and ") {
 
 #' Specify the language for the automated feedback
 #' 
-#' @param lang shorthand notation for the language. Currently, "en", "fr" and "es" are supported
+#' Functionality for different languages is no longer supported
+#' 
+#' @param lang shorthand notation for the language.
 #' @export
-set_language <- function(lang = c("en", "fr", "es")) {
-  lang <- match.arg(lang)
-  tw$set(language = lang)
+set_language <- function(lang) {
+  message("Different languages are no longer supported in testwhat")
 }
 
-reset_language <- function() {
-  tw$set(language = NULL)
-}
-
-get_language <- function() {
-  lang <- tw$get("language")
-  ifelse(is.null(lang), "en", lang)
-}
-
-get_num <- function(index) {
+get_ord <- function(index) {
   switch(index,
          "1" = "first", "2" = "second",
          "3" = "third", "4" = "fourth",
          "5" = "fifth", "6" = "sixth",
          "7" = "seventh", sprintf("%ith", index))
+}
+
+get_num <- function(index) {
+  switch(index,
+         "1" = "one", "2" = "two",
+         "3" = "three", "4" = "four",
+         "5" = "five", sprintf("%i", index)) 
+}
+
+get_times <- function(index) {
+  switch(index,
+         "1" = "", "2" = " twice",
+         sprintf(" %s times", get_num(index)))
 }
 
 trunc_str <- function(x,start="c") {

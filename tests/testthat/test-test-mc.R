@@ -1,5 +1,4 @@
 context("test_mc")
-source("helpers.R")
 
 test_that("test_mc works", {
   lst <- list()
@@ -8,7 +7,7 @@ test_that("test_mc works", {
   
   lst$DC_SCT <- "test_mc(2, feedback_msgs = c('this is the WRONG answer', 'this is the CORRECT answer'))"
   output <- test_it(lst)
-  passes(output, mess_patt = "this is the CORRECT answer")
+  passes(output, mess_patt = "This is the CORRECT answer")
   
   lst$DC_SCT <- "test_mc(2)"
   output <- test_it(lst)
@@ -16,7 +15,7 @@ test_that("test_mc works", {
   
   lst$DC_SCT <- "test_mc(1, feedback_msgs = c('this is the CORRECT answer', 'this is the WRONG answer'))"
   output <- test_it(lst)
-  fails(output, mess_patt = "this is the WRONG answer")
+  fails(output, mess_patt = "This is the WRONG answer")
   
   lst$DC_SCT <- "test_mc(1)"
   output <- test_it(lst)

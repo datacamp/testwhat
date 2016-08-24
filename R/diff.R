@@ -1,13 +1,12 @@
 build_diff <- function(sol, stud, ...) {
   if (isTRUE(all.equal(stud, tryerrorstring))) {
-    return(" Evaluating the expression you specified caused an error.")
+    return("evaluating the expression you specified caused an error.")
   }
-  res <- get_diff(sol, stud, ...)
-  if (is.null(res)) {
-    return(NULL)
+  diff <- get_diff(sol, stud, ...)
+  if(is.null(diff)) {
+    return("")
   } else {
-    # capitalize + space in front
-    return(paste0(" ", toupper(substring(res, 1, 1)), substring(res, 2)))
+    return(diff)
   }
 }
 

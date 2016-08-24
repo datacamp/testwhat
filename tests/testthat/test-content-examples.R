@@ -1,5 +1,4 @@
 context("content_examples")
-source("helpers.R")
 
 test_that("exercise intermediate R", {
   lst <- list()
@@ -37,10 +36,75 @@ test_what(expect_true(result_one["by"]), feedback = "Add a column total by refer
 
 test_that("exercise intermediate r", {
   lst <- list()
+  lst$DC_PEC <- "linkedin <- c(16, 9, 13, 5, 2, 17, 14)"
+  lst$DC_SOLUTION <- "for (li in linkedin) { print(li) }"
+  lst$DC_CODE <- "for (li in linkedin) { print(li + 1) }"
+  lst$DC_SCT <- "test_output_contains('invisible(lapply(linkedin,print))')"
+  output <- test_it(lst)
+  fails(output)
+
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("exercise intermediate r - 2", {
+  lst <- list()
   lst$DC_PEC <- 'load(url("http://s3.amazonaws.com/assets.datacamp.com/production/course_753/datasets/chapter2.RData"))'
   lst$DC_CODE <- 'str(logs)\nlogs[[11]]$detaidls\nclass(logs[[1]]$timestamp)'
   lst$DC_SOLUTION <- lst$DC_CODE
   lst$DC_SCT <- 'test_function("class", "x", incorrect_msg = "Have you passed the `timestamp` component of `logs[[1]]` to `class()`?")'
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("exercise ggplot2 - v1", {
+  lst <- list()
+  lst$DC_PEC <- "library(ggplot2)"
+  lst$DC_SCT <- "
+test_function_v2('qplot', 'data', index = 1)
+test_function_v2('qplot', 'x', eval = FALSE, index = 1)
+test_function_v2('qplot', 'data', index = 2)
+test_function_v2('qplot', 'x', eval = FALSE, index = 2)
+test_function_v2('qplot', 'y', eval = FALSE, index = 2)
+test_function_v2('qplot', 'data', index = 3)
+test_function_v2('qplot', 'x', eval = FALSE, index = 3)
+test_function_v2('qplot', 'y', eval = FALSE, index = 3)
+test_function_v2('qplot', 'geom', eval = FALSE, index = 3)
+test_error()
+success_msg('Good job!')
+  "
+  lst$DC_SOLUTION <- "
+qplot(factor(cyl), data = mtcars)
+qplot(factor(cyl), factor(vs), data = mtcars)
+qplot(factor(cyl), factor(vs), data = mtcars, geom = 'jitter')
+  "
+  lst$DC_CODE <- lst$DC_SOLUTION
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("exercise ggplot2 - v2", {
+  lst <- list()
+  lst$DC_PEC <- "library(ggplot2)"
+  lst$DC_SCT <- "
+  test_function_v2('qplot', args = c('data', 'x'), eval = c(T, F), index = 1)
+  test_function_v2('qplot', c('data', 'x', 'y'), eval = c(T, F, F), index = 2)
+  test_function_v2('qplot', c('data', 'x', 'y','geom'), eval = c(T, F, F, F), index = 3)
+  test_error()
+  success_msg('Good job!')
+  "
+  lst$DC_SOLUTION <- "
+  # qplot() with x only
+  qplot(factor(cyl), data = mtcars)
+
+  # qplot() with x and y
+  qplot(factor(cyl), factor(vs), data = mtcars)
+
+  # qplot() with geom set to jitter manually
+  qplot(factor(cyl), factor(vs), data = mtcars, geom = 'jitter')
+  "
+  lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
 })

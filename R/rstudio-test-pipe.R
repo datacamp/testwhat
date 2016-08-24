@@ -11,17 +11,8 @@
 #'
 #' @export
 test_pipe <- function(num = 1, absent_msg = NULL, insuf_msg = NULL) {
-
-  student_code <- tw$get("student_code")
-  init_tags(fun = "test_pipe")
-
-  where.is.regex = gregexpr(pattern = '%>%', text = student_code, fixed = TRUE)
-  if (is.null(absent_msg)) {
-    absent_msg = "You did not use the pipe operator at all. Do this and see how your code simplifies!"
-  }
-  check_that(is_false(any(where.is.regex[[1]] == (-1))), feedback = list(message = absent_msg))
   if (is.null(insuf_msg)) {
     insuf_msg = sprintf("You should use the pipe operator at least %i times in total in your solution code",num)
   }
-  check_that(is_true(length(where.is.regex[[1]]) >= num), feedback = list(message =  insuf_msg))
+  ex() %>% check_code(regex = "%>%", times = num, missing_msg = insuf_msg)
 }

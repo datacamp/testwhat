@@ -1,5 +1,4 @@
 context("test_library_function")
-source("helpers.R")
 
 test_that("test_library_function works 1", {
   lst <- list()
@@ -11,7 +10,7 @@ test_that("test_library_function works 1", {
   
   lst$DC_SCT <- "test_library_function(\"yaml\", not_called_msg = \"blieblabloe\")"
   output <- test_it(lst)
-  fails(output, mess_patt = "blieblabloe")
+  fails(output, mess_patt = "Blieblabloe")
 })
 
 test_that("test_library_function works 2", {

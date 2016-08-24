@@ -1,5 +1,4 @@
 context("test_chunk_options")
-source("helpers.R")
 
 test_that("test_chunk_options works", {
   lst <- list()

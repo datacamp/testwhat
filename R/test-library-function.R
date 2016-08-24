@@ -27,17 +27,15 @@
 test_library_function <- function(package,
                           not_called_msg = NULL, 
                           incorrect_msg = NULL) {
-  
-  student_code <- tw$get("student_code")
-  init_tags(fun = "test_library_function")
-  
+
   if(is.null(not_called_msg)) {
     not_called_msg <- sprintf("Make sure to call the <code>library()</code> function to load the <code>%s</code> package", package)
   }
+
   if(is.null(incorrect_msg)) {
     incorrect_msg <- sprintf("Have you correctly called the <code>library()</code> function to load the <code>%s</code> package?", package)
   }
   
-  check_that(is_true(grepl("(library|require)\\(", student_code)), not_called_msg)
-  check_that(is_true(grepl(sprintf("(library|require)\\s*\\(\\s*[\"']?%s[\"']?\\s*\\)",package), student_code)), incorrect_msg)
+  ex() %>% check_code(regex = "(library|require)\\(", missing_msg = not_called_msg, append = is.null(not_called_msg))
+  ex() %>% check_code(regex = sprintf("(library|require)\\s*\\(\\s*[\"']?%s[\"']?\\s*\\)",package), missing_msg = incorrect_msg, append = is.null(incorrect_msg))
 }

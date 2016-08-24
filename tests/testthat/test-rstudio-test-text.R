@@ -1,5 +1,4 @@
 context("test_text")
-source("helpers.R")
 
 test_that("test_text works", {
   lst <- list()
@@ -60,28 +59,28 @@ test_that("test_text works", {
     
     Wowww."))
   
-  lst$DC_SCT <- "test_rmd_group(1, test_text(\"test\"))"
+  lst$DC_SCT <- "test_rmd_group(1, test_text('test'))"
   output <- test_it(lst)
   passes(output)
   
-  lst$DC_SCT <- "test_rmd_group(1, test_text(\"test\", freq = 2))"
+  lst$DC_SCT <- "test_rmd_group(1, test_text('test', freq = 2))"
   output <- test_it(lst)
   passes(output)
   
-  lst$DC_SCT <- "test_rmd_group(1, test_text(\"good\", format = \"bold\"))"
+  lst$DC_SCT <- "test_rmd_group(1, test_text('good', format = 'bold'))"
   output <- test_it(lst)
   passes(output)
   
-  lst$DC_SCT <- "test_rmd_group(1, test_text(\"rest\", not_called_msg = \"not calllled\"))"
+  lst$DC_SCT <- "test_rmd_group(1, test_text('rest', not_called_msg = 'not calllled'))"
   output <- test_it(lst)
-  fails(output, mess_patt = "not calllled")
+  fails(output, mess_patt = "Not calllled")
   
-  lst$DC_SCT <- "test_rmd_group(1, test_text(\"good\", freq = 2, not_called_msg = \"not called twice\"))"
+  lst$DC_SCT <- "test_rmd_group(1, test_text('good', freq = 2, not_called_msg = 'not called twice'))"
   output <- test_it(lst)
-  fails(output, mess_patt = "not called twice")
+  fails(output, mess_patt = "Not called twice")
   
-  lst$DC_SCT <- "test_rmd_group(1, test_text(\"good\", format = \"parentheses\", incorrect_msg = \"that is not correct\"))"
+  lst$DC_SCT <- "test_rmd_group(1, test_text('good', format = 'parentheses', incorrect_msg = 'that is not correct'))"
   output <- test_it(lst)
-  fails(output, mess_patt = "that is not correct")
+  fails(output, mess_patt = "That is not correct")
 })
 

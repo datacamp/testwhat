@@ -4,12 +4,12 @@
 \alias{set_language}
 \title{Specify the language for the automated feedback}
 \usage{
-set_language(lang = c("en", "fr", "es"))
+set_language(lang)
 }
 \arguments{
-\item{lang}{shorthand notation for the language. Currently, "en", "fr" and "es" are supported}
+\item{lang}{shorthand notation for the language.}
 }
 \description{
-Specify the language for the automated feedback
+Functionality for different languages is no longer supported
 }
 

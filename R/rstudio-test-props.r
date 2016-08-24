@@ -24,12 +24,11 @@ test_props <- function(index = 1,
                        not_called_msg = NULL,
                        incorrect_msg = NULL,
                        error_msg = NULL) {
-  
-  student_pd <- tw$get("student_pd")
-  solution_pd <- tw$get("solution_pd")
-  student_env <- tw$get("student_env")
-  solution_env <- tw$get("solution_env")
-  init_tags(fun = "test_props")
+  state <- ex()
+  student_pd <- state$get("student_pd")
+  solution_pd <- state$get("solution_pd")
+  student_env <- state$get("student_env")
+  solution_env <- state$get("solution_env")
   
   ggvis_pds_stud <- find_ggvis_pds(student_pd)
   ggvis_pds_sol <- find_ggvis_pds(solution_pd)
@@ -40,12 +39,12 @@ test_props <- function(index = 1,
   
   sol_calls <- find_function_calls(ggvis_pds_sol[[index]], name = funs[1], env = solution_env)
   if (length(sol_calls) > 1) {
-    stop(sprintf("Function %s should only occur exactly once in the %s `ggvis` command of the solution.", funs[1], get_num(index)))
+    stop(sprintf("Function %s should only occur exactly once in the %s `ggvis` command of the solution.", funs[1], get_ord(index)))
   }
   
   sol_props <- get_all_props(funs[1], sol_calls[[1]]$call)
   if (is.null(sol_props)) {
-    stop(sprintf("The %s ggvis command in your solution contains an error", get_num(index)))
+    stop(sprintf("The %s ggvis command in your solution contains an error", get_ord(index)))
   }
   if (is.null(props)) {
     props <- names(sol_props)
@@ -61,13 +60,13 @@ test_props <- function(index = 1,
   # message if specified function was not called
   if (is.null(not_called_msg)) {
     calls <- if (length(funs) == 1) "a call" else "calls"
-    not_called_msg <- sprintf("The %s `ggvis` command in your code should contain %s to %s.", get_num(index), calls, collapse_funs(funs))
+    not_called_msg <- sprintf("The %s `ggvis` command in your code should contain %s to %s.", get_ord(index), calls, collapse_funs(funs))
   }
   # message if the properties or not found or set incorrectly
   if (is.null(incorrect_msg)) {
     propstr <- if (length(props) == 1) "property" else "properties"
     incorrect_msg <- sprintf("In the %s `ggvis` command of your code, make sure to correctly define the %s %s inside %s.",
-                            get_num(index), propstr, collapse_props(props), collapse_funs(funs, conn = " or "))
+                            get_ord(index), propstr, collapse_props(props), collapse_funs(funs, conn = " or "))
     if (length(props[!props  %in% c("x","y")]) > 0)
       incorrect_msg <- paste(incorrect_msg, "Beware of the difference between <code>=</code> and <code>:=</code>.")
     if (!allow_extra)
@@ -77,7 +76,7 @@ test_props <- function(index = 1,
                               index, collapse_funs(funs))
   }
   if (is.null(error_msg)) {
-    error_msg <- sprintf("There's an error in the %s `ggvis` command of your code. Have a look at the console output to fix the error.", get_num(index))
+    error_msg <- sprintf("There's an error in the %s `ggvis` command of your code. Have a look at the console output to fix the error.", get_ord(index))
   }
   
   pass <- FALSE

@@ -34,28 +34,24 @@ test_exercise <- function(sct,
   
   # Store everything that's needed locally (initialize does a full reset)
   tw$clear()
-  tw$initialize(list(pec = pec,
-                     student_code = student_code,
-                     student_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(student_code),
-                     student_env = student_env,
-                     solution_code = solution_code,
-                     solution_pd = if (ex_type == "MarkdownExercise") NULL else build_pd(solution_code),
-                     solution_env = solution_env,
-                     output_list = output_list,
-                     test_env = new.env(parent = environment()),
-                     reporter = DC_reporter$new()))
+  state <- RootState$new(pec = pec,
+                         student_code = student_code,
+                         student_pd = build_pd(student_code),
+                         student_env = student_env,
+                         solution_code = solution_code,
+                         solution_pd = build_pd(solution_code),
+                         solution_env = solution_env,
+                         output_list = output_list,
+                         test_env = new.env(parent = environment()))
+  tw$set(state = state, reporter = DC_reporter$new(), stack = TRUE)
   on.exit(tw$clear())
 
   # Execute sct with the DataCamp reporter such that it collects test results
-  run_until_fail(parse(text = sct))
-  outcome <- get_rep()$get_feedback()
-
-  # HACK: If markdown exercise, remove line information
-  if (ex_type == "MarkdownExercise" && "line_start" %in% names(outcome)) {
-    outcome[c("line_start", "column_start", "line_end", "column_end")] <- NULL
-  }
-
-  return(outcome)
+  correct <- run_until_fail(parse(text = sct))
+  feedback <- get_rep()$get_feedback()
+  return(generate_payload(feedback = feedback,
+                          correct = correct,
+                          ex_type = ex_type))
 }
 
 get_rep <- function() {
@@ -63,7 +59,7 @@ get_rep <- function() {
 }
 
 run_until_fail <- function(code) {
-  eval_fail <- try(eval(code, envir = tw$get("test_env")), silent = TRUE)
+  eval_fail <- try(eval(code, envir = ex()$get("test_env")), silent = TRUE)
   if (inherits(eval_fail, "try-error")) {
     cond <- attr(eval_fail, "condition")$message
     if (identical(cond, sct_failed_msg)) {
@@ -71,7 +67,7 @@ run_until_fail <- function(code) {
       return(FALSE)
     } else {
       # Something actually went wrong, not an SCT that failed
-      stop(attr(eval_fail, "condition"))
+      stop("Something went wrong in the SCT: ", attr(eval_fail, "condition"))
     }
   } else {
     # The SCT passed

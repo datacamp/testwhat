@@ -1,5 +1,4 @@
 context("test_rmd_file")
-source("helpers.R")
 
 test_that("test_rmd_file works", {
   lst <- list()

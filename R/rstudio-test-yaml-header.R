@@ -11,15 +11,14 @@
 #'
 #' @export
 test_yaml_header <- function(options = NULL,
-                               check_equality = TRUE,
-                               allow_extra = TRUE,
-                               not_called_msg = NULL,
-                               incorrect_msg = NULL) {
-  
-  chunk_number <- tw$get("chunk_number")
-  student_code <- tw$get("student_code")
-  solution_code <- tw$get("solution_code")
-  init_tags(fun = "test_yaml_header")
+                             check_equality = TRUE,
+                             allow_extra = TRUE,
+                             not_called_msg = NULL,
+                             incorrect_msg = NULL) {
+  state <- ex()
+  chunk_number <- state$get("chunk_number")
+  student_code <- state$get("student_code")
+  solution_code <- state$get("solution_code")
 
   yaml_solution <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(solution_code, split = "\n")[[1]])), silent = TRUE)
   if(inherits(yaml_solution, "try-error")) {
@@ -27,7 +26,8 @@ test_yaml_header <- function(options = NULL,
   }
   
   yaml_student <- try(unlist(rmarkdown:::parse_yaml_front_matter(strsplit(student_code, split = "\n")[[1]])), silent = TRUE)
-  check_that(is_false(inherits(yaml_student, "try-error")), "Make sure the YAML header contains no errors. Beware of erroneous indentation.")
+  check_that(is_false(inherits(yaml_student, "try-error")), 
+             feedback = "Make sure the YAML header contains no errors. Beware of erroneous indentation.")
   
   if(is.null(options)) {
     options <- names(yaml_solution)
@@ -60,13 +60,13 @@ test_yaml_header <- function(options = NULL,
   
   no_nas = any(is.na(names(stud_options_select)))
   # check if all options available
-  check_that(is_false(no_nas), not_called_msg)
+  check_that(is_false(no_nas), feedback = not_called_msg)
   
   if(!no_nas && check_equality) {
-    check_that(is_equal(sol_options_select, stud_options_select), incorrect_msg)
+    check_that(is_equal(sol_options_select, stud_options_select), feedback = incorrect_msg)
   }
 
   if(!allow_extra) {
-    check_that(is_equal(length(stud_options_select), length(yaml_student)), incorrect_msg)
+    check_that(is_equal(length(stud_options_select), length(yaml_student)), feedback = incorrect_msg)
   }
 }

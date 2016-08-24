@@ -118,7 +118,7 @@ test_that("test not enough calls", {
   
   lst$DC_SCT <- "test_props(index = 1, funs = c('ggvis','layer_points'), not_called_msg = 'silly')"
   output <- test_it(lst)
-  fails(output, mess_patt = "silly")
+  fails(output, mess_patt = "Silly")
 })
 
 test_that("test missing function calls", {
@@ -133,7 +133,7 @@ test_that("test missing function calls", {
   
   lst$DC_SCT <- "test_props(index = 1, funs = c('ggvis','layer_points'), not_called_msg = 'silly')"
   output <- test_it(lst)
-  fails(output, mess_patt = "silly")
+  fails(output, mess_patt = "Silly")
 })
 
 test_that("test with different calls", {

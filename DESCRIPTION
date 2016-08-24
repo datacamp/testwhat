@@ -16,7 +16,8 @@ Imports:
     ggvis,
     lazyeval,
     R6,
-    stringdist
+    stringdist,
+    magrittr
 Suggests:
     testthat
 License: MIT + file LICENSE
