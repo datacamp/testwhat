@@ -1,34 +1,42 @@
 #' Test whether a student correctly called a function/operator
-#'
-#' Test whether a student called a function correctly. Note: \code{test_function} and \code{test_function_v2} are now
-#' identical and either can be used.
 #' 
-#' @param name  name of the function/operator as a string, e.g. \code{"mean"} or \code{"+"}
-#' @param args  character vector of argument names that the student should have
-#' supplied in the function calls.
-#' @param index  integer that specifies which call of \code{name} in the solution 
-#' code will be checked.
-#' @param eval  logical vector indicating whether the corresponding argument
-#' should be evaluated before testing. Setting this to \code{FALSE} can be
-#' useful, e.g., to test whether the student supplied a large predefined
-#' object, as only the corresponding \code{\link{name}} is compared in this
-#' case (use with care!).
-#' @param eq_condition  character vector indicating how to perform the
-#' comparison for each argument. See \code{\link{is_equal}}
-#' @param not_called_msg custom feedback message in case the student did not call the
-#' function often enough.
-#' @param args_not_specified_msg custom feedback message in case the student did call the function
-#' with the arguments listed in \code{args}
-#' @param incorrect_msg custom feedback message in case the student did not call the
-#' function with the same argument values as in the sample solution. 
-#' You can specify a vector of arguments with the same length as \code{args}, to have
-#' argument-specific custom feedback.
-#' @param append Whether or not to append the feedback to feedback built in previous states
+#' Test whether a student called a function correctly. Note:
+#' \code{test_function} and \code{test_function_v2} are now identical and either
+#' can be used.
+#' 
+#' @param name  name of the function/operator as a string, e.g. \code{"mean"} or
+#'   \code{"+"}
+#' @param args  character vector of argument names that the student should have 
+#'   supplied in the function calls.
+#' @param index  integer that specifies which call of \code{name} in the
+#'   solution code will be checked.
+#' @param eval  logical vector indicating whether and how to compare arguments.
+#'   If \code{eval} is \code{NA}, student and solution argument are not
+#'   compared. If \code{eval} is \code{FALSE}, the string versions of the
+#'   arguments are compared. If \code{eval} is \code{TRUE}, the argument in the
+#'   student code is evaluated in the student environment and the argument in
+#'   the solution code is evaluated in the solution environment, and their
+#'   results are compared. Setting this to \code{FALSE} can be useful, e.g., to
+#'   test whether the student supplied a large predefined object, or when you're
+#'   in a sub-SCT where the environments are not unambiguously available.
+#' @param eq_condition  character vector indicating how to perform the 
+#'   comparison for each argument. See \code{\link{is_equal}}
+#' @param not_called_msg custom feedback message in case the student did not
+#'   call the function often enough.
+#' @param args_not_specified_msg custom feedback message in case the student did
+#'   call the function with the arguments listed in \code{args}
+#' @param incorrect_msg custom feedback message in case the student did not call
+#'   the function with the same argument values as in the sample solution. You
+#'   can specify a vector of arguments with the same length as \code{args}, to
+#'   have argument-specific custom feedback.
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states
 #' @param ... S3 stuff
 #' @param state state to start from (for \code{check_} functions)
-#' @param arg_not_specified_msg custom message in case argument was not specified (for \code{check_arg})
+#' @param arg_not_specified_msg custom message in case argument was not
+#'   specified (for \code{check_arg})
 #' @param arg name of argument to specify (for \code{check_arg})
-#' 
+#'   
 #' @examples
 #' \dontrun{
 #' # Example 1
@@ -78,11 +86,21 @@ test_function <- function(name,
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
   
-  fun_state <- ex() %>% check_function(name, index = index, not_called_msg = not_called_msg, append = is.null(not_called_msg))
+  fun_state <- check_function(ex(), name, index = index,
+                              not_called_msg = not_called_msg,
+                              append = is.null(not_called_msg))
   for (i in seq_along(args)) {
-    fun_state %>% 
-      check_arg(args[i], arg_not_specified_msg = args_not_specified_msg, append = is.null(args_not_specified_msg)) %>% 
-      check_equal(incorrect_msg = incorrect_msg[i], eval = eval[i], eq_condition = eq_condition[i], append = is.null(incorrect_msg[i]))
+    arg_state <- check_arg(fun_state,
+                           arg = args[i], 
+                           arg_not_specified_msg = args_not_specified_msg, 
+                           append = is.null(args_not_specified_msg))
+    if (!is.na(eval[i])) {
+      check_equal(arg_state,
+                  incorrect_msg = incorrect_msg[i], 
+                  eval = eval[i], 
+                  eq_condition = eq_condition[i], 
+                  append = is.null(incorrect_msg[i]))
+    }
   }
 }
 
