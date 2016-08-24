@@ -30,47 +30,55 @@ check_arg(state, arg, arg_not_specified_msg = NULL, append = TRUE)
   eval = TRUE, eq_condition = "equivalent", append = TRUE, ...)
 }
 \arguments{
-\item{name}{name of the function/operator as a string, e.g. \code{"mean"} or \code{"+"}}
+\item{name}{name of the function/operator as a string, e.g. \code{"mean"} or
+\code{"+"}}
 
-\item{args}{character vector of argument names that the student should have
+\item{args}{character vector of argument names that the student should have 
 supplied in the function calls.}
 
-\item{index}{integer that specifies which call of \code{name} in the solution 
-code will be checked.}
+\item{index}{integer that specifies which call of \code{name} in the
+solution code will be checked.}
 
-\item{eval}{logical vector indicating whether the corresponding argument
-should be evaluated before testing. Setting this to \code{FALSE} can be
-useful, e.g., to test whether the student supplied a large predefined
-object, as only the corresponding \code{\link{name}} is compared in this
-case (use with care!).}
+\item{eval}{logical vector indicating whether and how to compare arguments.
+If \code{eval} is \code{NA}, student and solution argument are not
+compared. If \code{eval} is \code{FALSE}, the string versions of the
+arguments are compared. If \code{eval} is \code{TRUE}, the argument in the
+student code is evaluated in the student environment and the argument in
+the solution code is evaluated in the solution environment, and their
+results are compared. Setting this to \code{FALSE} can be useful, e.g., to
+test whether the student supplied a large predefined object, or when you're
+in a sub-SCT where the environments are not unambiguously available.}
 
-\item{eq_condition}{character vector indicating how to perform the
+\item{eq_condition}{character vector indicating how to perform the 
 comparison for each argument. See \code{\link{is_equal}}}
 
-\item{not_called_msg}{custom feedback message in case the student did not call the
-function often enough.}
+\item{not_called_msg}{custom feedback message in case the student did not
+call the function often enough.}
 
-\item{args_not_specified_msg}{custom feedback message in case the student did call the function
-with the arguments listed in \code{args}}
+\item{args_not_specified_msg}{custom feedback message in case the student did
+call the function with the arguments listed in \code{args}}
 
-\item{incorrect_msg}{custom feedback message in case the student did not call the
-function with the same argument values as in the sample solution. 
-You can specify a vector of arguments with the same length as \code{args}, to have
-argument-specific custom feedback.}
+\item{incorrect_msg}{custom feedback message in case the student did not call
+the function with the same argument values as in the sample solution. You
+can specify a vector of arguments with the same length as \code{args}, to
+have argument-specific custom feedback.}
 
 \item{state}{state to start from (for \code{check_} functions)}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states}
 
 \item{arg}{name of argument to specify (for \code{check_arg})}
 
-\item{arg_not_specified_msg}{custom message in case argument was not specified (for \code{check_arg})}
+\item{arg_not_specified_msg}{custom message in case argument was not
+specified (for \code{check_arg})}
 
 \item{...}{S3 stuff}
 }
 \description{
-Test whether a student called a function correctly. Note: \code{test_function} and \code{test_function_v2} are now
-identical and either can be used.
+Test whether a student called a function correctly. Note:
+\code{test_function} and \code{test_function_v2} are now identical and either
+can be used.
 }
 \examples{
 \dontrun{
