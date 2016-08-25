@@ -109,6 +109,37 @@ test_that("exercise ggplot2 - v2", {
   passes(output)
 })
 
+test_that("R for sas, spss, stata", {
+  lst <- list()
+  lst$DC_PEC <- "
+load(url(\"http://s3.amazonaws.com/assets.datacamp.com/course/Bob/mydata100.RData\"))
+pretest <- mydata100$pretest
+gender <- mydata100$gender
+  "
+  lst$DC_SOLUTION <- "
+by(pretest,
+   gender,
+   function(x){ c(mean(x, na.rm = TRUE), 
+                sd(x, na.rm = TRUE),
+                median(x = x, na.rm = TRUE)) })
+  "
+  lst$DC_CODE <- lst$DC_SOLUTION
+  lst$DC_SCT <- '
+test_error()
+test_function("by", "data", 
+  incorrect_msg = "There is something wrong with your data argument in the <code>by()</code> function.",
+  not_called_msg = "Use the <code>by()</code> function with the data specified as first argument.")
+  test_function("by", "INDICES", 
+  incorrect_msg = "There is something wrong with the grouping of your <code>by()</code> function.",
+  not_called_msg = "Use the <code>by()</code> function with <code>gender</code> as grouping factor.")
+  test_function("by", "FUN", 
+  incorrect_msg = "There is something wrong with the anonymous function in the <code>by()</code> function.",
+  not_called_msg = "Use the <code>by()</code> function with the anonymous that needs to be applied.")
+  '
+  output <- test_it(lst)
+  passes(output)
+})
+
 ## NOT FIXED!
 # test_that("exercise cleaning data", {
 #   lst <- list()

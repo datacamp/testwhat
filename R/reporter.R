@@ -54,7 +54,7 @@ get_line_info <- function(feedback) {
     }
   }
   
-  if (is.null(pd) || is.na(pd)) {
+  if (!isTRUE(try(is.data.frame(pd), silent = TRUE))) {
     return(NULL)
   }
   
