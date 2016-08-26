@@ -26,9 +26,10 @@ State <- R6::R6Class("State",
         passed_stud_indices <- agg$stud_index[agg$x]
         if (length(passed_stud_indices) > 0) {
           ind_to_blacklist <- min(passed_stud_indices)
-          stopifnot(length(unique(df$name)) == 1)
-          stopifnot(length(unique(df$sol_index)) == 1)
-          private$set_used(df$name[1], df$sol_index[1], ind_to_blacklist) 
+          if (isTRUE(try(length(unique(df$name)) == 1, silent = TRUE)) &&
+              isTRUE(try(length(unique(df$sol_index)) == 1, silent = TRUE))) {
+            private$set_used(df$name[1], df$sol_index[1], ind_to_blacklist)
+          }
         }
       }
       private$fun_usage <- list()
