@@ -218,7 +218,7 @@ decorate_state <- function(state, stud, sol, el = NULL) {
 #' 
 #' @param state the state to create a substate from
 #' @param code the solution code to put into the state
-#' @param env list of environment variables to add to the solution environment
+#' @param ... named environment variables to add to or override in the solution environment
 #' 
 #' @name override
 

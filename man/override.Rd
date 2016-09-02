@@ -18,7 +18,7 @@ override_solution_env(state, ...)
 
 \item{code}{the solution code to put into the state}
 
-\item{env}{list of environment variables to add to the solution environment}
+\item{...}{named environment variables to add to or override in the solution environment}
 }
 \description{
 Produces a new state with a custom solution code. Mostly useful inside
