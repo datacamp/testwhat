@@ -6,3 +6,7 @@ test_that("trim works as expected", {
   expected <- "Hello. This? Is! A. Test?! Ok? Fine."
   expect_equal(res, expected)
 })
+
+test_that("language is deprecated", {
+  expect_message(set_language("en"), "Different languages are no longer supported in testwhat")
+})
