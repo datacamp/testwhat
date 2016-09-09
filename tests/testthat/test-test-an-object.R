@@ -1,4 +1,4 @@
-context("test_ggplot")
+context("test_an_object")
 
 test_that("test_an_object", {
   lst <- list()

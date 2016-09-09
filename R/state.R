@@ -218,10 +218,44 @@ decorate_state <- function(state, stud, sol, el = NULL) {
 #' 
 #' @param state the state to create a substate from
 #' @param code the solution code to put into the state
-#'   
+#' @param ... named environment variables to add to or override in the solution environment
+#' 
+#' @name override
+
+#' @rdname override
 #' @export
-override_solution <- function(state, code) {
+override_solution <- function(state, code = NULL, ...) {
   sub_state <- SubState$new(state)
-  sub_state$set(solution_code = code, solution_pd = build_pd(code))
+  if (!is.null(code)) {
+    sub_state$set(solution_code = code, solution_pd = build_pd(code))
+  }
+  env = list(...)
+  if (!is.null(env)) {
+    sub_state$set(solution_env = new.env(parent = globalenv()))
+    for (el in ls(envir = state$get("solution_env"))) {
+      assign(el, get(el, envir = state$get("solution_env")), envir = sub_state$get("solution_env"))
+    }
+    for (i in seq_along(env)) {
+      name <- names(env)[i]
+      val <- env[[i]]
+      assign(name, val, envir = sub_state$get("solution_env"))
+    }
+  }
   return(sub_state)
 }
+
+#' @rdname override
+#' @export
+override_solution_code <- function(state, code) {
+  override_solution(state, code = code)
+}
+
+#' @rdname override
+#' @export
+override_solution_env <- function(state, ...) {
+  override_solution(state, code = NULL, ...)
+}
+
+
+
+

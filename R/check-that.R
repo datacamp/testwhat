@@ -122,13 +122,12 @@ is_equal.formula <- function(x, y, eq_condition = "equivalent") {
 convert_formula <- function(form) {
   n <- length(form)
   deparsed <- lapply(form, deparse)[2:n]
-  target = deparsed[[1]]
-  explan = deparsed[[2]]
-  explan = sort(trim(strsplit(explan, "\\+")[[1]]))
+  target <- deparsed[[1]]
+  explan <- deparsed[[2]]
+  trm <- function(x) gsub("^\\s+|\\s+$", "", x)
+  explan <- sort(trm(strsplit(explan, "\\+")[[1]]))
   return(list(target = target, explan = explan))
 }
-
-trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
 failure <- function() {
   FALSE
