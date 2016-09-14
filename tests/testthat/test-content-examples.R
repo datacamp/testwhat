@@ -119,26 +119,50 @@ gender <- mydata100$gender
   lst$DC_SOLUTION <- "
 by(pretest,
    gender,
-   function(x){ c(mean(x, na.rm = TRUE), 
+   function(x){ c(mean(x, na.rm = TRUE),
                 sd(x, na.rm = TRUE),
                 median(x = x, na.rm = TRUE)) })
   "
   lst$DC_CODE <- lst$DC_SOLUTION
   lst$DC_SCT <- '
 test_error()
-test_function("by", "data", 
+test_function("by", "data",
   incorrect_msg = "There is something wrong with your data argument in the <code>by()</code> function.",
   not_called_msg = "Use the <code>by()</code> function with the data specified as first argument.")
-  test_function("by", "INDICES", 
+  test_function("by", "INDICES",
   incorrect_msg = "There is something wrong with the grouping of your <code>by()</code> function.",
   not_called_msg = "Use the <code>by()</code> function with <code>gender</code> as grouping factor.")
-  test_function("by", "FUN", 
+  test_function("by", "FUN",
   incorrect_msg = "There is something wrong with the anonymous function in the <code>by()</code> function.",
   not_called_msg = "Use the <code>by()</code> function with the anonymous that needs to be applied.")
   '
   output <- test_it(lst)
   passes(output)
 })
+
+test_that("intermediate r practice", {
+  lst <- list()
+  lst$DC_PEC <- 'load(url("http://s3.amazonaws.com/assets.datacamp.com/production/course_753/datasets/chapter2.RData"))'
+  lst$DC_SCT <- '
+test_function("str", "object")
+#test_output_contains("logs[[11]]$details")
+#test_function("class", "x")
+success_msg("AWESOME!")
+  '
+  lst$DC_SOLUTION <- "
+str(logs)
+logs[[11]]$details
+class(logs[[1]])
+  "
+  lst$DC_CODE <- "
+print(logs)
+print(logs[[11]])
+print(str(logs[[1]]$timestamp))
+  "
+  output <- test_it(lst)
+  fails(output)
+})
+
 
 ## NOT FIXED!
 # test_that("exercise cleaning data", {
