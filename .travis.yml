@@ -1,4 +1,5 @@
-language: r
-sudo: required
+language: R
+sudo: false
+cache: packages
 r_check_args: --as-cran --no-tests
 
