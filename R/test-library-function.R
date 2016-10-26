@@ -29,7 +29,7 @@ test_library_function <- function(package,
                           incorrect_msg = NULL) {
 
   if(is.null(not_called_msg)) {
-    not_called_msg <- sprintf("Make sure to call the <code>library()</code> function to load the <code>%s</code> package", package)
+    not_called_msg <- sprintf("Make sure to call the <code>library()</code> function to load the <code>%s</code> package.", package)
   }
 
   if(is.null(incorrect_msg)) {
