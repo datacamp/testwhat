@@ -129,3 +129,18 @@ test_that("check_output_expr - backwards compatatibility", {
   passes(output)
 })
 
+test_that("check_output - message output", {
+  lst <- list()
+  lst$DC_ECHO <- TRUE
+  lst$DC_CODE <- 'message("I am a message")'
+  
+  lst$DC_SCT <- "ex() %>% check_output('I am a message')"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_SCT <- "ex() %>% check_output('I am a message', output_only = FALSE)"
+  output <- test_it(lst)
+  passes(output)
+})
+
+
