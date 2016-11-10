@@ -201,6 +201,23 @@ test_that("test_function - index (3)", {
   passes(output)
 })
 
+test_that("test_function - index (4)", {
+  lst <- list()
+  lst$DC_PEC <- ""
+  lst$DC_SOLUTION <- "round(pi, 3)\nround(exp(1), 3)"
+  lst$DC_CODE <- "round(pi, 3)\nround(exp(2), 3)"
+  
+  lst$DC_SCT <- 'test_function("round", args = "x", index = 2)'
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 1, 1, 7, 8)
+  
+  lst$DC_SCT <- 'test_function("round", args = "x", index = 1)\ntest_function("round", args = "x", index = 2)'
+  output <- test_it(lst)
+  fails(output)
+  line_info(output, 2, 2, 7, 12)
+})
+
 test_that("test_function - eq_condition", {
   lst <- list()
   lst$DC_CODE <- "df.equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  var(df.equiv)\n  df.not_equiv <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))\n  lm(df.not_equiv)"
@@ -226,7 +243,7 @@ test_that("test_function - eq_condition", {
 test_that("test_function - eval", {
   lst <- list()
   lst$DC_SOLUTION <- "mean(1:3)"
-  
+
   # eval = TRUE (the default)
   lst$DC_SCT <- "test_function('mean', args = 'x')"
   lst$DC_CODE <- "mean(1:2)"
@@ -238,7 +255,7 @@ test_that("test_function - eval", {
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
   passes(output)
-  
+
   # eval = FALSE
   lst$DC_SCT <- "test_function('mean', args = 'x', eval = FALSE)"
   lst$DC_CODE <- "mean(1:2)"
@@ -253,7 +270,7 @@ test_that("test_function - eval", {
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
   passes(output)
-  
+
   # eval = NA
   lst$DC_SCT <- "test_function('mean', args = 'x', eval = NA)"
   lst$DC_CODE <- "mean(1:2)"
@@ -507,23 +524,23 @@ test_that("test_function - plot calls", {
   lst$DC_CODE <- "plot(df[['time']], df[['res']])"
   output <- test_it(lst)
   passes(output)
-  
+
   lst$DC_CODE <- "plot(res ~ time, data = df)"
   output <- test_it(lst)
   passes(output)
-  
+
   lst$DC_CODE <- "plot(df$res ~ df$time)"
   output <- test_it(lst)
   passes(output)
-  
+
   lst$DC_CODE <- "plot(df$res, df$time)"
   output <- test_it(lst)
   fails(output)
-  
+
   lst$DC_CODE <- "plot(df$time ~ df$res)"
   output <- test_it(lst)
   fails(output)
-  
+
   lst$DC_CODE <- "plot(time ~ res, data = df)"
   output <- test_it(lst)
   fails(output)
