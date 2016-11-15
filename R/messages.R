@@ -203,6 +203,6 @@ build_message.file <- function(det) {
 build_message.output <- function(det) {
   switch(det$case, 
          regex = "The output that your code generated doesn't contain the pattern we're looking for.",
-         expr = sprintf("Is the output of <code>%s</code> in your script?", det$expr),
+         expr = sprintf("Did your code produce the same output as <code>%s</code>?", det$expr),
          NULL)
 }
