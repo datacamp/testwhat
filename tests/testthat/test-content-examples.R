@@ -138,6 +138,45 @@ print(str(logs[[1]]$timestamp))
   fails(output)
 })
 
+test_that("exercise eda", {
+  lst <- list()
+  lst$DC_PEC <- 'source("http://s3.amazonaws.com/assets.datacamp.com/production/course_1414/datasets/shared.R")
+votes_joined <- read_dataset("votes_joined")'
+  lst$DC_CODE <- '# Load the tidyr package
+library(tidyr)
+  
+  # Gather the six mu/nu/di/hr/co/ec columns
+  votes_joined %>%
+  gather(topic, has_topic, me:ec)
+  
+  # Perform gather again, then filter
+  votes_gathered <- votes_joined %>%
+  gather(topic, has_topic, me:ec) %>%
+  filter(has_topic == 1)'
+  lst$DC_SOLUTION <- lst$DC_CODE
+  lst$DC_SCT <- '
+test_library_function("tidyr")
+
+test_function("gather", args = c("data", "key", "value"), eval = c(T, F, F))
+
+test_correct({
+test_data_frame("votes_gathered", incorrect_msg = "Did you gather the six columns (`mu`, `nu`, `di`, `hr`, `co`, and `ec`) and filter such that `has_topic == 1`?")
+}, {
+test_function("gather", args = c("data", "key", "value"), eval = c(T, F, F))
+test_function("filter")
+})
+
+test_error()
+success_msg("Awesome job!")
+  '
+  
+  output <- test_it(lst)
+  passes(output)
+  output <- test_it(lst)
+  passes(output)
+  
+})
+
 # # NOT FIXED!
 # test_that("exercise cleaning data", {
 #   lst <- list()
