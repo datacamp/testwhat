@@ -164,7 +164,6 @@ get_all_props <- function(fun, call) {
   }
 }
 
-#' @importFrom lazyeval lazy_dots
 props <- function(..., .props = NULL, inherit = TRUE, env = parent.frame()) {
   ggvis:::check_empty_args()
   args <- pluck(lazyeval::lazy_dots(...), "expr")

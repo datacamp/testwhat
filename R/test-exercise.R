@@ -32,26 +32,35 @@ test_exercise <- function(sct,
     student_env <- globalenv()
   }
   
-  # Store everything that's needed locally (initialize does a full reset)
-  tw$clear()
-  state <- RootState$new(pec = pec,
-                         student_code = student_code,
-                         student_pd = build_pd(student_code),
-                         student_env = student_env,
-                         solution_code = solution_code,
-                         solution_pd = build_pd(solution_code),
-                         solution_env = solution_env,
-                         output_list = output_list,
-                         test_env = new.env(parent = environment()))
-  tw$set(state = state, reporter = DC_reporter$new(), stack = TRUE)
-  on.exit(tw$clear())
-
-  # Execute sct with the DataCamp reporter such that it collects test results
-  correct <- run_until_fail(parse(text = sct))
-  feedback <- get_rep()$get_feedback()
-  return(generate_payload(feedback = feedback,
-                          correct = correct,
-                          ex_type = ex_type))
+  # First check if parsing worked out
+  if (any(sapply(output_list, `[[`, "type") == "parse-error")) {
+    report <- tryCatch(do_parse(student_code),
+                       error = function(e) {
+                         list(message = parse_fallback_msg)
+                       })
+    return(c(list(correct = FALSE), report))
+  } else {
+    # Store everything that's needed locally (initialize does a full reset)
+    tw$clear()
+    state <- RootState$new(pec = pec,
+                           student_code = student_code,
+                           student_pd = build_pd(student_code),
+                           student_env = student_env,
+                           solution_code = solution_code,
+                           solution_pd = build_pd(solution_code),
+                           solution_env = solution_env,
+                           output_list = output_list,
+                           test_env = new.env(parent = environment()))
+    tw$set(state = state, reporter = DC_reporter$new(), stack = TRUE)
+    on.exit(tw$clear())
+    
+    # Execute sct with the DataCamp reporter such that it collects test results
+    correct <- run_until_fail(parse(text = sct))
+    feedback <- get_rep()$get_feedback()
+    return(generate_payload(feedback = feedback,
+                            correct = correct,
+                            ex_type = ex_type))
+  }
 }
 
 get_rep <- function() {
