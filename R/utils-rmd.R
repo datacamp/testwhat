@@ -5,9 +5,10 @@ build_doc_structure <- function(text) {
   knitr::opts_knit$set(out.format = "markdown")
   
   # Fix pattern business
-  apat = knitr::all_patterns; opat = knit_patterns$get()
+  apat <- knitr::all_patterns
+  opat <- knitr::knit_patterns$get()
   on.exit({
-    knit_patterns$restore(opat)
+    knitr::knit_patterns$restore(opat)
     knitr:::chunk_counter(reset = TRUE)
     knitr:::knit_code$restore(list())
     knitr::opts_knit$set(old.format)
