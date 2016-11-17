@@ -11,14 +11,14 @@ Depends:
     R (>= 3.0.0)
 Imports:
     markdown,
-    knitr,
-    rmarkdown,
-    ggvis,
     lazyeval,
     R6,
     stringdist,
     magrittr
 Suggests:
+    knitr,
+    rmarkdown,
+    ggvis,
     testthat
 License: MIT + file LICENSE
 LazyData: true

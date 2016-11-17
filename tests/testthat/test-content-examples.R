@@ -144,11 +144,11 @@ test_that("exercise eda", {
 votes_joined <- read_dataset("votes_joined")'
   lst$DC_CODE <- '# Load the tidyr package
 library(tidyr)
-  
+
   # Gather the six mu/nu/di/hr/co/ec columns
   votes_joined %>%
   gather(topic, has_topic, me:ec)
-  
+
   # Perform gather again, then filter
   votes_gathered <- votes_joined %>%
   gather(topic, has_topic, me:ec) %>%
@@ -169,12 +169,12 @@ test_function("filter")
 test_error()
 success_msg("Awesome job!")
   '
-  
+
   output <- test_it(lst)
   passes(output)
   output <- test_it(lst)
   passes(output)
-  
+
 })
 
 # # NOT FIXED!

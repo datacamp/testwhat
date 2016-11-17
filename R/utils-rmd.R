@@ -1,4 +1,3 @@
-#' @importFrom knitr pat_md knit_patterns opts_knit
 build_doc_structure <- function(text) {
   
   # Fix markdown format
@@ -13,7 +12,7 @@ build_doc_structure <- function(text) {
     knitr:::knit_code$restore(list())
     knitr::opts_knit$set(old.format)
   })
-  pat_md()
+  knitr::pat_md()
   
   # split the file
   content = knitr:::split_file(lines = knitr:::split_lines(text)) 
