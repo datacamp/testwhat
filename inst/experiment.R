@@ -11,7 +11,7 @@ if (install) {
 source(file.path(system.file(package = "testwhat"), "tests", "testthat", "helper.R"))
 
 lst <- list(DC_PEC = "y <- 6", # set to "" if not specified
-            DC_SOLUTION = "x <- 10",
+            DC_SOLUTION = "x <- 10\na <- 12", # the entire code chunk is a single string
             DC_CODE = "x <- 10",
             DC_SCT = "test_object('x')")
 
