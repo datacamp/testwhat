@@ -38,11 +38,11 @@ test_predefined_objects <- function(name,
   already <- "it has already been coded for you! You can use the arrow next to 'Submit Answer' to reset your code."
   
   if (is.null(undefined_msg)) {
-    undefined_msg <- sprintf("Don't remove the predefined variable `%s`;%s", name, already)
+    undefined_msg <- sprintf("Don't remove the predefined variable `%s`; %s", name, already)
   }
   
   if (is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Don't change the contents of the predefined variable `%s`;", name, already)
+    incorrect_msg <- sprintf("Don't change the contents of the predefined variable `%s`; %s", name, already)
   }
   
   undefined_msg <- rep(undefined_msg, n_names, length.out = n_names)

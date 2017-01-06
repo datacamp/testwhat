@@ -28,5 +28,5 @@ devtools::test(filter = "test-object")
 covr::codecov(token = "private_token")
 ```
 
-For more details, questions and suggestions, you can contact <b>content-engineering@datacamp.com</b>.
+For more details, questions and suggestions, you can contact <b>learn-engineering@datacamp.com</b>.
 
