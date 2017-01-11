@@ -1,0 +1,197 @@
+---
+title: "How to Test an Object has been Defined Correctly"
+author: "Richie Cotton"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!--
+Setup functions will eventually move to testwhat.
+-->
+```{r, echo = FALSE}
+
+knitr::opts_chunk$set(error = TRUE)
+tw <<- testwhat:::tw
+
+setup_state <- function(STU_CODE, SOL_CODE, PEC = character()) {
+  sol_env <- new.env()
+  stu_env <- new.env()
+  
+  evaluate::evaluate(PEC,      envir=sol_env)
+  evaluate::evaluate(SOL_CODE, envir=sol_env)
+  evaluate::evaluate(PEC,      envir=stu_env)
+  evaluate::evaluate(STU_CODE, envir=stu_env)
+  
+  tw$clear()
+
+  state <- testwhat:::RootState$new(
+    pec = PEC,
+    student_code = STU_CODE,
+    student_pd = testwhat:::build_pd(STU_CODE),
+    student_env = stu_env,
+    solution_code = SOL_CODE,
+    solution_pd = testwhat:::build_pd(SOL_CODE),
+    solution_env = sol_env,
+    output_list = list(),
+    test_env = new.env(parent=globalenv())
+  )
+
+  # testwhat will access the reporter and state from the tw object
+  rep <- testwhat:::DC_reporter$new()
+  tw$set(state = state, reporter = rep, stack = TRUE)
+}
+
+show_sct_error <- function() {
+  feedback <- testwhat:::get_rep()$get_feedback()
+  if(length(feedback) > 0L) {
+    payload <- testwhat:::generate_payload(
+      feedback, correct = FALSE, ex_type = 'NormalExercise'
+    )
+    stop(payload$message, call. = FALSE)
+  }
+}
+run_sct <- function(expr) {
+  tryCatch(
+    expr,
+    error = function(e) {
+      show_sct_error()
+    }
+  )
+}
+```
+
+
+To test that an object has been defined correctly, there are two things that need to be checked. Firstly, the student must have defined an object with the correct name. Secondly, that object must have the same value as the equivalent object in the solution code.
+
+## Scope
+
+This page covers testing all object types except functions, which are covered in *link to function definition help page*.
+
+To begin, load the package!
+
+```{r}
+library(testwhat)
+```
+
+## Testing a simple object
+
+<!--
+Use an atomic vector. Needs to have names to demo eq_condition later.
+-->
+
+In the simplest case, you can simply call `test_object()`.
+
+### Basic usage
+
+Here's some solution code that creates a named vector.
+
+```{r}
+primes <- c(two = 2, three = 3, five = 5, seven = 7, eleven = 11)
+```
+
+You can test that the object has been correctly formed using `test_object()`, with the name of the object passed as a string.
+
+```{r, eval = FALSE}
+test_object("primes")
+```
+
+If the student defines the object correctly, no error is thrown.
+
+```{r, results = "hide"}
+setup_state(
+  SOL_CODE = "primes <- c(two = 2, three = 3, five = 5, seven = 7, eleven = 11)",
+  STU_CODE = "primes <- setNames(c(2, 3, 5, 7, 11), c('two', 'three', 'five', 'seven', 'eleven'))"
+)
+run_sct(
+  test_object("primes")
+)
+```
+
+If the student fails to define the object, the following error is thrown. In the following example, `primes` is not defined since the student capitalized the name.
+
+```{r}
+setup_state(
+  SOL_CODE = "primes <- c(two = 2, three = 3, five = 5, seven = 7, eleven = 11)",
+  STU_CODE = "PRIMES <- c(two = 2, three = 3, five = 5, seven = 7, eleven = 11)"
+)
+run_sct(
+  test_object("primes")
+)
+```
+
+If the student defined `primes`, but the value was incorrect, the following error is thrown.
+
+```{r}
+setup_state(
+  SOL_CODE = "primes <- c(two = 2, three = 3, five = 5, seven = 7, eleven = 11)",
+  STU_CODE = "primes <- c(two = 2, three = 3, five = 5, seven = 7, eleven = 13)"
+)
+run_sct(
+  test_object("primes")
+)
+```
+
+### Different types of equality
+
+<!--
+Different values of eq_condition & when to use them
+-->
+
+There are three types of equality that can be checked for. The default is checking that objects are `"equivalent"`. This will not check attributes like the names or class. Since `primes` is a named vector, in this case, you should set `eq_condition = "equal"` to check the names as well.
+
+```{r, eval = FALSE}
+test_object("primes", eq_condition = "equal")
+```
+
+In the following example, the variable name (`primes`) is correct, and the values (`2, 3, 5, 7, 11`) are correct, but one of the names is wrong. Checking equivalence will not pick up on this mistake.
+
+```{r}
+setup_state(
+  SOL_CODE = "primes <- c(two = 2, three = 3, five = 5, seven = 7, eleven = 11)",
+  STU_CODE = "primes <- c(two = 2, three = 3, five = 5, seven = 7, twelve = 11)"
+)
+run_sct(
+  test_object("primes", eq_condition = "equal")
+)
+```
+
+An even stricter check is to use `eq_condition = "identical"`. This is only appropriate for checking variables that don't contain numbers, since it does not allow for any numerical rounding error. For more information, compare [`?all.equal`](https://www.rdocumentation.org/packages/base/topics/all.equal) and [`?identical`](https://www.rdocumentation.org/packages/base/topics/identical).
+
+### Feedback messages
+
+<!--
+When should you override the undefined_msg and incorrect_msg?
+Find examples of bad messages
+-->
+
+## Testing a more complex object
+
+<!--
+Need to find a sufficiently complicated object that test_object() doesn't
+provide specific enough feedback. Is a matrix with named rows/columns enough?
+Otherwise a list. Maybe build up to a recursive list.
+Use test_object(eval = FALSE) then lots of cases of test_expression_result()
+on specific parts of the object.
+-->
+
+## Testing a data.frame
+
+<!--
+Is test_data_frame() always enough? Does it needs to be supplemented with
+extra tests? 
+
+Does it work with `data.table`s? What about `tibble::data_frame`s? What about
+`groupedData` (used by `nlme`; see `datasets::CO2`).
+-->
+
+# Testing other types
+
+<!--
+Does test_object() work OK with formulae, environments, expressions, calls, names, externalptrs, whatever?
+-->
+
+
