@@ -8,20 +8,22 @@ Description: This package makes it easy for teachers to test students'
 Depends:
     R (>= 3.0.0)
 Imports:
-    markdown,
-    R6,
-    stringdist,
     magrittr,
-    praise
+    markdown,
+    praise,
+    R6,
+    stringdist
 Suggests:
-    knitr,
-    rmarkdown,
+    covr,
+    data.table,
     ggvis,
+    knitr,
     lazyeval,
-    testthat,
     RBackend,
     rjson,
-    covr
+    rmarkdown,
+    sets,
+    testthat
 Remotes: datacamp/r-backend
 License: MIT + file LICENSE
 LazyData: true
