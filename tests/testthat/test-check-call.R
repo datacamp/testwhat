@@ -104,7 +104,7 @@ test_that("test_function step by step - custom", {
 
 test_that("test_function step by step - custom - 2", {
   lst <- list(DC_SOLUTION = "mean(1:3, na.rm = TRUE)",
-              DC_SCT = "test_function('mean', args = c('x', 'na.rm'), not_called_msg = 'notcalled', args_not_specified_msg = 'notspecified', incorrect_msg = c('incorrect1', 'incorrect2'))")
+              DC_SCT = "test_function('mean', args = c('x', 'na.rm'), not_called_msg = 'notcalled', args_not_specified_msg = c('notspecified', 'notspecified2'), incorrect_msg = c('incorrect1', 'incorrect2'))")
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -113,7 +113,7 @@ test_that("test_function step by step - custom - 2", {
 
   lst$DC_CODE <- "mean(1:3)"
   output <- test_it(lst)
-  fails(output, "Notspecified")
+  fails(output, "Notspecified2")
 
   lst$DC_CODE <- "mean(1:2, na.rm = FALSE)"
   output <- test_it(lst)
@@ -206,12 +206,12 @@ test_that("test_function - index (4)", {
   lst$DC_PEC <- ""
   lst$DC_SOLUTION <- "round(pi, 3)\nround(exp(1), 3)"
   lst$DC_CODE <- "round(pi, 3)\nround(exp(2), 3)"
-  
+
   lst$DC_SCT <- 'test_function("round", args = "x", index = 2)'
   output <- test_it(lst)
   fails(output)
   line_info(output, 1, 1, 7, 8)
-  
+
   lst$DC_SCT <- 'test_function("round", args = "x", index = 1)\ntest_function("round", args = "x", index = 2)'
   output <- test_it(lst)
   fails(output)
