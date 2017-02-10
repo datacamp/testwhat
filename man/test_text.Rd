@@ -23,4 +23,3 @@ If none of the above, the format string is appended to text in front and in the 
 Test inline text and its formatting for R Markdown exercises.
 This test can only be called inside a test_rmd_group() call!
 }
-

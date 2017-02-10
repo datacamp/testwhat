@@ -4,10 +4,12 @@
 \alias{success_msg}
 \title{Define the success message}
 \usage{
-success_msg(msg)
+success_msg(msg, praise = FALSE)
 }
 \arguments{
-\item{msg}{The congratulatory message as a character string.}
+\item{msg}{The success message as a character string.}
+
+\item{praise}{Whether or not to prepend a message of praise from the \code{praise} package.}
 }
 \description{
 If all tests in an SCT pass, the student is presented with a 
@@ -20,4 +22,3 @@ For multiple choice exercises, the success message is specified
 inside \code{\link{test_mc}}, so an additional call of \code{success_msg}
 is not necessary.
 }
-

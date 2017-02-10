@@ -38,4 +38,3 @@ test_predefined_objects(c("a", "b", "c"))
 }
 
 }
-

@@ -19,4 +19,3 @@ Test a single R Markdown file
 \details{
 This test should be called when there are multiple files in the submission.
 }
-

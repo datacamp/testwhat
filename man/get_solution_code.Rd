@@ -9,4 +9,3 @@ get_solution_code()
 \description{
 Get solution environment (backwards comp)
 }
-

@@ -22,4 +22,3 @@ test_yaml_header(options = NULL, check_equality = TRUE,
 Test whether the student specified the correct options in the yaml header (for 
 R Markdown exercises). This test should be called outside an test_rmd_group call.
 }
-

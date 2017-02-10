@@ -38,4 +38,3 @@ test_an_object("x")
 }
 
 }
-

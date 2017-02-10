@@ -25,4 +25,3 @@ exercise
 \details{
 This test can only be called inside a test_rmd_group() call!
 }
-

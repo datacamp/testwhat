@@ -24,4 +24,3 @@ errors in machine precision), or \code{"identical"} (exactly identical).}
 \description{
 Utility function to use inside \code{\link{check_that}}.
 }
-
