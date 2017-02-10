@@ -13,7 +13,8 @@ Imports:
     markdown,
     R6,
     stringdist,
-    magrittr
+    magrittr,
+    praise
 Suggests:
     knitr,
     rmarkdown,
@@ -27,4 +28,4 @@ Authors@R: c(person("Andreas", "Alfons", role = "aut"),
     person("Vincent", "Vankrunkelsven", email = "vincent@datacamp.com", role = c("aut")))
 Author: Filip Schouwenaars <filip@datacamp.com>
 Maintainer: Filip Schouwenaars <filip@datacamp.com>
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

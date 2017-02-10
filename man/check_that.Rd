@@ -30,4 +30,3 @@ check_that(is_equal(4, 4))
 }
 
 }
-

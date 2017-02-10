@@ -12,4 +12,3 @@ DC_reporter
 DataCamp reporter: 'log' test results
 }
 \keyword{datasets}
-

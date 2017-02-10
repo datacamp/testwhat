@@ -9,4 +9,3 @@ get_student_code()
 \description{
 Get solution environment (backwards comp)
 }
-

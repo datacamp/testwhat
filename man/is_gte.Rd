@@ -14,4 +14,3 @@ is_gte(x, y)
 \description{
 Utility function to use inside \code{\link{check_that}}.
 }
-

@@ -24,4 +24,3 @@ override_solution_env(state, ...)
 Produces a new state with a custom solution code. Mostly useful inside
 \code{test_or}, if you want to test for different cases.
 }
-

@@ -14,4 +14,3 @@ test_rmd_group(group_number, code)
 \description{
 Test a single R Markdown file group (R Markdown exercises) with arbitrary testwhat functions.
 }
-

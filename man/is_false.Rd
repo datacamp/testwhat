@@ -12,4 +12,3 @@ is_false(x)
 \description{
 Utility function to use inside \code{\link{check_that}}.
 }
-

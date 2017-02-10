@@ -18,4 +18,3 @@ Learn more about testwhat on the wiki: \url{www.github.com/datacamp/testwhat/wik
 \references{
 \url{www.datacamp.com}
 }
-

@@ -35,4 +35,3 @@ test_mc(2, feedback_msgs = c(msg1, msg2, msg3, msg4))
 }
 
 }
-

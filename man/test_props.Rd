@@ -31,4 +31,3 @@ command and inside a specific function. By default, this function will compare t
 student and solution. However, the teacher can also state that the definition of data can be done in other
 functions.
 }
-

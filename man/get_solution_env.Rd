@@ -9,4 +9,3 @@ get_solution_env()
 \description{
 Get solution environment (backwards compatbility)
 }
-

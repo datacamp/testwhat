@@ -9,8 +9,14 @@
 #' inside \code{\link{test_mc}}, so an additional call of \code{success_msg}
 #' is not necessary.
 #' 
-#' @param msg The congratulatory message as a character string.
+#' @param msg The success message as a character string.
+#' @param praise Whether or not to prepend a message of praise from the \code{praise} package.
+#' 
 #' @export
-success_msg <- function(msg) {
+#' @importFrom praise praise
+success_msg <- function(msg, praise = FALSE) {
+  if (isTRUE(praise)) {
+    msg <- paste(praise::praise(), msg)
+  }
   get_rep()$set_success_msg(msg)
 }

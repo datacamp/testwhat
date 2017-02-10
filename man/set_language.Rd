@@ -12,4 +12,3 @@ set_language(lang)
 \description{
 Functionality for different languages is no longer supported
 }
-

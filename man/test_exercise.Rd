@@ -35,4 +35,3 @@ tests were sucessful, and \code{feedback} that contains a feedback message.
 Run all tests for an exercise and report the results (including feedback).
 This function is run by R Backend and should not be used by course creators.
 }
-
