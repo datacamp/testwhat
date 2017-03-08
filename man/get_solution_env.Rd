@@ -2,10 +2,10 @@
 % Please edit documentation in R/utils.R
 \name{get_solution_env}
 \alias{get_solution_env}
-\title{Get solution environment (backwards compatbility)}
+\title{Get solution environment (backwards comp)}
 \usage{
 get_solution_env()
 }
 \description{
-Get solution environment (backwards compatbility)
+Get solution environment (backwards comp)
 }
