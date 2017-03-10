@@ -14,12 +14,13 @@ check_sufficient <- function(calls, index, name) {
 }
 
 #' @importFrom magrittr %>%
-#' @param code The code to execute
 #'
 #' @export
 magrittr::`%>%`
 
-# Execute code in the student environment
+#' Execute code in the student environment
+#' @param code The code to execute
+#' 
 #' @export
 execute_student <- function(code) {
   try(eval(substitute(code), envir = get_student_env()))

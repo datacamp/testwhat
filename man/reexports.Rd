@@ -5,9 +5,6 @@
 \alias{reexports}
 \alias{\%>\%}
 \title{Objects exported from other packages}
-\arguments{
-\item{code}{The code to execute}
-}
 \keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
