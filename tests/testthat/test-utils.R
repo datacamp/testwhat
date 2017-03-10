@@ -27,3 +27,50 @@ test_that("accessor works", {
   expect_equal(tw$get(), list())
   expect_equal(tw$get("a"), NULL)
 })
+
+
+test_that("check_output - basic", {
+  # Student envrionment manipulation
+  lst <- list()
+  lst$DC_ECHO <- TRUE
+  lst$DC_SOLUTION <- "x <- 5"
+  lst$DC_SCT <- "tryCatch(test_object('x'), finally = execute_student(rm(x)))"
+  
+  # correct answer
+  lst$DC_CODE <- "x <- 5"
+  output <- test_it(lst)
+  passes(output)
+  # should be cleaned up
+  expect_equal(length(ls(envir = .GlobalEnv)), 0)
+  expect_equal(length(ls(envir = RBackend:::dc$get("sol_env"))), 1)
+  
+  # incorrect answer
+  lst$DC_CODE <- "x <- 7"
+  output <- test_it(lst)
+  fails(output)
+  # should also be cleaned up
+  expect_equal(length(ls(envir = .GlobalEnv)), 0)
+  expect_equal(length(ls(envir = RBackend:::dc$get("sol_env"))), 1)
+  
+  # Solution envrionment manipulation
+  lst <- list()
+  lst$DC_ECHO <- TRUE
+  lst$DC_SOLUTION <- "x <- 5"
+  lst$DC_SCT <- "tryCatch(test_object('x'), finally = execute_solution(rm(x)))"
+  
+  # correct answer
+  lst$DC_CODE <- "x <- 5"
+  output <- test_it(lst)
+  passes(output)
+  # should be cleaned up
+  expect_equal(length(ls(envir = .GlobalEnv)), 1)
+  expect_equal(length(ls(envir = RBackend:::dc$get("sol_env"))), 0)
+  
+  # incorrect answer
+  lst$DC_CODE <- "x <- 7"
+  output <- test_it(lst)
+  fails(output)
+  # should also be cleaned up
+  expect_equal(length(ls(envir = .GlobalEnv)), 1)
+  expect_equal(length(ls(envir = RBackend:::dc$get("sol_env"))), 0)
+})

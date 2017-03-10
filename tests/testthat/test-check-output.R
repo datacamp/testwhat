@@ -75,7 +75,7 @@ test_that("check_output_expr - basic", {
 
   lst$DC_CODE <- "print(12)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Is the output of <code>print\\(123\\)</code> in your script")
+  fails(output, mess_patt = "Did your code produce the same output as <code>print\\(123\\)</code>?")
 
   lst$DC_CODE <- "print(123)"
   output <- test_it(lst)
@@ -122,7 +122,7 @@ test_that("check_output_expr - backwards compatatibility", {
 
   lst$DC_CODE <- "print(12)"
   output <- test_it(lst)
-  fails(output, mess_patt = "Is the output of <code>print\\(123\\)</code> in your script")
+  fails(output, mess_patt = "Did your code produce the same output as <code>print\\(123\\)</code>?")
 
   lst$DC_CODE <- "print(123)"
   output <- test_it(lst)
