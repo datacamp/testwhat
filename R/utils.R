@@ -13,19 +13,25 @@ check_sufficient <- function(calls, index, name) {
   }
 }
 
-#' @export
-execute_code <- function(code, stud_env = TRUE, sol_env = TRUE) {
-  if (stud_env) {
-    eval(substitute(code), envir = get_student_env())
-  }
-  if (sol_env) {
-    eval(substitute(code), envir = get_solution_env())
-  }
-}
-
 #' @importFrom magrittr %>%
+#' @param code The code to execute
+#'
 #' @export
 magrittr::`%>%`
+
+# Execute code in the student environment
+#' @export
+execute_student <- function(code) {
+  try(eval(substitute(code), envir = get_student_env()))
+}
+
+#' Execute code in the solution environment
+#' @param code The code to execute
+#'
+#' @export
+execute_solution <- function(code) {
+  try(eval(substitute(code), envir = get_solution_env()))
+}
 
 #' Get solution environment (backwards comp)
 #' @export

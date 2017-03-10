@@ -2,10 +2,10 @@
 % Please edit documentation in R/utils.R
 \name{get_student_env}
 \alias{get_student_env}
-\title{Get student environment (backwards copm)}
+\title{Get student environment (backwards comp)}
 \usage{
 get_student_env()
 }
 \description{
-Get student environment (backwards copm)
+Get student environment (backwards comp)
 }
