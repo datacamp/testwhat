@@ -19,6 +19,16 @@ test_that("check_expr - result", {
   passes(output)
 })
 
+test_that("check_expr - result with randomness", {
+  lst <- list()
+  lst$DC_SOLUTION <- ""
+  lst$DC_CODE <- ""
+  lst$DC_SCT <- "ex() %>% check_expr('rnorm(1)') %>% check_result() %>% check_equal()"
+  
+  output <- test_it(lst)
+  passes(output)
+})
+
 test_that("check_expr - result - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))"

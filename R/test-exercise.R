@@ -26,7 +26,8 @@ test_exercise <- function(sct,
                           student_env,
                           solution_env,
                           output_list,
-                          in_test_mode = FALSE) {
+                          in_test_mode = FALSE,
+                          seed = 42) {
   # backwards compatibility with older versions of RBackend
   if (missing(student_env)) {
     student_env <- globalenv()
@@ -51,7 +52,7 @@ test_exercise <- function(sct,
                            solution_env = solution_env,
                            output_list = output_list,
                            test_env = new.env(parent = environment()))
-    tw$set(state = state, reporter = DC_reporter$new(), stack = TRUE)
+    tw$set(state = state, reporter = DC_reporter$new(), stack = TRUE, seed = seed)
     on.exit(tw$clear())
     
     # Execute sct with the DataCamp reporter such that it collects test results
