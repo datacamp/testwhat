@@ -1,5 +1,8 @@
 language: R
 sudo: false
 cache: packages
-r_check_args: --as-cran --no-tests
-
+r_check_args: --as-cran
+install:
+    - R -e 'install.packages("devtools")'
+    - R -e 'devtools::install_deps(dep = T)'
+    - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"), dependencies = FALSE)'
