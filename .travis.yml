@@ -3,6 +3,7 @@ sudo: false
 cache: packages
 r_check_args: --as-cran
 install:
-    - R -e 'install.packages("devtools")'
+    - R -e 'install.packages(c("devtools", "rjson"))'
     - R -e 'devtools::install_deps(dep = T)'
-    - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"), dependencies = FALSE)'
+    - R -e 'devtools::install(".")'
+    - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend@fix-is-datacamp"), dependencies = FALSE)'

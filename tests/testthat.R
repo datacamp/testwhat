@@ -1,2 +1,7 @@
+Sys.unsetenv("R_TESTS")
+
 library("testthat")
-test_check("testwhat")
+
+library("testwhat")
+
+test_dir("testthat")

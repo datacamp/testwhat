@@ -20,7 +20,9 @@ Suggests:
     rmarkdown,
     ggvis,
     lazyeval,
-    testthat
+    testthat,
+    RBackend
+Remotes: datacamp/r-backend
 License: MIT + file LICENSE
 LazyData: true
 Authors@R: c(person("Andreas", "Alfons", role = "aut"),

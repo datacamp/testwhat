@@ -3,6 +3,7 @@ context("check_wd")
 ## Really funky stuff with these tests...
 
 test_that("check_wd - 1", {
+  skip_on_travis()
   lst <- list()
   lst$DC_PEC <- "if (file.exists('testing.txt')) file.remove('testing.txt')"
   lst$DC_CODE <- "write('testing', file = 'testing.txt')"
@@ -13,6 +14,7 @@ test_that("check_wd - 1", {
 })
 
 test_that("check_wd - 2", {
+  skip_on_travis()
   lst <- list() # no pec, no solution, no user code
 
   lst$DC_SCT <- "ex() %>% check_wd('non_existing.txt')"
@@ -25,6 +27,7 @@ test_that("check_wd - 2", {
 })
 
 test_that("check_wd - 3", {
+  skip_on_travis()
   lst <- list() # no pec, no solution, no user code
 
   lst$DC_SCT <- "ex() %>% check_wd('test/non_existing.txt')"
@@ -37,6 +40,7 @@ test_that("check_wd - 3", {
 })
 
 test_that("test_file_exists - backwards compatible - 1", {
+  skip_on_travis()
   lst <- list()
   lst$DC_PEC <- "if (file.exists('testing.txt')) file.remove('testing.txt')"
   lst$DC_CODE <- "write('testing', file = 'testing.txt')"
@@ -47,6 +51,7 @@ test_that("test_file_exists - backwards compatible - 1", {
 })
 
 test_that("test_file_exists - backwards compatible - 2", {
+  skip_on_travis()
   lst <- list() # no pec, no solution, no user code
 
   lst$DC_SCT <- "test_file_exists('non_existing.txt')"
@@ -59,6 +64,7 @@ test_that("test_file_exists - backwards compatible - 2", {
 })
 
 test_that("test_file_exists - backwards compatible - 3", {
+  skip_on_travis()
   lst <- list() # no pec, no solution, no user code
 
   lst$DC_SCT <- "test_file_exists('test/non_existing.txt')"
