@@ -26,7 +26,6 @@ test_exercise <- function(sct,
                           student_env,
                           solution_env,
                           output_list,
-                          in_test_mode = FALSE,
                           seed = 42) {
   # backwards compatibility with older versions of RBackend
   if (missing(student_env)) {
