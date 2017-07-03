@@ -5,7 +5,7 @@
 \title{Run all tests for an exercise}
 \usage{
 test_exercise(sct, ex_type, pec, student_code, solution_code, student_env,
-  solution_env, output_list, in_test_mode = FALSE)
+  solution_env, output_list, seed = 42)
 }
 \arguments{
 \item{sct}{Submission correctness tests as a character string.}
