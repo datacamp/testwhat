@@ -105,6 +105,8 @@ check_object <- function(state, name, undefined_msg = NULL, append = TRUE) {
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")
   
+  assert_is_string(name)
+  
   obj_state <- ObjectState$new(state)
   obj_state$add_details(type = "object",
                         case = "defined",
@@ -141,6 +143,7 @@ check_element <- function(state, el, el_missing_msg = NULL, append = TRUE) {
 
 
 check_sub_helper <- function(state, sub, sub_missing_msg, append, type = c("column", "element")) {
+  assert_is_string(sub)
   type <- match.arg(type)
   ObjectSubState <- switch(type, column = ObjectColumnState, element = ObjectElementState)
   student_object <- state$get("student_object")

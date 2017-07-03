@@ -90,3 +90,8 @@ tw <- tw_accessors()
 `%||%` <- function(a, b) {
   if (!is.null(a)) a else b
 }
+
+assert_is_string <- function(x, sct_name) {
+  if (!is.character(x))
+    stop(x, paste0(sys.call(1)[1], " requires a string, but received the class", typeof(x), '.'))
+}
