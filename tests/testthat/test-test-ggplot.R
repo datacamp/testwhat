@@ -30,7 +30,7 @@ cyl.am +
                     values = c("#E41A1C", "#377EB8"),
                     labels = c("Manual", "Automatic")) +
   scale_y_continuous("Number") +
-  scale_x_discrete("Cylinders") + stat_smooth(method = "lm") + xlab("test")
+  scale_x_discrete("Cylinders") + xlab("test")
         '
   lst$DC_SOLUTION <- '
 # base layers
@@ -60,8 +60,7 @@ a = 1
     values = c("#E41A1C", "#377EB8"),
     labels = c("Manual", "Automatic")) +
     scale_y_continuous("Number") +
-    scale_x_discrete("Cylinders") +
-    stat_smooth(method = "lm") + xlab("test")
+    scale_x_discrete("Cylinders") + xlab("test")
     '
   
   lst$DC_SCT <- 'test_ggplot(6, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab", extra_fail_msg = "Wrong x-label", all_fail_msg = "Everything goes wrong")'

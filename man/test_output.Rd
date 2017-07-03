@@ -59,9 +59,10 @@ student's output. By default, regular output, messages, warnings and errors
 are considered.
 
 With \code{test_output_contains} and \code{check_output_expr} you can pass an
-expression, that is executed and whose output is compared to the output the
-student generated. If the generated output is found in the student's output,
-the check passes. By default, only regular output is considered.
+expression, that is executed in the student environment, and whose output is 
+compared to the output the student generated. If the generated output is found
+in the student's output, the check passes. By default, only regular output is
+considered.
 }
 \examples{
 \dontrun{

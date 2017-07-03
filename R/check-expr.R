@@ -142,11 +142,13 @@ run_expr_helper <- function(state, expr, expr_str, error_msg, append, case = c("
                              append = append,
                              pd = NULL)
   
+  set.seed(tw$get("seed"))
   sol_res <- tryCatch(converter(eval(expr, envir = state$get("solution_env"))), error = function(e) e)
   if (inherits(sol_res, 'error')) {
     stop(sprintf("Running %s gave an error", expr_str))
   }
   
+  set.seed(tw$get("seed"))
   stud_res <- tryCatch(converter(eval(expr, envir = state$get("student_env"))), error = function(e) e)
   check_that(is_false(inherits(stud_res, 'error')), feedback = expreval_state$details)
   
@@ -170,11 +172,13 @@ run_expr_error_helper <- function(state, expr, expr_str, no_error_msg, append) {
                               append = append,
                               pd = NULL)
   
+  set.seed(tw$get("seed"))
   sol_res <- tryCatch(eval(expr, envir = state$get("solution_env")), error = function(e) e)
   if (!inherits(sol_res, 'error')) {
     stop(sprintf("Running %s didn't give an error, while it should.", expr_str))
   }
   
+  set.seed(tw$get("seed"))
   stud_res <- tryCatch(eval(expr, envir = state$get("student_env")), error = function(e) e)
   check_that(is_true(inherits(stud_res, 'error')), feedback = exprerror_state$details)
   
