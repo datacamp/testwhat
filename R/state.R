@@ -152,6 +152,8 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
   )
 )
 
+FileSysState <- R6::R6Class("FileSysState", inherit = RootState)
+
 CallState <- R6::R6Class("FunctionState", inherit = ChildState, private = list(student_calls = NULL, solution_call = NULL))
 FunctionState <- R6::R6Class("FunctionState", inherit = CallState)
 OperationState <- R6::R6Class("OperationState", inherit = CallState)
@@ -180,8 +182,8 @@ ControlState <- R6::R6Class("ControlState", inherit = ChildState, private = list
 SubState <- R6::R6Class("SubState", inherit = ChildState)
 
 RegexState <- R6::R6Class("RegexState", inherit = ChildState)
-FileState <- R6::R6Class("FileState", inherit = ChildState)
 ErrorState <- R6::R6Class("ErrorState", inherit = ChildState)
+FileState <- R6::R6Class("FileState", inherit = ChildState)
 
 MarkdownState <- R6::R6Class("MarkdownState", inherit = ChildState,
                              private = list(student_ds = NULL,
