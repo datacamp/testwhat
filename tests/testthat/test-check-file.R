@@ -67,6 +67,18 @@ test_that("check_file followed by test_student_typed incorrect", {
   expect_error(check_code(fstate, "wrong", fixed = TRUE), "<sct_failed_error>")
 })
 
+test_that("check_file parses new file correctly", {
+  state <- do.call(file_state, CODE_SIMPLE)
+  fstate <- check_file(state, 'right.R')
+  expect_equivalent(fstate$get('student_pd'), testwhat:::build_pd("'right'"))
+})
+
+test_that("check_file misparse uses null for parse data", {
+  state <- file_state(STU_CODE = list('script.R' = '_1'), SOL_CODE = list('script.R' = '1'))
+  fstate <- check_file(state, 'script.R')
+  expect_null(fstate$get("student_pd"))
+})
+
 # test test_exercise with check_file ----
 
 pf_test_ex <- function(sct) test_exercise(
