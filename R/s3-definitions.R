@@ -50,6 +50,17 @@ check_body.default <- function(state, ...) {
   stop("Can't run check_body() with a ", class(state)[1], " as input state.", call. = FALSE)
 }
 
+#' @rdname s3definitions
+#' @export
+check_file <- function(state, ...) {
+    UseMethod("check_file", state)
+}
+
+#' @rdname s3definitions
+#' @export
+check_file.default <- function(state, ...) {
+  stop("Can't run check_file() with a ", class(state)[1], " as input state.", call. = FALSE)
+}
 
 
 

@@ -42,7 +42,9 @@ test_exercise <- function(sct,
   } else {
     # Store everything that's needed locally (initialize does a full reset)
     tw$clear()
-    state <- RootState$new(pec = pec,
+    StateCls <- if (length(student_code) > 1) FileSysState else RootState
+    
+    state <- StateCls$new(pec = pec,
                            student_code = student_code,
                            student_pd = build_pd(student_code),
                            student_env = student_env,

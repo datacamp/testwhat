@@ -9,6 +9,8 @@
 \alias{check_error}
 \alias{check_body}
 \alias{check_body.default}
+\alias{check_file}
+\alias{check_file.default}
 \title{S3 definitions}
 \usage{
 check_equal(state, ...)
@@ -24,6 +26,10 @@ check_error(state, ...)
 check_body(state, ...)
 
 \method{check_body}{default}(state, ...)
+
+check_file(state, ...)
+
+\method{check_file}{default}(state, ...)
 }
 \arguments{
 \item{state}{state to start from}
