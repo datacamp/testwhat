@@ -386,7 +386,7 @@ test_that("embedded check_fun_def - outer function", {
                  innerfun_def <- fundef %>% check_body()"
 
   lst$DC_CODE <- lst$DC_SOLUTION
-  output <- test_it(lst)
+  capture.output(output <- test_it(lst))
   passes(output)
 })
 
