@@ -89,15 +89,15 @@ extract_function_definition <- function(pd, name) {
   sub_pds <- extract_assignments(pd, name)
   if(length(sub_pds) == 1) {
     pd <- sub_pds[[1]]
-    function_parent <- pd$parent[pd$token == "FUNCTION"]
-    if (length(function_parent) == 1) {
+    function_parents <- pd$parent[pd$token == "FUNCTION"]
+    fundefs <- lapply(function_parents, function(function_parent) {
       last_brother <- tail(pd$id[pd$parent == function_parent], 1)
       code <- getParseText(pd, last_brother)
       sub_pd <- get_sub_pd(pd, last_brother)
       return(list(code = code, pd = sub_pd))
-    } else {
-      return(NULL)
-    }
+    })
+    # only the first parent (if there are embbedded definitions)
+    return(fundefs[[1]])
   } else {
     return(NULL)
   }
