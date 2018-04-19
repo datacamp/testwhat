@@ -90,6 +90,9 @@ extract_function_definition <- function(pd, name) {
   if(length(sub_pds) == 1) {
     pd <- sub_pds[[1]]
     function_parents <- pd$parent[pd$token == "FUNCTION"]
+    if (length(function_parents) == 0) {
+      return(NULL)
+    }
     fundefs <- lapply(function_parents, function(function_parent) {
       last_brother <- tail(pd$id[pd$parent == function_parent], 1)
       code <- getParseText(pd, last_brother)

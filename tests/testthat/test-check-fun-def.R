@@ -208,6 +208,27 @@ test_that("check_fun_def - errs appropriately", {
   # TODO
 })
 
+test_that("embedded check_fun_def - outer function", {
+  lst <- list()
+  lst$DC_SOLUTION <- "my_fun <- function(x) { twice <- function(a) { a * 2 }; twice(x) }"
+  lst$DC_SCT <- "ex() %>% check_fun_def('my_fun') %>% check_body()"
+  lst$DC_CODE <- lst$DC_SOLUTION
+  capture.output(output <- test_it(lst))
+  passes(output)
+})
+
+test_that("check_fun_def - function instead of function def", {
+  lst <- list()
+  lst$DC_SOLUTION <- "my_fun <- function(x) { x + 2 }"
+  lst$DC_SCT <- "ex() %>% check_fun_def('my_fun') %>% check_body()"
+  lst$DC_CODE <- "my_fun <- mean"
+  capture.output(output <- test_it(lst))
+  fails(output, mess_patt = "Did you correctly define")
+})
+
+test_that("embedded check_fun_def - inner function", {
+  # TODO not supported yet
+})
 
 context("test_function_definition (old)")
 
@@ -375,21 +396,4 @@ test_that("test_function_definition works with control structure in there", {
   lst$DC_CODE <- lst$DC_SOLUTION
   capture.output(output <- test_it(lst))
   passes(output)
-})
-
-test_that("embedded check_fun_def - outer function", {
-  expect_equal(TRUE, TRUE)
-  lst <- list()
-  lst$DC_SOLUTION <- "my_fun <- function(x) { twice <- function(a) { a * 2 }; twice(x) }"
-  lst$DC_SCT <- "fundef <- ex() %>% check_fun_def('my_fun')
-                 fundef %>% check_arguments()
-                 innerfun_def <- fundef %>% check_body()"
-
-  lst$DC_CODE <- lst$DC_SOLUTION
-  capture.output(output <- test_it(lst))
-  passes(output)
-})
-
-test_that("embedded check_fun_def - inner function", {
-  # TODO not supported yet
 })
