@@ -21,7 +21,9 @@ Suggests:
     ggvis,
     lazyeval,
     testthat,
-    RBackend
+    RBackend,
+    rjson,
+    covr
 Remotes: datacamp/r-backend
 License: MIT + file LICENSE
 LazyData: true

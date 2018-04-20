@@ -3,7 +3,8 @@ sudo: false
 cache: packages
 r_check_args: --as-cran
 install:
-    - R -e 'install.packages(c("devtools", "rjson"))'
-    - R -e 'devtools::install_deps(dep = T)'
-    - R -e 'devtools::install(".")'
-    - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"), dependencies = FALSE)'
+    - R -e 'install.packages(c("dplyr", "ggvis", "hflights", "ggplot2", "car", "RColorBrewer", "rpart"))'
+    - R -e 'devtools::install(".", dependencies = TRUE)'
+    - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"), dependencies = TRUE)'
+after_success:
+  - Rscript -e 'covr::codecov()'
