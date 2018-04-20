@@ -2,14 +2,16 @@
 
 [![Build Status](https://api.travis-ci.org/datacamp/testwhat.svg?branch=master)](https://travis-ci.org/datacamp/testwhat)
 [![codecov.io](https://codecov.io/github/datacamp/testwhat/coverage.svg?branch=master)](https://codecov.io/github/datacamp/testwhat?branch=master)
-[![Rdoc](http://www.rdocumentation.org/badges/version/testwhat)](http://www.rdocumentation.org/packages/testwhat)
+[![Rdocs](http://www.rdocumentation.org/badges/version/testwhat)](http://www.rdocumentation.org/packages/testwhat)
 
-The `testwhat` package provides rich functionality to write Submission Correctness Tests for interactive R exercises on the DataCamp platform. The package is inspired by [Hadley Wickham's `testthat` package](https://github.com/hadley/testthat), the standard for unit testing in R. For a detailed guide on how to use `testwhat`, head over to the [wiki](https://github.com/datacamp/testwhat/wiki). To learn more about course creation for DataCamp, visit our [Teach Documentation](https://www.datacamp.com/teach/documentation).
+The `testwhat` package provides rich functionality to write Submission Correctness Tests for interactive R exercises on the DataCamp platform. The package is inspired by [`testthat`](https://github.com/hadley/testthat), the standard for unit testing in R.
 
-## Documentation
+## Reference
 
-* [testwhat wiki](https://github.com/datacamp/testwhat/wiki)
-* [full tutorial](https://github.com/datacamp/courses-testwhat-tutorial)
+* Wiki: https://github.com/datacamp/testwhat/wiki
+* Full tutorial: https://github.com/datacamp/courses-testwhat-tutorial
+* Teach on DataCamp: https://authoring.datacamp.com
+* Extensions: https://github.com/datacamp/testwhat.ext
 
 ## Installation
 
@@ -18,20 +20,13 @@ library("devtools")
 install_github("datacamp/testwhat")
 ```
 
-## Testing this package
+## Running tests
 
-Because `testwhat` depends on proprietary R packages, you can only run the tests on a system that has these packages installed. If you have the private [codecov](https://codecov.io/github/datacamp/testwhat) token, you can also upload the coverage results:
+`testwhat` currently depends on the proprietary `RBackend` and `RCompletion` packages to run tests.
 
 ```R
-# Run the tests locally
 devtools::test()
-
-# Run only a part of the tests
-devtools::test(filter = "test-object")
-
-# Upload code coverage report to codecov.io
-covr::codecov(token = "private_token")
 ```
 
-For more details, questions and suggestions, you can contact <b>learn-engineering@datacamp.com</b>.
+For more details, questions and suggestions, [contact us](mailto:content-engineering@datacamp.com).
 
