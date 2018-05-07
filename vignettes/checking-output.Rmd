@@ -1,0 +1,65 @@
+---
+title: "Checking output"
+author: "Filip Schouwenaars"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Search for pattern in output
+
+`check_output()` enables you to check for patterns or literal matches in the output the student generated with his or her submission. Where `check_output_expr()` (see next section) _executes_ the `expr` argument you pass it and then tries to match it to the student's output, the `check_output()` function doesn't perform any execution: it simply looks for matches for the `pattern` you specify.
+
+### Example
+
+Suppose you want to check whether the student printed out `My name is <name here>`. A solution could look like this:
+
+```{r}
+# Print out your name
+"My name is DataCamp"
+```
+
+To allow for different names here, you can use the following SCT:
+
+```{r}
+ex() %>% check_output("[M|m]y name is [a-zA-Z]+?", missing_msg = "Have you printed out your name?")
+```
+
+The regex allows you to allow both `my` and `My`, and to allow any name, as long as its first character is a letter and there's at least one such character.
+
+[Click here to learn more about regular expressions in R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html).
+
+## Search if student output contains output of expression
+
+`check_output_expr()` executes the `expr` - an R expression as a string that you specify - and records the output it generates. Next, it tries to match this output to the output that the student generated with his or her submission. With `times` you can specify how often this match should occur, and with `incorrect_msg` you can override the automatically generated message in case the test failed.
+
+**`check_output_expr()` is used very often, typically to check if the student correctly printed out a variable, whatever its class**. It is also pretty robust to different solutions: how people end up printing the variable doesn't matter, as long as the output contains the correct info it's all good.
+
+**WATCH OUT:** `check_output_expr()` is only appropriate to test _textual output_, so actual printouts to the console. It will not work to test function calls that do not generate any output, or that generate plot output. Using, for example, `test_output_contains("hist(mtcars$mpg)")` to test whether a student correctly created a histogram of the `mpg` column of `mtcars` makes no sense: the `hist()` function does not generate textual output that can be captured with `capture.output()`.
+
+### Example
+
+Suppose you want the student to print out the fourth row of the `mtcars` data frame. The solution would look as follows:
+
+```{r}
+# Print out the fourth row of mtcars
+mtcars[4, ]
+```
+
+The following SCT would check this:
+
+```{r}
+ex() %>% check_output_expr("mtcars[4, ]", missing_msg = "Have you used `[4, ]` to print out the fourth row of `mtcars`?")
+```
+
+You simply pass the expression that would generate the correct printout as an expression, and `check_output_expr()` takes care of the rest. You can also use a custom `missing_msg` to give meaningful feedback to the student.

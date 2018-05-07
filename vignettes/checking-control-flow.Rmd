@@ -1,0 +1,117 @@
+---
+title: "Checking control flow"
+author: "Filip Schouwenaars"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Checking control flow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+You can use `check_for()`, `check_while()` and `check_if_else()` chains to check whether a student has properly coded control constructs.
+
+## Example 1: For loop
+
+Consider the following solution:
+
+```{r}
+# Print out the integers 1 to 10
+for (i in 1:10) {
+  print(i)
+}
+```
+
+A suitable SCT for this exercise can be the following:
+
+```{r}
+forloop <- ex() %>% check_for(not_found_msg = "Make sure to code a for loop in the first place!")
+forloop %>% check_cond() %>% check_code("in\\s*1:10", missing_msg = "You can use `i in 1:10` to define your for loop.")
+forloop %>% check_body() %>% check_function("print") %>% check_arg("x") %>% check_equal(eval = FALSE)
+```
+
+- `check_for()` checks whether students have specified a `for` loop in their code. If this is the case, it produces a substate, referring to the condition of the for loop and its body.
+- Next, you can 'zoom in' on the condition and body of the `for` loop, using `check_cond()` and `check_body()` respectively.  After this zooming in, you can continue the chain of SCT functions to check these 'parts' of the code. The `check_code()` call, for example, only looks to match the regular expression in the iteration part of the `for` loop.
+
+## Example 2: Check if else
+
+Consider the following solution:
+	
+```{r}
+# Predefined value of x
+x <- TRUE
+
+# Code the if else construct
+if (x) {
+  print("x is TRUE!")
+} else {
+  print("x is not TRUE!")
+}
+```
+
+The following SCT checks its correctness:
+
+```{r}
+ex() %>% check_object("x")
+ifelse <- ex() %>% check_if_else()
+ifelse %>% check_cond() %>% check_code("x")
+ifelse %>% check_if() %>% check_function("print") %>% check_arg("x") %>% check_equal()
+ifelse %>% check_else() %>% check_function("print") %>% check_arg("x") %>% check_equal()
+```
+
+- `check_if_else()` parses the student code and checks if there is an if-else statement in there.
+- `check_cond`, `check_if`, and `check_else()` all 'zoom in' on a particular part of the if-else statement: the condition, the body of the `if` statement and the body of the `else` statement. After this zooming in, you can continue the chain of SCT functions to check these 'parts' of the code. The first `check_function("print")` chain for example, only looks for the function call inside the `if` body.
+
+### Example 3: Check if, else if, else
+
+It is also possible to use `else if` in R. How to test this? Well, behind the scenes, R parses the following structure:
+
+```{r}
+if (condition1) {
+  expression
+} else if (condition2) {
+  expression
+} else {
+  expression
+}
+```
+
+as if it follows this structure:
+
+```{r}
+if (condition1) {
+  expression
+} else {
+  if (condition2) {
+
+  } else {
+
+  }
+}
+```
+
+If you want to test such a piece of code, you therefore need the following construct:
+
+```{r}
+ex() %>% check_if_else() %>% {
+  check_cond(.) %>% ...
+  check_if(.) %>% ...
+  check_else(.) %>% check_if_else() %>% {
+    check_cond(.) %>% ...
+    check_if(.) %>% ...
+    check_else(.) %>% ...
+  }
+}
+```
+
+## Caution
+
+Not all of the SCT chains that you specify after a 'zooming in' step might work as you'd expect. Remind that functions like `test_object()` and `test_function()` often depend on both the student and solution environment. It is possible that during execution of control flow these values change. The `testwhat` functions will always compare the 'end environment' of student and solution, it is not possible to do matching on intermediate values of objects that are changed further in the script.
+

@@ -1,9 +1,9 @@
 ---
-title: "Check function calls"
+title: "Checking function calls"
 author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Checking Objects}
+  %\VignetteIndexEntry{Checking function calls}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

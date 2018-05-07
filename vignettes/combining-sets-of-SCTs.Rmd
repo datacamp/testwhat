@@ -1,0 +1,103 @@
+---
+title: "Combining sets of SCTs"
+author: "Filip Schouwenaars"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Combining sets of SCTs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+In R, there are many ways to solve a problem. Writing an SCT that checks when students make a mistake, but is robust to multiple different solutions is a challenge. `check_correct` and `test_or` allow you to add logic to your SCT. Instead of running all tests and failing as soon as one of the tests fail, you can conditionally execute tests, and interpret the results separately.
+
+### Example 1: `check_correct`
+
+As an example, suppose you want the student to calculate the mean of a vector `vec` and store it in `res`. A possible solution could be:
+
+```{r}
+# vec is predefined for you
+vec <- c(1, 2, 3, 4, 5, 6)
+
+# Calculate result
+result <- mean(vec)
+```
+
+You want the SCT to pass when the student manages to store the correct value in the object `result`. How `result` was calculated, does not matter to you: as long as `result` is correct, the SCT should accept the submission. If something `result` is not correct, you want to dig a little deeper and see if the student used the `mean()` function correctly. The following SCT will do just that:
+
+```{r}
+check_correct(ex() %>% check_object("result") %>% check_equal(),
+              {
+                ex() %>% check_error()
+                ex() %>% check_function("mean") %>% check_arg("x") %>% check_equal()
+              })
+```
+
+Notice that it's perfectly possible to specify more than one SCT function call in the arguments as the second sub-SCT shows.
+
+Let's go over what happens when the student submits different versions of the fifth line of code in the solution:
+
+- The student submits `result <- mean(vec)`, exactly the same as the solution.
+  + `check_correct()` executes the first sub-SCT chain (`check_object()`)
+  + This SCT chain passes, so the second sub-SCT chain is not executed.
+  + The overall SCT passes.
+- The student submits `result <- sum(vec)/length(vec)`, which should be correct
+  + `check_correct()` executes the first sub-SCT chain
+  + This SCT chain passes, so the second sub-SCT chain is not executed.
+  + The overall SCT passes, even though `mean()` was not used.
+- The student submits `result <- mean(vec + 1)`.
+  + `check_correct()` executes the first sub-SCT chain.
+  + This sub-SCT chain fails _silently_, so `check_correct()` heads over to the second, 'diagnose' sub-SCT chain (`check_function()` etc)
+  + `check_function()` will fail, because the parameter passed to `mean()` does not correspond to the argument passed in the solution.
+  + The overall SCT fails, with a meaningful, specific feedback message: you did not correctly specify the argument inside `mean()`.
+- The student submits `result <- mean(vec) + 1`.
+  + `check_correct()` executes the first sub-SCT chain
+  + This sub-SCT chain fails _silently_, so `check_correct()` heads over to the second, 'diagnose' sub-SCT chain (`check_function()` etc)
+  + Both functions in the second sub-SCT chain pass, because `mean()` is called in exactly the same way in the student code as in the solution.
+  + Because there is clearly something wrong - `result` is not correct - the 'check' sub-SCT, `ex() %>% test_object("result")` is executed again, but _loudly_ this time.
+  + `check_object()` fails _loudly_ and the student gets the message that `result` does not contain the correct value.
+
+
+## Example 2: `check_or`
+
+This function simply tests whether one of the sub-SCTs you specify inside it passes. If such as a sub-SCT is a single function, you can simply pass the function call as is. If you want to include multiple functions in a sub-SCT, use curly brackets (see previous example). 
+
+Suppose you want to check whether people correctly printed out any integer between 3 and 7. A solution could be:
+
+```{r}
+print(4)
+```
+
+To test this, you can use `test_or` with three separate `check_output_expr()` functions.
+
+```{r}
+check_or(ex() %>% check_output_expr('4'),
+         ex() %>% check_output_expr('5'),
+         ex() %>% check_output_expr('6'))
+success_msg("Nice job!")
+```
+
+If all of the SCTs that you pass fail, the feedback that the first sub-SCT generated is presented to the student. If you want to override the message that is shown if all sub-SCTs fail, you can manually specify `incorrect_msg` inside `check_or`:
+
+```{r}
+check_or(ex() %>% check_output_expr('4'),
+         ex() %>% check_output_expr('5'),
+         ex() %>% check_output_expr('6'),
+         incorrect_msg = "Just print out either 4, 5, or 6!")
+success_msg("Nice job!")
+```
+
+You can consider `check_or()` a logic-inducing function. The different calls to `testwhat` functions that are in your SCT are actually all tests that _have_ to pass: they are `AND` tests. With `test_or()` you can add chunks of `OR` tests in there.
+
+## Why use it?
+
+You will find that `check_correct()` and `check_or()` are extremely powerful functions to allow for different ways of solving the same problem.
+
+For example, you can use `check_correct()` to check the end result of a calculation. If the end result is correct, you can go ahead and accept the entire exercise. If the end result is incorrect, you can use the `diagnose_code` part of `check_correct()` to dig a little deeper. It is also perfectly possible to use `check_correct()` inside another `check_correct()`, to make things more advanced.

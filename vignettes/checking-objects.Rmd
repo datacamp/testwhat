@@ -1,0 +1,144 @@
+---
+title: "Checking objects"
+author: "Filip Schouwenaars"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Checking objects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+`check_object()` is the start of your SCT chains to check whether students have correctly defined objects.
+
+### Example 1: Simple object
+
+Consider the following solution:
+
+```{r}
+# Create the variable x
+x <- 15
+```
+
+You don't care too much about how `x` was created, as long as it's defined and refers to the correct value. To test this robustly, you can use `check_object()` in your SCT:
+
+```{r}
+ex() %>% check_object("x") %>% check_equal()
+```
+
+`check_object()` will check if the variable `x` is defined and has the same value as `x` has in the solution environment. All of the following student submissions will be accepted by `check_object()`:
+
+- `x <- 15`
+- `x <- 12 + 3`
+- `x <- 3; x <- x + 12`
+
+How the object `x` came about does not matter: only the end result, the actual content of `x`, matters.
+
+### Example 2: Only check the existence
+
+Say that you want the student to create an object `x`, but you don't care what the contents of the variable are:
+
+```{r}
+# Create an arbitrary object x
+x <- 123
+```
+
+In your SCT< simply drop the `check_equal()` bit:
+
+```{r}
+ex() %>% check_object("x")
+success_msg("Arbitrary, I like that.")
+```
+
+### Example 3: `eq_condition`
+
+The argument `eq_condition` becomes important when working with data structures that can contain names, such as vectors and lists. Suppose you have the following solution:
+
+```{r}
+# Create the list l
+l <- list(a = 2, b = 3, c = 4)
+```
+
+To test this list, you can use the following SCT:
+
+```{r}
+ex() %>% check_object("l") %>% check_equal()
+```
+
+- `eq_condition = "equivalent"` by default, meaning that the names of the data structure are not checked. If the student creates a list `l` as follows:
+
+  ```{r}
+  l <- list(d = 2, e = 3, f = 4)
+  ```
+  
+  it will also be accepted.
+  
+- If you set `eq_condition = "equal"`:
+
+  ```{r}
+  ex() %>% check_object("l") %>% check_equal(eq_condition = "equal")
+  ```
+  
+  the data structure's attributes, such as its names, are also checked. Now, 
+  
+  ```{r}
+  l <- list(d = 2, e = 3, f = 4)
+  ```
+  
+  will not be accepted
+
+
+### Example 4: Automated feedback messages
+
+Just like for `check_equal()` in the `check_function()`-induced SCT chain, the automatic messages that are generated when the student makes mistakes of different kinds is continuously improved to be as insightful as possible. For example, when the solution expects:
+
+```{r}
+x = 123
+```
+
+but the student submits:
+
+```{r}
+x = "123"
+```
+
+An SCT that contains
+
+```{r}
+ex() %>% check_object('x') %>% check_equal()
+```
+
+will mention: "`x` is a character string, while it should be a number.". When comparing character strings between student and solution, this comparison goes further, hinting about potential incorrect capitalization, incorrect spacing, incorrect punctuation or possible typos.
+
+
+### Example 5: Complex objects
+
+Because R deals very often with more complex data structures, there are several utility functions to test specific parts of an object instead of the entire object as a whole. As an example, consider the following solution:
+    
+```{r}
+# A dataframe df is available
+df <- data.frame(name = c("vincent", "lisa", "robin"),
+                 count1 = c(4, 7, 2),
+                 count2 = c(5, 8, 10))
+
+# Add a column tot, sum of count1 and count2
+df$tot <- df$count1 + df$count2
+```
+
+To check whether the student correctly added this column, you can use the following SCT. As usual, the function is able to produce meaningful feedback in case of failure, but these messages can be overridden. To explain the meaning of the different steps, we have specified custom messages for each one of them:
+
+```{r}
+ex() %>% check_object("df", undefined_msg = "Make sure to not remove `df`!") %>%
+  check_column("tot", col_missing_msg = "Have you added the column `tot` to `df`?") %>%
+  check_equal(incorrect_msg = "Have you correctly calculated the column `tot` based on `count1` and `count2`?")
+```
+
+Equivalent to `check_column()`, `testwhat` also features the `check_element()` function to check the equality of list elements. The only difference with `check_column()` is the automatic feedback message that is generated, as a data frame is a list object and its elements are the columns.
+

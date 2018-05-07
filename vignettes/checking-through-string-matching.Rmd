@@ -1,9 +1,9 @@
 ---
-title: "Check through string matching"
+title: "Checking through string matching"
 author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Checking through string matching}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 With `check_code()`, you can look through the student's submission to find a match with the string or strings specified in `strings`. With `fixed` you can declare whether or not to use regular expressions. If `fixed = FALSE`, the default, the strings are used as regular expressions for which a match is sought. when `fixed = TRUE`, `check_code()` will consider the strings you pass as actual strings that have to be found exactly in the student's submission. `times` tells how often (one of) the string(s) should be matched.
 
 Before a match is sought, the student submission as well as the `strings` argument is 'cleaned up': spaces are removed, all `<-` are replaced by `=`, double strings are changed to single strings, etc. That way, you don't have to code all equivalent options.
@@ -27,11 +26,10 @@ Before a match is sought, the student submission as well as the `strings` argume
 
 Suppose you want the student to type the sentence "R is Rsome!", but you want to allow for some small mistakes regarding capitalization and the exclamation mark. The solution looks like this:
 
-		*** =solution
-		```{r}
-		# Write the sentence in quotes
-		"R is Rsome!"
-		```
+```{r}
+# Write the sentence in quotes
+"R is Rsome!"
+```
 
 The SCT could look as follows:
 
@@ -54,7 +52,7 @@ All of the following student submission would be accepted by this `testwhat` fun
 
 [Click here to learn more about regular expressions in R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html).
 
-## Example 2: Exact matchin
+## Example 2: Exact matching
 
 Suppose you want to check whether a student coded a SQL expression correctly:
 
