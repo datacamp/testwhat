@@ -1,0 +1,15 @@
+reference:
+  - title: Commonly used functions
+    contents:
+    - starts_with("check_")
+    - test_mc
+    - test_library_function
+    - success_msg
+    - override
+  - title: High-level function
+    contents:
+    - test_ggplot
+    - test_predefined_objects
+  - title: Internals
+    contents:
+    - test_exercise

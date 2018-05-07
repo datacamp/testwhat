@@ -5,7 +5,7 @@
 \alias{override_solution}
 \alias{override_solution_code}
 \alias{override_solution_env}
-\title{Override the solution code and pd in a state}
+\title{Functions to override solution code (and parse data) and variables in the solution environment.}
 \usage{
 override_solution(state, code = NULL, ...)
 

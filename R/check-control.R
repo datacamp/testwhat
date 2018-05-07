@@ -1,4 +1,4 @@
-#' Test if student coded a control statement correctly
+#' Check whether student coded a control statement correctly
 #' 
 #' @param state state to start from (for \code{check_} functions)
 #' @param index Number of that particular control statement to check
@@ -24,20 +24,8 @@
 #' } else {
 #'  str(vec)
 #' }
-#' 
-#' # SCT option 1
-#' test_if_else(1, 
-#'              if_cond_test = {
-#'                test_student_typed("%in%")
-#'                test_student_typed("vec")
-#'              },
-#'              if_expr_test = test_function("print")
-#'              else_expr_test = test_if_else(1,
-#'                                            if_cond_test = test_student_typed(">"),
-#'                                            if_expr_test = test_function("cat"),
-#'                                            else_expr_test = test_function("str")))
 #'                                            
-#' # SCT option 2
+#' # SCT
 #' ifelse <- check_if_else(1)
 #' ifelse %>% check_cond() %>% check_code("%in%")
 #' ifelse %>% check_cond() %>% check_code("vec")
@@ -53,16 +41,7 @@
 #'  print(x)
 #' }
 #' 
-#' # SCT Option 1
-#' test_while_loop(1, 
-#'                cond_test = test_student_typed(c("< 18", "18 >")),
-#'                expr_test = {
-#'                  test_student_typed(c("x + 5", "5 + x"))
-#'                  # no actual value matching possible!!
-#'                  test_function("print", args = 'x', eval = FALSE)
-#'                })
-#' 
-#' # SCT Option 2
+#' # SCT
 #' w <- check_while(1)
 #' w %>% check_cond() %>% check_code(c("< 18", "18 >"))
 #' w %>% check_body() %>% check_code(c("x + 5", "5 + x"))
@@ -73,16 +52,7 @@
 #'  print("hurray!") 
 #' }
 #' 
-#' # SCT Option 1
-#' test_for_loop(1, 
-#'               cond_test = {
-#'                 test_student_typed("in")
-#'                 test_student_typed("1")
-#'                 test_student_typed("5")
-#'               }, 
-#'               expr_test = test_function("print"), args = "x")
-#' 
-#' # SCT Option 2
+#' # SCT
 #' f <- ex() %>% check_for(1)
 #' cond <- f %>% check_cond() 
 #' cond %>% check_code("in")
@@ -91,96 +61,6 @@
 #' f %>% check_body() %>% check_function("print") %>% check_arg("x") %>% check_equal()
 #' }
 #' @name test_control
-
-#' @rdname test_control
-#' @export
-test_if_else <- function(index = 1, 
-                         if_cond_test = NULL, 
-                         if_expr_test = NULL, 
-                         else_expr_test = NULL,
-                         not_found_msg = NULL,
-                         missing_else_msg = NULL) {
-  old_state <- ex()  
-  test_env <- old_state$get("test_env")
-  on.exit(tw$set(state = old_state))
-  
-  testif <- old_state %>% check_if_else(index = index, not_found_msg = not_found_msg, append = is.null(not_found_msg))
-  
-  if_cond_test <- substitute(if_cond_test)
-  if (!is.null(if_cond_test)) {
-    cond_state <- testif %>% check_cond()
-    tw$set(state = cond_state)
-    eval(if_cond_test, envir = test_env)
-  }
-  
-  if_expr_test <- substitute(if_expr_test)
-  if (!is.null(if_expr_test)) {
-    ifexprstate <- testif %>% check_if()
-    tw$set(state = ifexprstate)
-    eval(if_expr_test, envir = test_env)
-  }
-  
-  else_expr_test <- substitute(else_expr_test)
-  if (!is.null(else_expr_test)) {
-    elseexprstate <- testif %>% check_else(not_found_msg = missing_else_msg, append = is.null(missing_else_msg))
-    tw$set(state = elseexprstate)
-    eval(else_expr_test, envir = test_env)
-  }
-}
-
-
-#' @rdname test_control
-#' @export
-test_while_loop <- function(index = 1, 
-                            cond_test = NULL, 
-                            expr_test = NULL,                          
-                            not_found_msg = NULL) {
-  cond_test <- substitute(cond_test)
-  expr_test <- substitute(expr_test)
-  test_loop(index = index, 
-            cond_test = cond_test,
-            expr_test = expr_test,
-            not_found_msg = not_found_msg,
-            fun = check_while)
-}
-
-#' @rdname test_control
-#' @export
-test_for_loop <- function(index = 1, 
-                          cond_test = NULL,
-                          expr_test = NULL,
-                          not_found_msg = NULL) {
-  cond_test <- substitute(cond_test)
-  expr_test <- substitute(expr_test)
-  test_loop(index = index, 
-            cond_test = cond_test,
-            expr_test = expr_test,
-            not_found_msg = not_found_msg,
-            fun = check_for)
-}
-
-test_loop <- function(index, cond_test, expr_test, not_found_msg, fun) {
-  old_state <- ex()
-  test_env <- old_state$get("test_env")
-  on.exit(tw$set(state = old_state))
-  
-  testloop <- old_state %>% fun(index = index, not_found_msg = not_found_msg, append = is.null(not_found_msg))
-  
-  if (!is.null(cond_test)) {
-    cond_state <- testloop %>% check_cond()
-    tw$set(state = cond_state)
-    eval(cond_test, envir = test_env)
-  }
-  
-  if (!is.null(expr_test)) {
-    body_state <- testloop %>% check_body()
-    tw$set(state = body_state)
-    eval(expr_test, envir = test_env)
-  }
-}
-
-
-
 
 #' @rdname test_control
 #' @export
@@ -299,6 +179,88 @@ check_else <- function(state, not_found_msg = NULL, append = TRUE) {
                          pd = student_struct[["else_part"]]$pd)
   decorate_state(else_state, student_struct, solution_struct, "else_part")
   return(else_state)
+}
+
+# Deprecated functions
+
+test_if_else <- function(index = 1, 
+                         if_cond_test = NULL, 
+                         if_expr_test = NULL, 
+                         else_expr_test = NULL,
+                         not_found_msg = NULL,
+                         missing_else_msg = NULL) {
+  old_state <- ex()  
+  test_env <- old_state$get("test_env")
+  on.exit(tw$set(state = old_state))
+  
+  testif <- old_state %>% check_if_else(index = index, not_found_msg = not_found_msg, append = is.null(not_found_msg))
+  
+  if_cond_test <- substitute(if_cond_test)
+  if (!is.null(if_cond_test)) {
+    cond_state <- testif %>% check_cond()
+    tw$set(state = cond_state)
+    eval(if_cond_test, envir = test_env)
+  }
+  
+  if_expr_test <- substitute(if_expr_test)
+  if (!is.null(if_expr_test)) {
+    ifexprstate <- testif %>% check_if()
+    tw$set(state = ifexprstate)
+    eval(if_expr_test, envir = test_env)
+  }
+  
+  else_expr_test <- substitute(else_expr_test)
+  if (!is.null(else_expr_test)) {
+    elseexprstate <- testif %>% check_else(not_found_msg = missing_else_msg, append = is.null(missing_else_msg))
+    tw$set(state = elseexprstate)
+    eval(else_expr_test, envir = test_env)
+  }
+}
+
+test_while_loop <- function(index = 1, 
+                            cond_test = NULL, 
+                            expr_test = NULL,                          
+                            not_found_msg = NULL) {
+  cond_test <- substitute(cond_test)
+  expr_test <- substitute(expr_test)
+  test_loop(index = index, 
+            cond_test = cond_test,
+            expr_test = expr_test,
+            not_found_msg = not_found_msg,
+            fun = check_while)
+}
+
+test_for_loop <- function(index = 1, 
+                          cond_test = NULL,
+                          expr_test = NULL,
+                          not_found_msg = NULL) {
+  cond_test <- substitute(cond_test)
+  expr_test <- substitute(expr_test)
+  test_loop(index = index, 
+            cond_test = cond_test,
+            expr_test = expr_test,
+            not_found_msg = not_found_msg,
+            fun = check_for)
+}
+
+test_loop <- function(index, cond_test, expr_test, not_found_msg, fun) {
+  old_state <- ex()
+  test_env <- old_state$get("test_env")
+  on.exit(tw$set(state = old_state))
+  
+  testloop <- old_state %>% fun(index = index, not_found_msg = not_found_msg, append = is.null(not_found_msg))
+  
+  if (!is.null(cond_test)) {
+    cond_state <- testloop %>% check_cond()
+    tw$set(state = cond_state)
+    eval(cond_test, envir = test_env)
+  }
+  
+  if (!is.null(expr_test)) {
+    body_state <- testloop %>% check_body()
+    tw$set(state = body_state)
+    eval(expr_test, envir = test_env)
+  }
 }
 
 

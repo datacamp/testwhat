@@ -4,9 +4,7 @@ Title: Easily write submission correctness tests for R exercises
 Version: 4.3.2
 Date: 2014-07-31
 Description: This package makes it easy for teachers to test students'
-    code submissions for R exercises, e.g., for interactive R courses on
-    \url{www.DataCamp.com}.
-URL: www.DataCamp.com
+    code submissions for R exercises, e.g., for interactive R courses on DataCamp.
 Depends:
     R (>= 3.0.0)
 Imports:
@@ -27,9 +25,12 @@ Suggests:
 Remotes: datacamp/r-backend
 License: MIT + file LICENSE
 LazyData: true
-Authors@R: c(person("Andreas", "Alfons", role = "aut"),
-    person("Filip", "Schouwenaars", email = "filip@datacamp.com", role = c("aut", "cre")),
-    person("Vincent", "Vankrunkelsven", email = "vincent@datacamp.com", role = c("aut")))
-Author: Filip Schouwenaars <filip@datacamp.com>
-Maintainer: Filip Schouwenaars <filip@datacamp.com>
+URL: https://github.com/datacamp/testwhat
+BugReports: https://github.com/datacamp/testwhat/issues
+Authors@R: c(
+    person("Andreas", "Alfons", role = "aut"),
+    person("Filip", "Schouwenaars", ,"filip@datacamp.com", role = c("aut", "cre")),
+    person("Vincent", "Vankrunkelsven", ,"vincent@datacamp.com", role = c("aut"))
+    )
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

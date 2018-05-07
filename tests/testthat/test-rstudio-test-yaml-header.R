@@ -120,11 +120,4 @@ test_that("test_yaml_header works", {
   lst$DC_SCT <- "test_yaml_header(options = c(\"author\"), check_equality = FALSE)"
   output <- test_it(lst)
   fails(output)
-  
-  
-  lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "\n---\ntitle: \"Testing\"\ntitle: \"OOPS\"\n---\n  \n  This\n  is\n  a\n  test\n  \n  ```{r}\n  dim(cars)\n  ```"))
-  lst$DC_SOLUTION <- rjson::toJSON(list(my_solution.Rmd = "\n---\ntitle: \"OOPS\"\n---\n  \n  This\n  is\n  a\n  test\n  but\n  doesn't \n  matter\n  \n  ```{r}\n  str(cars)\n  ```"))
-  lst$DC_SCT <- "test_yaml_header(options = c(\"title\"))"
-  output <- test_it(lst)
-  fails(output)
 })

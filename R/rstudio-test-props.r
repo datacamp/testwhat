@@ -1,6 +1,6 @@
-#' Test whether the student used the correct properties (ggvis exercises)
+#' Check whether the student used the correct properties (ggvis exercises)
 #'
-#' Test whether the student used at least as many and the correct properties as the solution inside a specific
+#' Check whether the student used at least as many and the correct properties as the solution inside a specific
 #' command and inside a specific function. By default, this function will compare the ggvis functions of both
 #' student and solution. However, the teacher can also state that the definition of data can be done in other
 #' functions.
@@ -15,8 +15,7 @@
 #' @param not_called_msg feedback message in case the specified function(s) was/were not found.
 #' @param incorrect_msg  feedback message in case the student specified properties do not correspond with the ones in the solution.
 #' @param error_msg feedback maessage in case the student submitted a faulty ggvis call
-#'
-#' @export
+#' @keywords internal
 test_props <- function(index = 1,
                        funs = "ggvis",
                        props = NULL,

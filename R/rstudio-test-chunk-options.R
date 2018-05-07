@@ -1,7 +1,7 @@
-#' Test whether the student defined the correct chunk options (R Markdown
+#' Check whether the student defined the correct chunk options (R Markdown
 #' exercises)
 #' 
-#' Test whether the student defined the correct chunk options in an R Markdown
+#' Check whether the student defined the correct chunk options in an R Markdown
 #' exercise
 #' 
 #' This test can only be called inside a test_rmd_group() call!
@@ -11,8 +11,7 @@
 #'   accepted (default TRUE)
 #' @param not_called_msg feedback message if option was not specified
 #' @param incorrect_msg  feedback message if option was incorrectly set
-#'   
-#' @export
+#' @keywords internal
 test_chunk_options <- function(options = NULL,
                                allow_extra = TRUE,
                                not_called_msg = NULL,

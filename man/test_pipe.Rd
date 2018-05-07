@@ -2,7 +2,7 @@
 % Please edit documentation in R/rstudio-test-pipe.R
 \name{test_pipe}
 \alias{test_pipe}
-\title{Test whether a student used the pipe operator sufficiently (ggvis and dplyr exercises)}
+\title{Check whether a student used the pipe operator sufficiently (ggvis and dplyr exercises)}
 \usage{
 test_pipe(num = 1, absent_msg = NULL, insuf_msg = NULL)
 }
@@ -14,7 +14,8 @@ test_pipe(num = 1, absent_msg = NULL, insuf_msg = NULL)
 \item{insuf_msg}{feeback message in case the student did not use the pipe operator sufficiently.}
 }
 \description{
-Test whether a student used the pipe sufficiently. By default, the function only checks if
+Check whether a student used the pipe sufficiently. By default, the function only checks if
 the pipe was used at least once. The user can also select the minimal
 number of occurrences of the pipe.
 }
+\keyword{internal}

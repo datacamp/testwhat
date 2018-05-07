@@ -7,7 +7,6 @@ r_check_args: --as-cran
 r_packages:
   - dplyr
   - ggvis
-  - hflights
   - ggplot2
   - car
   - RColorBrewer

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rstudio-test-yaml-header.R
 \name{test_yaml_header}
 \alias{test_yaml_header}
-\title{Test yaml header (Markdown)}
+\title{Check yaml header (Markdown)}
 \usage{
 test_yaml_header(options = NULL, check_equality = TRUE,
   allow_extra = TRUE, not_called_msg = NULL, incorrect_msg = NULL)
@@ -19,6 +19,7 @@ test_yaml_header(options = NULL, check_equality = TRUE,
 \item{incorrect_msg}{feedback message if option was incorrectly set (optional but recommended)}
 }
 \description{
-Test whether the student specified the correct options in the yaml header (for 
+Check whether the student specified the correct options in the yaml header (for 
 R Markdown exercises). This test should be called outside an test_rmd_group call.
 }
+\keyword{internal}

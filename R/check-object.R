@@ -1,6 +1,6 @@
-#' Test R object existence and value
+#' Check R object existence and value
 #' 
-#' Test whether a student defined a certain object (correctly)
+#' Check whether a student defined a certain object (correctly)
 #' 
 #' @param state the state to start from
 #' @param name name of the object to test.
@@ -28,28 +28,19 @@
 #' # Example 1
 #' x <- mean(1:3, na.rm = TRUE)
 #' 
-#' # SCT option 1
-#' test_object("x")
-#' 
-#' # SCT option 2 
+#' # SCT
 #' ex() %>% check_object("x") %>% check_equal()
 #' 
 #' # Example 2
 #' x <- mean(1:3, na.rm = TRUE)
 #' 
-#' # SCT option 1 to only check existence of x
-#' test_object("x", eval = FALSE)
-#' 
-#' # SCT option 2 to only check existence of x
+#' # SCT option
 #' ex() %>% check_object("x")
 #' 
 #' # Example 3
 #' df <- data.frame(a = 1:3, b = LETTERS[1:3])
-#' 
-#' # SCT option 1 to test column a
-#' test_data_frame("df", columns = "a")
 #'
-#' # SCT option 2 to test column a
+#' # SCT to test column a
 #' ex() %>% check_object("df") %>% check_column("a") %>% check_equal()
 #' 
 #' # Example 4
@@ -59,45 +50,6 @@
 #' ex() %>% check_object("lst") %>% check_element("b") %>% check_equal()
 #' }
 #' @name test_object
-
-
-#' @rdname test_object
-#' @export
-test_object <- function(name, eq_condition = "equivalent",
-                        eval = TRUE,
-                        undefined_msg = NULL, incorrect_msg = NULL) {
-  obj_state <- ex() %>% check_object(name, 
-                                     undefined_msg = undefined_msg,
-                                     append = is.null(undefined_msg))
-  if (eval) {
-    obj_state %>% check_equal(incorrect_msg = incorrect_msg, 
-                              eq_condition = eq_condition,
-                              append = is.null(incorrect_msg))
-  }
-}
-
-
-#' @rdname test_object
-#' @export
-test_data_frame <- function(name, columns = NULL, 
-                            eq_condition = "equivalent",
-                            undefined_msg = NULL,
-                            undefined_cols_msg = NULL, 
-                            incorrect_msg = NULL) {
-  obj_state <- ex() %>% check_object(name = name, 
-                                     undefined_msg = undefined_msg,
-                                     append = is.null(undefined_msg))
-  
-  if (is.null(columns)) {
-    columns <- names(obj_state$get("solution_object"))
-  }
-  
-  for (col in columns) {
-    obj_state %>% 
-      check_column(col, col_missing_msg = undefined_cols_msg, append = is.null(undefined_cols_msg)) %>% 
-      check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
-  }
-}
 
 #' @rdname test_object
 #' @export
@@ -204,4 +156,39 @@ check_equal_helper <- function(state, incorrect_msg, eq_condition, append, type 
   check_that(is_equal(student_obj, solution_obj, eq_condition),
              feedback = state$details)
   return(state)
+}
+
+# Deprecated test functions
+
+test_object <- function(name, eq_condition = "equivalent",
+                        eval = TRUE,
+                        undefined_msg = NULL, incorrect_msg = NULL) {
+  obj_state <- ex() %>% check_object(name, 
+                                     undefined_msg = undefined_msg,
+                                     append = is.null(undefined_msg))
+  if (eval) {
+    obj_state %>% check_equal(incorrect_msg = incorrect_msg, 
+                              eq_condition = eq_condition,
+                              append = is.null(incorrect_msg))
+  }
+}
+
+test_data_frame <- function(name, columns = NULL, 
+                            eq_condition = "equivalent",
+                            undefined_msg = NULL,
+                            undefined_cols_msg = NULL, 
+                            incorrect_msg = NULL) {
+  obj_state <- ex() %>% check_object(name = name, 
+                                     undefined_msg = undefined_msg,
+                                     append = is.null(undefined_msg))
+  
+  if (is.null(columns)) {
+    columns <- names(obj_state$get("solution_object"))
+  }
+  
+  for (col in columns) {
+    obj_state %>% 
+      check_column(col, col_missing_msg = undefined_cols_msg, append = is.null(undefined_cols_msg)) %>% 
+      check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
+  }
 }

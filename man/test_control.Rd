@@ -2,9 +2,6 @@
 % Please edit documentation in R/check-control.R
 \name{test_control}
 \alias{test_control}
-\alias{test_if_else}
-\alias{test_while_loop}
-\alias{test_for_loop}
 \alias{check_if_else}
 \alias{check_while}
 \alias{check_for}
@@ -12,17 +9,8 @@
 \alias{check_body.ControlState}
 \alias{check_if}
 \alias{check_else}
-\title{Test if student coded a control statement correctly}
+\title{Check whether student coded a control statement correctly}
 \usage{
-test_if_else(index = 1, if_cond_test = NULL, if_expr_test = NULL,
-  else_expr_test = NULL, not_found_msg = NULL, missing_else_msg = NULL)
-
-test_while_loop(index = 1, cond_test = NULL, expr_test = NULL,
-  not_found_msg = NULL)
-
-test_for_loop(index = 1, cond_test = NULL, expr_test = NULL,
-  not_found_msg = NULL)
-
 check_if_else(state, index = 1, not_found_msg = NULL, append = TRUE)
 
 check_while(state, index = 1, not_found_msg = NULL, append = TRUE)
@@ -38,7 +26,15 @@ check_if(state)
 check_else(state, not_found_msg = NULL, append = TRUE)
 }
 \arguments{
+\item{state}{state to start from (for \code{check_} functions)}
+
 \item{index}{Number of that particular control statement to check}
+
+\item{not_found_msg}{Custom message in case the control statement was not found}
+
+\item{append}{Whether or not to append the feedback to feedback built in previous states}
+
+\item{...}{S3 stuff}
 
 \item{if_cond_test}{sub-SCT to perform in the if condition part (for \code{test_if_else}}
 
@@ -46,22 +42,14 @@ check_else(state, not_found_msg = NULL, append = TRUE)
 
 \item{else_expr_test}{sub-SCT to perform in the else expression  (for \code{test_if_else})}
 
-\item{not_found_msg}{Custom message in case the control statement was not found}
-
 \item{missing_else_msg}{Custom message in case the else part is missing (for \code{test_if_else})}
 
 \item{cond_test}{sub-SCT to perform on the condition part (for \code{test_for_loop} or \code{test_while_loop})}
 
 \item{expr_test}{sub-SCT to perform on the expression part (for \code{test_for_loop} or \code{test_while_loop})}
-
-\item{state}{state to start from (for \code{check_} functions)}
-
-\item{append}{Whether or not to append the feedback to feedback built in previous states}
-
-\item{...}{S3 stuff}
 }
 \description{
-Test if student coded a control statement correctly
+Check whether student coded a control statement correctly
 }
 \examples{
 \dontrun{
@@ -74,20 +62,8 @@ if("a" \%in\% vec) {
 } else {
  str(vec)
 }
-
-# SCT option 1
-test_if_else(1, 
-             if_cond_test = {
-               test_student_typed("\%in\%")
-               test_student_typed("vec")
-             },
-             if_expr_test = test_function("print")
-             else_expr_test = test_if_else(1,
-                                           if_cond_test = test_student_typed(">"),
-                                           if_expr_test = test_function("cat"),
-                                           else_expr_test = test_function("str")))
                                            
-# SCT option 2
+# SCT
 ifelse <- check_if_else(1)
 ifelse \%>\% check_cond() \%>\% check_code("\%in\%")
 ifelse \%>\% check_cond() \%>\% check_code("vec")
@@ -103,16 +79,7 @@ while(x < 18) {
  print(x)
 }
 
-# SCT Option 1
-test_while_loop(1, 
-               cond_test = test_student_typed(c("< 18", "18 >")),
-               expr_test = {
-                 test_student_typed(c("x + 5", "5 + x"))
-                 # no actual value matching possible!!
-                 test_function("print", args = 'x', eval = FALSE)
-               })
-
-# SCT Option 2
+# SCT
 w <- check_while(1)
 w \%>\% check_cond() \%>\% check_code(c("< 18", "18 >"))
 w \%>\% check_body() \%>\% check_code(c("x + 5", "5 + x"))
@@ -123,16 +90,7 @@ for(i in 1:5) {
  print("hurray!") 
 }
 
-# SCT Option 1
-test_for_loop(1, 
-              cond_test = {
-                test_student_typed("in")
-                test_student_typed("1")
-                test_student_typed("5")
-              }, 
-              expr_test = test_function("print"), args = "x")
-
-# SCT Option 2
+# SCT
 f <- ex() \%>\% check_for(1)
 cond <- f \%>\% check_cond() 
 cond \%>\% check_code("in")

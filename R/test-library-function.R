@@ -1,4 +1,4 @@
-#' Test whether the library function was called correctly
+#' Check whether the library function was called correctly
 #' 
 #' Convenience function to test in a very hacky way whether 
 #' the library function was called correctly in its most simple form.

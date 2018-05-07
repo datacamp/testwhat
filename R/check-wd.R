@@ -1,4 +1,4 @@
-#' Test whether a file exists
+#' Check whether a file exists
 #' 
 #' @param path Path to the file you want to check
 #' @param incorrect_msg Custom feedback message in case the file does not exist
@@ -10,19 +10,10 @@
 #' # Example 1 solution code:
 #' # write("hello", file = "test.txt")
 #' 
-#' # SCT Option 1 to test if file exists
-#' test_file_exists("test.txt")
-#' 
-#' # SCT Option 2 to test if file exists
+#' # SCT
 #' ex() %>% check_wd("test.txt")
 #' }
 #' @name test_wd
-
-#' @rdname test_wd
-#' @export
-test_file_exists <- function(path, incorrect_msg = NULL) {
-  ex() %>% check_wd(path = path, missing_msg = incorrect_msg)
-}
 
 #' @rdname test_wd
 #' @export
@@ -34,4 +25,8 @@ check_wd <- function(state, path, missing_msg = NULL) {
                          folder = dirname(path),
                          message = missing_msg)
   check_that(is_true(file.exists(path)), feedback = file_state$details)
+}
+
+test_file_exists <- function(path, incorrect_msg = NULL) {
+  ex() %>% check_wd(path = path, missing_msg = incorrect_msg)
 }

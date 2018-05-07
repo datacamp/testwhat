@@ -1,0 +1,84 @@
+---
+title: "Check through string matching"
+author: "Filip Schouwenaars"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+
+With `check_code()`, you can look through the student's submission to find a match with the string or strings specified in `strings`. With `fixed` you can declare whether or not to use regular expressions. If `fixed = FALSE`, the default, the strings are used as regular expressions for which a match is sought. when `fixed = TRUE`, `check_code()` will consider the strings you pass as actual strings that have to be found exactly in the student's submission. `times` tells how often (one of) the string(s) should be matched.
+
+Before a match is sought, the student submission as well as the `strings` argument is 'cleaned up': spaces are removed, all `<-` are replaced by `=`, double strings are changed to single strings, etc. That way, you don't have to code all equivalent options.
+
+**CAUTION**: It is often tempting to use `check_code()` as it's straightforward to use, but **you should avoid using this function**, as it imposes severe restrictions on how a student can solve an exercise. Often, there are many different ways to solve an exercise. Unless you have a very advanced regular expression or list a bunch of options, `check_code()` will not be able to accept all these different approaches. **Always think about better ways to test a student submission before you resort to `check_code()`**.
+
+## Example 1: regular expression
+
+Suppose you want the student to type the sentence "R is Rsome!", but you want to allow for some small mistakes regarding capitalization and the exclamation mark. The solution looks like this:
+
+		*** =solution
+		```{r}
+		# Write the sentence in quotes
+		"R is Rsome!"
+		```
+
+The SCT could look as follows:
+
+```{r}
+ex() %>% check_code("^\"[r|R] is [r|R]some!?\"$",
+                    not_typed_msg = "Have you correctly written the sentence `R is Rsome!`?")
+success_msg("Nice job!")
+```
+
+All of the following student submission would be accepted by this `testwhat` function call:
+
+- `"R is Rsome!"`
+- `"R is Rsome"`
+- `"r is Rsome!"`
+- `"r is Rsome"`
+- `"R is rsome!"`
+- `"R is rsome"`
+- `"r is rsome!"`
+- `"r is rsome"`
+
+[Click here to learn more about regular expressions in R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html).
+
+## Example 2: Exact matchin
+
+Suppose you want to check whether a student coded a SQL expression correctly:
+
+```{r}
+# Create the correct SQL expression
+x <- "SELECT posts FROM tweets WHERE n_char > 10"
+```
+
+The student can solve this in many ways, all of which should be accepted:
+
+- `x <- "select posts from tweets where n_char > 10"`
+- `x <- "SELECT posts FROM tweets WHERE n_char > 10"`
+- `x <- "SELECT posts from tweets where n_char > 10"`
+- ...
+
+You can thus write the following SCT. In `strings` you specify a vector with all options. This time, you have to set `fixed = TRUE` so you can do exact string matching. Finally, you can chose to override the `not_typed_msg` to give a custom message if the student didn't type what you expected.
+
+```{r}
+ex() %>% check_code(c("select posts from tweets where n_char > 10",
+                      "SELECT posts FROM tweets WHERE n_char > 10",
+                      "SELECT posts from tweets where n_char > 10"),
+                    fixed = TRUE,
+                    not_typed_msg = "Have you correctly coded the SQL query?")
+success_msg("Great job!")
+```
+
+However, the above SCT doesn't really cut it. To be really robust to all different ways of coding this query, you'll either want to use regular expressions inside `test_student_typed()` (see example 2) or do a check on the resulting data frame from executing the SQL query (preferable, since than you automatically cover any correct way of doing things).

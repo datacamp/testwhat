@@ -2,35 +2,29 @@
 % Please edit documentation in R/check-wd.R
 \name{test_wd}
 \alias{test_wd}
-\alias{test_file_exists}
 \alias{check_wd}
-\title{Test whether a file exists}
+\title{Check whether a file exists}
 \usage{
-test_file_exists(path, incorrect_msg = NULL)
-
 check_wd(state, path, missing_msg = NULL)
 }
 \arguments{
-\item{path}{Path to the file you want to check}
-
-\item{incorrect_msg}{Custom feedback message in case the file does not exist}
-
 \item{state}{the state to start from}
 
+\item{path}{Path to the file you want to check}
+
 \item{missing_msg}{Custom feedback message in case the file is missing}
+
+\item{incorrect_msg}{Custom feedback message in case the file does not exist}
 }
 \description{
-Test whether a file exists
+Check whether a file exists
 }
 \examples{
 \dontrun{
 # Example 1 solution code:
 # write("hello", file = "test.txt")
 
-# SCT Option 1 to test if file exists
-test_file_exists("test.txt")
-
-# SCT Option 2 to test if file exists
+# SCT
 ex() \%>\% check_wd("test.txt")
 }
 }

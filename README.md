@@ -8,10 +8,8 @@ The `testwhat` package provides rich functionality to write Submission Correctne
 
 ## Reference
 
-* Wiki: https://github.com/datacamp/testwhat/wiki
-* Full tutorial: https://github.com/datacamp/courses-testwhat-tutorial
 * Teach on DataCamp: https://authoring.datacamp.com
-* Extensions: https://github.com/datacamp/testwhat.ext
+* What is an SCT? https://authoring.datacamp.com/courses/sct.html
 
 ## Installation
 

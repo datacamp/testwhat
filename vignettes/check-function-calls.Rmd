@@ -1,0 +1,310 @@
+---
+title: "Check function calls"
+author: "Filip Schouwenaars"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Checking Objects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+Testing functions is probably one of the most common things you'll do when writing SCTs. The functions in `testwhat` related to testing functions allow you to test whether students correctly called particular functions, with the correct arguments and whether these arguments are correct. To assess all of these aspects, `testwhat` goes through the solution code to see which functions were called there and how, and also checks the solution environment to see what the value of the parameters is. This makes the comparison of function calls concise yet robust.
+
+## Example 1: Basic
+
+Suppose you want the student to call the `round()` function on `pi` (a value that's available in R by default), as follows:
+
+```{r}
+# Round pi to three digits
+round(pi, 3)
+```
+
+The following SCT tests whether the `round()` function is used correctly:
+
+```{r}
+fun <- ex() %>% check_function("round")
+fun %>% check_arg("x") %>% check_equal()
+fun %>% check_arg("digits") %>% check_equal()
+```
+
+To find out which arguments you have to specify in `args`, you can use `args(round)`. This will show that the names of the arguments of the `round()` function are `x` and `digits`. When a student submits his code and SCT is executed, `check_function()` tests whether the student has called the function `round()`. Next, `check_arg()` checks whether each argument was specified. Finally, `check_equal()` checks whether the values of the argument are the same as in the solution. So in this case, it tests whether `round()` is used with the `x` argument equal to `pi` and the second argument equal to `3`. The above SCT would accept all of the following submissions:
+
+- `round(pi, 3)`
+- `round(pi, digits = 3)`
+- `round(x = pi, digits = 3)`
+- `round(digits = 3, x = pi)`
+- `round(pi, digits = 1 + 2)`
+- `round(digits = 5 - 2, pi^2/pi)`
+
+### Custom messages
+
+In case of a failure, `testwhat` will automatically generate meaningful feedback that's specific to what the student did wrong, but you can also override these messages:
+
+
+```{r}
+fun <- ex() %>% check_function("round", not_called_msg = "Have you used `round()` to round `pi`?")
+fun %>%
+  check_arg("x", arg_not_specified_msg = "Have you specified the number to round?") %>%
+  check_equal("Have you correctly specified that `round()` should round `pi`?")
+fun %>%
+  check_arg("digits", arg_not_specfied_msg = "Have you specified to how many digits the number should be rounded?") %>%
+  check_equal("Have you correctly set the `digits` argument to 3?")
+```
+
+### `eval`
+
+Inside `check_equal()`, you can use `eval` to control how parameters are checked:
+
+- If `eval = FALSE`, the expressions of the parameters are compared as strings, not the value that results from evaluating the expression.
+- If `eval = TRUE`, which is the default, the expressions that are used to set the arguments are evaluated and their results compared.
+
+If you change the SCT as follows (which in this example is not a good idea!):
+
+```{r}
+fun <- ex() %>% check_function("round")
+fun %>% check_arg("x") %>% check_equal(eval = FALSE)
+fun %>% check_arg("digits") %>% check_equal()
+```
+
+not all of the student submissions listed above would be accepted, because now `pi` is checked literally, as the string `"pi"`, not as the number `3.1415...`. Using `eval = FALSE` is interesting when you're working with huge datasets and don't want to compare their values exhaustively, or for objects for which the equality operator is not standard, such as SQL connections.
+
+## Example 2: Multiple function calls
+
+`index`, which is 1 by default, becomes important when there are several calls of the same function. Suppose that your exercise requires the student to call the `round()` function twice: once on `pi` and once on `exp(1)`, Euler's number. A possible solution could be the following:
+
+```{r}
+# Call round on pi
+round(pi, 3)
+
+# Call round on e
+round(exp(1), 3)
+```
+
+To test both these function calls, you'll need the following SCT:
+
+```{r}
+ex() %>% check_function("round", index = 1) %>% check_arg("x") %>% check_equal()
+ex() %>% check_function("round", index = 2) %>% check_arg("x") %>% check_equal()
+success_msg("Two in a row, great!")
+```
+
+The first `check_function()` chain, where `index = 1`, checks the solution code for the first function call of `round()`, finds it - `round(pi, 3)` - and then goes to look through the student code to find a function call of `round()` that matches the arguments. It is perfectly possible that there are 5 function calls of `round()` in the student's submission, and that only the fourth call matches the requirements for the first `check_function()` chain. As soon as a function call is found in the student code that passes all tests, `testwhat` heads over to the second `check_function()` chain, where `index = 2`. The same thing happens: the second call of `round()` is found from the solution code, and a match is sought for in the student code. This time, however, the function call that was matched before is now 'blacklisted'; it is not possible that the same function call in the student code causes both `check_function()` chains to pass.
+
+This means that all of the following student submissions would be accepted:
+
+- `round(pi, 3); round(exp(1), 3)`
+- `round(exp(1), 3); round(pi, 3)`
+- `round(pi, 3); round(123.456); round(exp(1), 3)`
+- `round(exp(1), 3); round(123.456); round(pi, 3)`
+
+Of course, you can also specify all other arguments to customize your test, such as `eval`, `args`, `not_called_msg` and `incorrect_msg`.
+
+## Example 3: Multiple function calls (2)
+
+When you're checking a function call, `check_function()` will look for all 'possible candidates' to match the function call in the solution. This can have some nasty side effects, though. Similar to the previous example, suppose that you want the student to use `round()` twice, but you only want to test the second `round()` call:
+
+```{r}
+# Call round on pi
+round(pi, 3)
+
+# Call round on e
+round(exp(1), 3)
+```
+
+An possible SCT would look like this then:
+
+```{r}
+ex() %>% check_function("round") %>% check_arg("x") %>% check_equal()
+```
+
+Suppose now that the student submits the following answer
+
+```{r}
+# Call round on pi
+round(pi, 3)
+
+# Call round on e
+round(exp(2), 3)
+```
+
+If you try this out, you'll see that `pi` will be highlighted, in the first call. This should be the second call, right? Here's why it happens, step by step:
+
+- `check_function("round")` looks for all calls of `round()` in the student's code. It finds two: on line 2 and on line 4.
+- Next, `check_arg("x")` checks whether the `x` argument is specified. It sees that both calls of `round()` do so, so both calls are still candidate to match the solution's function call.
+- Next, `check-equal()` checks if the actual value of `x` carresponds to the value of that argument in the solution. More specifically, it looks for a `x` argument that equals `exp(1)`. It checks the `x` argument of the first `round()` call and sees it's no good. Then it checks the `x` argument of the second `round()` call and sees it's no good either. At this point the SCT fails, and simply the first function of the candidates, the one at line 2, is highlighted as the incorrect one.
+
+You can solve this by 'ruling out' the first `round()` call as a candidate, by simply using a `check_function()` chain beforehand:
+
+```{r}
+ex() %>% check_function("round", index = 1) %>% check_arg("x") %>% check_equal()
+ex() %>% check_function("round", index = 2) %>% check_arg("x") %>% check_equal()
+```
+
+This way, the first `round()` call will not be considered as a candidate anymore by the time you're checking the second `round()` call. If you submit the same student code for this SCT, you will see that highlighting happens correctly this time.
+
+## Example 4: Advanced Automatic Feedback
+
+The automatic messages that are generated when the student makes mistakes of different kinds is continuously improved to be as insightful as possible. For example, when the solution expects:
+
+```{r}
+print(1.1234)
+```
+
+but the student submits:
+
+```{r}
+print("1.1234")
+```
+
+An SCT that contains `check_function("print") %>% check_arg("x") %>% check_equal()` will generate the message: "Have you correctly specified the argument `x` inside `print()`? You specified a character string, while it should be a number.". When comparing character strings between student and solution, this comparison goes further, hinting about potential incorrect capitalization, incorrect spacing, incorrect punctuation or possible typos.
+
+## Example 5: `...` argument
+
+Behind the scenes `check_function()` uses the `match.call()` function, to match the arguments to the function parameters. As an example, all of these different but equivalent ways to call the `grepl()` function:
+
+```{r}
+grepl(pattern = "a{2}", x = "aabb")
+grepl(pat = "a{2}", x = "aabb")
+grepl("a{2}", x = "aabb")
+grepl("a{2}", "aabb")
+grepl(x = "aabb", pattern = "a{2}")
+grepl(x = "aabb", "a{2}")
+```
+
+Are converted into a standardized form by `match.call`:
+
+```{r}
+grepl(pattern = "a{2}", x = "aabb")
+```
+
+That way, it's easy to tell how each argument was specified.
+
+However, in R, there's the so-called ellipsis argument to pass arguments in a very free form, without having to list them in the function signature explicitly. They are typically used in an S3 context, where the arguments are dispatched to 'lower level S3 functions'. `match.call()` cannot handle the ellipsis argument in a straightforward way.
+
+In terms of argument matching in general, 4 things can happen:
+
+1. `match.call()` perfectly works, and every argument you pass is matched to an argument name, without any ellipsis problems.
+
+2. `check_fucntion()` figures out that you wanted to test an S3 function (`predict()` is a great example, it has a bunch of class-specific implementation). Based on the class of the first argument, it figures out the 'more detailed', class-specific implementation and tries to match the arguments to the signature of this more detailed function. NOTE: it is still possible that this signature features the `...` arguments, so the points below apply as well for this case.
+
+3. The function call that `match.call()` has to standardize contains arguments that are matched to the ellipsis, but these arguments are named explicitly, for example the the `main` argument in `plot(mtcars$wt, mtcars$hp, main = 'mtcars plot')`. In this case, `match.call()` will match `mtcars$wt` to `x`, `mtcars$hp` to `y` and `'mtcars plot'` to `main`, just like for regular arguments.
+
+4. The function call that `match.call()` has to standardize contains arguments that are matched to the ellipsis, but these arguments are not explicitly named. In this case, all 'unnamed arguments' are merged together in a list under the argument name `...`.
+
+Things become tricky if case 4 occurs: if a student specifies multiple arguments without naming them, and you want to check these arguments, you'll need to use `"..."` inside your `args` function. However, be aware that this `"..."` part can represent a number of arguments that the student specified.
+
+As an example, suppose you want to the student the calculate the sum of 1, 2, 3, 4, and `NA`. `sum()` supports the following approach:
+
+```{r}
+sum(1, 2, 3, 4, NA, na.rm = TRUE)
+```
+
+To test this:
+
+```{r}
+ex() %>% check_function("sum") %>% {
+    check_arg(., "...") %>% check_equal()
+    check_arg(., "na.rm") %>% check_equal()
+}
+```
+
+All of the following submissions will pass:
+
+- `sum(1, 2, 3, 4, NA, na.rm = TRUE)`
+- `sum(1, 1+1, 1+2, 1+3, NA, na.rm = TRUE)`
+- `sum(na.rm = TRUE, 1, 1+1, 1+2, 1+3, NA)`
+
+However, none of the following submissions will pass (as you see, order is important):
+
+- `sum(1, 2, 3, 4, NA, na.rm = FALSE)`
+- `sum(1, 2, 3, NA, na.rm = TRUE)`
+- `sum(1, 2, 4, 3, NA, na.rm = TRUE)`
+
+If the arguments that are matched to `...` are not correct, `check_equal()` will automatically generate the message:
+
+    Check your call of `sum()`. Did you correctly specify the arguments that are matched to `...`?
+
+In this example of using the `sum()` function, using `test_function()` is a bad idea to start with. You also want to allow the student to use:
+
+```{r}
+sum(c(1, 2, 3, 4, NA), na.rm = TRUE)
+```
+
+which is perfectly valid as well. That's why the following SCT would be more appropriate:
+
+```{r}
+test_output_contains("10", incorrect_msg = "Did you correctly print out the sum?")
+```
+
+## Example 6: Allowing for different solutions
+
+A typical example of this is an exercise with the `plot()` function:
+
+```{r}
+df <- data.frame(time = seq(0, 2*pi, 0.01))
+df$res <- sin(df$time)
+
+# create a plot of res vs time
+plot(df$time, df$res)
+```
+
+All of the following submissions should pass:
+
+- `plot(df$time, df$res)`
+- `plot(df[['time']], df[['res']])`
+- `plot(res ~ time, data = df)`
+- `plot(df$res ~ df$time)`
+
+However, if you simply use the following SCT
+
+```{r}
+test_function("plot", args = c("x", "y"))
+```
+
+The third and fourth plot won't work, because the solution code does not contain the calls to compare to. You can use the more granular `check_*()` functions in combination with `test_or()` and `override_solution()`. As the name suggests, this temporarily overrides the solution so that you can use `check_function()` for different possibilities.
+
+```{r}
+test_or({
+  fun <- ex() %>% check_function('plot')
+  fun %>% check_arg('x') %>% check_equal()
+  fun %>% check_arg('y') %>% check_equal()
+}, {
+  fun <- ex() %>% override_solution('plot(res ~ time, data = df)') %>% check_function('plot')
+  fun %>% check_arg('formula') %>% check_equal()
+  fun %>% check_arg('data') %>% check_equal()
+}, {
+  ex() %>% override_solution('plot(df$res ~ df$time)') %>% check_function('plot') %>% check_arg('formula') %>% check_equal()
+})
+```
+
+### Example 6: Function results
+
+Suppose you want the student to call the sum function on a vector containing the values 1 to 5.
+
+```{r}
+# Calculate sum of vector 1 to 5
+sum(1:5)
+```
+
+One way to solve this is with `check_output_expr()`, but this does not explicitly require the student to use the `sum()` function. To make the usage of `sum()` explicit, you can use `test_function_result()`:
+
+```{r}
+ex() %>% check_function("sum") %>% check_result() %>% check_equal()
+success_msg("sweet")
+```
+
+The above SCT would accept all of the following submissions:
+
+- `sum(5:1)`
+- `sum(c(1, 2, 4, 3, 5))`
+- `x <- c(1, 2, 3, 4, 5); sum(x)`
+
+

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rstudio-test-chunk-options.R
 \name{test_chunk_options}
 \alias{test_chunk_options}
-\title{Test whether the student defined the correct chunk options (R Markdown
+\title{Check whether the student defined the correct chunk options (R Markdown
 exercises)}
 \usage{
 test_chunk_options(options = NULL, allow_extra = TRUE,
@@ -19,9 +19,10 @@ accepted (default TRUE)}
 \item{incorrect_msg}{feedback message if option was incorrectly set}
 }
 \description{
-Test whether the student defined the correct chunk options in an R Markdown
+Check whether the student defined the correct chunk options in an R Markdown
 exercise
 }
 \details{
 This test can only be called inside a test_rmd_group() call!
 }
+\keyword{internal}
