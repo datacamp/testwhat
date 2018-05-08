@@ -6,3 +6,5 @@
 *.orig
 inst/doc
 docs/*
+vignettes/*.R
+vignettes/*.html
