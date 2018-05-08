@@ -5,7 +5,6 @@ r_check_args: --as-cran
 
 # devtools + packages for testing
 r_packages:
-  - devtools
   - dplyr
   - ggvis
   - ggplot2
@@ -14,7 +13,9 @@ r_packages:
   - rpart
 
 install:
-    - R -e 'devtools::install(".", dependencies = TRUE)'
-    - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"))'
+  - R -e 'install.packages("devtools")'
+  - R -e 'devtools::install(".", dependencies = TRUE)'
+  - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"))'
+
 after_success:
   - Rscript -e 'covr::codecov()'
