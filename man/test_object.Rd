@@ -51,14 +51,6 @@ not the same as in the sample solution.}
 \code{\link{is_equal}}.}
 
 \item{...}{S3 stuff}
-
-\item{eval}{Next to existence, check if the value of the object corresponds 
-between student en solution environment}
-
-\item{columns}{character vector of data frame columns to test}
-
-\item{undefined_cols_msg}{Custom feedback message if not all specified
-columns of were found in the student's data frame.}
 }
 \description{
 Check whether a student defined a certain object (correctly)

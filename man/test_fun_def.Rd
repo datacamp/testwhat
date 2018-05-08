@@ -37,11 +37,6 @@ function does not have the correct number of arguments.}
 found.}
 
 \item{...}{arguments to pass to the user-defined function to test result, output or error in a later stage}
-
-\item{function_test}{sub-SCT to perform on the function}
-
-\item{body_test}{sub-SCT to perform on the body of the function if the
-sub-SCT in \code{function_test} fails. Only able to test on strings here!}
 }
 \description{
 Check whether the student defined a function correctly

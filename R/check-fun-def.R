@@ -1,9 +1,6 @@
 #' Check whether the student defined a function correctly
 #' 
 #' @param name  The name of the function to test
-#' @param function_test sub-SCT to perform on the function
-#' @param body_test sub-SCT to perform on the body of the function if the
-#'   sub-SCT in \code{function_test} fails. Only able to test on strings here!
 #' @param undefined_msg Custom message in case the specified function
 #'   was not defined
 #' @param no_fundef_msg Custom message in case the function specified in \code{name} is not a function.

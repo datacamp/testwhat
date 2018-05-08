@@ -1,3 +1,7 @@
+template:
+  params:
+    bootswatch: cosmo
+    
 reference:
   - title: Commonly used functions
     contents:

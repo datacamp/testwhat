@@ -6,16 +6,11 @@
 #' @param name name of the object to test.
 #' @param eq_condition character string indicating how to compare. See 
 #'   \code{\link{is_equal}}.
-#' @param eval Next to existence, check if the value of the object corresponds 
-#'   between student en solution environment
 #' @param undefined_msg Optional feedback message in case the student did not 
 #'   define the object. A meaningful message is automatically generated if not 
 #'   supplied.
 #' @param incorrect_msg Custom feedback message in case the student's object is
 #'   not the same as in the sample solution.
-#' @param columns character vector of data frame columns to test
-#' @param undefined_cols_msg Custom feedback message if not all specified
-#'   columns of were found in the student's data frame.
 #' @param col_missing_msg Custom message in case data frame column is missing
 #' @param col name of column to check
 #' @param el_missing_msg Custom message in case element is messing.

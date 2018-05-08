@@ -6,8 +6,6 @@
 #'
 #' @param name  name of the function/operator as a string, e.g. \code{"mean"} or
 #'   \code{"+"}
-#' @param args  character vector of argument names that the student should have
-#'   supplied in the function calls.
 #' @param index  integer that specifies which call of \code{name} in the
 #'   solution code will be checked.
 #' @param eval  logical vector indicating whether and how to compare arguments.
@@ -23,8 +21,6 @@
 #'   comparison for each argument. See \code{\link{is_equal}}
 #' @param not_called_msg custom feedback message in case the student did not
 #'   call the function often enough.
-#' @param args_not_specified_msg custom feedback message in case the student did
-#'   call the function with the argument specified.
 #' @param incorrect_msg custom feedback message in case the student did not call
 #'   the function with the same argument values as in the sample solution. You
 #'   can specify a vector of arguments with the same length as \code{args}, to
@@ -60,15 +56,15 @@
 #' ex() %>% check_operator("+") %>% check_result() %>% check_equal()
 #' }
 #'
-#' @name check_fun_op
+#' @name check_function
 
-#' @rdname check_fun_op
+#' @rdname check_function
 #' @export
 check_function <- function(state, name, index = 1, not_called_msg = NULL, append = TRUE) {
   check_fun_op_helper(state, name = name, index = index, not_called_msg = not_called_msg, append = append, type = "function")
 }
 
-#' @rdname check_fun_op
+#' @rdname check_function
 #' @export
 check_operator <- function(state, name, index = 1, append = TRUE, not_called_msg = NULL) {
   check_fun_op_helper(state, name = name, index = index, not_called_msg = not_called_msg, append = append, type = "operator")
@@ -116,10 +112,7 @@ check_fun_op_helper <- function(state, name, index, not_called_msg, append, type
   return(call_state)
 }
 
-
-## CHECK ARGUMENT
-
-#' @rdname check_fun_op
+#' @rdname check_function
 #' @export
 check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
 
@@ -177,7 +170,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
 }
 
 
-#' @rdname check_fun_op
+#' @rdname check_function
 #' @export
 check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, eq_condition = "equivalent", append = TRUE, ...) {
 

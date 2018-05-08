@@ -30,11 +30,8 @@
 #' @param ... S3 stuff
 #' @param append Whether or not to append the feedback to feedback built in
 #'   previous states
-#'
 #' @param expr The expression (as string) for which the output should be in the
 #'   student's console output.
-#' @param incorrect_msg Custom message in case the output of the expression
-#'   wasn't found often enough in the student's output.
 #'
 #' @examples
 #' \dontrun{
@@ -52,7 +49,6 @@
 #' }
 #'
 #' @name check_output
-
 
 #' @rdname check_output
 #' @export

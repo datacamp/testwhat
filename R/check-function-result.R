@@ -1,9 +1,5 @@
 #' Check the result of a function call/operation
 #' 
-#' 
-#' @param name name of the function whose output you would like to check.
-#' @param index Ordinal number of the call you want to check (both student and solution!).
-#' @param not_called_msg feedback message in case the function is not retrieved.
 #' @param error_msg feedback message in case the student function call at the mentioned index generated an error.
 #' @param incorrect_msg  feedback message in case the evaluation was not the same as in the solution.
 #' @param eq_condition how to compare student and solution.
@@ -19,27 +15,27 @@
 #' # SCT
 #' ex() %>% check_function("mean") %>% check_result() %>% check_equal()
 #' }
-#' @name check_result
+#' @name check_function_result
 
-#' @rdname check_result
+#' @rdname check_function_result
 #' @export
 check_result.OperationState <- function(state, error_msg = NULL, append = TRUE, ...) {
   check_call_result(state, error_msg = error_msg, append = append, type = "operator")
 }
 
-#' @rdname check_result
+#' @rdname check_function_result
 #' @export
 check_result.FunctionState <- function(state, error_msg = NULL, append = TRUE, ...) {
   check_call_result(state, error_msg = error_msg, append = append, type = "function")
 }
 
-#' @rdname check_result
+#' @rdname check_function_result
 #' @export
 check_equal.FunctionResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, append = TRUE, ...) {
   check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = append, type = "function")
 }
 
-#' @rdname check_result
+#' @rdname check_function_result
 #' @export
 check_equal.OperationResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, append = TRUE, ...) {
   check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = append, type = "operator")

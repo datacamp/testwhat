@@ -3,13 +3,6 @@
 #' @param state state to start from (for \code{check_} functions)
 #' @param index Number of that particular control statement to check
 #' @param not_found_msg Custom message in case the control statement was not found
-#' 
-#' @param if_cond_test sub-SCT to perform in the if condition part (for \code{test_if_else}
-#' @param if_expr_test sub-SCT to perform in the if expression part (for \code{test_if_else})
-#' @param else_expr_test sub-SCT to perform in the else expression  (for \code{test_if_else})
-#' @param missing_else_msg Custom message in case the else part is missing (for \code{test_if_else})
-#' @param cond_test sub-SCT to perform on the condition part (for \code{test_for_loop} or \code{test_while_loop})
-#' @param expr_test sub-SCT to perform on the expression part (for \code{test_for_loop} or \code{test_while_loop})
 #' @param append Whether or not to append the feedback to feedback built in previous states
 #' @param ... S3 stuff
 #' 
@@ -60,21 +53,21 @@
 #' cond %>% check_code("5")
 #' f %>% check_body() %>% check_function("print") %>% check_arg("x") %>% check_equal()
 #' }
-#' @name test_control
+#' @name check_control
 
-#' @rdname test_control
+#' @rdname check_control
 #' @export
 check_if_else <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
   check_control(state, index, not_found_msg, append = append, type = "if")
 }
 
-#' @rdname test_control
+#' @rdname check_control
 #' @export
 check_while <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
   check_control(state, index, not_found_msg, append = append, type = "while")
 }
 
-#' @rdname test_control
+#' @rdname check_control
 #' @export
 check_for <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
   check_control(state, index, not_found_msg, append = append, type = "for")
@@ -122,7 +115,7 @@ check_control <- function(state, index, not_found_msg, append, type = c("if", "w
   return(control_state)
 }
 
-#' @rdname test_control
+#' @rdname check_control
 #' @export
 check_cond <- function(state) {
   student_struct <- state$get("student_struct")
@@ -133,7 +126,7 @@ check_cond <- function(state) {
   return(cond_state)
 }
 
-#' @rdname test_control
+#' @rdname check_control
 #' @export
 check_body.ControlState <- function(state, ...) {
   student_struct <- state$get("student_struct")
@@ -144,7 +137,7 @@ check_body.ControlState <- function(state, ...) {
   return(body_state)
 }
 
-#' @rdname test_control
+#' @rdname check_control
 #' @export
 check_if <- function(state) {
   student_struct <- state$get("student_struct")
@@ -155,7 +148,7 @@ check_if <- function(state) {
   return(if_state)
 }
 
-#' @rdname test_control
+#' @rdname check_control
 #' @export
 check_else <- function(state, not_found_msg = NULL, append = TRUE) {
   student_struct <- state$get("student_struct")

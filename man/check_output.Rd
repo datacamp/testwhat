@@ -42,9 +42,6 @@ previous states}
 
 \item{expr}{The expression (as string) for which the output should be in the
 student's console output.}
-
-\item{incorrect_msg}{Custom message in case the output of the expression
-wasn't found often enough in the student's output.}
 }
 \description{
 Check the output of the submission to see if it contains certain elements.

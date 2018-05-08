@@ -7,13 +7,10 @@
 #' Using these function should be a last resort, as there are myriad ways of 
 #' solving the same problem with R!
 #' 
-#' @param strings A set of strings/regexes that should be in the student code.
 #' @param regex A set of strings/regexes that should be in the student code.
 #' @param fixed if TRUE, strings are treated literally. If FALSE, strings are
 #'   treated as regex patterns.
 #' @param times how often should any of the strings be matched?
-#' @param not_typed_msg Custom feedback in case the pattern is not contained
-#'   often enough in the student's submission.
 #' @param state the state to start from
 #' @param missing_msg Custom feedback in case the pattern is not contained often
 #'   enough in the student's submission.

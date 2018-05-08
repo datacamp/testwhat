@@ -1,29 +1,30 @@
 #' Test predefined R objects
-#' 
+#'
 #' At the start of your SCT, you typically want to check whether some predefined
-#' variables are still correct. \code{test_predefined_object} allows you to 
-#' specify a vector of object names, together with a vector of equivalence 
-#' conditions, evaluation specifications, undefined an incorrect messages. As 
-#' such, \code{test_predefined_objects} is a vectorized wrapper around 
-#' \code{\link{check_object}} with meaningful defeault feedback messages that 
+#' variables are still correct. \code{test_predefined_object} allows you to
+#' specify a vector of object names, together with a vector of equivalence
+#' conditions, evaluation specifications, undefined an incorrect messages. As
+#' such, \code{test_predefined_objects} is a vectorized wrapper around
+#' \code{\link{check_object}} with meaningful defeault feedback messages that
 #' tell the student to not adapt predefined objects and code in the sample code.
-#' 
+#'
 #' @param name vector of names of the objects to check
-#' @param eq_condition vector version of \code{eq_condition} of 
-#'   \code{\link{check_equal}}.
-#' @param eval vector version of \code{eval} of \code{\link{check_equal}}.
-#' @param undefined_msg vector version of \code{undefined_msg} of 
+#' @param eq_condition character vector indicating how to compare. See
+#'   \code{\link{is_equal}}.
+#' @param eval logical vector indicating whether or not you want to check only
+#'   the objects' existence or also whether their values match the solution.
+#' @param undefined_msg vector version of \code{undefined_msg} of
 #'   \code{\link{check_object}}
-#' @param incorrect_msg vector version of \code{incorrect_msg} of 
+#' @param incorrect_msg vector version of \code{incorrect_msg} of
 #'   \code{\link{check_object}}
-#'   
+#'
 #' @examples
 #' \dontrun{
-#' # Suppose the sample code specifies the variables a, b and c, 
+#' # Suppose the sample code specifies the variables a, b and c,
 #' # and you want to check that a, b and c haven't changed.
 #' test_predefined_objects(c("a", "b", "c"))
 #' }
-#' 
+#'
 #' @export
 test_predefined_objects <- function(name, 
                                     eq_condition = "equivalent",
