@@ -3,8 +3,9 @@ sudo: false
 cache: packages
 r_check_args: --as-cran
 
-# packages required for testing
+# devtools + packages for testing
 r_packages:
+  - devtools
   - dplyr
   - ggvis
   - ggplot2

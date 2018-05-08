@@ -109,10 +109,7 @@
     
     
 <p>Many exercise require a student to hand-craft a function to make their code more dry. With <code><a href="../reference/test_fun_def.html">check_fun_def()</a></code> and a range of related helper <code>check_</code> functions you can effectively check the correctness of these user-defined functions.</p>
-<div id="example-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-1" class="anchor"></a>Example 1</h3>
-<p>Have a look at the following solution:</p>
+<p>As an example, have a look at the following solution:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Define my_fun</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">my_fun &lt;-<span class="st"> </span><span class="cf">function</span>(a, b) {</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">    <span class="kw">abs</span>(a) <span class="op">+</span><span class="st"> </span><span class="kw">abs</span>(b)</a>
@@ -140,7 +137,6 @@
 <code><a href="../reference/s3definitions.html">check_body()</a></code> executes tests in the substate of the body of the function definition (as if the body of the function was the only code in the student submission). If, for example, the student used <code>abs()</code> outside the function definition, this would be ignored. Notice here that no arguments are specified. If we did this, <code>test_function()</code> would compare the actual values of the arguments. This is information that is not available, as <code>a</code> and <code>b</code> are not variables that are available in the workspace, only in the scope of the function. If all of the calls in <code>body_test</code> pass, the tests in <code>function_test</code> are executed again, this time not silently, and thus able to generate feedback messages.</li>
 </ul>
 </div>
-  </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
       </div>
