@@ -4,27 +4,32 @@
 [![codecov.io](https://codecov.io/github/datacamp/testwhat/coverage.svg?branch=master)](https://codecov.io/github/datacamp/testwhat?branch=master)
 [![Rdocs](http://www.rdocumentation.org/badges/version/testwhat)](http://www.rdocumentation.org/packages/testwhat)
 
-The `testwhat` package provides rich functionality to write Submission Correctness Tests for interactive R exercises on the DataCamp platform. The package is inspired by [`testthat`](https://github.com/hadley/testthat), the standard for unit testing in R.
+The `testwhat` package helps you to write Submission Correctness Tests (SCTs) for interactive R exercises on the DataCamp platform.
 
-## Reference
+- If you are new to teaching on DataCamp, check out https://authoring.datacamp.com.
+- If you want to learn what SCTs are and how they work, visit https://authoring.datacamp.com/courses/sct.html.
+- For a complete overview of all functionality inside `testwhat` and articles about what to use when, consult https://datacamp.github.io/testwhat.
 
-* Teach on DataCamp: https://authoring.datacamp.com
-* What is an SCT? https://authoring.datacamp.com/courses/sct.html
+For details, questions and suggestions, [contact us](mailto:content-engineering@datacamp.com).
 
-## Installation
+## Development
+
+### Installation
 
 ```R
 library("devtools")
 install_github("datacamp/testwhat")
 ```
 
-## Running tests
+### Tests
 
-`testwhat` currently depends on the proprietary `RBackend` and `RCompletion` packages to run tests.
+`testwhat` currently depends on the proprietary `RBackend` and `RCompletion` packages to run tests. Tests run automatically on every branch that is updated through travis.
 
 ```R
 devtools::test()
 ```
 
-For more details, questions and suggestions, [contact us](mailto:content-engineering@datacamp.com).
+### Documentation
+
+Whenever a push is done to the `master` branch, this repo will automatically build a `pkgdown` website (containing reference documentation and vignettes), push it to the `gh-pages` branch, which in turn is served by GitHub at https://datacamp.github.io/testwhat.
 

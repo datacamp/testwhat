@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Filip Schouwenaars" />
+
+
+<title>Checking through string matching</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Checking through string matching</h1>
+<h4 class="author"><em>Filip Schouwenaars</em></h4>
+
+
+
+<p>With <code>check_code()</code>, you can look through the student’s submission to find a match with the string or strings specified in <code>strings</code>. With <code>fixed</code> you can declare whether or not to use regular expressions. If <code>fixed = FALSE</code>, the default, the strings are used as regular expressions for which a match is sought. when <code>fixed = TRUE</code>, <code>check_code()</code> will consider the strings you pass as actual strings that have to be found exactly in the student’s submission. <code>times</code> tells how often (one of) the string(s) should be matched.</p>
+<p>Before a match is sought, the student submission as well as the <code>strings</code> argument is ‘cleaned up’: spaces are removed, all <code>&lt;-</code> are replaced by <code>=</code>, double strings are changed to single strings, etc. That way, you don’t have to code all equivalent options.</p>
+<p><strong>CAUTION</strong>: It is often tempting to use <code>check_code()</code> as it’s straightforward to use, but <strong>you should avoid using this function</strong>, as it imposes severe restrictions on how a student can solve an exercise. Often, there are many different ways to solve an exercise. Unless you have a very advanced regular expression or list a bunch of options, <code>check_code()</code> will not be able to accept all these different approaches. <strong>Always think about better ways to test a student submission before you resort to <code>check_code()</code></strong>.</p>
+<div id="example-1-regular-expression" class="section level2">
+<h2>Example 1: regular expression</h2>
+<p>Suppose you want the student to type the sentence “R is Rsome!”, but you want to allow for some small mistakes regarding capitalization and the exclamation mark. The solution looks like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Write the sentence in quotes</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">&quot;R is Rsome!&quot;</span></a></code></pre></div>
+<p>The SCT could look as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_code</span>(<span class="st">&quot;^</span><span class="ch">\&quot;</span><span class="st">[r|R] is [r|R]some!?</span><span class="ch">\&quot;</span><span class="st">$&quot;</span>,</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">                    <span class="dt">not_typed_msg =</span> <span class="st">&quot;Have you correctly written the sentence `R is Rsome!`?&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">success_msg</span>(<span class="st">&quot;Nice job!&quot;</span>)</a></code></pre></div>
+<p>All of the following student submission would be accepted by this <code>testwhat</code> function call:</p>
+<ul>
+<li><code>&quot;R is Rsome!&quot;</code></li>
+<li><code>&quot;R is Rsome&quot;</code></li>
+<li><code>&quot;r is Rsome!&quot;</code></li>
+<li><code>&quot;r is Rsome&quot;</code></li>
+<li><code>&quot;R is rsome!&quot;</code></li>
+<li><code>&quot;R is rsome&quot;</code></li>
+<li><code>&quot;r is rsome!&quot;</code></li>
+<li><code>&quot;r is rsome&quot;</code></li>
+</ul>
+<p><a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html">Click here to learn more about regular expressions in R</a>.</p>
+</div>
+<div id="example-2-exact-matching" class="section level2">
+<h2>Example 2: Exact matching</h2>
+<p>Suppose you want to check whether a student coded a SQL expression correctly:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Create the correct SQL expression</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">x &lt;-<span class="st"> &quot;SELECT posts FROM tweets WHERE n_char &gt; 10&quot;</span></a></code></pre></div>
+<p>The student can solve this in many ways, all of which should be accepted:</p>
+<ul>
+<li><code>x &lt;- &quot;select posts from tweets where n_char &gt; 10&quot;</code></li>
+<li><code>x &lt;- &quot;SELECT posts FROM tweets WHERE n_char &gt; 10&quot;</code></li>
+<li><code>x &lt;- &quot;SELECT posts from tweets where n_char &gt; 10&quot;</code></li>
+<li>…</li>
+</ul>
+<p>You can thus write the following SCT. In <code>strings</code> you specify a vector with all options. This time, you have to set <code>fixed = TRUE</code> so you can do exact string matching. Finally, you can chose to override the <code>not_typed_msg</code> to give a custom message if the student didn’t type what you expected.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_code</span>(<span class="kw">c</span>(<span class="st">&quot;select posts from tweets where n_char &gt; 10&quot;</span>,</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">                      <span class="st">&quot;SELECT posts FROM tweets WHERE n_char &gt; 10&quot;</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">                      <span class="st">&quot;SELECT posts from tweets where n_char &gt; 10&quot;</span>),</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">                    <span class="dt">fixed =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                    <span class="dt">not_typed_msg =</span> <span class="st">&quot;Have you correctly coded the SQL query?&quot;</span>)</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw">success_msg</span>(<span class="st">&quot;Great job!&quot;</span>)</a></code></pre></div>
+<p>However, the above SCT doesn’t really cut it. To be really robust to all different ways of coding this query, you’ll either want to use regular expressions inside <code>test_student_typed()</code> (see example 2) or do a check on the resulting data frame from executing the SQL query (preferable, since than you automatically cover any correct way of doing things).</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

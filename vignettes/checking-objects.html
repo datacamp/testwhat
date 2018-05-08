@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Filip Schouwenaars" />
+
+
+<title>Checking objects</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Checking objects</h1>
+<h4 class="author"><em>Filip Schouwenaars</em></h4>
+
+
+
+<p><code>check_object()</code> is the start of your SCT chains to check whether students have correctly defined objects.</p>
+<div id="example-1-simple-object" class="section level3">
+<h3>Example 1: Simple object</h3>
+<p>Consider the following solution:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Create the variable x</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="dv">15</span></a></code></pre></div>
+<p>You don’t care too much about how <code>x</code> was created, as long as it’s defined and refers to the correct value. To test this robustly, you can use <code>check_object()</code> in your SCT:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_object</span>(<span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_equal</span>()</a></code></pre></div>
+<p><code>check_object()</code> will check if the variable <code>x</code> is defined and has the same value as <code>x</code> has in the solution environment. All of the following student submissions will be accepted by <code>check_object()</code>:</p>
+<ul>
+<li><code>x &lt;- 15</code></li>
+<li><code>x &lt;- 12 + 3</code></li>
+<li><code>x &lt;- 3; x &lt;- x + 12</code></li>
+</ul>
+<p>How the object <code>x</code> came about does not matter: only the end result, the actual content of <code>x</code>, matters.</p>
+</div>
+<div id="example-2-only-check-the-existence" class="section level3">
+<h3>Example 2: Only check the existence</h3>
+<p>Say that you want the student to create an object <code>x</code>, but you don’t care what the contents of the variable are:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Create an arbitrary object x</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="dv">123</span></a></code></pre></div>
+<p>In your SCT&lt; simply drop the <code>check_equal()</code> bit:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_object</span>(<span class="st">&quot;x&quot;</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">success_msg</span>(<span class="st">&quot;Arbitrary, I like that.&quot;</span>)</a></code></pre></div>
+</div>
+<div id="example-3-eq_condition" class="section level3">
+<h3>Example 3: <code>eq_condition</code></h3>
+<p>The argument <code>eq_condition</code> becomes important when working with data structures that can contain names, such as vectors and lists. Suppose you have the following solution:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Create the list l</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">l &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> <span class="dv">2</span>, <span class="dt">b =</span> <span class="dv">3</span>, <span class="dt">c =</span> <span class="dv">4</span>)</a></code></pre></div>
+<p>To test this list, you can use the following SCT:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_object</span>(<span class="st">&quot;l&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_equal</span>()</a></code></pre></div>
+<ul>
+<li><p><code>eq_condition = &quot;equivalent&quot;</code> by default, meaning that the names of the data structure are not checked. If the student creates a list <code>l</code> as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">l &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">d =</span> <span class="dv">2</span>, <span class="dt">e =</span> <span class="dv">3</span>, <span class="dt">f =</span> <span class="dv">4</span>)</a></code></pre></div>
+<p>it will also be accepted.</p></li>
+<li><p>If you set <code>eq_condition = &quot;equal&quot;</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_object</span>(<span class="st">&quot;l&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_equal</span>(<span class="dt">eq_condition =</span> <span class="st">&quot;equal&quot;</span>)</a></code></pre></div>
+<p>the data structure’s attributes, such as its names, are also checked. Now,</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">l &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">d =</span> <span class="dv">2</span>, <span class="dt">e =</span> <span class="dv">3</span>, <span class="dt">f =</span> <span class="dv">4</span>)</a></code></pre></div>
+<p>will not be accepted</p></li>
+</ul>
+</div>
+<div id="example-4-automated-feedback-messages" class="section level3">
+<h3>Example 4: Automated feedback messages</h3>
+<p>Just like for <code>check_equal()</code> in the <code>check_function()</code>-induced SCT chain, the automatic messages that are generated when the student makes mistakes of different kinds is continuously improved to be as insightful as possible. For example, when the solution expects:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">x =<span class="st"> </span><span class="dv">123</span></a></code></pre></div>
+<p>but the student submits:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">x =<span class="st"> &quot;123&quot;</span></a></code></pre></div>
+<p>An SCT that contains</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_object</span>(<span class="st">'x'</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_equal</span>()</a></code></pre></div>
+<p>will mention: “<code>x</code> is a character string, while it should be a number.”. When comparing character strings between student and solution, this comparison goes further, hinting about potential incorrect capitalization, incorrect spacing, incorrect punctuation or possible typos.</p>
+</div>
+<div id="example-5-complex-objects" class="section level3">
+<h3>Example 5: Complex objects</h3>
+<p>Because R deals very often with more complex data structures, there are several utility functions to test specific parts of an object instead of the entire object as a whole. As an example, consider the following solution:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># A dataframe df is available</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;vincent&quot;</span>, <span class="st">&quot;lisa&quot;</span>, <span class="st">&quot;robin&quot;</span>),</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">                 <span class="dt">count1 =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">                 <span class="dt">count2 =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">10</span>))</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co"># Add a column tot, sum of count1 and count2</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">df<span class="op">$</span>tot &lt;-<span class="st"> </span>df<span class="op">$</span>count1 <span class="op">+</span><span class="st"> </span>df<span class="op">$</span>count2</a></code></pre></div>
+<p>To check whether the student correctly added this column, you can use the following SCT. As usual, the function is able to produce meaningful feedback in case of failure, but these messages can be overridden. To explain the meaning of the different steps, we have specified custom messages for each one of them:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_object</span>(<span class="st">&quot;df&quot;</span>, <span class="dt">undefined_msg =</span> <span class="st">&quot;Make sure to not remove `df`!&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="st">  </span><span class="kw">check_column</span>(<span class="st">&quot;tot&quot;</span>, <span class="dt">col_missing_msg =</span> <span class="st">&quot;Have you added the column `tot` to `df`?&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="st">  </span><span class="kw">check_equal</span>(<span class="dt">incorrect_msg =</span> <span class="st">&quot;Have you correctly calculated the column `tot` based on `count1` and `count2`?&quot;</span>)</a></code></pre></div>
+<p>Equivalent to <code>check_column()</code>, <code>testwhat</code> also features the <code>check_element()</code> function to check the equality of list elements. The only difference with <code>check_column()</code> is the automatic feedback message that is generated, as a data frame is a list object and its elements are the columns.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

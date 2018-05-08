@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Filip Schouwenaars" />
+
+
+<title>Combining sets of SCTs</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Combining sets of SCTs</h1>
+<h4 class="author"><em>Filip Schouwenaars</em></h4>
+
+
+
+<p>In R, there are many ways to solve a problem. Writing an SCT that checks when students make a mistake, but is robust to multiple different solutions is a challenge. <code>check_correct</code> and <code>test_or</code> allow you to add logic to your SCT. Instead of running all tests and failing as soon as one of the tests fail, you can conditionally execute tests, and interpret the results separately.</p>
+<div id="example-1-check_correct" class="section level3">
+<h3>Example 1: <code>check_correct</code></h3>
+<p>As an example, suppose you want the student to calculate the mean of a vector <code>vec</code> and store it in <code>res</code>. A possible solution could be:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># vec is predefined for you</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">vec &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># Calculate result</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">result &lt;-<span class="st"> </span><span class="kw">mean</span>(vec)</a></code></pre></div>
+<p>You want the SCT to pass when the student manages to store the correct value in the object <code>result</code>. How <code>result</code> was calculated, does not matter to you: as long as <code>result</code> is correct, the SCT should accept the submission. If something <code>result</code> is not correct, you want to dig a little deeper and see if the student used the <code>mean()</code> function correctly. The following SCT will do just that:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">check_correct</span>(<span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_object</span>(<span class="st">&quot;result&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_equal</span>(),</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">              {</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">                <span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_error</span>()</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">                <span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_function</span>(<span class="st">&quot;mean&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_arg</span>(<span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_equal</span>()</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">              })</a></code></pre></div>
+<p>Notice that it’s perfectly possible to specify more than one SCT function call in the arguments as the second sub-SCT shows.</p>
+<p>Let’s go over what happens when the student submits different versions of the fifth line of code in the solution:</p>
+<ul>
+<li>The student submits <code>result &lt;- mean(vec)</code>, exactly the same as the solution.
+<ul>
+<li><code>check_correct()</code> executes the first sub-SCT chain (<code>check_object()</code>)</li>
+<li>This SCT chain passes, so the second sub-SCT chain is not executed.</li>
+<li>The overall SCT passes.</li>
+</ul></li>
+<li>The student submits <code>result &lt;- sum(vec)/length(vec)</code>, which should be correct
+<ul>
+<li><code>check_correct()</code> executes the first sub-SCT chain</li>
+<li>This SCT chain passes, so the second sub-SCT chain is not executed.</li>
+<li>The overall SCT passes, even though <code>mean()</code> was not used.</li>
+</ul></li>
+<li>The student submits <code>result &lt;- mean(vec + 1)</code>.
+<ul>
+<li><code>check_correct()</code> executes the first sub-SCT chain.</li>
+<li>This sub-SCT chain fails <em>silently</em>, so <code>check_correct()</code> heads over to the second, ‘diagnose’ sub-SCT chain (<code>check_function()</code> etc)</li>
+<li><code>check_function()</code> will fail, because the parameter passed to <code>mean()</code> does not correspond to the argument passed in the solution.</li>
+<li>The overall SCT fails, with a meaningful, specific feedback message: you did not correctly specify the argument inside <code>mean()</code>.</li>
+</ul></li>
+<li>The student submits <code>result &lt;- mean(vec) + 1</code>.
+<ul>
+<li><code>check_correct()</code> executes the first sub-SCT chain</li>
+<li>This sub-SCT chain fails <em>silently</em>, so <code>check_correct()</code> heads over to the second, ‘diagnose’ sub-SCT chain (<code>check_function()</code> etc)</li>
+<li>Both functions in the second sub-SCT chain pass, because <code>mean()</code> is called in exactly the same way in the student code as in the solution.</li>
+<li>Because there is clearly something wrong - <code>result</code> is not correct - the ‘check’ sub-SCT, <code>ex() %&gt;% test_object(&quot;result&quot;)</code> is executed again, but <em>loudly</em> this time.</li>
+<li><code>check_object()</code> fails <em>loudly</em> and the student gets the message that <code>result</code> does not contain the correct value.</li>
+</ul></li>
+</ul>
+</div>
+<div id="example-2-check_or" class="section level2">
+<h2>Example 2: <code>check_or</code></h2>
+<p>This function simply tests whether one of the sub-SCTs you specify inside it passes. If such as a sub-SCT is a single function, you can simply pass the function call as is. If you want to include multiple functions in a sub-SCT, use curly brackets (see previous example).</p>
+<p>Suppose you want to check whether people correctly printed out any integer between 3 and 7. A solution could be:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">print</span>(<span class="dv">4</span>)</a></code></pre></div>
+<p>To test this, you can use <code>test_or</code> with three separate <code>check_output_expr()</code> functions.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">check_or</span>(<span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_output_expr</span>(<span class="st">'4'</span>),</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">         <span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_output_expr</span>(<span class="st">'5'</span>),</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">         <span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_output_expr</span>(<span class="st">'6'</span>))</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">success_msg</span>(<span class="st">&quot;Nice job!&quot;</span>)</a></code></pre></div>
+<p>If all of the SCTs that you pass fail, the feedback that the first sub-SCT generated is presented to the student. If you want to override the message that is shown if all sub-SCTs fail, you can manually specify <code>incorrect_msg</code> inside <code>check_or</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">check_or</span>(<span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_output_expr</span>(<span class="st">'4'</span>),</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">         <span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_output_expr</span>(<span class="st">'5'</span>),</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">         <span class="kw">ex</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">check_output_expr</span>(<span class="st">'6'</span>),</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">         <span class="dt">incorrect_msg =</span> <span class="st">&quot;Just print out either 4, 5, or 6!&quot;</span>)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="kw">success_msg</span>(<span class="st">&quot;Nice job!&quot;</span>)</a></code></pre></div>
+<p>You can consider <code>check_or()</code> a logic-inducing function. The different calls to <code>testwhat</code> functions that are in your SCT are actually all tests that <em>have</em> to pass: they are <code>AND</code> tests. With <code>test_or()</code> you can add chunks of <code>OR</code> tests in there.</p>
+</div>
+<div id="why-use-it" class="section level2">
+<h2>Why use it?</h2>
+<p>You will find that <code>check_correct()</code> and <code>check_or()</code> are extremely powerful functions to allow for different ways of solving the same problem.</p>
+<p>For example, you can use <code>check_correct()</code> to check the end result of a calculation. If the end result is correct, you can go ahead and accept the entire exercise. If the end result is incorrect, you can use the <code>diagnose_code</code> part of <code>check_correct()</code> to dig a little deeper. It is also perfectly possible to use <code>check_correct()</code> inside another <code>check_correct()</code>, to make things more advanced.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
