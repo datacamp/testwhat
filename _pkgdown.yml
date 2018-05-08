@@ -17,3 +17,30 @@ reference:
   - title: Internals
     contents:
     - test_exercise
+
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Glossary
+      href: articles/glossary.html
+    - text: Guides
+      menu:
+      - text: Checking objects
+        href: articles/checking-objects.html
+      - text: Checking function calls
+        href: articles/checking-function-calls.html
+      - text: Checking output
+        href: articles/checking-output.html
+      - text: Checking control flow
+        href: articles/checking-control-flow.html
+      - text: Checking function definitions
+        href: articles/checking-function-definitions.html
+      - text: Checking through string matching
+        href: articles/checking-through-string-matching.html
+      - text: Combining sets of SCTs
+        href: articles/combining-sets-of-scts.html
+      - text: Electives
+        href: articles/electives.html
+    - text: Reference
+      href: reference/index.html
