@@ -14,41 +14,7 @@ check_sufficient <- function(calls, index, name) {
 }
 
 #' @importFrom magrittr %>%
-#'
-#' @export
-magrittr::`%>%`
-
-#' Execute code in the student environment
-#' @param code The code to execute
-#' 
-#' @export
-execute_student <- function(code) {
-  try(eval(substitute(code), envir = get_student_env()))
-}
-
-#' Execute code in the solution environment
-#' @param code The code to execute
-#'
-#' @export
-execute_solution <- function(code) {
-  try(eval(substitute(code), envir = get_solution_env()))
-}
-
-#' Get solution environment (backwards comp)
-#' @export
-get_solution_env <- function() { ex()$get("solution_env") }
-
-#' Get student environment (backwards comp)
-#' @export
-get_student_env <- function() { ex()$get("student_env") }
-
-#' Get solution environment (backwards comp)
-#' @export
-get_student_code <- function() { ex()$get("student_code") }
-
-#' Get solution environment (backwards comp)
-#' @export
-get_solution_code <- function() { ex()$get("solution_code") }
+NULL
 
 tw_accessors <- function() {
   tw_data <- list()

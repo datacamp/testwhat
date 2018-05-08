@@ -10,29 +10,30 @@ test_predefined_objects(name, eq_condition = "equivalent", eval = TRUE,
 \arguments{
 \item{name}{vector of names of the objects to check}
 
-\item{eq_condition}{vector version of \code{eq_condition} of 
-\code{\link{test_object}}.}
+\item{eq_condition}{character vector indicating how to compare. See
+\code{\link{is_equal}}.}
 
-\item{eval}{vector version of \code{eval} of \code{\link{test_object}}.}
+\item{eval}{logical vector indicating whether or not you want to check only
+the objects' existence or also whether their values match the solution.}
 
-\item{undefined_msg}{vector version of \code{undefined_msg} of 
-\code{\link{test_object}}}
+\item{undefined_msg}{vector version of \code{undefined_msg} of
+\code{\link{check_object}}}
 
-\item{incorrect_msg}{vector version of \code{incorrect_msg} of 
-\code{\link{test_object}}}
+\item{incorrect_msg}{vector version of \code{incorrect_msg} of
+\code{\link{check_object}}}
 }
 \description{
 At the start of your SCT, you typically want to check whether some predefined
-variables are still correct. \code{test_predefined_object} allows you to 
-specify a vector of object names, together with a vector of equivalence 
-conditions, evaluation specifications, undefined an incorrect messages. As 
-such, \code{test_predefined_objects} is a vectorized wrapper around 
-\code{\link{test_object}} with meaningful defeault feedback messages that 
+variables are still correct. \code{test_predefined_object} allows you to
+specify a vector of object names, together with a vector of equivalence
+conditions, evaluation specifications, undefined an incorrect messages. As
+such, \code{test_predefined_objects} is a vectorized wrapper around
+\code{\link{check_object}} with meaningful defeault feedback messages that
 tell the student to not adapt predefined objects and code in the sample code.
 }
 \examples{
 \dontrun{
-# Suppose the sample code specifies the variables a, b and c, 
+# Suppose the sample code specifies the variables a, b and c,
 # and you want to check that a, b and c haven't changed.
 test_predefined_objects(c("a", "b", "c"))
 }

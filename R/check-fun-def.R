@@ -1,9 +1,6 @@
 #' Check whether the student defined a function correctly
 #' 
 #' @param name  The name of the function to test
-#' @param function_test sub-SCT to perform on the function
-#' @param body_test sub-SCT to perform on the body of the function if the
-#'   sub-SCT in \code{function_test} fails. Only able to test on strings here!
 #' @param undefined_msg Custom message in case the specified function
 #'   was not defined
 #' @param no_fundef_msg Custom message in case the function specified in \code{name} is not a function.
@@ -23,16 +20,7 @@
 #'   a + b 
 #' }
 #' 
-#' # SCT option 1
-#' test_function_definition("my_fun",
-#'                          function_test = {
-#'                            test_expression_result("my_fun(1,2)")
-#'                            test_expression_error("my_fun('c',3)")
-#'                          }, {
-#'                            test_student_typed("+")
-#'                          })
-#' 
-#' # SCT option 2
+#' # SCT
 #' fundef %>% check_fun_def("my_fun") 
 #' fundef %>% check_arguments()
 #' fundef %>% check_call(a = 1, b = 2) %>% check_result() %>% check_equal()
@@ -41,51 +29,6 @@
 #' }
 #' 
 #' @name test_fun_def
-
-#' @rdname test_fun_def
-#' @export
-test_function_definition <- function(name, 
-                                     function_test = NULL,
-                                     body_test = NULL,
-                                     undefined_msg = NULL, 
-                                     incorrect_number_arguments_msg = NULL) {
-  body_test <- substitute(body_test)
-  function_test <- substitute(function_test)
-  fundef <- ex() %>% check_fun_def(name, 
-                                   undefined_msg = undefined_msg, 
-                                   append = is.null(undefined_msg))
-  
-  fun_passed <- TRUE
-  if (!is.null(function_test)) {
-    fun_passed <- run_until_fail(function_test)
-    fun_feedback <- get_rep()$get_feedback()
-  }
-
-  if (!fun_passed) {
-    fundef %>% check_arguments(incorrect_number_arguments_msg = incorrect_number_arguments_msg, 
-                               append = is.null(incorrect_number_arguments_msg))  
-  }
-  
-  body_passed <- TRUE
-  if (!is.null(body_test)) {
-    oldstate <- ex()
-    on.exit(tw$set(state = oldstate))
-    body_state <- check_body(fundef)
-    tw$set(state = body_state)
-    body_passed <- run_until_fail(body_test)
-    body_feedback <- get_rep()$get_feedback()
-  }
-  
-  if (fun_passed) {
-    # all good
-  } else {
-    if (body_passed) {
-      check_that(failure(), feedback = fun_feedback)
-    } else {
-      check_that(failure(), feedback = body_feedback)
-    }
-  }
-}
 
 #' @rdname test_fun_def
 #' @export
@@ -184,7 +127,50 @@ check_call <- function(state, ...) {
   return(expr_state)
 }
 
+# Deprecated functions
 
+test_function_definition <- function(name, 
+                                     function_test = NULL,
+                                     body_test = NULL,
+                                     undefined_msg = NULL, 
+                                     incorrect_number_arguments_msg = NULL) {
+  body_test <- substitute(body_test)
+  function_test <- substitute(function_test)
+  fundef <- ex() %>% check_fun_def(name, 
+                                   undefined_msg = undefined_msg, 
+                                   append = is.null(undefined_msg))
+  
+  fun_passed <- TRUE
+  if (!is.null(function_test)) {
+    fun_passed <- run_until_fail(function_test)
+    fun_feedback <- get_rep()$get_feedback()
+  }
+  
+  if (!fun_passed) {
+    fundef %>% check_arguments(incorrect_number_arguments_msg = incorrect_number_arguments_msg, 
+                               append = is.null(incorrect_number_arguments_msg))  
+  }
+  
+  body_passed <- TRUE
+  if (!is.null(body_test)) {
+    oldstate <- ex()
+    on.exit(tw$set(state = oldstate))
+    body_state <- check_body(fundef)
+    tw$set(state = body_state)
+    body_passed <- run_until_fail(body_test)
+    body_feedback <- get_rep()$get_feedback()
+  }
+  
+  if (fun_passed) {
+    # all good
+  } else {
+    if (body_passed) {
+      check_that(failure(), feedback = fun_feedback)
+    } else {
+      check_that(failure(), feedback = body_feedback)
+    }
+  }
+}
 
 
 

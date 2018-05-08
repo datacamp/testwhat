@@ -4,7 +4,9 @@
 \alias{is_equal}
 \alias{is_equal.default}
 \alias{is_equal.formula}
-\title{Check equality of two objects}
+\title{Check equality of two objects	
+	
+Utility function to use inside \code{\link{check_that}}.}
 \usage{
 is_equal(x, y, eq_condition = "equivalent")
 
@@ -18,9 +20,12 @@ is_equal(x, y, eq_condition = "equivalent")
 \item{y}{object to compare}
 
 \item{eq_condition}{how to compare the objects: \code{"equivalent"} (the default,
-does not check attributes), \code{"equal"} (checks attributes, but allows for
+does not check attributes), \code{"equal"} (checks attributes, but allows for    
 errors in machine precision), or \code{"identical"} (exactly identical).}
 }
 \description{
+Check equality of two objects	
+	
 Utility function to use inside \code{\link{check_that}}.
 }
+\keyword{internal}

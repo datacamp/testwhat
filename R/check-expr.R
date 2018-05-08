@@ -22,50 +22,15 @@
 #' # Example 1
 #' a <- c(1, 2, 3, 4, 5, 6) 
 #' 
-#' # SCT option 1 to test if second and fourth element is ok:
-#' test_expression_result("a[c(2, 4)]")
-#' 
-#' # SCT option 2
+#' # SCT
 #' ex() %>% check_expr("a[c(2, 4)]") %>% check_result() %>% check_equal()
 #' 
 #' # Example 2
 #' my_fun <- function() { print('hello') }
 #' 
-#' # SCT option 1 to test if my_fun() produces correct output:
-#' test_expression_output("my_fun()")
-#' 
-#' # SCT option 2
+#' # SCT
 #' ex() %>% check_expr("my_fun()") %>% check_output() %>% check_equal()
 #' }
-
-#' @rdname test_expr
-#' @export 
-test_expression_result <- function(expr, 
-                                   eq_condition = "equivalent",
-                                   incorrect_msg = NULL) {
-  ex() %>% 
-    check_expr(expr) %>% 
-    check_result() %>% 
-    check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
-}
-
-#' @rdname test_expr
-#' @importFrom utils capture.output
-test_expression_output <- function(expr, incorrect_msg = NULL) {
-  ex() %>% 
-    check_expr(expr) %>% 
-    check_output() %>% 
-    check_equal(incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
-}
-
-#' @rdname test_expr
-#' @export 
-test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NULL) {
-  ex() %>% 
-    check_expr(expr) %>% 
-    check_error(no_error_msg = no_error_msg, append = is.null(no_error_msg)) %>% 
-    check_equal(incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
-}
 
 #' @rdname test_expr
 #' @export
@@ -158,6 +123,32 @@ run_expr_helper <- function(state, expr, expr_str, error_msg, append, case = c("
                              pd = NULL)
   expreval_state$set(student_object = stud_res, solution_object = sol_res)
   return(expreval_state)
+}
+
+# Deprecated functions
+
+test_expression_result <- function(expr, 
+                                   eq_condition = "equivalent",
+                                   incorrect_msg = NULL) {
+  ex() %>% 
+    check_expr(expr) %>% 
+    check_result() %>% 
+    check_equal(eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
+}
+
+#' @importFrom utils capture.output
+test_expression_output <- function(expr, incorrect_msg = NULL) {
+  ex() %>% 
+    check_expr(expr) %>% 
+    check_output() %>% 
+    check_equal(incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
+}
+
+test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NULL) {
+  ex() %>% 
+    check_expr(expr) %>% 
+    check_error(no_error_msg = no_error_msg, append = is.null(no_error_msg)) %>% 
+    check_equal(incorrect_msg = incorrect_msg, append = is.null(incorrect_msg))
 }
 
 

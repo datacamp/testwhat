@@ -2,7 +2,7 @@
 % Please edit documentation in R/rstudio-test-props.r
 \name{test_props}
 \alias{test_props}
-\title{Test whether the student used the correct properties (ggvis exercises)}
+\title{Check whether the student used the correct properties (ggvis exercises)}
 \usage{
 test_props(index = 1, funs = "ggvis", props = NULL, allow_extra = TRUE,
   not_called_msg = NULL, incorrect_msg = NULL, error_msg = NULL)
@@ -26,8 +26,9 @@ specified as an empty charactor vector (c()), only the calling of the functions 
 \item{error_msg}{feedback maessage in case the student submitted a faulty ggvis call}
 }
 \description{
-Test whether the student used at least as many and the correct properties as the solution inside a specific
+Check whether the student used at least as many and the correct properties as the solution inside a specific
 command and inside a specific function. By default, this function will compare the ggvis functions of both
 student and solution. However, the teacher can also state that the definition of data can be done in other
 functions.
 }
+\keyword{internal}

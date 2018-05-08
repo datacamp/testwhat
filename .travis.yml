@@ -3,18 +3,19 @@ sudo: false
 cache: packages
 r_check_args: --as-cran
 
-# packages required for testing
+# devtools + packages for testing
 r_packages:
   - dplyr
   - ggvis
-  - hflights
   - ggplot2
   - car
   - RColorBrewer
   - rpart
 
 install:
-    - R -e 'devtools::install(".", dependencies = TRUE)'
-    - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"))'
+  - R -e 'install.packages("devtools")'
+  - R -e 'devtools::install(".", dependencies = TRUE)'
+  - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"))'
+
 after_success:
   - Rscript -e 'covr::codecov()'

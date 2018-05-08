@@ -2,7 +2,7 @@
 % Please edit documentation in R/test-library-function.R
 \name{test_library_function}
 \alias{test_library_function}
-\title{Test whether the library function was called correctly}
+\title{Check whether the library function was called correctly}
 \usage{
 test_library_function(package, not_called_msg = NULL, incorrect_msg = NULL)
 }

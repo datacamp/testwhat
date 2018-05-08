@@ -190,9 +190,7 @@ MarkdownState <- R6::R6Class("MarkdownState", inherit = ChildState,
                                             solution_ds_part = NULL,
                                             inline_number = NULL,
                                             chunk_number = NULL))
-#' Get the main state
-#' 
-#' @export
+# Get the main state
 ex <- function() {
   return(tw$get("state"))
 }
@@ -211,10 +209,10 @@ decorate_state <- function(state, stud, sol, el = NULL) {
   }
 }
 
-#' Override the solution code and pd in a state
+#' Functions to override solution code (and parse data) and variables in the solution environment.
 #' 
 #' Produces a new state with a custom solution code. Mostly useful inside
-#' \code{test_or}, if you want to test for different cases.
+#' \code{check_or}, if you want to test for different cases.
 #' 
 #' @param state the state to create a substate from
 #' @param code the solution code to put into the state

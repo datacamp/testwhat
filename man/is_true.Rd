@@ -2,7 +2,9 @@
 % Please edit documentation in R/check-that.R
 \name{is_true}
 \alias{is_true}
-\title{Check if object is true}
+\title{Check if object is true	
+	
+Utility function to use inside \code{\link{check_that}}.}
 \usage{
 is_true(x)
 }
@@ -10,5 +12,8 @@ is_true(x)
 \item{x}{object to test}
 }
 \description{
+Check if object is true	
+	
 Utility function to use inside \code{\link{check_that}}.
 }
+\keyword{internal}

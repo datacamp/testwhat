@@ -30,21 +30,15 @@
 #' @param ... S3 stuff
 #' @param append Whether or not to append the feedback to feedback built in
 #'   previous states
-#'
 #' @param expr The expression (as string) for which the output should be in the
 #'   student's console output.
-#' @param incorrect_msg Custom message in case the output of the expression
-#'   wasn't found often enough in the student's output.
 #'
 #' @examples
 #' \dontrun{
 #' # Example 1
 #' mtcars
 #'
-#' # SCT option 1
-#' test_output_contains("mtcars")
-#'
-#' # SCT option 2
+#' # SCT
 #' ex() %>% check_output_expr("mtcars")
 #'
 #' # Example 2
@@ -54,10 +48,9 @@
 #' ex() %>% check_output("[H|h]ello\\!*")
 #' }
 #'
-#' @name test_output
+#' @name check_output
 
-
-#' @rdname test_output
+#' @rdname check_output
 #' @export
 check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, output_only = FALSE, missing_msg = NULL, append = TRUE, ...) {
   regex_state <- RegexState$new(state)
@@ -77,13 +70,7 @@ check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, time
   return(regex_state)
 }
 
-#' @rdname test_output
-#' @export
-test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
-  ex() %>% check_output_expr(expr = expr, times = times, missing_msg = incorrect_msg, append = is.null(incorrect_msg))
-}
-
-#' @rdname test_output
+#' @rdname check_output
 #' @export
 check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
 
@@ -148,3 +135,10 @@ clean_up <- function(x) {
   x <- gsub("\"", "'", x)
   return(x)
 }
+
+# Deprecated
+
+test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
+  ex() %>% check_output_expr(expr = expr, times = times, missing_msg = incorrect_msg, append = is.null(incorrect_msg))
+}
+

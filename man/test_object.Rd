@@ -2,21 +2,14 @@
 % Please edit documentation in R/check-object.R
 \name{test_object}
 \alias{test_object}
-\alias{test_data_frame}
 \alias{check_object}
 \alias{check_column}
 \alias{check_element}
 \alias{check_equal.ObjectState}
 \alias{check_equal.ObjectColumnState}
 \alias{check_equal.ObjectElementState}
-\title{Test R object existence and value}
+\title{Check R object existence and value}
 \usage{
-test_object(name, eq_condition = "equivalent", eval = TRUE,
-  undefined_msg = NULL, incorrect_msg = NULL)
-
-test_data_frame(name, columns = NULL, eq_condition = "equivalent",
-  undefined_msg = NULL, undefined_cols_msg = NULL, incorrect_msg = NULL)
-
 check_object(state, name, undefined_msg = NULL, append = TRUE)
 
 check_column(state, col, col_missing_msg = NULL, append = TRUE)
@@ -33,27 +26,13 @@ check_element(state, el, el_missing_msg = NULL, append = TRUE)
   append = TRUE, eq_condition = "equivalent", ...)
 }
 \arguments{
+\item{state}{the state to start from}
+
 \item{name}{name of the object to test.}
-
-\item{eq_condition}{character string indicating how to compare. See 
-\code{\link{is_equal}}.}
-
-\item{eval}{Next to existence, check if the value of the object corresponds 
-between student en solution environment}
 
 \item{undefined_msg}{Optional feedback message in case the student did not 
 define the object. A meaningful message is automatically generated if not 
 supplied.}
-
-\item{incorrect_msg}{Custom feedback message in case the student's object is
-not the same as in the sample solution.}
-
-\item{columns}{character vector of data frame columns to test}
-
-\item{undefined_cols_msg}{Custom feedback message if not all specified
-columns of were found in the student's data frame.}
-
-\item{state}{the state to start from}
 
 \item{append}{Whether or not to append the feedback to feedback built in previous states}
 
@@ -65,38 +44,35 @@ columns of were found in the student's data frame.}
 
 \item{el_missing_msg}{Custom message in case element is messing.}
 
+\item{incorrect_msg}{Custom feedback message in case the student's object is
+not the same as in the sample solution.}
+
+\item{eq_condition}{character string indicating how to compare. See 
+\code{\link{is_equal}}.}
+
 \item{...}{S3 stuff}
 }
 \description{
-Test whether a student defined a certain object (correctly)
+Check whether a student defined a certain object (correctly)
 }
 \examples{
 \dontrun{
 # Example 1
 x <- mean(1:3, na.rm = TRUE)
 
-# SCT option 1
-test_object("x")
-
-# SCT option 2 
+# SCT
 ex() \%>\% check_object("x") \%>\% check_equal()
 
 # Example 2
 x <- mean(1:3, na.rm = TRUE)
 
-# SCT option 1 to only check existence of x
-test_object("x", eval = FALSE)
-
-# SCT option 2 to only check existence of x
+# SCT option
 ex() \%>\% check_object("x")
 
 # Example 3
 df <- data.frame(a = 1:3, b = LETTERS[1:3])
 
-# SCT option 1 to test column a
-test_data_frame("df", columns = "a")
-
-# SCT option 2 to test column a
+# SCT to test column a
 ex() \%>\% check_object("df") \%>\% check_column("a") \%>\% check_equal()
 
 # Example 4

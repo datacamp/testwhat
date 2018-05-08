@@ -14,22 +14,10 @@
 #' \dontrun{
 #' # Example student code: x <- 4 + "a"
 #' 
-#' # SCT option 1
-#' test_error()
-#' 
-#' # SCT option 2
+#' # SCT
 #' ex() %>% check_error()
 #' }
 #' 
-#' @rdname test_error
-
-#' @rdname test_error
-#' @export
-test_error <- function(incorrect_msg = NULL) {
-  ex() %>% check_error(incorrect_msg = incorrect_msg)
-}
-
-#' @rdname test_error
 #' @export
 check_error.default <- function(state, incorrect_msg = NULL, ...) {
   output_list <- state$get("output_list")
@@ -74,4 +62,9 @@ check_error.default <- function(state, incorrect_msg = NULL, ...) {
   error_state$add_details(type = "error", message = fb_msg, pd = pd, append = TRUE)
   check_that(is_true(length(error_indices) == 0), feedback = error_state$details)
   return(error_state)
+}
+
+# Deprecated
+test_error <- function(incorrect_msg = NULL) {
+  ex() %>% check_error(incorrect_msg = incorrect_msg)
 }

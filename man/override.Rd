@@ -5,7 +5,7 @@
 \alias{override_solution}
 \alias{override_solution_code}
 \alias{override_solution_env}
-\title{Override the solution code and pd in a state}
+\title{Functions to override solution code (and parse data) and variables in the solution environment.}
 \usage{
 override_solution(state, code = NULL, ...)
 
@@ -22,5 +22,5 @@ override_solution_env(state, ...)
 }
 \description{
 Produces a new state with a custom solution code. Mostly useful inside
-\code{test_or}, if you want to test for different cases.
+\code{check_or}, if you want to test for different cases.
 }

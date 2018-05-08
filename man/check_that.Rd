@@ -2,7 +2,12 @@
 % Please edit documentation in R/check-that.R
 \name{check_that}
 \alias{check_that}
-\title{Expectation wrapper}
+\title{Expectation wrapper
+	
+This function wraps around an is_... function. When the expectation fails to	
+be met, the feedback message is sent to the reporter. You can use 	
+\code{\link{is_true}}, \code{\link{is_false}}, \code{\link{is_gte}} or	
+\code{\link{is_equal}}}
 \usage{
 check_that(code, feedback, env = parent.frame())
 }
@@ -10,23 +15,26 @@ check_that(code, feedback, env = parent.frame())
 \item{code}{The expectation that should be wrapped}
 
 \item{feedback}{A character string with feedback when the expection is not
-met OR a list object, containing multiple pieces of information. This list
+met OR a list object, containing multiple pieces of information. This list    
 should at least contain an element named \code{message}}
 
 \item{env}{environment in which the test should be evaluated; defaults to \code{parent.frame()}}
 }
 \description{
-This function wraps around an is_... function. When the expectation fails to
-be met, the feedback message is sent to the reporter. You can use 
-\code{\link{is_true}}, \code{\link{is_false}}, \code{\link{is_gte}} or
+Expectation wrapper
+	
+This function wraps around an is_... function. When the expectation fails to	
+be met, the feedback message is sent to the reporter. You can use 	
+\code{\link{is_true}}, \code{\link{is_false}}, \code{\link{is_gte}} or	
 \code{\link{is_equal}}
 }
 \examples{
-\dontrun{
-check_that(is_true(3 == 3))
-check_that(is_false(3 == 4))
-check_that(is_gte(4, 3))
-check_that(is_equal(4, 4))
+\dontrun{	
+check_that(is_true(3 == 3))	
+check_that(is_false(3 == 4))	
+check_that(is_gte(4, 3))	
+check_that(is_equal(4, 4))	
+}	
+	
 }
-
-}
+\keyword{internal}

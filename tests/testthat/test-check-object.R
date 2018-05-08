@@ -151,9 +151,8 @@ test_that("test_object - eq_condition = identical", {
 
 test_that("test_object - different classes - 1", {
   lst <- list()
-  lst$DC_PEC <- "library(hflights); library(dplyr); hflights <- tbl_df(hflights); "
-  lst$DC_CODE <- "carriers <- hflights$TaxiIn"
-  lst$DC_SOLUTION <- "carriers <- hflights$UniqueCarrier"
+  lst$DC_CODE <- "carriers <- c(1, 2, 3)"
+  lst$DC_SOLUTION <- "carriers <- c('a', 'b', 'c')"
   lst$DC_SCT <- "test_object('carriers')"
   output <- test_it(lst)
   fails(output)

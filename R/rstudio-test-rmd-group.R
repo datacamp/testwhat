@@ -4,8 +4,7 @@
 #'
 #' @param group_number  Number of the group.
 #' @param code  SCT code to test the group (in curly braces)
-#'
-#' @export
+#' @keywords internal
 test_rmd_group <- function(group_number, code) {
   old_state <- ex()
   on.exit(tw$set(state = old_state))

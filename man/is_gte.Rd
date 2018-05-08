@@ -2,7 +2,9 @@
 % Please edit documentation in R/check-that.R
 \name{is_gte}
 \alias{is_gte}
-\title{Check >= relation}
+\title{Check >= relation	
+	
+Utility function to use inside \code{\link{check_that}}.}
 \usage{
 is_gte(x, y)
 }
@@ -12,5 +14,8 @@ is_gte(x, y)
 \item{y}{single numeric value to compare}
 }
 \description{
+Check >= relation	
+	
 Utility function to use inside \code{\link{check_that}}.
 }
+\keyword{internal}

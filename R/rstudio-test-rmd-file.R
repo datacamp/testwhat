@@ -9,7 +9,8 @@
 #' @param solution_file the name of the solution file to be tested
 #' @inheritParams test_function
 #' 
-#' @export
+#' @rdname rstudio
+#' @keywords internal
 test_rmd_file <- function(code, 
                           student_file = NULL, 
                           solution_file = NULL) {

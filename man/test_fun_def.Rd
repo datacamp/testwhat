@@ -2,16 +2,12 @@
 % Please edit documentation in R/check-fun-def.R
 \name{test_fun_def}
 \alias{test_fun_def}
-\alias{test_function_definition}
 \alias{check_fun_def}
 \alias{check_arguments}
 \alias{check_body.FunDefState}
 \alias{check_call}
 \title{Check whether the student defined a function correctly}
 \usage{
-test_function_definition(name, function_test = NULL, body_test = NULL,
-  undefined_msg = NULL, incorrect_number_arguments_msg = NULL)
-
 check_fun_def(state, name, undefined_msg = NULL, no_fundef_msg = NULL,
   append = TRUE)
 
@@ -23,24 +19,19 @@ check_arguments(state, incorrect_number_arguments_msg = NULL, append = TRUE)
 check_call(state, ...)
 }
 \arguments{
+\item{state}{the state to start from}
+
 \item{name}{The name of the function to test}
-
-\item{function_test}{sub-SCT to perform on the function}
-
-\item{body_test}{sub-SCT to perform on the body of the function if the
-sub-SCT in \code{function_test} fails. Only able to test on strings here!}
 
 \item{undefined_msg}{Custom message in case the specified function
 was not defined}
 
-\item{incorrect_number_arguments_msg}{Optional feedback message in case the 
-function does not have the correct number of arguments.}
-
-\item{state}{the state to start from}
-
 \item{no_fundef_msg}{Custom message in case the function specified in \code{name} is not a function.}
 
 \item{append}{Whether or not to append the feedback to feedback built in previous states}
+
+\item{incorrect_number_arguments_msg}{Optional feedback message in case the 
+function does not have the correct number of arguments.}
 
 \item{not_found_msg}{Custom feedback message if function definition was not
 found.}
@@ -58,16 +49,7 @@ my_fun <- function(a, b) {
   a + b 
 }
 
-# SCT option 1
-test_function_definition("my_fun",
-                         function_test = {
-                           test_expression_result("my_fun(1,2)")
-                           test_expression_error("my_fun('c',3)")
-                         }, {
-                           test_student_typed("+")
-                         })
-
-# SCT option 2
+# SCT
 fundef \%>\% check_fun_def("my_fun") 
 fundef \%>\% check_arguments()
 fundef \%>\% check_call(a = 1, b = 2) \%>\% check_result() \%>\% check_equal()

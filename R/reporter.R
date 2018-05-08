@@ -1,5 +1,3 @@
-#' DataCamp reporter: 'log' test results
-#'
 #' @importFrom R6 R6Class
 DC_reporter <- R6::R6Class("DC_reporter",
   public = list(

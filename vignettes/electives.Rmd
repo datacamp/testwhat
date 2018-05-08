@@ -1,0 +1,90 @@
+---
+title: "Electives"
+author: "Filip Schouwenaars"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Randomness
+
+To check the correctness of function calls, R objects etc. `testwhat` uses a student and solution environment. The pre exercise code (PEC) and student submission are executed in the student environment. Likewise, the PEC and the solution code are executed in the solution envrionment.
+
+For basic exercises that don't involve a random componenent, this works fine. As soon as your R code depends on pseudo-random numbers, however, this could imply a mismatch between objects in the student and solution code. To solve this, the R backend specifies seeds itself. (see `?set.seed` for more background)
+
+Before running the PEC in the student environment, the backend specifies a random seed based on the current time in seconds (i.e. a random seed). Before running the PEC in the solution environment, the same seed is reset. That way, the PEC leads to the exact same student and solution environments, even when randomly generated numbers are used. As an example, the following PEC will lead to the same `my_samples` object in both student and solution environment.
+
+```{r}
+my_samples <- rnorm(100)
+```
+
+If you want to work with your own seed in the PEC, simply use `set.seed()` at the top of your script, which overrides the seed the backend specified:
+
+```{r}
+set.seed(123)
+my_samples <- rnorm(100)
+```
+
+On exercise startup, the backend will run the solution code after running the PEC in the solution environment. Before the backend runs the solution code, however, a _script seed_ will be specified with `set.seed()`. This random seed is again based on the current time. This same seed will be used to reset the seed before each submission of a student: that way, there will again be perfect correspondence between both environments. If you want to work with a custom script seed, you have two options. You can either place a `set.seed()` call at the top of both the sample and solution code and tell the student to not touch this. This is clearly non-ideal, so there's a second option: the backend provides the function `custom_seed()`. Just like `set.seed()` it takes a number that is used as the seed. If you call this function in your pre exercise code, the backend will use this seed instead of its own randomly generated seed before executing the solution code in the solution environment and before executing the student submission in the student environment.
+
+```{r}
+custom_seed(1234)
+```
+
+**In general, using `set.seed()` and `custom_seed()` in your exercises is not necessary to ensure correspondence between your student and solution environment: the backend takes care of this for you. These functions are only necessary if you want to manually set a seed for either the pre exercise code or the student/solution code**
+
+## Allow solution error
+
+In some cases, you may want the student to submit code that intentially throws errors. For example, you want the student to define a function that throws an error if the input arguments are not in the correct format, and next you want the student to call this functoin, hence throwing the error.
+
+By default, DataCamp's RBackend does not allow solutions that lead to an error. To suppress this backend error, you can use the following in the pre-exercise-code:
+
+```{r}
+allow_solution_error()
+```
+
+This tells the backend that the solution code will generate an error when executed.
+
+## Blocking solution execution
+
+An issue with R packages is that they're often not developed by software developers. Sometimes, very specialized R packages only work in a certain context. More specifically, some packages expect data to be available in the global environment (the top of the search path).
+
+For `testwhat` and DataCamp's R Backend it communicates with, this can cause problems: there's a solution enviroment and a student environment (so that `testwhat` can easily compare objects that student created with the object that they should've created, for example with `test_object()`). If the code that's executed in the solution environment implicitly expects data to be available in the global environment (which is the student environment), things get messed up.
+
+To circumvent these errors, you can use the `SingleProcessExercise`. This is the same as a `NormalExercise`, but the backend will not execute the solution code in the solution environment, and the issues won't appear. This does limit the power of the SCT: there are no objects available in the solution environment to compare with now. There are ways to work around this, though.
+
+As an example, suppose you want to test simple assignment, but for some reason you don't want the solution code to execute in the solution environment:
+
+    --- type:SingleProcessExercise 
+    ## Test exercise
+
+    ... (content here)
+
+    *** =solution
+    ```{r}
+    x <- 5
+    ```
+
+If you want to test this exercise, you cannot use
+
+    *** =sct
+    ```{r}
+    ex() %>% check_object('x')
+    ```
+
+because `test_object()` will look for `x` in the solution environment and not find it. You can work around this by using the chained syntax and manually storing elements in the solution environment:
+
+    *** =sct
+    ```{r}
+    ex() %>% override_solution(x = 5) %>% check_object('x') %>% check_equal()
+    ```

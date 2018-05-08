@@ -32,12 +32,6 @@ collapse_funs <- function(x, conn = " and ") {
   collapse(paste0("`",x,"()`"), conn)
 }
 
-#' Specify the language for the automated feedback
-#' 
-#' Functionality for different languages is no longer supported
-#' 
-#' @param lang shorthand notation for the language.
-#' @export
 set_language <- function(lang) {
   message("Different languages are no longer supported in testwhat")
 }

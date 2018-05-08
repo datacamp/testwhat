@@ -1,0 +1,13 @@
+pandoc: '2.2'
+pkgdown: 1.0.0.9000
+pkgdown_sha: d7c658122bfbd143552cd28585f867dd344302ad
+articles:
+  checking-control-flow: checking-control-flow.html
+  checking-function-calls: checking-function-calls.html
+  checking-function-definitions: checking-function-definitions.html
+  checking-objects: checking-objects.html
+  checking-output: checking-output.html
+  checking-through-string-matching: checking-through-string-matching.html
+  combining-sets-of-SCTs: combining-sets-of-SCTs.html
+  electives: electives.html
+
