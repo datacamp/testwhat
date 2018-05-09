@@ -148,6 +148,24 @@ ex() %>% check_object("x") %>% check_equal()
 ```
 
 
+### Check ggplot
+
+```{r}
+# code
+mtcars %>% 
+  ggplot(aes(wt, hp)) + 
+  geom_point()
+
+# sct
+ex() %>% {
+  check_function(., "ggplot") %>% check_arg("data") %>% check_equal()
+  check_function(., "aes") %>% {
+    check_arg(., "x") %>% check_equal(eval = FALSE) 
+    check_arg(., "y") %>% check_equal(eval = FALSE)
+  }
+  check_function(., "geom_point")
+}
+```
 
 
 
