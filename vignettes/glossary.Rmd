@@ -46,7 +46,7 @@ ex() %>% check_object("x") %>% {
 mean(1:10, na.rm = TRUE)
 
 # sct
-ex() %>% check_function() %>% {
+ex() %>% check_function("mean") %>% {
   check_arg(., "x") %>% check_equal()
   check_arg(., "na.rm") %>% check_equal()
 }
@@ -56,11 +56,11 @@ ex() %>% check_function() %>% {
 
 ```{r}
 # solution
-mean(1:10, na.rm = TRUE)
+x <- mean(1:10, na.rm = TRUE)
 
 # sct
 check_correct(ex() %>% check_object("x") %>% check_equal(),
-              ex() %>% check_function() %>% {
+              ex() %>% check_function("mean") %>% {
                 check_arg(., "x") %>% check_equal()
                 check_arg(., "na.rm") %>% check_equal()
               })
