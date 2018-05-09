@@ -46,7 +46,7 @@ ex() %>% check_object("x") %>% {
 mean(1:10, na.rm = TRUE)
 
 # sct
-ex() %>% check_function() %>% {
+ex() %>% check_function("mean") %>% {
   check_arg(., "x") %>% check_equal()
   check_arg(., "na.rm") %>% check_equal()
 }
@@ -56,17 +56,17 @@ ex() %>% check_function() %>% {
 
 ```{r}
 # solution
-mean(1:10, na.rm = TRUE)
+x <- mean(1:10, na.rm = TRUE)
 
 # sct
 check_correct(ex() %>% check_object("x") %>% check_equal(),
-              ex() %>% check_function() %>% {
+              ex() %>% check_function("mean") %>% {
                 check_arg(., "x") %>% check_equal()
                 check_arg(., "na.rm") %>% check_equal()
               })
 ```
 
-### Checking output
+### Check output
 
 ```{r}
 # solution
@@ -84,7 +84,7 @@ print("Hi, DataCamp")
 ex() %>% check_output("[H|h]i,\\s+[a-zA-Z]+?") 
 ```
 
-### Checking control flow
+### Check control flow
 
 ```{r}
 # solution
@@ -114,7 +114,7 @@ ex() %>% check_for() %>% {
 }
 ```
 
-### Checking function definition
+### Check function definition
 
 ```{r}
 # solution
@@ -134,7 +134,7 @@ ex() %>% check_fun_def("my_fun") %>% {
 }
 ```
 
-### Checking through string matching
+### Check through string matching
 
 ```{r}
 # code
@@ -148,6 +148,24 @@ ex() %>% check_object("x") %>% check_equal()
 ```
 
 
+### Check ggplot
+
+```{r}
+# code
+mtcars %>% 
+  ggplot(aes(wt, hp)) + 
+  geom_point()
+
+# sct
+ex() %>% {
+  check_function(., "ggplot") %>% check_arg("data") %>% check_equal()
+  check_function(., "aes") %>% {
+    check_arg(., "x") %>% check_equal(eval = FALSE) 
+    check_arg(., "y") %>% check_equal(eval = FALSE)
+  }
+  check_function(., "geom_point")
+}
+```
 
 
 
