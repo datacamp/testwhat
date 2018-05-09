@@ -44,8 +44,8 @@ Consider the following snippet of markdown that represents part of an exercise:
     ```
 
 - `check_if_else()` will check whether an `if` statement was coded, and will afterwards 'zoom in' on the if statement only.
-- Chain A: `check_cond()` will consequently zoom in on the condition part of the `if` statement. Hence, `check_code()` will only look inside the condition of the `if` statement of the student's submission.
-- Chain B: Similarly, `check_if()` starts from the `if` statement, and zooms in on the body of the `if` statement, after which `check_function()` will only look for the `print` call inside the body, ignoring anything outside of it.
+- Chain A: `check_cond()` will consequently zoom in on the condition part of the `if` statement, so `check_code()` will only look inside this fragment of the student submission.
+- Chain B: Similarly, `check_if()` starts from the `if` statement, and zooms in on the body of the `if` statement, after which `check_function()` will only look for the `print` call inside this fragment of the student submission.
 
 To further explain this example, assume the following student submission:
 
@@ -58,7 +58,7 @@ if (x < 0) {
 
 In chain A, this is what happens:
 
-- `check_if_else()` considers the entire submission (as contained in `ex()`), and produces a 'child state' that contains the `if` statements in student and solution:
+- `check_if_else()` considers the entire submission (as contained in `ex()`), and produces a child state that contains the `if` statements in student and solution:
 
   ```{r}
   # solution
@@ -72,7 +72,7 @@ In chain A, this is what happens:
   }
   ```
 
-- `check_cond()` considers the state above produced by `check_if_else()`, and produces a 'child state' with only the condition parts of the `if` statements:
+- `check_cond()` considers the state above produced by `check_if_else()`, and produces a child state with only the condition parts of the `if` statements:
 
   ```{r}
   # solution
@@ -82,9 +82,9 @@ In chain A, this is what happens:
   x < 0
   ```
 
-- `check_code()` considers the state above produced by `check_cond()`, and tries to match the regexes to `x < 0` in the student. None of the regexes match this fragment of the student code, so the test fails.
+- `check_code()` considers the state above produced by `check_cond()`, and tries to match the regexes to `x < 0` student snippet. None of the regexes match, so the test fails.
 
-Assume now that the student corrects the mistake, and submits the following, which is still not correct:
+Assume now that the student corrects the mistake, and submits the following (which is still not correct):
 
 ```{r}
 x <- 4
@@ -93,9 +93,9 @@ if (x > 0) {
 }
 ```
 
-Chain A will go through the same steps and will pass this time as `x > 0` is matches one of the regexes. In Chain B, this is what happens:
+Chain A will go through the same steps and will pass this time as `x > 0` in the student submission now matches one of the regexes. In Chain B, this is what happens:
 
-- `check_if()` considers the state produced by `check_if_else()`, and produces a 'child state' with only the body parts of the `if` statements:
+- `check_if()` considers the state produced by `check_if_else()`, and produces a child state with only the body parts of the `if` statements:
 
   ```{r}
   # solution
