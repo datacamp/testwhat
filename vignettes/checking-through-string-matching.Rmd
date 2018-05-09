@@ -1,6 +1,5 @@
 ---
 title: "Checking through string matching"
-author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Checking through string matching}

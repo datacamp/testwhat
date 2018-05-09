@@ -1,6 +1,5 @@
 ---
 title: "Checking control flow"
-author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Checking control flow}

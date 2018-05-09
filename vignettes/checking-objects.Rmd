@@ -1,6 +1,5 @@
 ---
 title: "Checking objects"
-author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Checking objects}

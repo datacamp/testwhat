@@ -1,0 +1,129 @@
+---
+title: "Syntax"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Syntax}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+`testwhat` uses the pipe operator (`%>%`) from the [`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html) package to 'chain together' SCT functions. Every chain starts with the `ex()` function call, which holds the exercise state. This exercise state contains all the information that is required to check if an exercise is correct, which are:
+
++ the student submission and the solution as text, and their corresponding parse trees.
++ a reference to the student workspace and the solution workspace.
++ the output and errors that were generated when executing the student code.
+
+As SCT functions are chained together with `%>%`, the exercise state is copied and adapted into so-called child states to zoom in on particular parts of the code.
+
+## Example
+
+Consider the following snippet of markdown that represents part of an exercise:
+
+    `@solution`
+    ```{r}
+    x <- 4
+    if (x > 0) {
+      print("x is positive")
+    }
+    ```
+    
+    `@sct`
+    ```{r}
+    if_state <- ex() %>% check_if_else() %>% {
+        check_cond(.) %>% check_code(c("x\\s+>\\s+0", "0\\s+<\\s+x")) # chain A
+        check_if(.) %>% check_function("print") %>% check_arg("x") %>% check_equal() # chain B
+    }
+    ```
+
+- `check_if_else()` will check whether an `if` statement was coded, and will afterwards 'zoom in' on the if statement only.
+- Chain A: `check_cond()` will consequently zoom in on the condition part of the `if` statement. Hence, `check_code()` will only look inside the condition of the `if` statement of the student's submission.
+- Chain B: Similarly, `check_if()` starts from the `if` statement, and zooms in on the body of the `if` statement, after which `check_function()` will only look for the `print` call inside the body, ignoring anything outside of it.
+
+To further explain this example, assume the following student submission:
+
+```{r}
+x <- 4
+if (x < 0) {
+  print("x is negative")
+}
+```
+
+In chain A, this is what happens:
+
+- `check_if_else()` considers the entire submission (as contained in `ex()`), and produces a 'child state' that contains the `if` statements in student and solution:
+
+  ```{r}
+  # solution
+  if (x > 0) {
+    print("x is positive")
+  }
+  
+  # student
+  if (x < 0) {
+    print("x is negative")
+  }
+  ```
+
+- `check_cond()` considers the state above produced by `check_if_else()`, and produces a 'child state' with only the condition parts of the `if` statements:
+
+  ```{r}
+  # solution
+  x > 0
+  
+  # student
+  x < 0
+  ```
+
+- `check_code()` considers the state above produced by `check_cond()`, and tries to match the regexes to `x < 0` in the student. None of the regexes match this fragment of the student code, so the test fails.
+
+Assume now that the student corrects the mistake, and submits the following, which is still not correct:
+
+```{r}
+x <- 4
+if (x > 0) {
+  print("x is negative")
+}
+```
+
+Chain A will go through the same steps and will pass this time as `x > 0` is matches one of the regexes. In Chain B, this is what happens:
+
+- `check_if()` considers the state produced by `check_if_else()`, and produces a 'child state' with only the body parts of the `if` statements:
+
+  ```{r}
+  # solution
+  print("x is positive")
+  
+  # student
+  print("x is negative")
+  ```
+
+- `check_function()` considers the state above produced by `check_if()`, and tries to find the function `print()`. Next, it produces a state with references to the different arguments that were specified and their values:
+
+  ```
+  # solution
+  { "x": "x is positive" }
+
+  # student
+  { "x": "x is negative" }
+  ```
+  
+- `check_arg()` checks if the argument `x` is specified, and produces a child state that zooms in on the actual value of `x`:
+
+  ```r
+  # solution
+  "x is positive"
+
+  # student
+  "x is negative"
+  ```
+  
+- Finally, `check_equal()` compares the equality of the two 'focused' arguments. They are not equal, so the check fails.
+

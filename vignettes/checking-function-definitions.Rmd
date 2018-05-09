@@ -1,9 +1,8 @@
 ---
 title: "Checking function definitions"
-author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Checking function definitions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

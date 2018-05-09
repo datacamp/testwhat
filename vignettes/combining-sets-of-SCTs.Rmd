@@ -1,6 +1,5 @@
 ---
 title: "Combining sets of SCTs"
-author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Combining sets of SCTs}

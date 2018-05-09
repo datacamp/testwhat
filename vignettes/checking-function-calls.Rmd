@@ -1,6 +1,5 @@
 ---
 title: "Checking function calls"
-author: "Filip Schouwenaars"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Checking function calls}

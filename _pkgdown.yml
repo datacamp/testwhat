@@ -22,6 +22,8 @@ navbar:
   title: ~
   type: default
   left:
+    - text: Syntax
+      href: articles/syntax.html
     - text: Glossary
       href: articles/glossary.html
     - text: Guides
