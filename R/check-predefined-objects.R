@@ -3,11 +3,9 @@
 #' At the start of your SCT, you typically want to check whether some predefined
 #' variables are still correct. \code{test_predefined_object} allows you to
 #' specify a vector of object names, together with a vector of equivalence
-#' conditions, evaluation specifications, undefined an incorrect messages. As
-#' such, \code{test_predefined_objects} is a vectorized wrapper around
-#' \code{\link{check_object}} with meaningful defeault feedback messages that
-#' tell the student to not adapt predefined objects and code in the sample code.
+#' conditions, evaluation specifications, undefined an incorrect messages.
 #'
+#' @param state the state to start from
 #' @param name vector of names of the objects to check
 #' @param eq_condition character vector indicating how to compare. See
 #'   \code{\link{is_equal}}.
@@ -22,15 +20,16 @@
 #' \dontrun{
 #' # Suppose the sample code specifies the variables a, b and c,
 #' # and you want to check that a, b and c haven't changed.
-#' test_predefined_objects(c("a", "b", "c"))
+#' ex() %>% check_predefined_objects(c("a", "b", "c"))
 #' }
 #'
 #' @export
-test_predefined_objects <- function(name, 
-                                    eq_condition = "equivalent",
-                                    eval = TRUE,
-                                    undefined_msg = NULL, 
-                                    incorrect_msg = NULL) {
+check_predefined_objects <- function(state,
+                                     name, 
+                                     eq_condition = "equivalent",
+                                     eval = TRUE,
+                                     undefined_msg = NULL, 
+                                     incorrect_msg = NULL) {
   
   n_names <- length(name)
   eq_condition <- rep(eq_condition, n_names, length.out = n_names)
@@ -49,7 +48,22 @@ test_predefined_objects <- function(name,
   undefined_msg <- rep(undefined_msg, n_names, length.out = n_names)
   incorrect_msg <- rep(incorrect_msg, n_names, length.out = n_names)
   
-  mapply(test_object, name = name, 
-         eq_condition = eq_condition, eval = eval, 
-         undefined = undefined_msg, incorrect_msg = incorrect_msg)
+  for (i in 1:n_names) {
+    obj <- ex() %>% check_object(name[i], undefined_msg = undefined_msg[i])
+    if (isTRUE(eval[i])) {
+      obj %>% check_equal(eq_condition = eq_condition[i], incorrect_msg = incorrect_msg[i])
+    }
+  }
+}
+
+test_predefined_objects <- function(name, 
+                                    eq_condition = "equivalent",
+                                    eval = TRUE,
+                                    undefined_msg = NULL, 
+                                    incorrect_msg = NULL) {
+  ex() %>% check_predefined_objects(name = name,
+                                    eq_condition = eq_condition,
+                                    eval = eval,
+                                    undefined_msg = undefined_msg,
+                                    incorrect_msg = incorrect_msg)
 }
