@@ -327,35 +327,15 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
 }
 
 test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
+
   sol_type <- class(sol_facet)[1]
-  if (sol_type == "grid") {
-    same_facet <- FALSE
-    same_cols <- FALSE
-    same_rows <- FALSE
-    
-    sol_rows <- c()
-    sol_cols <- c()
-    
-    stud_type <- class(stud_facet)[1]
-    
-    if (stud_type == "grid") {
-      same_facet <- TRUE
-      
-      sol_cols <- names(sol_facet$cols)
-      stud_cols <- names(stud_facet$cols)
-      
-      if (length(base::intersect(sol_cols, stud_cols)) >= length(sol_cols)) {
-        same_cols <- TRUE
-      }
-      
-      sol_rows <- names(sol_facet$rows)
-      stud_rows <- names(stud_facet$rows)
-      
-      if (length(base::intersect(sol_rows, stud_rows)) >= length(sol_rows)) {
-        same_rows <- TRUE
-      }
-    }
-    
+  stud_type <- class(stud_facet)[1]
+
+  if (sol_type == "FacetGrid") {
+
+    sol_cols <- names(sol_facet$params$cols)
+    sol_rows <- names(sol_facet$params$rows)
+
     if (!is.null(facet_fail_msg)) {
       feedback_msg <- rep_len(facet_fail_msg, 3)
     } else {
@@ -367,10 +347,31 @@ test_facet_layer <- function(sol_facet, stud_facet, feedback, facet_fail_msg) {
                         feedback_incorrect,
                         feedback_incorrect)
     }
+
+    check_that(is_equal(sol_type, stud_type), feedback = feedback_msg[1])
+
+    stud_cols <- names(stud_facet$params$cols)
+    check_that(is_gte(length(base::intersect(sol_cols, stud_cols)), length(sol_cols)), feedback = feedback_msg[2])
+
+    stud_rows <- names(stud_facet$params$rows)
+    check_that(is_gte(length(base::intersect(sol_rows, stud_rows)), length(sol_rows)), feedback = feedback_msg[3])
+  }
+
+  if (sol_type == "FacetWrap") {
     
-    check_that(is_true(same_facet), feedback = feedback_msg[1])
-    check_that(is_true(same_cols), feedback = feedback_msg[2])
-    check_that(is_true(same_rows), feedback = feedback_msg[3])
+    sol_facets <- names(sol_facet$params$facets)
+
+    if (!is.null(facet_fail_msg)) {
+      feedback_msg <- rep_len(facet_fail_msg, 2)
+    } else {
+      feedback_msg <- c(paste0(feedback, " did you add the correct facet, `facet_", sol_type, "()`, using the `+` operator?"),
+                        paste0(feedback, " did you correctly specify the facets: `", paste(sol_facets, collapse = "+"), "`?"))
+    }
+
+    check_that(is_equal(sol_type, stud_type), feedback = feedback_msg[1])
+
+    stud_facets <- names(stud_facet$params$facets)
+    check_that(is_gte(length(base::intersect(sol_facets, stud_facets)), length(sol_facets)), feedback = feedback_msg[2])
   }
 }
 

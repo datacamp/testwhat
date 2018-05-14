@@ -1,96 +1,35 @@
 context("test_ggplot")
 
+pec <- "suppressWarnings(library(ggplot2))"
+
 test_that("test_ggplot works 1", {
-  lst <- list()
-  lst$DC_PEC <- "suppressWarnings(library(ggplot2))"
-  lst$DC_CODE <- '
-# base layers
-cyl.am <- ggplot(mtcars, aes(x = factor(cyl), fill = factor(am)))
-
-# Add geom
-cyl.am + 
-  geom_bar()
-
-# Stack - default
-cyl.am + 
-  geom_bar(position = "stack")
-
-# Fill - show proportion
-cyl.am + 
-  geom_bar(position = "fill")  
-
-# Dodging - principles of similarity and proximity
-cyl.am +
-  geom_bar(position = "dodge") 
-
-# Clean up the axes with Scale functions:
-cyl.am +
-  geom_bar(position = "dodge") +
-  scale_fill_manual("Transmission", 
-                    values = c("#E41A1C", "#377EB8"),
-                    labels = c("Manual", "Automatic")) +
-  scale_y_continuous("Number") +
-  scale_x_discrete("Cylinders") + xlab("test")
-        '
-  lst$DC_SOLUTION <- '
-# base layers
-    cyl.am <- ggplot(mtcars, aes(x = factor(cyl), fill = factor(am)))
-    
-    # Add geom
-    cyl.am + 
-    geom_bar()
-    
-    # Stack - default 
-    cyl.am + 
-    geom_bar(position = "stack")
-    
-    # Fill - show proportion
-    cyl.am + 
-    geom_bar(position = "fill")  
-    
-    # Dodging - principles of similarity and proximity
-    cyl.am +
-    geom_bar(position = "dodge") 
-    
-    # Clean up the axes with Scale functions:
-a = 1
-    cyl.am +
-    geom_bar(position = "dodge") +
-    scale_fill_manual("Transmission", 
-    values = c("#E41A1C", "#377EB8"),
-    labels = c("Manual", "Automatic")) +
-    scale_y_continuous("Number") +
-    scale_x_discrete("Cylinders") + xlab("test")
-    '
-  
-  lst$DC_SCT <- 'test_ggplot(6, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab", extra_fail_msg = "Wrong x-label", all_fail_msg = "Everything goes wrong")'
+  code <- 'ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +
+              geom_bar(position = "dodge") +
+              scale_fill_manual("Transmission", values = c("#E41A1C", "#377EB8"), labels = c("Manual", "Automatic")) +
+              scale_y_continuous("Number") +
+              scale_x_discrete("Cylinders") + xlab("test")'
+  lst <- list(DC_PEC = pec,
+              DC_CODE = code,
+              DC_SOLUTION = code,
+              DC_SCT = 'test_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")')
   output <- test_it(lst)
   passes(output)
-  
 })
 
 test_that("test_ggplot works 2", {
-  lst <- list()
-  lst$DC_PEC <- "suppressWarnings(library(ggplot2))"
-  lst$DC_CODE <- '
-# The previous plot, without points:
-ggplot(mtcars, aes(x = wt, y = mpg)) +
-    geom_smooth(se = F)
-    '
-  lst$DC_SOLUTION <- '
- # The previous plot, without points:
-ggplot(mtcars, aes(x = wt, y = mpg)) +
-  stat_smooth(method = "auto",se = F)
-    '
-  
-  lst$DC_SCT <- 'test_ggplot(1, check = "geom", check_geom_params = "method")\ntest_ggplot(1, check = "geom", check_geom_params = "se")'
+  lst <- list(
+    DC_PEC = pec,
+    DC_CODE = 'ggplot(mtcars, aes(x = wt, y = mpg)) + geom_smooth(se = F)',
+    DC_SOLUTION = 'ggplot(mtcars, aes(x = wt, y = mpg)) + stat_smooth(method = "auto",se = F)',
+    DC_SCT = 'test_ggplot(1, check = "geom", check_geom_params = "method")
+              test_ggplot(1, check = "geom", check_geom_params = "se")')
   output <- test_it(lst)
   passes(output)
 })
 
 test_that('test_ggplot works 3', {
   lst <- list()
-  lst$DC_PEC <- "suppressWarnings(library(ggplot2))\nlibrary(RColorBrewer)\nlibrary(car)"
+  lst$DC_PEC <- paste0(pec, "\nlibrary(RColorBrewer)\nlibrary(car)")
   lst$DC_CODE <- '
 myColors <- c(brewer.pal(3, "Dark2"), "black")
 ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
@@ -123,18 +62,51 @@ test_that("test_ggplot works 4", {
     coord_cartesian(xlim = c(1,6), ylim = c(10,35)) +
     scale_color_manual("Cylinders", values = brewer.pal(9, "Blues")[c(4,6,8)]) +
     facet_wrap( ~ cyl, scales = "free_y")
-    
+
     z + theme(panel.background = element_blank(),
     legend.key = element_blank(),
     legend.background = element_blank(),
     strip.background = element_blank(),
     plot.background = element_rect(fill = brewer.pal(3, "Reds")[1], color = "black", size = 3))
-    
+
     myPink <- brewer.pal(3, "Reds")[1]
     '
   lst$DC_CODE <- 'z + theme(plot.background = element_rect(fill = myPink))'
   lst$DC_SOLUTION <- 'z + theme(plot.background = element_rect(fill = myPink))'
   lst$DC_SCT <- 'test_ggplot(1)'
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("spots wrong facetting (grid)", {
+  code <- "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_grid(Treatment ~ Type)"
+  lst <- list(
+    DC_PEC = pec,
+    DC_CODE = code,
+    DC_SOLUTION = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_grid(. ~ Plant)",
+    DC_SCT = "test_ggplot()"
+  )
+  output <- test_it(lst)
+  fails(output)
+
+  lst$DC_SOLUTION <- code
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("spots wrong facetting (wrap)", {
+  code <- "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_wrap(~ Type)"
+  lst <- list(
+    DC_PEC = pec,
+    DC_CODE = code,
+    DC_SOLUTION = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_wrap(~ Plant)",
+    DC_SCT = "test_ggplot()"
+  )
+
+  output <- test_it(lst)
+  fails(output)
+
+  lst$DC_SOLUTION <- code
   output <- test_it(lst)
   passes(output)
 })
