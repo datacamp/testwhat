@@ -1,5 +1,6 @@
 #' Test ggplot call
-#' 
+#'
+#' @param state the state to start from
 #' @param index which call to check
 #' @param all_fail_msg Message if all fails
 #' 
@@ -37,24 +38,24 @@
 #' @param check Which layers to check
 #' 
 #' @export
-test_ggplot <- function(index = 1,
-                        all_fail_msg = NULL,
-                        check_data = TRUE, data_fail_msg = NULL,
-                        check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
-                        check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE, check_geom_params = NULL,
-                        check_facet = TRUE, facet_fail_msg = NULL,
-                        check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
-                        check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
-                        check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
-                        check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
-                        check = NULL) {
+check_ggplot <- function(state,
+                         index = 1,
+                         all_fail_msg = NULL,
+                         check_data = TRUE, data_fail_msg = NULL,
+                         check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
+                         check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE, check_geom_params = NULL,
+                         check_facet = TRUE, facet_fail_msg = NULL,
+                         check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
+                         check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
+                         check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
+                         check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
+                         check = NULL) {
+  student_env <- state$get("student_env")
+  solution_env <- state$get("solution_env")
+  student_code <- state$get("student_code")
+  solution_code <- state$get("solution_code")
+  predefined_code <- state$get("pec")
   
-  student_env <- ex()$get("student_env")
-  solution_env <- ex()$get("solution_env")
-  student_code <- ex()$get("student_code")
-  solution_code <- ex()$get("solution_code")
-  predefined_code <- ex()$get("pec")
-
   layers <- c("data", "aes", "geom", "facet", "scale", "coord", "stat")
   
   sol_ggplot_info <- get_ggplot_solution_info(solution_code, predefined_code, solution_env)
@@ -135,7 +136,7 @@ test_ggplot <- function(index = 1,
     # Check the coord layer
     test_coord_layer(sol_selected_command, stud_selected_command, feedback, coord_fail_msg, exact_coord, student_env, solution_env)
   }
-
+  
   if (!is.null(check_extra)) {
     # Check extra layers
     for (i in 1:length(check_extra)) {
@@ -157,6 +158,30 @@ test_ggplot <- function(index = 1,
                         student_env, solution_env)
     }
   }
+}
+
+test_ggplot <- function(index = 1,
+                        all_fail_msg = NULL,
+                        check_data = TRUE, data_fail_msg = NULL,
+                        check_aes = TRUE, aes_fail_msg = NULL, exact_aes = FALSE,
+                        check_geom = TRUE, geom_fail_msg = NULL, exact_geom = FALSE, check_geom_params = NULL,
+                        check_facet = TRUE, facet_fail_msg = NULL,
+                        check_scale = TRUE, scale_fail_msg = NULL, exact_scale = FALSE,
+                        check_coord = TRUE, coord_fail_msg = NULL, exact_coord = FALSE,
+                        check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
+                        check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
+                        check = NULL) {
+  ex() %>% check_ggplot(index = index,
+                        all_fail_msg = all_fail_msg,
+                        check_data = check_data, data_fail_msg = data_fail_msg,
+                        check_aes = check_aes, aes_fail_msg = aes_fail_msg, exact_aes = exact_aes,
+                        check_geom = check_geom, geom_fail_msg = geom_fail_msg, exact_geom = exact_geom, check_geom_params = check_geom_params,
+                        check_facet = check_facet, facet_fail_msg = facet_fail_msg,
+                        check_scale = check_scale, scale_fail_msg = scale_fail_msg, exact_scale = exact_scale,
+                        check_coord = check_coord, coord_fail_msg = coord_fail_msg, exact_coord = exact_coord,
+                        check_stat = check_stat, stat_fail_msg = stat_fail_msg, exact_stat = exact_stat,
+                        check_extra = check_extra, extra_fail_msg = extra_fail_msg, exact_extra = exact_extra,
+                        check = check)
 }
 
 test_data_layer <- function(sol_data, stud_data, feedback, data_fail_msg) {

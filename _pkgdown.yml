@@ -12,8 +12,8 @@ reference:
     - override
   - title: High-level function
     contents:
-    - test_ggplot
-    - test_predefined_objects
+    - check_ggplot
+    - check_predefined_objects
   - title: Internals
     contents:
     - test_exercise
