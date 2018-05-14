@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-In R, there are many ways to solve a problem. Writing an SCT that checks when students make a mistake, but is robust to multiple different solutions is a challenge. `check_correct` and `test_or` allow you to add logic to your SCT. Instead of running all tests and failing as soon as one of the tests fail, you can conditionally execute tests, and interpret the results separately.
+In R, there are many ways to solve a problem. Writing an SCT that checks when students make a mistake, but is robust to multiple different solutions is a challenge. `check_correct` and `check_or` allow you to add logic to your SCT. Instead of running all tests and failing as soon as one of the tests fail, you can conditionally execute tests, and interpret the results separately.
 
 ### Example 1: `check_correct`
 
@@ -80,7 +80,6 @@ To test this, you can use `test_or` with three separate `check_output_expr()` fu
 check_or(ex() %>% check_output_expr('4'),
          ex() %>% check_output_expr('5'),
          ex() %>% check_output_expr('6'))
-success_msg("Nice job!")
 ```
 
 If all of the SCTs that you pass fail, the feedback that the first sub-SCT generated is presented to the student. If you want to override the message that is shown if all sub-SCTs fail, you can manually specify `incorrect_msg` inside `check_or`:
@@ -90,7 +89,6 @@ check_or(ex() %>% check_output_expr('4'),
          ex() %>% check_output_expr('5'),
          ex() %>% check_output_expr('6'),
          incorrect_msg = "Just print out either 4, 5, or 6!")
-success_msg("Nice job!")
 ```
 
 You can consider `check_or()` a logic-inducing function. The different calls to `testwhat` functions that are in your SCT are actually all tests that _have_ to pass: they are `AND` tests. With `test_or()` you can add chunks of `OR` tests in there.

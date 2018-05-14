@@ -35,7 +35,6 @@ The SCT could look as follows:
 ```{r}
 ex() %>% check_code("^\"[r|R] is [r|R]some!?\"$",
                     not_typed_msg = "Have you correctly written the sentence `R is Rsome!`?")
-success_msg("Nice job!")
 ```
 
 All of the following student submission would be accepted by this `testwhat` function call:
@@ -75,7 +74,6 @@ ex() %>% check_code(c("select posts from tweets where n_char > 10",
                       "SELECT posts from tweets where n_char > 10"),
                     fixed = TRUE,
                     not_typed_msg = "Have you correctly coded the SQL query?")
-success_msg("Great job!")
 ```
 
 However, the above SCT doesn't really cut it. To be really robust to all different ways of coding this query, you'll either want to use regular expressions inside `test_student_typed()` (see example 2) or do a check on the resulting data frame from executing the SQL query (preferable, since than you automatically cover any correct way of doing things).

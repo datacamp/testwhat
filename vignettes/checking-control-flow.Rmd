@@ -31,9 +31,10 @@ for (i in 1:10) {
 A suitable SCT for this exercise can be the following:
 
 ```{r}
-forloop <- ex() %>% check_for(not_found_msg = "Make sure to code a for loop in the first place!")
-forloop %>% check_cond() %>% check_code("in\\s*1:10", missing_msg = "You can use `i in 1:10` to define your for loop.")
-forloop %>% check_body() %>% check_function("print") %>% check_arg("x") %>% check_equal(eval = FALSE)
+forloop <- ex() %>% check_for() %>% {
+  check_cond(.) %>% check_code("in\\s*1:10", missing_msg = "You can use `i in 1:10` to define your for loop.")
+  check_body(.) %>% check_function("print") %>% check_arg("x") %>% check_equal(eval = FALSE)
+}
 ```
 
 - `check_for()` checks whether students have specified a `for` loop in their code. If this is the case, it produces a substate, referring to the condition of the for loop and its body.
@@ -59,10 +60,11 @@ The following SCT checks its correctness:
 
 ```{r}
 ex() %>% check_object("x")
-ifelse <- ex() %>% check_if_else()
-ifelse %>% check_cond() %>% check_code("x")
-ifelse %>% check_if() %>% check_function("print") %>% check_arg("x") %>% check_equal()
-ifelse %>% check_else() %>% check_function("print") %>% check_arg("x") %>% check_equal()
+ex() %>% check_if_else() %>% {
+  check_cond(.) %>% check_code("x")
+  check_if(.) %>% check_function("print") %>% check_arg("x") %>% check_equal()
+  check_else(.) %>% check_function("print") %>% check_arg("x") %>% check_equal()
+}
 ```
 
 - `check_if_else()` parses the student code and checks if there is an if-else statement in there.

@@ -32,7 +32,7 @@ You don't care too much about how `x` was created, as long as it's defined and r
 ex() %>% check_object("x") %>% check_equal()
 ```
 
-`check_object()` will check if the variable `x` is defined and has the same value as `x` has in the solution environment. All of the following student submissions will be accepted by `check_object()`:
+`check_object()` will check if the variable `x` is defined in the student environment; `check_equal()` will check whether its value is the same as `x` in the solution environment. All of the following student submissions will be accepted by `check_object()`:
 
 - `x <- 15`
 - `x <- 12 + 3`
@@ -49,11 +49,10 @@ Say that you want the student to create an object `x`, but you don't care what t
 x <- 123
 ```
 
-In your SCT< simply drop the `check_equal()` bit:
+Simply drop the `check_equal()` bit in your SCT:
 
 ```{r}
 ex() %>% check_object("x")
-success_msg("Arbitrary, I like that.")
 ```
 
 ### Example 3: `eq_condition`

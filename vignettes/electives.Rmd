@@ -15,6 +15,44 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Success message
+
+When all tests in an SCT pass, `testwhat` will automatically generate a congratulatory message to present to the student. If you want to override this 'success message', you can use the `success_msg()` function:
+
+```{r}
+ex() %>% check_object("x") %>% check_equal()
+success_msg("Great job! You're getting goot at object assignment!")
+```
+
+## Multiple choice exercises
+
+Multiple choice exercises are straightforward to test. Use `test_mc()` to provide tailored feedback for both the incorrect options, as the correct option. Below is the markdown source for a multiple choice exercise example, with an SCT that uses `test_mc`:
+
+    ## The author of R
+    
+    ```yaml
+    type: MultipleChoiceExercise
+    ```
+    
+    Who is one of the authors of the R programming language?
+    
+    `@instructions`
+    
+    - Roy Co
+    - Ronald McDonald
+    - Ross Ihaka
+    
+    `@sct`
+    ```{r}
+    msg1 <- "That's someone who makes soups."
+    msg2 <- "That's a clown who likes burgers."
+    msg3 <- "Correct! Head over to the next exercise!"
+    test_mc(correct = 3, 
+            feedback_msgs = c(msg1, msg2, msg3))
+    ```
+
+The first argument of `test_mc()`, `correct`, should be the number of the correct answer in this list. Here, the correct answer is Ross Ihaka, corresponding to 3. The `feedback_msgs` argument should be a list of strings with a length equal to the number of options. We encourage you to provide feedback messages that are informative and tailored to the (incorrect) option that people selected. Make sure to correctly order the feedback message such that it corresponds to the possible answers that are listed in the instructions tab. Notice that there's no need for `success_msg()` in multiple choice exercises, as you have to specify the success message inside `test_mc()`, along with the feedback for incorrect options.
+
 ## Randomness
 
 To check the correctness of function calls, R objects etc. `testwhat` uses a student and solution environment. The pre exercise code (PEC) and student submission are executed in the student environment. Likewise, the PEC and the solution code are executed in the solution envrionment.

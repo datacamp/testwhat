@@ -29,12 +29,15 @@ round(pi, 3)
 The following SCT tests whether the `round()` function is used correctly:
 
 ```{r}
-fun <- ex() %>% check_function("round")
-fun %>% check_arg("x") %>% check_equal()
-fun %>% check_arg("digits") %>% check_equal()
+fun <- ex() %>% check_function("round") %>% {
+  check_arg(., "x") %>% check_equal()
+  check_arg(., "digits") %>% check_equal()
+}
 ```
 
-To find out which arguments you have to specify in `args`, you can use `args(round)`. This will show that the names of the arguments of the `round()` function are `x` and `digits`. When a student submits his code and SCT is executed, `check_function()` tests whether the student has called the function `round()`. Next, `check_arg()` checks whether each argument was specified. Finally, `check_equal()` checks whether the values of the argument are the same as in the solution. So in this case, it tests whether `round()` is used with the `x` argument equal to `pi` and the second argument equal to `3`. The above SCT would accept all of the following submissions:
+To find out which arguments you have to specify in `check_arg()`, you can use `args(round)`. This will show that the names of the arguments of the `round()` function are `x` and `digits`. 
+
+When a student submits his code and SCT is executed, `check_function()` tests whether the student has called the function `round()`. Next, `check_arg()` checks whether each argument was specified. Finally, `check_equal()` checks whether the values of the argument are the same as in the solution. So in this case, it tests whether `round()` is used with the `x` argument equal to `pi` and the second argument equal to `3`. The above SCT would accept all of the following submissions:
 
 - `round(pi, 3)`
 - `round(pi, digits = 3)`
@@ -92,7 +95,6 @@ To test both these function calls, you'll need the following SCT:
 ```{r}
 ex() %>% check_function("round", index = 1) %>% check_arg("x") %>% check_equal()
 ex() %>% check_function("round", index = 2) %>% check_arg("x") %>% check_equal()
-success_msg("Two in a row, great!")
 ```
 
 The first `check_function()` chain, where `index = 1`, checks the solution code for the first function call of `round()`, finds it - `round(pi, 3)` - and then goes to look through the student code to find a function call of `round()` that matches the arguments. It is perfectly possible that there are 5 function calls of `round()` in the student's submission, and that only the fourth call matches the requirements for the first `check_function()` chain. As soon as a function call is found in the student code that passes all tests, `testwhat` heads over to the second `check_function()` chain, where `index = 2`. The same thing happens: the second call of `round()` is found from the solution code, and a match is sought for in the student code. This time, however, the function call that was matched before is now 'blacklisted'; it is not possible that the same function call in the student code causes both `check_function()` chains to pass.
@@ -297,7 +299,6 @@ One way to solve this is with `check_output_expr()`, but this does not explicitl
 
 ```{r}
 ex() %>% check_function("sum") %>% check_result() %>% check_equal()
-success_msg("sweet")
 ```
 
 The above SCT would accept all of the following submissions:
