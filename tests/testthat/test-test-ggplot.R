@@ -110,3 +110,15 @@ test_that("spots wrong facetting (wrap)", {
   output <- test_it(lst)
   passes(output)
 })
+
+test_that("can handle the pipe operator", {
+  code <- "mtcars %>% filter(gear == 4) %>% ggplot(aes(x = hp, y = wt)) + geom_point()"
+  lst <- list(
+    DC_PEC = paste0(pec, "\nlibrary(dplyr)"),
+    DC_CODE = code,
+    DC_SOLUTION = code,
+    DC_SCT = "test_ggplot(1)"
+  )
+  output <- test_it(lst)
+  passes(output)
+})

@@ -685,6 +685,10 @@ get_ggplot_commands <- function(code, predefined_code, envir) {
 }
 
 extract_ggplot_command <- function(code, envir) {
+  if (any(grepl("%>%", deparse(code), fixed = TRUE))) {
+    code <- unpipe(code)
+  }
+
   if (is_ggplot_command(code, envir)) {
     return(replace_saved_ggplot_commands(code, envir))
   } else if (is.name(code)) {
