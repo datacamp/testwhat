@@ -12,8 +12,7 @@ test_that("test_ggplot works 1", {
               DC_CODE = code,
               DC_SOLUTION = code,
               DC_SCT = 'test_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")')
-  output <- test_it(lst)
-  passes(output)
+  passes(test_it(lst))
 })
 
 test_that("test_ggplot works 2", {
@@ -23,8 +22,7 @@ test_that("test_ggplot works 2", {
     DC_SOLUTION = 'ggplot(mtcars, aes(x = wt, y = mpg)) + stat_smooth(method = "auto",se = F)',
     DC_SCT = 'test_ggplot(1, check = "geom", check_geom_params = "method")
               test_ggplot(1, check = "geom", check_geom_params = "se")')
-  output <- test_it(lst)
-  passes(output)
+  passes(test_it(lst))
 })
 
 test_that('test_ggplot works 3', {
@@ -48,8 +46,7 @@ ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
 test_ggplot(1, check = "geom", check_geom_params = c("method", "se"))
 test_ggplot(1, check = "geom", check_geom_params = c("method", "se", "span", "group", "col"))
 test_ggplot(1, check = "scale")'
-  output <- test_it(lst)
-  passes(output)
+  passes(test_it(lst))
 })
 
 test_that("test_ggplot works 4", {
@@ -74,8 +71,7 @@ test_that("test_ggplot works 4", {
   lst$DC_CODE <- 'z + theme(plot.background = element_rect(fill = myPink))'
   lst$DC_SOLUTION <- 'z + theme(plot.background = element_rect(fill = myPink))'
   lst$DC_SCT <- 'test_ggplot(1)'
-  output <- test_it(lst)
-  passes(output)
+  passes(test_it(lst))
 })
 
 test_that("spots wrong facetting (grid)", {
@@ -86,12 +82,9 @@ test_that("spots wrong facetting (grid)", {
     DC_SOLUTION = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_grid(. ~ Plant)",
     DC_SCT = "test_ggplot()"
   )
-  output <- test_it(lst)
-  fails(output)
-
+  fails(test_it(lst))
   lst$DC_SOLUTION <- code
-  output <- test_it(lst)
-  passes(output)
+  passes(test_it(lst))
 })
 
 test_that("spots wrong facetting (wrap)", {
@@ -102,13 +95,9 @@ test_that("spots wrong facetting (wrap)", {
     DC_SOLUTION = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_wrap(~ Plant)",
     DC_SCT = "test_ggplot()"
   )
-
-  output <- test_it(lst)
-  fails(output)
-
+  fails(test_it(lst))
   lst$DC_SOLUTION <- code
-  output <- test_it(lst)
-  passes(output)
+  passes(test_it(lst))
 })
 
 test_that("can handle the pipe operator", {
@@ -117,8 +106,23 @@ test_that("can handle the pipe operator", {
     DC_PEC = paste0(pec, "\nlibrary(dplyr)"),
     DC_CODE = code,
     DC_SOLUTION = code,
-    DC_SCT = "test_ggplot(1)"
+    DC_SCT = "test_ggplot()"
   )
-  output <- test_it(lst)
-  passes(output)
+  passes(test_it(lst))
+})
+
+test_that("can handle british students", {
+  code <- "ggplot(mtcars, aes(x = wt, y = hp)) + geom_point(aes(colour = factor(cyl)))"
+  scale <-  " + scale_colour_manual(values = c('red', 'blue', 'green'))"
+  lst <- list(
+    DC_PEC = pec,
+    DC_CODE = gsub("scale_colour", "scale_color", paste0(code, scale)),
+    DC_SOLUTION = paste0(code, scale),
+    DC_SCT = "test_ggplot()"
+  )
+  passes(test_it(lst))
+  lst$DC_CODE <- paste0(code, scale)
+  passes(test_it(lst))
+  lst$DC_CODE <- code
+  fails(test_it(lst))
 })
