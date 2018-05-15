@@ -420,6 +420,7 @@ test_stat_layer <- function(sol_command, stud_command, feedback, stat_fail_msg, 
 
 test_generic_part <- function(type, sol_command, stud_command, feedback, fail_msg, exact,
                               student_env, solution_env) {
+
   sol_parts <- extract_parts(sol_command, type)
   stud_parts <- extract_parts(stud_command, type)
   
@@ -434,9 +435,9 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
   for (i in 1:nb_sol_parts) {
     sol_part <- sol_parts[[i]]
     if (is.call(sol_part)) {
-      sol_func_name = sol_part[[1]]
+      sol_func_name <- sol_part[[1]]
     } else {
-      sol_func_name = sol_part
+      sol_func_name <- sol_part
     }
     
     found_name <- FALSE
@@ -450,12 +451,12 @@ test_generic_part <- function(type, sol_command, stud_command, feedback, fail_ms
       for (j in 1:nb_stud_parts) {
         stud_part <- stud_parts[[j]]
         if (is.call(stud_part)) {
-          stud_func_name = stud_part[[1]]
+          stud_func_name <- stud_part[[1]]
         } else {
-          stud_func_name = stud_part
+          stud_func_name <- stud_part
         }
         
-        if (stud_func_name == sol_func_name) {
+        if (map_synonyms(stud_func_name) == map_synonyms(sol_func_name)) {
           found_name <- TRUE
           found_params <- TRUE
           
@@ -751,4 +752,8 @@ is_geom_command <- function(code, envir) {
   } else {
     return(isTRUE(grepl("^geom_", code[[1]])))
   }
+}
+
+map_synonyms <- function(fun) {
+  gsub("scale_colour_", "scale_color_", fun, fixed = TRUE)
 }
