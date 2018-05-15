@@ -129,6 +129,16 @@ test_that("check_output_expr - backwards compatatibility", {
   passes(output)
 })
 
+test_that("check_output_expr - use solution code", {
+  code <- "print(12)"
+  lst <- list(
+    DC_CODE = code,
+    DC_SOLUTION = code,
+    DC_SCT = "test_output_contains(get_solution_code())"
+  )
+  passes(test_it(lst))
+})
+
 test_that("check_output - message output", {
   lst <- list()
   lst$DC_ECHO <- TRUE

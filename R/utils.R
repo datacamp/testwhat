@@ -13,6 +13,8 @@ check_sufficient <- function(calls, index, name) {
   }
 }
 
+get_solution_code <- function() { ex()$get("solution_code") }
+
 #' @importFrom magrittr %>%
 NULL
 
