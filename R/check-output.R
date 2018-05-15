@@ -52,6 +52,12 @@
 
 #' @rdname check_output
 #' @export
+check_output <- function(state, ...) {
+  UseMethod("check_output", state)
+}
+
+#' @rdname check_output
+#' @export
 check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, output_only = FALSE, missing_msg = NULL, append = TRUE, ...) {
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "output",

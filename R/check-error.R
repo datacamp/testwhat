@@ -18,6 +18,15 @@
 #' ex() %>% check_error()
 #' }
 #' 
+#' @name check_error
+
+#' @rdname check_error
+#' @export
+check_error <- function(state, ...) {
+  UseMethod("check_error", state)
+}
+
+#' @rdname check_error
 #' @export
 check_error.default <- function(state, incorrect_msg = NULL, ...) {
   output_list <- state$get("output_list")

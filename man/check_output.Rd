@@ -6,6 +6,8 @@
 \alias{check_output_expr}
 \title{Check whether the student printed something to the console}
 \usage{
+check_output(state, ...)
+
 \method{check_output}{default}(state, regex, fixed = FALSE, trim = FALSE,
   times = 1, output_only = FALSE, missing_msg = NULL, append = TRUE,
   ...)
@@ -15,6 +17,8 @@ check_output_expr(state, expr, times = 1, missing_msg = NULL,
 }
 \arguments{
 \item{state}{the state to start from}
+
+\item{...}{S3 stuff}
 
 \item{regex}{the regular expression or pattern to look for}
 
@@ -37,8 +41,6 @@ often enough.}
 
 \item{append}{Whether or not to append the feedback to feedback built in
 previous states}
-
-\item{...}{S3 stuff}
 
 \item{expr}{The expression (as string) for which the output should be in the
 student's console output.}
