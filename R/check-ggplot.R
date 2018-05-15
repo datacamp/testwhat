@@ -320,7 +320,7 @@ test_geom_layer <- function(sol_command, stud_command, sol_layers, stud_layers, 
                                   attr(sol_params[[x]], "aes") <- NULL
                                   gen_fb <- "aesthetic "
                                 }
-                                return(paste0(gen_fb,"`", x, "` set to `", deparse(sol_params[[x]]), "`"))
+                                return(paste0(gen_fb,"`", x, "` set to `", paste0(deparse(sol_params[[x]]), collapse = " "), "`"))
                               }, character(1))
       nb_param_strings <- length(param_strings)
       if (nb_param_strings > 1) {

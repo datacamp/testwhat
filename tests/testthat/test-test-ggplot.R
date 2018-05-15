@@ -126,3 +126,14 @@ test_that("can handle british students", {
   lst$DC_CODE <- code
   fails(test_it(lst))
 })
+
+test_that("can handle exotic geom_labels", {
+  code <- "ggplot(cars, aes(speed, dist)) + geom_label(label = rownames(cars))"
+  lst <- list(
+    DC_PEC = pec,
+    DC_CODE = code,
+    DC_SOLUTION = code,
+    DC_SCT = "test_ggplot()"
+  )
+  passes(test_it(lst))
+})
