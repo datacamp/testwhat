@@ -32,6 +32,7 @@
 #' }
 #' 
 #' @export
+#' @importFrom testwhat.base get_num_hits
 check_code <- function(state, regex, fixed = FALSE, times = 1, missing_msg = NULL, append = TRUE) {
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "typed",

@@ -14,6 +14,7 @@
 #' 
 #' @export
 #' @importFrom praise praise
+#' @importFrom testwhat.base get_rep
 success_msg <- function(msg, praise = FALSE) {
   if (isTRUE(praise)) {
     msg <- paste(praise::praise(), msg)

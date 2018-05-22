@@ -59,6 +59,7 @@
 #' @rdname check_logic
 
 #' @rdname check_logic
+#' @importFrom testwhat.base run_until_fail get_rep
 #' @export
 check_correct <- function(check_code, diagnose_code) {
   rep <- get_rep()
@@ -78,6 +79,7 @@ check_correct <- function(check_code, diagnose_code) {
 }
 
 #' @rdname check_logic
+#' @importFrom testwhat.base run_until_fail get_rep
 #' @export
 check_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
 

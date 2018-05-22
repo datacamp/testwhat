@@ -5,8 +5,8 @@ r_check_args: --as-cran
 
 install:
   - R -e 'install.packages(c("devtools", "dplyr", "ggvis", "ggplot2", "car", "RColorBrewer", "rpart", "pkgdown"))'
-  - R -e 'devtools::install(".", dependencies = TRUE)'
-  - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend"))'
+  - R -e 'devtools::install_github(c("datacamp/r-completion", "datacamp/r-backend", "datacamp/testwhat.base"))'
+  - R -e 'devtools::install(".")'
 
 after_success:
   - Rscript -e 'covr::codecov()'

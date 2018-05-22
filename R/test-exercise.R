@@ -17,6 +17,7 @@
 #' tests were sucessful, and \code{feedback} that contains a feedback message.
 #'
 #' @export
+#' @importFrom testwhat.base tw RootState DC_reporter build_pd run_until_fail get_rep
 test_exercise <- function(sct, 
                           ex_type, 
                           pec,
@@ -62,23 +63,4 @@ test_exercise <- function(sct,
   }
 }
 
-get_rep <- function() {
-  tw$get("reporter")
-}
 
-run_until_fail <- function(code) {
-  eval_fail <- try(eval(code, envir = ex()$get("test_env")), silent = TRUE)
-  if (inherits(eval_fail, "try-error")) {
-    cond <- attr(eval_fail, "condition")$message
-    if (identical(cond, sct_failed_msg)) {
-      # The SCT failed
-      return(FALSE)
-    } else {
-      # Something actually went wrong, not an SCT that failed
-      stop("Something went wrong in the SCT: ", attr(eval_fail, "condition"))
-    }
-  } else {
-    # The SCT passed
-    return(TRUE)
-  }
-}
