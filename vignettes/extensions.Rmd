@@ -1,0 +1,42 @@
+---
+title: "Extensions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Extensions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+There can be cases where the functions `testwhat` features are not sufficient to robustly check a student submission while providing good feedback at the same time. In addition, there might be courses in which you find yourself using the same SCT pattern over and over.
+
+`teswhat.ext` is a public R package [on GitHub](https://www.github.com/datacamp/testwhat.ext) that can feature both custom functionality as well 'meta SCTs' to employ in multiple exercises.
+
+To get started with using `teswhat.ext`:
+
+- Clone the [GitHub repo](https://www.github.com/datacamp/testwhat.ext), create a new branch and add your custom SCT functionality.
+- Make a PR and assign somebody from Content Engineering as a reviewer.
+- When approved, the PR will be merged in, and a new release will be created for you.
+- In the `requirements.r` file of the course in which you want to use your custom functionality, add the following line:
+
+  ```{r}
+  remotes::install_github("datacamp/testwhat.ext", ref = "v1.2.3")
+  ```
+
+  where `"v1.2.3"` points to the new release of `testwhat.ext`.
+- In the `sct` block of your exercise, use `library(testwhat.ext)`. You can now use your custom built SCT function as if it was a function exported by `testwhat`:
+
+  ```{r}
+  library(testwhat.ext)
+  ex() %>% check_function_my_version("mean") %>% ...
+  ```
+  
+A word of warning. Before you embark onto the wild adventure of writing your own SCT functions, be aware that there is **a lot** that students can do wrong with their submission, and it is your job to catch every edge case that can potentially break the code. Therefore, it is advised to combine already existing `testwhat` functions in your extension function, rather than building `check_` functions from scratch.
+  
