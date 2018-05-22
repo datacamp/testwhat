@@ -1,9 +1,3 @@
-#' @importFrom utils getParseData
-build_pd <- function(code) {
-  tryCatch(getParseData(parse(text = code, keep.source = TRUE), includeText = TRUE),
-           error = function(e) return(NULL))
-}
-
 get_children <- function(pd, ids) {
   all_childs <- c()
   childs <- function(index){

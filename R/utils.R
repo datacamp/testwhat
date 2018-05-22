@@ -1,5 +1,3 @@
-sct_failed_msg <- "<sct_failed_error>"
-
 check_defined <- function(name, sol_env) {
   if (!exists(name, sol_env, inherits = FALSE)) {
     stop(paste(name, "is not defined in your solution environment.",
@@ -13,47 +11,17 @@ check_sufficient <- function(calls, index, name) {
   }
 }
 
+failure <- function() {
+  FALSE
+}
+
 get_solution_code <- function() { ex()$get("solution_code") }
 
 #' @importFrom magrittr %>%
 NULL
 
-tw_accessors <- function() {
-  tw_data <- list()
-  
-  get = function(name) {
-    if(missing(name)) {
-      tw_data
-    } else {
-      tw_data[[name]]
-    }
-  }
-  
-  set = function(...) {
-    tw_data <<- merge(list(...))
-    invisible(NULL)
-  }
-  
-  clear = function() {
-    tw_data <<- list()
-    invisible(NULL)
-  }
-  
-  initialize = function(data) {
-    tw_data <<- data
-    invisible(NULL)
-  }
-  
-  merge = function(values) merge_list(tw_data, values)
-  list(get = get, set = set, clear = clear, initialize = initialize)
-}
-
-merge_list <- function(x, y) {
-  x[names(y)] = y
-  x
-}
-
-tw <- tw_accessors()
+#' @importFrom testwhat.base check_that test_what is_equal is_false is_true is_gte
+NULL
 
 `%||%` <- function(a, b) {
   if (!is.null(a)) a else b

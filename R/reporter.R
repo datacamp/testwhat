@@ -1,31 +1,3 @@
-#' @importFrom R6 R6Class
-DC_reporter <- R6::R6Class("DC_reporter",
-  public = list(
-
-    initialize = function() {},
-  
-    register_feedback = function(feedback) {
-      private$feedback <- feedback
-      stop(sct_failed_msg)
-    },
-    
-    set_success_msg = function(msg) {
-      private$success_msg <- msg
-    },
-    
-    get_feedback = function() {
-      feedback <- private$feedback %||% private$success_msg
-      private$feedback <- NULL
-      return(feedback)
-    }
-  ),
-  
-  private = list(
-    success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1),
-    feedback = NULL
-  )
-)
-
 generate_payload <- function(feedback, correct, ex_type) {
   msg <- to_html(build_feedback_message(feedback))
   payload <- list(correct = correct,

@@ -129,6 +129,7 @@ check_call <- function(state, ...) {
 
 # Deprecated functions
 
+#' @importFrom testwhat.base run_until_fail get_rep
 test_function_definition <- function(name, 
                                      function_test = NULL,
                                      body_test = NULL,

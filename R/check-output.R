@@ -57,6 +57,7 @@ check_output <- function(state, ...) {
 }
 
 #' @rdname check_output
+#' @importFrom testwhat.base get_num_hits
 #' @export
 check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, output_only = FALSE, missing_msg = NULL, append = TRUE, ...) {
   regex_state <- RegexState$new(state)
@@ -77,6 +78,7 @@ check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, time
 }
 
 #' @rdname check_output
+#' @importFrom testwhat.base get_num_hits
 #' @export
 check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
 
@@ -111,26 +113,6 @@ convert_output_list <- function(x, output_only = FALSE) {
 
 trim_output <- function(x) {
   gsub("\n|[[:space:]]", "", x)
-}
-
-get_num_hits <- function(regex, x, fixed) {
-  if (length(regex) == 0 || (length(regex) == 1 && nchar(regex) == 0)) {
-    return(0)
-  } else {
-    counts <- sapply(regex, function(patt) {
-      res <- gregexpr(patt, text = x, fixed = fixed)[[1]]
-      if (any(res == -1)) {
-        return(0L)
-      } else {
-        return(length(res))
-      }
-    }, USE.NAMES = FALSE)
-    if (length(counts) == 0) {
-      return(0)
-    } else {
-      return(sum(counts))
-    }
-  }
 }
 
 clean_up <- function(x) {

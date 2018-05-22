@@ -177,7 +177,7 @@ test_that(
   "parse_rcpp parses CPP code with R in it", {
     # Cast actual and expected to data.frame to avoid comparing scrfile
     #  attribute, which has a different timestamp
-    expected_pd <- testwhat:::build_pd("var(1:10)") %>% 
+    expected_pd <- testwhat.base::build_pd("var(1:10)") %>%
       data.frame()
     
     actual_state <- setup_state(STU_CODE = "var(1:10)", SOL_CODE = "var(1:10)") %>% 
