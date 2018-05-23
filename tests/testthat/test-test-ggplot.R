@@ -1,6 +1,6 @@
 context("test_ggplot")
 
-pec <- "suppressWarnings(library(ggplot2))"
+pec <- "library(ggplot2)"
 
 test_that("test_ggplot works 1", {
   code <- 'ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +
@@ -8,107 +8,92 @@ test_that("test_ggplot works 1", {
               scale_fill_manual("Transmission", values = c("#E41A1C", "#377EB8"), labels = c("Manual", "Automatic")) +
               scale_y_continuous("Number") +
               scale_x_discrete("Cylinders") + xlab("test")'
-  lst <- list(DC_PEC = pec,
-              DC_CODE = code,
-              DC_SOLUTION = code,
-              DC_SCT = 'test_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")')
-  passes(test_it(lst))
+  res <- setup_state(code, pec = pec) %>% check_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")
+  passes2(res)
 })
 
 test_that("test_ggplot works 2", {
-  lst <- list(
-    DC_PEC = pec,
-    DC_CODE = 'ggplot(mtcars, aes(x = wt, y = mpg)) + geom_smooth(se = F)',
-    DC_SOLUTION = 'ggplot(mtcars, aes(x = wt, y = mpg)) + stat_smooth(method = "auto",se = F)',
-    DC_SCT = 'test_ggplot(1, check = "geom", check_geom_params = "method")
-              test_ggplot(1, check = "geom", check_geom_params = "se")')
-  passes(test_it(lst))
-})
-
-test_that('test_ggplot works 3', {
-  lst <- list()
-  lst$DC_PEC <- paste0(pec, "\nlibrary(RColorBrewer)\nlibrary(car)")
-  lst$DC_CODE <- '
-myColors <- c(brewer.pal(3, "Dark2"), "black")
-ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
-    geom_point() +
-    stat_smooth(method = "lm", se = F) +
-    stat_smooth(method = "lm", se = F, span = 0.7, aes(group = 2, col = "All")) +
-    scale_color_manual("Cylinders", values = myColors)'
-  lst$DC_SOLUTION <- '
-myColors <- c(brewer.pal(3, "Dark2"), "black")
-ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
-    geom_point() +
-    stat_smooth(method = "lm", se = F) +
-    stat_smooth(method = "lm", se = F, span = 0.7, aes(group = 2, col = "All")) +
-    scale_color_manual("Cylinders", values = myColors)'
-  lst_DC_SCT <- '
-test_ggplot(1, check = "geom", check_geom_params = c("method", "se"))
-test_ggplot(1, check = "geom", check_geom_params = c("method", "se", "span", "group", "col"))
-test_ggplot(1, check = "scale")'
-  passes(test_it(lst))
+  s <- setup_state(
+    stu_code = 'ggplot(mtcars, aes(x = wt, y = mpg)) + geom_smooth(se = F)',
+    sol_code = 'ggplot(mtcars, aes(x = wt, y = mpg)) + stat_smooth(method = "auto",se = F)',
+    pec = pec
+  )
+  
+  passes2(s %>% check_ggplot(1, check = "geom", check_geom_params = "method"))
+  passes2(s %>% check_ggplot(1, check = "geom", check_geom_params = "se"))
 })
 
 test_that("spots wrong facetting (grid)", {
   code <- "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_grid(Treatment ~ Type)"
-  lst <- list(
-    DC_PEC = pec,
-    DC_CODE = code,
-    DC_SOLUTION = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_grid(. ~ Plant)",
-    DC_SCT = "test_ggplot()"
+  s <- setup_state(
+    stu_code = code,
+    sol_code = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_grid(. ~ Plant)",
+    pec = pec
   )
-  fails(test_it(lst))
-  lst$DC_SOLUTION <- code
-  passes(test_it(lst))
+  expect_error(check_ggplot(s), class = "sct_failure")
+  s <- setup_state(
+    stu_code = code,
+    sol_code = code,
+    pec = pec
+  )
+  passes2(check_ggplot(s))
 })
 
 test_that("spots wrong facetting (wrap)", {
   code <- "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_wrap(~ Type)"
-  lst <- list(
-    DC_PEC = pec,
-    DC_CODE = code,
-    DC_SOLUTION = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_wrap(~ Plant)",
-    DC_SCT = "test_ggplot()"
+  s <- setup_state(
+    stu_code = code,
+    sol_code = "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_wrap(~ Plant)",
+    pec = pec
   )
-  fails(test_it(lst))
-  lst$DC_SOLUTION <- code
-  passes(test_it(lst))
+  expect_error(check_ggplot(s), class = "sct_failure")
+  s <- setup_state(
+    stu_code = code,
+    sol_code = code,
+    pec = pec
+  )
+  passes2(check_ggplot(s))
 })
 
 test_that("can handle the pipe operator", {
   code <- "mtcars %>% filter(gear == 4) %>% ggplot(aes(x = hp, y = wt)) + geom_point()"
-  lst <- list(
-    DC_PEC = paste0(pec, "\nlibrary(dplyr)"),
-    DC_CODE = code,
-    DC_SOLUTION = code,
-    DC_SCT = "test_ggplot()"
+  s <- setup_state(
+    pec = paste0(pec, "\nlibrary(dplyr)"),
+    stu_code = code,
+    sol_code = code
   )
-  passes(test_it(lst))
+  passes2(check_ggplot(s))
 })
 
 test_that("can handle british students", {
   code <- "ggplot(mtcars, aes(x = wt, y = hp)) + geom_point(aes(colour = factor(cyl)))"
   scale <-  " + scale_colour_manual(values = c('red', 'blue', 'green'))"
-  lst <- list(
-    DC_PEC = pec,
-    DC_CODE = gsub("scale_colour", "scale_color", paste0(code, scale)),
-    DC_SOLUTION = paste0(code, scale),
-    DC_SCT = "test_ggplot()"
+  s <- setup_state(
+    pec = pec,
+    stu_code = gsub("scale_colour", "scale_color", paste0(code, scale)),
+    sol_code = paste0(code, scale)
   )
-  passes(test_it(lst))
-  lst$DC_CODE <- paste0(code, scale)
-  passes(test_it(lst))
-  lst$DC_CODE <- code
-  fails(test_it(lst))
+  passes2(check_ggplot(s))
+  s2 <- setup_state(
+    pec = pec,
+    stu_code = paste0(code, scale),
+    sol_code = paste0(code, scale)
+  )
+  passes2(check_ggplot(s2))
+  s3 <- setup_state(
+    pec = pec,
+    stu_code = code,
+    sol_code = paste0(code, scale)
+  )
+  expect_error(check_ggplot(s3), class = "sct_failure")
 })
 
 test_that("can handle exotic geom_labels", {
   code <- "ggplot(cars, aes(speed, dist)) + geom_label(label = rownames(cars))"
-  lst <- list(
-    DC_PEC = pec,
-    DC_CODE = code,
-    DC_SOLUTION = code,
-    DC_SCT = "test_ggplot()"
+  s <- setup_state(
+    pec = pec,
+    stu_code = code,
+    sol_code = code
   )
-  passes(test_it(lst))
+  passes2(check_ggplot(s))
 })

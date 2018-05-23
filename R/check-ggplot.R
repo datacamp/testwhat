@@ -158,6 +158,8 @@ check_ggplot <- function(state,
                         student_env, solution_env)
     }
   }
+
+  return(state)
 }
 
 test_ggplot <- function(index = 1,
