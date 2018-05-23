@@ -16,7 +16,16 @@ reference:
     - check_predefined_objects
   - title: Internals
     contents:
+    - build_pd
+    - compare
+    - ex
+    - get_num_hits
+    - is_equal
+    - run_until_fail
+    - setup_state
+    - state
     - test_exercise
+    - tw
 
 navbar:
   title: ~
