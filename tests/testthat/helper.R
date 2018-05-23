@@ -22,6 +22,10 @@ passes <- function(res, mess_patt = NULL) {
   }
 }
 
+passes2 <- function(res) {
+  expect_true(inherits(res, "State"))
+}
+
 fails <- function(res, mess_patt = NULL) {
   expect_false(res$correct)
   if (!is.null(mess_patt)) {
