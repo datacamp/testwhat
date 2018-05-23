@@ -5,7 +5,7 @@ test_that("test_text works", {
   lst$DC_TYPE <- "MarkdownExercise"
   lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
   lst$DC_FORMAT <- "HTML"
-  lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "
+  lst$DC_CODE <- c(my_doc.Rmd = "
 ---
     title: \"Testing\"
     author: \"Tester\"
@@ -30,9 +30,9 @@ test_that("test_text works", {
     plot(cars)
     ```
     
-    Wowww.")) 
+    Wowww.")
   
-    lst$DC_SOLUTION <- rjson::toJSON(list(my_sol.Rmd = "
+    lst$DC_SOLUTION <- c(my_sol.Rmd = "
 ---
     title: \"Testing\"
     author: \"Tester\"
@@ -57,7 +57,7 @@ test_that("test_text works", {
     plot(cars)
     ```
     
-    Wowww."))
+    Wowww.")
   
   lst$DC_SCT <- "test_rmd_group(1, test_text('test'))"
   output <- test_it(lst)

@@ -118,8 +118,7 @@ test_that("test call result - functions - errs appropriately", {
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
   lst$DC_SCT <- "test_function_result('mutate')"
   
-  output <- test_it(lst)
-  error(output)
+  expect_error(test_it(lst))
 })
 
 test_that("test call result - functions - indexing", {
@@ -305,8 +304,7 @@ test_that("check_operator - errs correctly", {
   lst$DC_SCT <- "ex() %>% check_operator('+')"
 
   lst$DC_SOLUTION <- ""
-  output <- test_it(lst)
-  error(output)
+  expect_error(test_it(lst))
 })
 
 

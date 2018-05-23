@@ -189,8 +189,7 @@ test_that("test_expression_result works with erroneous code", {
   lst$DC_CODE <- "x <- 5\nrm(x)"
 
   lst$DC_SCT <- "test_expression_result('class(non_existing)')"
-  output <- test_it(lst)
-  error(output)
+  expect_error(test_it(lst))
 
   lst$DC_SCT <- "test_expression_result('class(x)')"
   output <- test_it(lst)
@@ -273,8 +272,7 @@ test_that("test_expression_output works if broken", {
   lst$DC_SOLUTION <- "func <- function(x) { print('Test: '); y <- wrong_stuff }"
 
   lst$DC_SCT <- "test_expression_output('func(3)')"
-  output <- test_it(lst)
-  error(output)
+  expect_error(test_it(lst))
 
   lst$DC_SOLUTION <- "func <- function(x) { print('Test: '); y <- 'ok_stuff' }"
   output <- test_it(lst)

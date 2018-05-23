@@ -228,23 +228,7 @@ test_that("test_object - line numbers - 2", {
   line_info(output, 1, 1)
 
   lst <- list()
-  lst$DC_CODE <- "x <<- 5"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "test_object('x')"
-  output <- test_it(lst)
-  fails(output)
-  line_info(output, 1, 1)
-
-  lst <- list()
-  lst$DC_CODE <- "5 ->> x"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "test_object('x')"
-  output <- test_it(lst)
-  fails(output)
-  line_info(output, 1, 1)
-
-  lst <- list()
-  lst$DC_CODE <- "5 ->> a\nx <- 6"
+  lst$DC_CODE <- "5 -> a\nx <- 6"
   lst$DC_SOLUTION <- "x <- 4"
   lst$DC_SCT <- "test_object('x')"
   output <- test_it(lst)
@@ -344,8 +328,8 @@ test_that("check_object in combination with test_or", {
 test_that("test_object inside MarkdownExercise doesn't show line numbers", {
   lst <- list()
   lst$DC_TYPE <- "MarkdownExercise"
-  lst$DC_SOLUTION <- rjson::toJSON(list(my_solution.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n"))
-  lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n"))
+  lst$DC_SOLUTION <- c(my_solution.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n")
+  lst$DC_CODE <- c(my_doc.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n")
   lst$DC_SCT <- "test_rmd_group(2, test_object('x'))\nsuccess_msg(\"OK\")"
   lst$DC_FORMAT <- "HTML"
   lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
@@ -353,7 +337,7 @@ test_that("test_object inside MarkdownExercise doesn't show line numbers", {
   output <- test_it(lst)
   passes(output)
 
-  lst$DC_CODE <- rjson::toJSON(list(my_doc.Rmd = "# This is a test\n```{r}\nx <- 4\n```\n"))
+  lst$DC_CODE <- c(my_doc.Rmd = "# This is a test\n```{r}\nx <- 4\n```\n")
   output <- test_it(lst)
   fails(output)
   line_info(output, NULL, NULL)
