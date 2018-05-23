@@ -59,27 +59,22 @@
 #' @rdname check_logic
 
 #' @rdname check_logic
-#' @importFrom testwhat.base run_until_fail get_rep
 #' @export
 check_correct <- function(check_code, diagnose_code) {
-  rep <- get_rep()
-  check_passed <- run_until_fail(substitute(check_code))
-  check_feedback <- rep$get_feedback()
-  diagnose_passed <- run_until_fail(substitute(diagnose_code))
-  diagnose_feedback <- rep$get_feedback()
-  if (check_passed) {
+  check_res <- run_until_fail(substitute(check_code))
+  diagnose_res <- run_until_fail(substitute(diagnose_code))
+  if (check_res$correct) {
     # all good
   } else {
-    if (diagnose_passed) {
-      check_that(failure(), feedback = check_feedback)
+    if (diagnose_res$correct) {
+      check_that(failure(), feedback = check_res$feedback)
     } else {
-      check_that(failure(), feedback = diagnose_feedback)
+      check_that(failure(), feedback = diagnose_res$feedback)
     }
   }
 }
 
 #' @rdname check_logic
-#' @importFrom testwhat.base run_until_fail get_rep
 #' @export
 check_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
 
@@ -88,12 +83,12 @@ check_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
   
   passes <- logical(length(input) )
   feedback <- list()
-  rep <- get_rep()
   
   for (i in seq_along(input)) {
     code <- input[[i]]
-    passes[i] <- run_until_fail(code)
-    feedback[[i]] <- rep$get_feedback()
+    res <- run_until_fail(code)
+    passes[i] <- res$correct
+    feedback[[i]] <- res$feedback
   }
   
   if (!any(passes)) {

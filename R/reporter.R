@@ -1,18 +1,3 @@
-generate_payload <- function(feedback, correct, ex_type) {
-  msg <- to_html(build_feedback_message(feedback))
-  payload <- list(correct = correct,
-                  message = msg)
-  
-  if (!correct && ex_type != "MarkdownExercise") {
-    line_info <- get_line_info(feedback)  
-    if (!is.null(line_info)) {
-      payload <- c(payload, line_info)
-    }
-  }
-  
-  return(payload)
-}
-
 get_line_info <- function(feedback) {
   
   # take 'highest pd' in list of feedback

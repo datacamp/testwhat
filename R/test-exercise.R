@@ -17,7 +17,6 @@
 #' tests were sucessful, and \code{feedback} that contains a feedback message.
 #'
 #' @export
-#' @importFrom testwhat.base tw RootState DC_reporter build_pd run_until_fail get_rep
 test_exercise <- function(sct, 
                           ex_type, 
                           pec,
@@ -42,6 +41,7 @@ test_exercise <- function(sct,
   } else {
     # Store everything that's needed locally (initialize does a full reset)
     tw$clear()
+    tw$set(success_msg = sample(c("Good Job!", "Well done!", "Great work!"), 1))
     state <- RootState$new(pec = pec,
                            student_code = student_code,
                            student_pd = build_pd(student_code),
@@ -51,16 +51,43 @@ test_exercise <- function(sct,
                            solution_env = solution_env,
                            output_list = output_list,
                            test_env = new.env(parent = environment()))
-    tw$set(state = state, reporter = DC_reporter$new(), stack = TRUE, seed = seed)
+    tw$set(state = state,
+           stack = TRUE,
+           seed = seed)
     on.exit(tw$clear())
     
     # Execute sct with the DataCamp reporter such that it collects test results
-    correct <- run_until_fail(parse(text = sct))
-    feedback <- get_rep()$get_feedback()
-    return(generate_payload(feedback = feedback,
-                            correct = correct,
-                            ex_type = ex_type))
+    res <- run_until_fail(parse(text = sct))
+    return(post_process(res, ex_type))
   }
 }
 
+#' Run SCT until it fails
+#'
+#' @param code the SCT script to run as an expression
+#'
+#' @export
+run_until_fail <- function(code) {
+  end_expr <- expression(return(list(correct = TRUE, message = tw$get("success_msg"))))
+  tryCatch(eval(c(code, end_expr), envir = tw$get("state")$get("test_env")),
+           sct_failure = function(e) {
+             return(list(correct = FALSE,
+                         message = e$message,
+                         feedback = attr(e, "feedback")))
+           })
+}
 
+post_process <- function(res, ex_type) {
+  # convert to HTML
+  res$message <- to_html(res$message)
+  
+  # add line info if incorrect, drop feedback object
+  if (!res$correct && ex_type != "MarkdownExercise") {
+    line_info <- get_line_info(res$feedback)
+    if (!is.null(line_info)) {
+      res <- c(res, line_info)
+    }
+  }
+  res$feedback <- NULL
+  return(res)
+}

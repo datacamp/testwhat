@@ -13,7 +13,6 @@ test_rmd_group <- function(group_number, code) {
   eval(substitute(code), envir = test_env)
 }
 
-#' @importFrom testwhat.base build_pd
 get_rmd_group <- function(state, group_number) {
   student_code <- state$get("student_code")
   solution_code <- state$get("solution_code")

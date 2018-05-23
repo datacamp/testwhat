@@ -24,7 +24,6 @@ build_feedback_message <- function(details) {
   return(capitalize(trim(total_msg)))
 }
 
-
 build_message <- function(det) {
   UseMethod("build_message", det)
 }

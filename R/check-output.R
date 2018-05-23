@@ -57,7 +57,6 @@ check_output <- function(state, ...) {
 }
 
 #' @rdname check_output
-#' @importFrom testwhat.base get_num_hits
 #' @export
 check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, output_only = FALSE, missing_msg = NULL, append = TRUE, ...) {
   regex_state <- RegexState$new(state)
@@ -78,7 +77,6 @@ check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, time
 }
 
 #' @rdname check_output
-#' @importFrom testwhat.base get_num_hits
 #' @export
 check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
 

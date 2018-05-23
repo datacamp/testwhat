@@ -1,3 +1,14 @@
+#' Build ParseData from string representing code
+#'
+#' @param code character string representing code
+#'
+#' @importFrom utils getParseData
+#' @export
+build_pd <- function(code) {
+  tryCatch(getParseData(parse(text = code, keep.source = TRUE), includeText = TRUE),
+           error = function(e) return(NULL))
+}
+
 get_children <- function(pd, ids) {
   all_childs <- c()
   childs <- function(index){

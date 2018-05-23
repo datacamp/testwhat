@@ -1,3 +1,30 @@
+#' Get the number of hits for a series of regexes
+#'
+#' @param regex vector of regular expressions against which to match
+#' @param x character vector where matches are sought
+#' @param fixed logical. If \code{TRUE}, \code{regex} are strings to be matched as is.
+#'
+#' @export
+get_num_hits <- function(regex, x, fixed) {
+  if (length(regex) == 0 || (length(regex) == 1 && nchar(regex) == 0)) {
+    return(0)
+  } else {
+    counts <- sapply(regex, function(patt) {
+      res <- gregexpr(patt, text = x, fixed = fixed)[[1]]
+      if (any(res == -1)) {
+        return(0L)
+      } else {
+        return(length(res))
+      }
+    }, USE.NAMES = FALSE)
+    if (length(counts) == 0) {
+      return(0)
+    } else {
+      return(sum(counts))
+    }
+  }
+}
+
 check_defined <- function(name, sol_env) {
   if (!exists(name, sol_env, inherits = FALSE)) {
     stop(paste(name, "is not defined in your solution environment.",
@@ -18,16 +45,50 @@ failure <- function() {
 get_solution_code <- function() { ex()$get("solution_code") }
 
 #' @importFrom magrittr %>%
-NULL
-
-#' @importFrom testwhat.base check_that test_what is_equal is_false is_true is_gte
-NULL
-
-`%||%` <- function(a, b) {
-  if (!is.null(a)) a else b
-}
+#' @export
+magrittr::`%>%`
 
 assert_is_string <- function(x, sct_name) {
   if (!is.character(x))
     stop(x, paste0(sys.call(1)[1], " requires a string, but received the class", typeof(x), '.'))
 }
+
+tw_accessors <- function() {
+  tw_data <- list()
+
+  get = function(name) {
+    if(missing(name)) {
+      tw_data
+    } else {
+      tw_data[[name]]
+    }
+  }
+
+  set = function(...) {
+    tw_data <<- merge(list(...))
+    invisible(NULL)
+  }
+
+  clear = function() {
+    tw_data <<- list()
+    invisible(NULL)
+  }
+
+  initialize = function(data) {
+    tw_data <<- data
+    invisible(NULL)
+  }
+
+  merge = function(values) merge_list(tw_data, values)
+  list(get = get, set = set, clear = clear, initialize = initialize)
+}
+
+merge_list <- function(x, y) {
+  x[names(y)] = y
+  x
+}
+
+#' tw singleton object to access data across SCT chains.
+#'
+#' @export
+tw <- tw_accessors()
