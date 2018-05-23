@@ -129,7 +129,6 @@ check_call <- function(state, ...) {
 
 # Deprecated functions
 
-#' @importFrom testwhat.base run_until_fail get_rep
 test_function_definition <- function(name, 
                                      function_test = NULL,
                                      body_test = NULL,
@@ -141,15 +140,13 @@ test_function_definition <- function(name,
                                    undefined_msg = undefined_msg, 
                                    append = is.null(undefined_msg))
   
-  fun_passed <- TRUE
   if (!is.null(function_test)) {
-    fun_passed <- run_until_fail(function_test)
-    fun_feedback <- get_rep()$get_feedback()
-  }
-  
-  if (!fun_passed) {
-    fundef %>% check_arguments(incorrect_number_arguments_msg = incorrect_number_arguments_msg, 
-                               append = is.null(incorrect_number_arguments_msg))  
+    fun_res <- run_until_fail(function_test)
+
+    if (!fun_res$correct) {
+      fundef %>% check_arguments(incorrect_number_arguments_msg = incorrect_number_arguments_msg,
+                                 append = is.null(incorrect_number_arguments_msg))
+    }
   }
   
   body_passed <- TRUE
@@ -158,17 +155,16 @@ test_function_definition <- function(name,
     on.exit(tw$set(state = oldstate))
     body_state <- check_body(fundef)
     tw$set(state = body_state)
-    body_passed <- run_until_fail(body_test)
-    body_feedback <- get_rep()$get_feedback()
+    body_res <- run_until_fail(body_test)
   }
   
-  if (fun_passed) {
+  if (is.null(function_test) || fun_res$correct) {
     # all good
   } else {
-    if (body_passed) {
-      check_that(failure(), feedback = fun_feedback)
+    if (is.null(body_test) || body_res$correct) {
+      check_that(failure(), feedback = fun_res$feedback)
     } else {
-      check_that(failure(), feedback = body_feedback)
+      check_that(failure(), feedback = body_res$feedback)
     }
   }
 }

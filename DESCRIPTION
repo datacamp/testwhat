@@ -6,26 +6,29 @@ Date: 2014-07-31
 Description: This package makes it easy for teachers to test students'
     code submissions for R exercises, e.g., for interactive R courses on DataCamp.
 Depends:
-    R (>= 3.0.0),
-    testwhat.base
+    R (>= 3.0.0)
 Imports:
+    evaluate,
     markdown,
     R6,
     stringdist,
     magrittr,
-    praise
+    praise,
+    withr
 Suggests:
-    knitr,
-    rmarkdown,
+    car,
+    covr,
+    dplyr,
     ggvis,
+    ggplot2,
+    knitr,
     lazyeval,
+    pkgdown,
+    rmarkdown,
+    rpart,
+    stats,
     testthat,
-    RBackend,
-    rjson,
-    covr
-Remotes:
-    datacamp/testwhat.base,
-    datacamp/r-backend
+    utils
 License: GPL-3 + file LICENSE
 LazyData: true
 URL: https://github.com/datacamp/testwhat

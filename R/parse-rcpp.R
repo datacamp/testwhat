@@ -7,8 +7,6 @@
 #' them. Currently the C++ code lines are not parsed, so they can only be 
 #' checked using \code{check_code()}-based SCTs.
 #' @keywords internal
-#'
-#' @importFrom testwhat.base build_pd
 parse_rcpp <- function(state) {
   childState <- ChildState$new(state)
   childState$set(

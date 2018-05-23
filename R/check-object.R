@@ -65,7 +65,7 @@ check_object <- function(state, name, undefined_msg = NULL, append = TRUE) {
   check_defined(name, solution_env)
   check_that(is_true(exists(name, envir = student_env, inherits = FALSE)),
              feedback = obj_state$details)
-  
+
   obj_state$set_details(case = "correct",
                         message = NULL,
                         pd = extract_object_assignment(state$get("student_pd"), name))

@@ -14,10 +14,9 @@
 #' 
 #' @export
 #' @importFrom praise praise
-#' @importFrom testwhat.base get_rep
 success_msg <- function(msg, praise = FALSE) {
   if (isTRUE(praise)) {
     msg <- paste(praise::praise(), msg)
   }
-  get_rep()$set_success_msg(msg)
+  tw$set(success_msg = capitalize(trim(msg)))
 }
