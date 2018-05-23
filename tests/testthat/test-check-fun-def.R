@@ -238,13 +238,11 @@ test_that("test_function_definition incorrect use", {
 
   lst$DC_SOLUTION <- ""
   lst$DC_CODE <- ""
-  capture.output(output <- test_it(lst))
-  error(output)
+  expect_error(test_it(lst))
 
   lst$DC_SOLUTION <- "my_func <- 2"
   lst$DC_CODE <- "my_func <- 2"
-  capture.output(output <- test_it(lst))
-  error(output)
+  expect_error(test_it(lst))
 })
 
 test_that("test_function_definition works", {
@@ -358,8 +356,7 @@ test_that("test_function_defintion works with body_test", {
   lst$DC_SCT <- paste("test_function_definition('my_fun',\n",
                       "function_test = test_expression_output('my_fun(123)'),\n",
                       "body_test = test_function('str', 'x'))")
-  capture.output(output <- test_it(lst))
-  error(output)
+  expect_error(test_it(lst))
 
   # If there's an incorrect SCT in body_test, should throw error
   lst <- list()
@@ -368,8 +365,7 @@ test_that("test_function_defintion works with body_test", {
   lst$DC_SCT <- paste("test_function_definition('my_fun',\n",
                       "function_test = test_expression_output('my_fun()'),\n",
                       "body_test = test_function('str', 'x'))")
-  capture.output(output <- test_it(lst))
-  error(output)
+  expect_error(test_it(lst))
 })
 
 

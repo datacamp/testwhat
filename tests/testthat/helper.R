@@ -1,85 +1,49 @@
-if (!requireNamespace("RBackend", quietly = TRUE)) {
-  stop("RBackend is needed to run the tests. Please install it.", call. = FALSE)
-}
+library(testwhat)
 
-if (!requireNamespace("rjson", quietly = TRUE)) {
-  stop("rjson is needed to run the tests. Please install it.", call. = FALSE)
+`%||%` <- function(a, b) {
+  if (!is.null(a)) a else b
 }
 
 test_it <- function(lst) {
-  if (is.null(lst$DC_TYPE)) lst$DC_TYPE <- "NormalExercise"
-  if (is.null(lst$DC_PEC)) lst$DC_PEC <- ""
-  if (is.null(lst$DC_SOLUTION)) lst$DC_SOLUTION <- ""
-  if (is.null(lst$DC_SCT)) lst$DC_SCT <- ""
-  lst$DC_COMMAND <- "init"
-  output <- rjson::fromJSON(RBackend::execute(rjson::toJSON(lst)))
-  if (any(sapply(output, `[[`, "type") == "error")) {
-    print(output)
-    stop("init failed")
-  }
-  lst$DC_COMMAND <- "submit"
-  rjson::fromJSON(RBackend::execute(rjson::toJSON(lst)))
+  ex_type <- lst$DC_TYPE %||% "NormalExercise"
+  setup_state(sol_code = lst$DC_SOLUTION %||% "",
+              stu_code = lst$DC_CODE %||% "",
+              pec <- lst$DC_PEC %||% "",
+              ex_type = ex_type)
+
+  testwhat:::post_process(run_until_fail(parse(text = lst$DC_SCT %||% "")),
+                          ex_type = ex_type)
 }
 
-get_sct_payload <- function(output) {
-  if (any(sapply(output, `[[`, "type") == "error")) {
-    print(output)
-    stop("an error occured")
-  }
-  output[sapply(output, `[[`, "type") == "sct"][[1]]$payload
-}
-
-get_error_payload <- function(output) {
-  if (any(sapply(output, `[[`, "type") == "sct")) {
-    print(output)
-    stop("no error occured")
-  }
-  output[sapply(output, `[[`, "type") == "error"][[1]]$payload
-}
-
-passes <- function(output, mess_patt = NULL) {
-  sct_payload <- get_sct_payload(output)
-  expect_true(sct_payload$correct)
+passes <- function(res, mess_patt = NULL) {
+  expect_true(res$correct)
   if (!is.null(mess_patt)) {
-    expect_true(grepl(mess_patt, sct_payload$message))
+    expect_true(grepl(mess_patt, res$message))
   }
 }
 
-fails <- function(output, mess_patt = NULL) {
-  sct_payload <- get_sct_payload(output)
-  expect_false(sct_payload$correct)
+fails <- function(res, mess_patt = NULL) {
+  expect_false(res$correct)
   if (!is.null(mess_patt)) {
-    expect_true(grepl(mess_patt, sct_payload$message))
+    expect_true(grepl(mess_patt, res$message))
   }
 }
 
-fb_contains <- function(output, mess_patt, fixed = TRUE) {
-  sct_payload <- get_sct_payload(output)
-  expect_true(grepl(mess_patt, sct_payload$message, fixed = fixed))
+fb_contains <- function(res, mess_patt, fixed = TRUE) {
+  expect_true(grepl(mess_patt, res$message, fixed = fixed))
 }
 
-fb_excludes <- function(output, mess_patt, fixed = TRUE) {
-  sct_payload <- get_sct_payload(output)
-  expect_false(grepl(mess_patt, sct_payload$message, fixed = fixed))
+fb_excludes <- function(res, mess_patt, fixed = TRUE) {
+  expect_false(grepl(mess_patt, res$message, fixed = fixed))
 }
 
-error <- function(output, mess_patt = NULL) {
-  error_payload <- get_error_payload(output)
-  expect_false(is.null(error_payload))
-  if (!is.null(mess_patt)) {
-    expect_true(grepl(mess_patt, error_payload))
-  }
-}
-
-line_info <- function(output, line_start, line_end, column_start, column_end) {
-  sct_payload <- get_sct_payload(output)
-  expect_equal(sct_payload$line_start, line_start)
-  expect_equal(sct_payload$line_end, line_end)
-  if(!missing(column_start)) expect_equal(sct_payload$column_start, column_start)
-  if(!missing(column_end)) expect_equal(sct_payload$column_end, column_end)
+line_info <- function(res, line_start, line_end, column_start, column_end) {
+  expect_equal(res$line_start, line_start)
+  expect_equal(res$line_end, line_end)
+  if(!missing(column_start)) expect_equal(res$column_start, column_start)
+  if(!missing(column_end)) expect_equal(res$column_end, column_end)
 }
 
 print_fb <- function(output) {
-  sct_payload <- get_sct_payload(output)
-  cat("\n", "FBM: \"", testwhat:::trim(sct_payload$message), "\"\n", sep = "")
+  cat("\n", "FBM: \"", testwhat:::trim(res$message), "\"\n", sep = "")
 }

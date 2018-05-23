@@ -22,8 +22,7 @@ test_that("test_mc works", {
   fails(output)
   
   lst$DC_SCT <- "test_mc(1, feedback_msgs = c('not enugh messages'))"
-  output <- test_it(lst)
-  error(output)
+  expect_error(test_it(lst))
   
   lst <- list()
   lst$DC_TYPE <- "MultipleChoiceExercise"

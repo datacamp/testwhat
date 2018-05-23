@@ -6,8 +6,7 @@ test_that("test_predefined_objects works", {
   lst$DC_CODE <- "a <- 2\nb <- 3\nc <- 2"
   
   lst$DC_SCT <- "test_predefined_objects()"
-  output <- test_it(lst)
-  error(output)
+  expect_error(test_it(lst))
   
   lst$DC_SCT <- "test_predefined_objects(c('a', 'b', 'c'))"
   output <- test_it(lst)

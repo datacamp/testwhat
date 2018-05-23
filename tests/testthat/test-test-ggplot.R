@@ -49,31 +49,6 @@ test_ggplot(1, check = "scale")'
   passes(test_it(lst))
 })
 
-test_that("test_ggplot works 4", {
-  lst <- list()
-  lst$DC_PEC <- 'suppressWarnings(library(ggplot2))\nlibrary(RColorBrewer)\n
-    z <- ggplot(mtcars, aes(x = wt, y = mpg, col = factor(cyl))) +
-    geom_point(alpha = 0.7, size = 3) +
-    geom_smooth(method = "lm", se = FALSE) +
-    labs(x = "Weight (lb/1000)", y = "Miles/(US) gallon") +
-    coord_cartesian(xlim = c(1,6), ylim = c(10,35)) +
-    scale_color_manual("Cylinders", values = brewer.pal(9, "Blues")[c(4,6,8)]) +
-    facet_wrap( ~ cyl, scales = "free_y")
-
-    z + theme(panel.background = element_blank(),
-    legend.key = element_blank(),
-    legend.background = element_blank(),
-    strip.background = element_blank(),
-    plot.background = element_rect(fill = brewer.pal(3, "Reds")[1], color = "black", size = 3))
-
-    myPink <- brewer.pal(3, "Reds")[1]
-    '
-  lst$DC_CODE <- 'z + theme(plot.background = element_rect(fill = myPink))'
-  lst$DC_SOLUTION <- 'z + theme(plot.background = element_rect(fill = myPink))'
-  lst$DC_SCT <- 'test_ggplot(1)'
-  passes(test_it(lst))
-})
-
 test_that("spots wrong facetting (grid)", {
   code <- "ggplot(CO2, aes(conc, uptake)) + geom_point() + facet_grid(Treatment ~ Type)"
   lst <- list(

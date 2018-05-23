@@ -1,49 +1,35 @@
 context("test_exercise")
 
-test_that("basic exercise", {
-  lst <- list()
-  lst$DC_CODE <- "x <- 4"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "test_object(\"x\")"
-  output <- test_it(lst)
-  passes(output)
-
-  lst <- list()
-  lst$DC_CODE <- "x <- 5"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "test_object('x')"
-  output <- test_it(lst)
-  fails(output)
-})
-
-test_that("msg outside of testwhat call", {
-  lst <- list()
-  lst$DC_CODE <- "x <- 4"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "msg <- 'incorrect_obj'\ntest_object('x', incorrect_msg = msg)"
-  output <- test_it(lst)
-  passes(output)
-
-  lst <- list()
-  lst$DC_CODE <- "x <- 5"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "msg <- 'incorrect_obj'\ntest_object('x', incorrect_msg = msg)"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect_obj")
-})
-
-test_that("msg outside subSCT using call", {
-  lst <- list()
-  lst$DC_CODE <- "x <- 4"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "msg <- 'incorrect_obj'\ntest_correct(test_object('x', incorrect_msg = msg), test_student_typed('4'))"
-  output <- test_it(lst)
-  passes(output)
+test_that("test_exercise works properly", {
   
-  lst <- list()
-  lst$DC_CODE <- "x <- 5"
-  lst$DC_SOLUTION <- "x <- 4"
-  lst$DC_SCT <- "msg <- 'incorrect_obj'\ntest_correct(test_object('x', incorrect_msg = msg), test_student_typed('x'))"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect_obj")
+  run_test_exercise <- function(stu_code, ..., sct) {
+    test_exercise(
+      sct = sct,
+      ex_type = "NormalExercise", 
+      pec = "",
+      student_code = stu_code,
+      solution_code = "x <- 4",
+      student_env = list2env(list(...), parent = globalenv()),
+      solution_env = list2env(list(x = 4), parent = globalenv()),
+      output_list = list(),
+      seed = 42
+    )  
+  }
+  
+  expect_true(run_test_exercise("x <- 4", x = 4, sct = "test_object('x')")$correct)
+  
+  expect_false(run_test_exercise("x <- 5", x = 5, sct = "test_object('x')")$correct)
+
+  # message outside of function
+  sct <- "msg <- 'incorrect_obj'\ntest_object('x', incorrect_msg = msg)"
+  res <- run_test_exercise("x <- 5", x = 5, sct = sct)
+  expect_false(res$correct)
+  expect_true(grepl("Incorrect_obj", res$message))
+  
+  # message outside of construct
+  sct <- "msg <- 'incorrect_obj'\ntest_correct(test_object('x', incorrect_msg = msg), test_student_typed('x'))"
+  res <- run_test_exercise("x <- 5", x = 5, sct = sct)
+  expect_false(res$correct)
+  expect_true(grepl("Incorrect_obj", res$message))
 })
+
