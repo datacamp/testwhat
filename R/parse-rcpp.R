@@ -25,13 +25,12 @@ seq_int <- function(lo, hi) {
   seq.int(lo, hi, by = 1)
 }
 
-extract_r_code_from_rcpp <- function(code_lines, flatten = TRUE) {
+extract_r_code_from_rcpp <- function(code, flatten = TRUE) {
+  code_lines <- strsplit(code, split = "\n")[[1]]
   start_line <- which(grepl(" */\\*{3} +R", code_lines))
   end_line <- which(grepl(" *\\*/", code_lines))
   r_chunks <- Map(seq_int, start_line + 1, end_line - 1) %>% 
     lapply(function(x) code_lines[x])
-  if(flatten) {
-    r_chunks <- unlist(r_chunks, use.names = FALSE)
-  }
-  r_chunks
+  r_chunks <- unlist(r_chunks, use.names = FALSE)
+  paste(r_chunks, collapse = "\n")
 }

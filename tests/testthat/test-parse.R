@@ -173,20 +173,3 @@ test_that("unit test: ___ in the string", {
   check_parse(c4c, patt = patt, ls = 3, cs = 1, le = 3, ce = 3)
 })
 
-test_that(
-  "parse_rcpp parses CPP code with R in it", {
-    # Cast actual and expected to data.frame to avoid comparing scrfile
-    #  attribute, which has a different timestamp
-    expected_pd <- build_pd("var(1:10)") %>%
-      data.frame()
-    
-    actual_state <- setup_state(stu_code = "var(1:10)", sol_code = "var(1:10)") %>%
-      parse_rcpp()
-    actual_student_pd <- actual_state$get("student_pd") %>%
-      data.frame() 
-    actual_solution_pd <- actual_state$get("student_pd") %>%
-      data.frame()
-    
-    expect_equal(actual_student_pd, expected_pd)
-    expect_equal(actual_solution_pd, expected_pd)
-})

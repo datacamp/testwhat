@@ -56,6 +56,20 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
   } else if (ex_type == "FileExercise") {
     sol_code_to_run <- ""
     stu_code_to_run <- ""
+  } else if (ex_type == "RCppExercise") {
+    populate_tmpfile <- function(code) {
+      file <- tempfile(fileext = ".cpp")
+      write(code, file)
+      return(file)
+    }
+    sol_file <- populate_tmpfile(sol_code)
+    stu_file <- populate_tmpfile(stu_code)
+    # sol_code_to_run <- sprintf("sourceCpp('%s', env = tw$get('sol_env'))", sol_file)
+    # stu_code_to_run <- sprintf("sourceCpp('%s', env = tw$get('stu_env'))", stu_file)
+    sol_code_to_run <- sprintf("sourceCpp('%s')", sol_file)
+    stu_code_to_run <- sprintf("sourceCpp('%s')", stu_file)
+    on.exit(unlink(sol_file))
+    on.exit(unlink(stu_file))
   } else {
     sol_code_to_run <- sol_code
     stu_code_to_run <- stu_code
@@ -86,6 +100,8 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
   
   sol_env <- new_env()
   stu_env <- new_env()
+  tw$set(sol_env = sol_env)
+  tw$set(stu_env = stu_env)
   
   with_seed(123, {
     evaluate::evaluate(pec, envir = sol_env)
