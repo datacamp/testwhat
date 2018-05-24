@@ -5,7 +5,8 @@
 #' available thorugh \code{\link{ex}}, from which you can start your SCT chains.
 #' In a way, this function is a very light weight version of DataCamp's R Backend.
 #' 
-#' @param sol_code Solution script as a string
+#' @param sol_code Solution script as a string. If it is not specified, the
+#'   student code will be used.
 #' @param stu_code Student submission as a string. If it is not specified, the
 #'   solution code will be used.
 #' @param pec Pre-exercise-code as a string
@@ -28,8 +29,15 @@
 #' @export
 setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "NormalExercise") {
   
-  if(base::missing(stu_code)) {
-    stu_code <- sol_code
+  if (base::missing(stu_code) && base::missing(sol_code)) {
+    stop("Either stu_code or sol_code have to be specified.")
+  } else {
+    if (base::missing(stu_code)) {
+      stu_code <- sol_code
+    }
+    if (base::missing(sol_code)) {
+      sol_code <- stu_code
+    }
   }
   
   if (ex_type == "MarkdownExercise") {
@@ -45,6 +53,9 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
     
     sol_code_to_run <- capture_code(sol_code)
     stu_code_to_run <- capture_code(stu_code)
+  } else if (ex_type == "FileExercise") {
+    sol_code_to_run <- ""
+    stu_code_to_run <- ""
   } else {
     sol_code_to_run <- sol_code
     stu_code_to_run <- stu_code
@@ -73,8 +84,8 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
     list(type = "r-error", payload = paste0("Error: ", item$message))  
   }
   
-  sol_env <- new.env(parent = globalenv())
-  stu_env <- new.env(parent = globalenv())
+  sol_env <- new_env()
+  stu_env <- new_env()
   
   with_seed(123, {
     evaluate::evaluate(pec, envir = sol_env)
@@ -105,4 +116,19 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
   # testwhat will access the reporter and state from the tw object
   tw$set(state = state, stack = TRUE, seed = 42)
   return(invisible(tw$get("state")))
+}
+
+#' Create a new environment
+#'
+#'  Create a new environment whose parent environment is the global environment.
+#'  @return An environment.
+#'  @examples
+#'  # Create a new environment
+#'  (e <- new_env())
+#'
+#'  # The parent environment is the global environment
+#'  identical(parent.env(e), globalenv())
+#'  @noRd
+new_env <- function() {
+  new.env(parent = globalenv())
 }
