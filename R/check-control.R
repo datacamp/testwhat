@@ -19,14 +19,18 @@
 #' }
 #'                                            
 #' # SCT
-#' ifelse <- check_if_else(1)
-#' ifelse %>% check_cond() %>% check_code("%in%")
-#' ifelse %>% check_cond() %>% check_code("vec")
-#' ifelse %>% check_if() %>% check_function("print")
-#' nestedifelse <- ifelse %>% check_else() %>% check_if_else(1)
-#' nestedifelse %>% check_cond() %>% check_code(">")
-#' nestedifelse %>% check_if() %>% check_function("cat")
-#' nestedifelse %>% check_else() %>% check_function("str")
+#' check_if_else(1) %>%  {
+#'   check_cond(.) %>% {
+#'     check_code(., "%in%")
+#'     check_code(., "vec")
+#'   }
+#'   check_if(.) %>% check_function(., "print")
+#'   check_else(.) %>% check_if_else() {
+#'     check_cond(.) %>% check_code(">")
+#'     check_if(.) %>% check_function("cat")
+#'     check_else(.) %>% check_function("str")
+#'   }
+#' }
 #' 
 #' # Example 2: while loop
 #' while(x < 18) {
@@ -35,10 +39,13 @@
 #' }
 #' 
 #' # SCT
-#' w <- check_while(1)
-#' w %>% check_cond() %>% check_code(c("< 18", "18 >"))
-#' w %>% check_body() %>% check_code(c("x + 5", "5 + x"))
-#' w %>% check_body() %>% check_function("print") %>% test_arg("x")
+#' check_while(1) %>% {
+#'   check_cond(.) %>% check_code(c("< 18", "18 >"))
+#'   check_body(.) %>% {
+#'     check_code(., c("x + 5", "5 + x"))
+#'     check_function(., "print") %>% test_arg("x")
+#'   }
+#' }
 #' 
 #' # Example 3: for loop
 #' for(i in 1:5) {
@@ -46,12 +53,14 @@
 #' }
 #' 
 #' # SCT
-#' f <- ex() %>% check_for(1)
-#' cond <- f %>% check_cond() 
-#' cond %>% check_code("in")
-#' cond %>% check_code("1")
-#' cond %>% check_code("5")
-#' f %>% check_body() %>% check_function("print") %>% check_arg("x") %>% check_equal()
+#' ex() %>% check_for() %>% {
+#'   check_cond(.) %>% {
+#'     check_code(., "in")
+#'     check_code(., "1")
+#'     check_code(., "5")
+#'   }
+#'   check_body(.) %>% check_function("print") %>% check_arg("x") %>% check_equal()
+#' }
 #' }
 #' @name check_control
 

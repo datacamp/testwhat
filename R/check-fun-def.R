@@ -1,5 +1,12 @@
 #' Check whether the student defined a function correctly
 #' 
+#' \code{check_fun_def} checks whether an object is defined in the student enviornment, and returns a state that can be piped to:
+#' \itemize{
+#'   \item{\code{check_arguments}, to check whether the correct arguments where specified.}
+#'   \item{\code{check_call}, to call the function with the provided arguments, and produces a state that can be piped to \code{check_output}, \code{check_result} and \code{check_error} to compare the output, result or error from calling the function between student and solution.}
+#'   \item{\code{check_body}, that returns a state that focuses on the body that defines the function. Note that you cannot use \code{\link{check_object}} to compare variables that are limited to the function scope.}
+#' }
+#'
 #' @param name  The name of the function to test
 #' @param undefined_msg Custom message in case the specified function
 #'   was not defined
@@ -21,16 +28,20 @@
 #' }
 #' 
 #' # SCT
-#' fundef %>% check_fun_def("my_fun") 
-#' fundef %>% check_arguments()
-#' fundef %>% check_call(a = 1, b = 2) %>% check_result() %>% check_equal()
-#' fundef %>% check_call(a = 'c', b = 3) %>% check_error() %>% check_equal()
-#' fundef %>% check_body() %>% check_code("+")
+#' ex() %>% check_fun_def("my_fun") %>% {
+#'   check_arguments(.)
+#'   check_call(., a = 1, b = 2) %>% {
+#'     check_result(.) %>% check_equal()
+#'     check_output(.) %>% check_equal()
+#'   }
+#'   check_call(., a = 'c', b = 3) %>% check_error() %>% check_equal()
+#'   check_body(.) %>% check_code("+")
+#' }
 #' }
 #' 
-#' @name test_fun_def
+#' @name check_fun_def
 
-#' @rdname test_fun_def
+#' @rdname check_fun_def
 #' @export
 check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NULL, append = TRUE) {
   student_env <- state$get("student_env")
@@ -71,7 +82,7 @@ check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NUL
   return(fundef_state)
 }
 
-#' @rdname test_fun_def
+#' @rdname check_fun_def
 #' @export
 check_arguments <- function(state, incorrect_number_arguments_msg = NULL, append = TRUE) {
   stud_arguments <- as.list(formals(state$get("student_object")))
@@ -90,7 +101,7 @@ check_arguments <- function(state, incorrect_number_arguments_msg = NULL, append
   return(fundefargs_state)
 }
 
-#' @rdname test_fun_def
+#' @rdname check_fun_def
 #' @export
 check_body.FunDefState <- function(state, not_found_msg = NULL, append = TRUE, ...) {
   name <- state$get("name")
@@ -118,7 +129,7 @@ check_body.FunDefState <- function(state, not_found_msg = NULL, append = TRUE, .
   return(body_state)
 }
 
-#' @rdname test_fun_def
+#' @rdname check_fun_def
 #' @export
 check_call <- function(state, ...) {
   expr_state <- ExprState$new(state)

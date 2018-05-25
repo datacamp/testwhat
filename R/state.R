@@ -109,6 +109,11 @@ State <- R6::R6Class("State",
                      )
 )
 
+#' @export
+print.State <- function(x, ...) {
+  cat(paste0("<", class(x)[1], ">\n"))
+}
+
 #' @rdname state
 #' @export
 RootState <- R6::R6Class("RootState", inherit = State,

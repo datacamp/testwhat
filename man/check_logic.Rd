@@ -45,11 +45,10 @@ Similarly, \code{check_or} checks whether one of many test sets pass. That way, 
 x <- mean(1:3)
 
 # Example SCT
-check_correct({
-  ex() \%>\% check_object("x") \%>\% check_equal()
-}, {
+check_correct(
+  ex() \%>\% check_object("x") \%>\% check_equal(),
   ex() \%>\% check_fun("mean") \%>\% check_arg("x") \%>\% check_equal()
-})
+)
 
 # Following submissions will all be accepted:
 x <- mean(1:3)

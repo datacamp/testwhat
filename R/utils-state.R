@@ -134,17 +134,6 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
   return(invisible(tw$get("state")))
 }
 
-#' Create a new environment
-#'
-#'  Create a new environment whose parent environment is the global environment.
-#'  @return An environment.
-#'  @examples
-#'  # Create a new environment
-#'  (e <- new_env())
-#'
-#'  # The parent environment is the global environment
-#'  identical(parent.env(e), globalenv())
-#'  @noRd
 new_env <- function() {
   new.env(parent = globalenv())
 }

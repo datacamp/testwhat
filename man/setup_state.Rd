@@ -8,7 +8,8 @@ setup_state(sol_code, stu_code, pec = character(),
   ex_type = "NormalExercise")
 }
 \arguments{
-\item{sol_code}{Solution script as a string}
+\item{sol_code}{Solution script as a string. If it is not specified, the
+student code will be used.}
 
 \item{stu_code}{Student submission as a string. If it is not specified, the
 solution code will be used.}
