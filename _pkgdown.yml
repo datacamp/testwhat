@@ -51,9 +51,13 @@ navbar:
         href: articles/checking-through-string-matching.html
       - text: Combining sets of SCTs
         href: articles/combining-sets-of-scts.html
-      - text: Extensions
-        href: articles/extensions.html
       - text: Electives
         href: articles/electives.html
+    - text: Advanced
+      menu:
+      - text: Test to Check
+        href: articles/test-to-check.html
+      - text: Extensions
+        href: articles/extensions.html
     - text: Reference
       href: reference/index.html

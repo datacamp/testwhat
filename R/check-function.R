@@ -45,9 +45,10 @@
 #' mean(c(NA, 1, 2), na.rm = TRUE)
 #'
 #' # SCT
-#' funstate <- ex() %>% check_function("mean")
-#' funstate %>% check_arg("x") %>% check_equal()
-#' funstate %>% check_arg("na.rm") %>% check_equal()
+#' ex() %>% check_function("mean") %>% {
+#'   check_arg(., "x") %>% check_equal()
+#'   check_arg(., "na.rm") %>% check_equal()
+#' }
 #'
 #' # Example 3
 #' 5 + 4

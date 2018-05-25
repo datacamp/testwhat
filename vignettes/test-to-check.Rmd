@@ -1,0 +1,137 @@
+---
+title: "Test to check"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Test to check}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+If you are looking at the SCTs of old DataCamp courses, you'll notice they use `test_x()` functions instead of `check_x()` functions, and there is no usage of `ex()`. The `test_x()` way of doing things has now been phased out in terms of the more verbose, but more transparent and composable `check_x()` functions that start with `ex()` and are chained together with the `%>%` operator.
+
+Whenever you come across an SCT that uses `test_x()` functions, you'll make everybody's life easier by converting it to a `check_x()`-based SCT. Below are the most common cases you will encounter, together with instructions on how to translate from one to the other.
+
+Something you came across that you didn't find in this list? Just create an issue on [`testwhat`'s GitHub repo](https://github.com/datacamp/testwhat). Content Engineering will explain how to translate the SCT and update this article.
+
+### `test_student_typed()`
+
+```{r}
+# Solution
+TRUE & FALSE
+
+# old SCT (fixed = TRUE by default)
+test_student_typed(c("TRUE & FALSE", "FALSE & TRUE"))
+
+# new SCT (fixed = FALSE by default)
+ex() %>% check_code(c("TRUE & FALSE", "FALSE & TRUE"), fixed = TRUE)
+```
+
+```{r}
+# Solution
+"Hello, world!"
+
+# equivalent 'old' SCT (fixed = TRUE by default)
+test_student_typed("[H|h]ello,*\\s*[W|w]orld\\!*", fixed = FALSE)
+
+# SCT, robust to small typos
+ex() %>% check_code("[H|h]ello,*\\s*[W|w]orld\\!*")
+```
+
+### `test_object()`
+
+```{r}
+# Solution
+x <- 5
+
+# old SCT
+test_object("x")
+
+# new SCT
+ex() %>% check_object("x") %>% check_equal()
+```
+
+```{r}
+# Solution, value of x does not matter
+x <- 5
+
+# old SCT
+test_object("x", eval = FALSE)
+
+# new SCT
+ex() %>% check_object("x")
+```
+
+### `test_function()`
+
+```{r}
+# Solution
+mean(1:3)
+
+# old SCT
+test_fucntion("mean", args = c("x"))
+
+# new SCT
+ex() %>% check_function("mean") %>% check_arg("x") %>% check_equal()
+```
+
+```{r}
+# Solution, value of na.rm does not matter
+mean(c(1, 2, 3), na.rm = TRUE)
+
+# Old SCT
+test_function("mean", args = c("x", "na.rm"), eval = c(TRUE, NA))
+
+# SCT
+funstate <- ex() %>% check_function("mean") %>% {
+  check_arg(., "x") %>% check_equal()
+  check_arg(., "na.rm")
+}
+```
+
+### `test_error()`
+
+```{r}
+# old SCT
+test_error()
+
+# new SCT
+ex() %>% check_error()
+```
+
+### `test_function_result()`
+
+```{r}
+# Solution
+mean(1:3)
+
+# old SCT
+test_function_result("mean")
+
+# new SCT
+ex() %>% check_function("mean") %>% check_result() %>% check_equal()
+```
+
+### `test_correct()`
+
+```{r}
+# Solution (how x is calculated does not matter)
+x <- mean(1:3)
+
+# old_SCT
+test_correct(test_object("x"), test_function("mean", args = c("x")))
+
+# new SCT
+check_correct(
+  ex() %>% check_object("x") %>% check_equal(),
+  ex() %>% check_fun("mean") %>% check_arg("x") %>% check_equal()
+)
+```
+

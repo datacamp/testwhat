@@ -12,16 +12,38 @@
 
 For details, questions and suggestions, [contact us](mailto:content-engineering@datacamp.com).
 
-## Development
 
-### Installation
+## Installation
 
 ```R
-library("devtools")
+library("remotes")
 install_github("datacamp/testwhat")
 ```
 
-### Tests
+## Demo
+
+Experimenting locally:
+
+```R
+library(testwhat)
+setup_state(sol_code = "x <- 5",
+            stu_code = "x <- 4")
+
+ex() %>% check_object("x")
+# No error: x is defined in both student and solution code
+
+ex() %>% check_object("x") %>% check_equal()
+# Error: The contents of the variable `x` aren't correct.
+
+# Debugging state
+s <- ex() %>% check_object()
+s        # only prints out state class
+str(s)   # full overview of state
+```
+
+To include an SCT in a DataCamp course, visit https://authoring.datacamp.com.
+
+## Tests
 
 `testwhat` currently depends on the proprietary `RBackend` and `RCompletion` packages to run tests. Tests run automatically on every branch that is updated through travis.
 
@@ -29,7 +51,7 @@ install_github("datacamp/testwhat")
 devtools::test()
 ```
 
-### Documentation
+## Documentation
 
 Whenever a push is done to the `master` branch, this repo will automatically build a `pkgdown` website (containing reference documentation and vignettes), push it to the `gh-pages` branch, which in turn is served by GitHub at https://datacamp.github.io/testwhat.
 
