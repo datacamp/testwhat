@@ -64,10 +64,8 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
     }
     sol_file <- populate_tmpfile(sol_code)
     stu_file <- populate_tmpfile(stu_code)
-    # sol_code_to_run <- sprintf("sourceCpp('%s', env = tw$get('sol_env'))", sol_file)
-    # stu_code_to_run <- sprintf("sourceCpp('%s', env = tw$get('stu_env'))", stu_file)
-    sol_code_to_run <- sprintf("sourceCpp('%s')", sol_file)
-    stu_code_to_run <- sprintf("sourceCpp('%s')", stu_file)
+    sol_code_to_run <- sprintf("sourceCpp('%s', env = tw$get('sol_env'))", sol_file)
+    stu_code_to_run <- sprintf("sourceCpp('%s', env = tw$get('stu_env'))", stu_file)
     on.exit(unlink(sol_file))
     on.exit(unlink(stu_file))
   } else {
