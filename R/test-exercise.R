@@ -81,8 +81,10 @@ post_process <- function(res, ex_type) {
   # convert to HTML
   res$message <- to_html(res$message)
   
-  # add line info if incorrect, drop feedback object
-  if (!res$correct && ex_type != "MarkdownExercise") {
+  # Only add line info if:
+  # - message is incorrect, and
+  # - exercise is not markdown / rcpp (post-processing of code chunks gives strange things)
+  if (!res$correct && !(ex_type %in% c("MarkdownExercise", "RCppExercise"))) {
     line_info <- get_line_info(res$feedback)
     if (!is.null(line_info)) {
       res <- c(res, line_info)

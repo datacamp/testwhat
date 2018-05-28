@@ -80,6 +80,9 @@ get_valid_ids <- function(pd, assign, symbols) {
 
 
 extract_object_assignment <- function(pd, name) {
+  if (is.null(pd)) {
+    return(NA)
+  }
   sub_pds <- extract_assignments(pd, name)
   if(length(sub_pds) == 1) {
     return(sub_pds[[1]])

@@ -48,6 +48,7 @@ check_code <- function(state, regex, fixed = FALSE, times = 1, missing_msg = NUL
   }
   num_hits <- get_num_hits(regex = regex, x = student_code, fixed = fixed)
   check_that(is_gte(num_hits, times), feedback = regex_state$details)
+  return(state)
 }
 
 # deprecated test_student_typed
