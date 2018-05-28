@@ -1,77 +1,43 @@
 context("check_wd")
 
-## Really funky stuff with these tests...
-
 test_that("check_wd - 1", {
-  skip_on_travis()
-  lst <- list()
-  lst$DC_PEC <- "if (file.exists('testing.txt')) file.remove('testing.txt')"
-  lst$DC_CODE <- "write('testing', file = 'testing.txt')"
-
-  lst$DC_SCT <- "ex() %>% check_wd(path = 'testing.txt'); suppressWarnings(file.remove('testing.txt'))"
-  output <- test_it(lst)
-  passes(output)
+  withr::with_file("testing.txt", {
+    writeLines("test", con = "testing.txt")
+    s <- setup_state(stu_code = "")
+    passes2(ex() %>% check_wd(path = 'testing.txt'))
+    passes2(test_file_exists('testing.txt'))
+  })
 })
 
 test_that("check_wd - 2", {
-  skip_on_travis()
-  lst <- list() # no pec, no solution, no user code
+  expect_error(ex() %>% check_wd('non_existing.txt'),
+               regexp = "The file `non_existing.txt` does not appear to be",
+               class = "sct_failure")
+  expect_error(test_file_exists('non_existing.txt'),
+               regexp = "The file `non_existing.txt` does not appear to be",
+               class = "sct_failure")
 
-  lst$DC_SCT <- "ex() %>% check_wd('non_existing.txt')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "The file <code>non_existing.txt</code> does not appear to be in your working directory")
-
-  lst$DC_SCT <- "ex() %>% check_wd('non_existing.txt', missing_msg = 'incorrect')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect")
+  expect_error(ex() %>% check_wd('non_existing.txt', missing_msg = 'incorrect'),
+               regexp = "Incorrect",
+               class = "sct_failure")
+  expect_error(test_file_exists('non_existing.txt', incorrect_msg = 'incorrect'),
+               regexp = "Incorrect",
+               class = "sct_failure")
 })
 
 test_that("check_wd - 3", {
-  skip_on_travis()
-  lst <- list() # no pec, no solution, no user code
+  expect_error(ex() %>% check_wd('test/non_existing.txt'),
+               regexp = "The file `non_existing.txt` does not appear to be inside the folder `test` in your working directory",
+               class = "sct_failure")
+  expect_error(test_file_exists('test/non_existing.txt'),
+               regexp = "The file `non_existing.txt` does not appear to be inside the folder `test` in your working directory",
+               class = "sct_failure")
 
-  lst$DC_SCT <- "ex() %>% check_wd('test/non_existing.txt')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "The file <code>non_existing.txt</code> does not appear to be inside the folder <code>test</code> in your working directory")
+  expect_error(ex() %>% check_wd('test/non_existing.txt', missing_msg = "incorrect"),
+               regexp = "Incorrect",
+               class = "sct_failure")
+  expect_error(test_file_exists('test/non_existing.txt', incorrect_msg = "incorrect"),
+               regexp = "Incorrect",
+               class = "sct_failure")
 
-  lst$DC_SCT <- "ex() %>% check_wd('test/non_existing.txt', missing_msg = 'incorrect')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect")
-})
-
-test_that("test_file_exists - backwards compatible - 1", {
-  skip_on_travis()
-  lst <- list()
-  lst$DC_PEC <- "if (file.exists('testing.txt')) file.remove('testing.txt')"
-  lst$DC_CODE <- "write('testing', file = 'testing.txt')"
-
-  lst$DC_SCT <- "test_file_exists('testing.txt'); file.remove('testing.txt')"
-  output <- test_it(lst)
-  passes(output)
-})
-
-test_that("test_file_exists - backwards compatible - 2", {
-  skip_on_travis()
-  lst <- list() # no pec, no solution, no user code
-
-  lst$DC_SCT <- "test_file_exists('non_existing.txt')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "The file <code>non_existing.txt</code> does not appear to be in your working directory")
-
-  lst$DC_SCT <- "test_file_exists('non_existing.txt', incorrect_msg = 'incorrect')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect")
-})
-
-test_that("test_file_exists - backwards compatible - 3", {
-  skip_on_travis()
-  lst <- list() # no pec, no solution, no user code
-
-  lst$DC_SCT <- "test_file_exists('test/non_existing.txt')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "The file <code>non_existing.txt</code> does not appear to be inside the folder <code>test</code> in your working directory")
-
-  lst$DC_SCT <- "test_file_exists('test/non_existing.txt', incorrect_msg = 'incorrect')"
-  output <- test_it(lst)
-  fails(output, mess_patt = "Incorrect")
 })

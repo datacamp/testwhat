@@ -191,9 +191,9 @@ build_message.file <- function(det) {
   msg <- NULL
   if (det$case == "available") {
     if (det$folder == ".") {
-      msg <- sprintf("The file <code>%s</code> does not appear to be in your working directory.", det$file)
+      msg <- sprintf("The file `%s` does not appear to be in your working directory.", det$file)
     } else {
-      msg <- sprintf("The file <code>%s</code> does not appear to be inside the folder `%s` in your working directory.", det$file, det$folder)
+      msg <- sprintf("The file `%s` does not appear to be inside the folder `%s` in your working directory.", det$file, det$folder)
     }
   }
   return(msg)
@@ -202,6 +202,6 @@ build_message.file <- function(det) {
 build_message.output <- function(det) {
   switch(det$case, 
          regex = "The output that your code generated doesn't contain the pattern we're looking for.",
-         expr = sprintf("Did your code produce the same output as <code>%s</code>?", det$expr),
+         expr = sprintf("Did your code produce the same output as `%s`?", det$expr),
          NULL)
 }

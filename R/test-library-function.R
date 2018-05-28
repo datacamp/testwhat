@@ -29,11 +29,11 @@ test_library_function <- function(package,
                           incorrect_msg = NULL) {
 
   if(is.null(not_called_msg)) {
-    not_called_msg <- sprintf("Make sure to call the <code>library()</code> function to load the <code>%s</code> package.", package)
+    not_called_msg <- sprintf("Make sure to call the `library()` function to load the `%s` package.", package)
   }
 
   if(is.null(incorrect_msg)) {
-    incorrect_msg <- sprintf("Have you correctly called the <code>library()</code> function to load the <code>%s</code> package?", package)
+    incorrect_msg <- sprintf("Have you correctly called the `library()` function to load the `%s` package?", package)
   }
   
   ex() %>% check_code(regex = "(library|require)\\(", missing_msg = not_called_msg, append = is.null(not_called_msg))

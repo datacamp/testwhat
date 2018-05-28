@@ -21,6 +21,7 @@ check_wd <- function(state, path, missing_msg = NULL) {
                          folder = dirname(path),
                          message = missing_msg)
   check_that(is_true(file.exists(path)), feedback = file_state$details)
+  return(state)
 }
 
 test_file_exists <- function(path, incorrect_msg = NULL) {

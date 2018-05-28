@@ -67,7 +67,7 @@ test_props <- function(index = 1,
     incorrect_msg <- sprintf("In the %s `ggvis` command of your code, make sure to correctly define the %s %s inside %s.",
                             get_ord(index), propstr, collapse_props(props), collapse_funs(funs, conn = " or "))
     if (length(props[!props  %in% c("x","y")]) > 0)
-      incorrect_msg <- paste(incorrect_msg, "Beware of the difference between <code>=</code> and <code>:=</code>.")
+      incorrect_msg <- paste(incorrect_msg, "Beware of the difference between `=` and `:=`.")
     if (!allow_extra)
       incorrect_msg <- paste(incorrect_msg, "Do not define any other properties!")
     if (length(props) == 0)

@@ -1,14 +1,20 @@
 context("test_ggplot")
 
 pec <- "library(ggplot2)"
+ex_code <- 'ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +
+geom_bar(position = "dodge") +
+scale_fill_manual("Transmission", values = c("#E41A1C", "#377EB8"), labels = c("Manual", "Automatic")) +
+scale_y_continuous("Number") +
+scale_x_discrete("Cylinders") + xlab("test")'
 
 test_that("test_ggplot works 1", {
-  code <- 'ggplot(mtcars, aes(x = factor(cyl), fill = factor(am))) +
-              geom_bar(position = "dodge") +
-              scale_fill_manual("Transmission", values = c("#E41A1C", "#377EB8"), labels = c("Manual", "Automatic")) +
-              scale_y_continuous("Number") +
-              scale_x_discrete("Cylinders") + xlab("test")'
-  res <- setup_state(code, pec = pec) %>% check_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")
+  res <- setup_state(ex_code, pec = pec) %>% check_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")
+  passes2(res)
+})
+
+test_that("backwards comp", {
+  setup_state(ex_code, pec = pec)
+  res <- test_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")
   passes2(res)
 })
 
@@ -97,3 +103,4 @@ test_that("can handle exotic geom_labels", {
   )
   passes2(check_ggplot(s))
 })
+
