@@ -25,7 +25,6 @@
 #' }
 #' 
 #' @importFrom evaluate evaluate
-#' @importFrom withr with_seed with_tempfile
 #' @export
 setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "NormalExercise") {
   
@@ -42,7 +41,7 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
   
   if (ex_type == "MarkdownExercise") {
     capture_code <- function(lst) {
-      with_tempfile("file", pattern = "doc", fileext = ".Rmd", {
+      withr::with_tempfile("file", pattern = "doc", fileext = ".Rmd", {
         write(lst[names(lst)[grepl(".rmd|.Rmd", names(lst))]], file = file)
         res <- knitr::purl(file, documentation = 0, quiet = TRUE)
         r_code <- paste(readLines(res), collapse = "\n")
@@ -101,11 +100,11 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
   tw$set(sol_env = sol_env)
   tw$set(stu_env = stu_env)
   
-  with_seed(123, {
+  withr::with_seed(123, {
     evaluate::evaluate(pec, envir = sol_env)
     evaluate::evaluate(sol_code_to_run, envir = sol_env)  
   })
-  with_seed(123, {
+  withr::with_seed(123, {
     evaluate::evaluate(pec, envir = stu_env)
     output <- evaluate::evaluate(stu_code_to_run, envir = stu_env)  
   })

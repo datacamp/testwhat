@@ -13,8 +13,7 @@ Imports:
     R6,
     stringdist,
     magrittr,
-    praise,
-    withr
+    praise
 Suggests:
     car,
     covr,
@@ -28,7 +27,8 @@ Suggests:
     rpart,
     stats,
     testthat,
-    utils
+    utils,
+    withr
 License: GPL-3 + file LICENSE
 LazyData: true
 URL: https://github.com/datacamp/testwhat
