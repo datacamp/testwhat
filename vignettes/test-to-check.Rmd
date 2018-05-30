@@ -90,7 +90,7 @@ mean(c(1, 2, 3), na.rm = TRUE)
 test_function("mean", args = c("x", "na.rm"), eval = c(TRUE, NA))
 
 # SCT
-funstate <- ex() %>% check_function("mean") %>% {
+ex() %>% check_function("mean") %>% {
   check_arg(., "x") %>% check_equal()
   check_arg(., "na.rm")
 }

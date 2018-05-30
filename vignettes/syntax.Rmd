@@ -37,7 +37,7 @@ Consider the following snippet of markdown that represents part of an exercise:
     
     `@sct`
     ```{r}
-    if_state <- ex() %>% check_if_else() %>% {
+    ex() %>% check_if_else() %>% {
         check_cond(.) %>% check_code(c("x\\s+>\\s+0", "0\\s+<\\s+x")) # chain A
         check_if(.) %>% check_function("print") %>% check_arg("x") %>% check_equal() # chain B
     }
