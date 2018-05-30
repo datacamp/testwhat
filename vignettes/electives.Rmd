@@ -17,12 +17,14 @@ knitr::opts_chunk$set(
 
 ## Success message
 
-When all tests in an SCT pass, `testwhat` will automatically generate a congratulatory message to present to the student. If you want to override this 'success message', you can use the `success_msg()` function:
+When all tests in an SCT pass, `testwhat` will automatically generate a congratulatory message to present to the student. If you want to override this 'success message', you can use the `success_msg()` function and specify a Markdown-formatted string:
 
 ```{r}
 ex() %>% check_object("x") %>% check_equal()
-success_msg("Great job! You're getting goot at object assignment!")
+success_msg("Great job! You're getting _so_ goot at object assignment!")
 ```
+
+[This article on the authoring docs](https://authoring.datacamp.com/courses/exercises/all-exercise-types/success-message.html) describes how to write good success messages.
 
 ## Multiple choice exercises
 
