@@ -58,11 +58,11 @@ ex() %>% check_function("mean") %>% {
 x <- mean(1:10, na.rm = TRUE)
 
 # sct
-check_correct(ex() %>% check_object("x") %>% check_equal(),
-              ex() %>% check_function("mean") %>% {
-                check_arg(., "x") %>% check_equal()
-                check_arg(., "na.rm") %>% check_equal()
-              })
+test_correct(ex() %>% check_object("x") %>% check_equal(),
+             ex() %>% check_function("mean") %>% {
+               check_arg(., "x") %>% check_equal()
+               check_arg(., "na.rm") %>% check_equal()
+             })
 ```
 
 ### Check output
