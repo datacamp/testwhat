@@ -25,12 +25,8 @@ test_that("test set basic 1", {
 
 test_that("robust against incorrect calls", {
   lst <- list()
-  lst$DC_PEC <- "library(ggvis)\nRBackend::allow_solution_error()"
+  lst$DC_PEC <- "library(ggvis)"
   lst$DC_SCT <- "test_props(index = 1, funs = 'ggvis')"
-
-  lst$DC_SOLUTION <- "p <- mtcars %>% ggvis(~disp, ~mpg, ~wt)"
-  lst$DC_CODE <- ""
-  expect_error(test_it(lst))
 
   lst$DC_SOLUTION <- "p <- mtcars %>% ggvis(~disp, ~mpg)"
   lst$DC_CODE <- "p <- mtcars %>% ggvis(~disp, ~mpg, ~wt)"
