@@ -404,8 +404,7 @@ test_that("test_function - diff messages - 3", {
 
 test_that("test_function - diff messages - try-errors", {
   lst <- list()
-  lst$DC_PEC <- "RBackend::allow_solution_error()"
-  lst$DC_SOLUTION <- "print(123 + 'test')"
+  lst$DC_SOLUTION <- "x <- 2; print(123 + x); x <- 'test'"
   lst$DC_SCT <- "test_function('print', args = 'x', index = 1)"
   lst$DC_CODE <- "print(123 + 'test')"
   expect_error(test_it(lst), regexp = "check_equal\\(\\) found an argument that causes an error when evaluated")

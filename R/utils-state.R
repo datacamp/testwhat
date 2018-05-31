@@ -101,11 +101,11 @@ setup_state <- function(sol_code, stu_code, pec = character(), ex_type = "Normal
   tw$set(stu_env = stu_env)
   
   withr::with_seed(123, {
-    evaluate::evaluate(pec, envir = sol_env)
-    evaluate::evaluate(sol_code_to_run, envir = sol_env)  
+    evaluate::evaluate(pec, envir = sol_env, stop_on_error = 2)
+    evaluate::evaluate(sol_code_to_run, envir = sol_env, stop_on_error = 2)
   })
   withr::with_seed(123, {
-    evaluate::evaluate(pec, envir = stu_env)
+    evaluate::evaluate(pec, envir = stu_env, stop_on_error = 2)
     output <- evaluate::evaluate(stu_code_to_run, envir = stu_env)  
   })
   
