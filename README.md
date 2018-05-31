@@ -37,8 +37,9 @@ ex() %>% check_object("x") %>% check_equal()
 
 # Debugging state
 s <- ex() %>% check_object()
-s        # only prints out state class
-str(s)   # full overview of state
+s                     # only prints out state class
+str(s)                # full overview of state
+s$get("student_code") # access student code in state
 ```
 
 To include an SCT in a DataCamp course, visit https://authoring.datacamp.com.
