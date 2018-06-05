@@ -8,11 +8,13 @@ test_it <- function(lst) {
   ex_type <- lst$DC_TYPE %||% "NormalExercise"
   setup_state(sol_code = lst$DC_SOLUTION %||% "",
               stu_code = lst$DC_CODE %||% "",
-              pec <- lst$DC_PEC %||% "",
+              sol_env = NULL,
+              stu_env = NULL,
+              stu_result = NULL,
+              pec = lst$DC_PEC %||% "",
               ex_type = ex_type)
-
-  testwhat:::post_process(run_until_fail(parse(text = lst$DC_SCT %||% "")),
-                          ex_type = ex_type)
+  post_process(run_until_fail(parse(text = lst$DC_SCT %||% "")),
+               ex_type = ex_type)
 }
 
 passes <- function(res, mess_patt = NULL) {
