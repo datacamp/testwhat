@@ -80,6 +80,20 @@ test_that("check_code - times", {
   passes(output)
 })
 
+test_that("check_code - drop_comments", {
+  lst <- list()
+  lst$DC_SCT <- "ex() %>% check_code('a', drop_comments = TRUE)"
+  
+  lst$DC_CODE <- "# a"
+  output <- test_it(lst)
+  fails(output)
+  
+  lst$DC_CODE <- "a <- 1"
+  output <- test_it(lst)
+  passes(output)
+})
+
+
 test_that("check_code - different patterns + fixed + times", {
   lst <- list()
   lst$DC_SCT <- "ex() %>% check_code(c('a{2}', 'b{2}'), times = 3, fixed = TRUE)"

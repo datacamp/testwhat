@@ -1,12 +1,12 @@
 #' Test the student's code as text
-#' 
+#'
 #' Some rudimentary string cleaning is performed to allow for different ways of
 #' saying the same things (removing spaces, changing single quotes to double
 #' quotes, changing TRUE to T ...).
-#' 
-#' Using these function should be a last resort, as there are myriad ways of 
+#'
+#' Using these function should be a last resort, as there are myriad ways of
 #' solving the same problem with R!
-#' 
+#'
 #' @param regex A set of strings/regexes that should be in the student code.
 #' @param fixed if TRUE, strings are treated literally. If FALSE, strings are
 #'   treated as regex patterns.
@@ -14,25 +14,31 @@
 #' @param state the state to start from
 #' @param missing_msg Custom feedback in case the pattern is not contained often
 #'   enough in the student's submission.
-#' @param append Whether or not to append the feedback to feedback built in previous states
-#' 
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states
+#' @param drop_comments Logical value indicating whether or not to remove
+#'   comments from these student code before looking for the pattern. Defaults
+#'   to FALSE for backwards compatibility reasons.
 #' @examples
 #' \dontrun{
 #' # Example 1
 #' TRUE & FALSE
-#' 
+#'
 #' # SCT
 #' ex() %>% check_code(c("TRUE & FALSE", "FALSE & TRUE"), fixed = TRUE)
-#' 
+#'
 #' # Example 2:
 #' "Hello, world!"
-#' 
+#'
 #' # SCT, robust to small typos
 #' ex() %>% check_code("[H|h]ello,*\\s*[W|w]orld\\!*")
 #' }
-#' 
+#'
 #' @export
-check_code <- function(state, regex, fixed = FALSE, times = 1, missing_msg = NULL, append = TRUE) {
+check_code <- function(state, regex,
+                       fixed = FALSE, times = 1,
+                       missing_msg = NULL, append = TRUE,
+                       drop_comments = FALSE) {
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "typed",
                           regex = regex,
@@ -42,7 +48,10 @@ check_code <- function(state, regex, fixed = FALSE, times = 1, missing_msg = NUL
                           append = append,
                           pd = NULL)
   student_code <- state$get("student_code")
-  if (fixed) {
+  if (isTRUE(drop_comments)) {
+    student_code <- remove_comments(student_code)
+  }
+  if (isTRUE(fixed)) {
     student_code <- clean_up(student_code)
     regex <- clean_up(regex)
   }

@@ -5,7 +5,7 @@
 \title{Test the student's code as text}
 \usage{
 check_code(state, regex, fixed = FALSE, times = 1, missing_msg = NULL,
-  append = TRUE)
+  append = TRUE, drop_comments = FALSE)
 }
 \arguments{
 \item{state}{the state to start from}
@@ -20,7 +20,12 @@ treated as regex patterns.}
 \item{missing_msg}{Custom feedback in case the pattern is not contained often
 enough in the student's submission.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states}
+
+\item{drop_comments}{Logical value indicating whether or not to remove
+comments from these student code before looking for the pattern. Defaults
+to FALSE for backwards compatibility reasons.}
 }
 \description{
 Some rudimentary string cleaning is performed to allow for different ways of
@@ -28,7 +33,7 @@ saying the same things (removing spaces, changing single quotes to double
 quotes, changing TRUE to T ...).
 }
 \details{
-Using these function should be a last resort, as there are myriad ways of 
+Using these function should be a last resort, as there are myriad ways of
 solving the same problem with R!
 }
 \examples{

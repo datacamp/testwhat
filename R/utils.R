@@ -25,6 +25,11 @@ get_num_hits <- function(regex, x, fixed) {
   }
 }
 
+remove_comments <- function(code) {
+  lines <- strsplit(code, "\\n")[[1]]
+  return(paste0(lines[!grepl("^#", lines)], collapse = "\n"))
+}
+
 check_defined <- function(name, sol_env) {
   if (!exists(name, sol_env, inherits = FALSE)) {
     stop(paste(name, "is not defined in your solution environment.",

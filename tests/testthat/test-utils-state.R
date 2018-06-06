@@ -1,4 +1,4 @@
-context("utils")
+context("utils-state")
 
 test_that("setup_state works", {
   code <- "x <- 5\nx"

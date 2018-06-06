@@ -133,6 +133,24 @@ ex() %>% check_fun_def("my_fun") %>% {
 }
 ```
 
+### Check `library` or `require` call
+
+```{r}
+# solution
+library(dplyr)
+
+# sct
+ex() %>% check_library("dplyr")
+
+# submissions that pass
+library(dplyr)
+library('dplyr')
+library("dplyr")
+require(dplyr)
+require('dplyr')
+require("dplyr")
+```
+
 ### Check through string matching
 
 ```{r}

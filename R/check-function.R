@@ -4,6 +4,7 @@
 #' \code{test_function} and \code{test_function_v2} are now identical and either
 #' can be used.
 #'
+#' @param state state to start from
 #' @param name  name of the function/operator as a string, e.g. \code{"mean"} or
 #'   \code{"+"}
 #' @param index  integer that specifies which call of \code{name} in the
@@ -28,7 +29,6 @@
 #' @param append Whether or not to append the feedback to feedback built in
 #'   previous states
 #' @param ... S3 stuff
-#' @param state state to start from (for \code{check_} functions)
 #' @param arg_not_specified_msg custom message in case argument was not
 #'   specified (for \code{check_arg})
 #' @param arg name of argument to specify (for \code{check_arg})

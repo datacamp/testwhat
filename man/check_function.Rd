@@ -19,7 +19,7 @@ check_arg(state, arg, arg_not_specified_msg = NULL, append = TRUE)
   eval = TRUE, eq_condition = "equivalent", append = TRUE, ...)
 }
 \arguments{
-\item{state}{state to start from (for \code{check_} functions)}
+\item{state}{state to start from}
 
 \item{name}{name of the function/operator as a string, e.g. \code{"mean"} or
 \code{"+"}}

@@ -9,7 +9,6 @@ reference:
     - test_correct
     - test_or
     - test_mc
-    - test_library_function
     - success_msg
     - override
   - title: High-level function
