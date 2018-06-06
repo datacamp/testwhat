@@ -4,7 +4,7 @@
 [![codecov.io](https://codecov.io/github/datacamp/testwhat/coverage.svg?branch=master)](https://codecov.io/github/datacamp/testwhat?branch=master)
 [![Rdocs](http://www.rdocumentation.org/badges/version/testwhat)](http://www.rdocumentation.org/packages/testwhat)
 
-`testwhat` enables you to write Submission Correctness Tests (SCTs) for interactive R exercises on DataCamp.
+`testwhat` helps you write Submission Correctness Tests (SCTs) for interactive R exercises on DataCamp.
 
 - If you are new to teaching on DataCamp, check out https://authoring.datacamp.com.
 - If you want to learn what SCTs are and how they work, visit [this article](https://authoring.datacamp.com/courses/exercises/technical-details/sct.html) specifically.
