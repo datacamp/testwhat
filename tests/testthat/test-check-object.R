@@ -470,11 +470,6 @@ test_that("test_column - eq_condition", {
   fails(output)
 })
 
-test_that("test_column - line numbers", {
-  # TODO
-})
-
-
 context("test_element")
 
 test_that("test_element - step by step", {

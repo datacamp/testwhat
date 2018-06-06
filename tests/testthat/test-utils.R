@@ -27,3 +27,15 @@ test_that("check_defined works", {
   expect_silent(check_defined("x", testenv))
   expect_error(check_defined("y", testenv))
 })
+
+test_that("remove_comments works", {
+  cases <- c("# c\n4", "#c\n4", "4\n#c", "4\n\n#c", "#c\n4\n# c\n")
+  for (case in cases) {
+    no_comments_stripped = stringr::str_trim(remove_comments(case))
+    expect_equal(no_comments_stripped, "4")
+  }
+  cases2 <- c("#", "#\n")
+  for (case in cases2) {
+    expect_equal(remove_comments("#"), "")  
+  }
+})

@@ -55,6 +55,26 @@ Multiple choice exercises are straightforward to test. Use `test_mc()` to provid
 
 The first argument of `test_mc()`, `correct`, should be the number of the correct answer in this list. Here, the correct answer is Ross Ihaka, corresponding to 3. The `feedback_msgs` argument should be a list of strings with a length equal to the number of options. We encourage you to provide feedback messages that are informative and tailored to the (incorrect) option that people selected. Make sure to correctly order the feedback message such that it corresponds to the possible answers that are listed in the instructions tab. Notice that there's no need for `success_msg()` in multiple choice exercises, as you have to specify the success message inside `test_mc()`, along with the feedback for incorrect options.
 
+## Checking library calls
+
+The `check_library()` function can be used to verify whether a student correclty used `library()` or `require()` to load in a package. It's a utility function that uses `check_code()` behind the scenes.
+
+```{r}
+# solution
+library(dplyr)
+
+# sct
+ex() %>% check_library("dplyr")
+
+# submissions that pass
+library(dplyr)
+library('dplyr')
+library("dplyr")
+require(dplyr)
+require('dplyr')
+require("dplyr")
+```
+
 ## Randomness
 
 To check the correctness of function calls, R objects etc. `testwhat` uses a student and solution environment. The pre exercise code (PEC) and student submission are executed in the student environment. Likewise, the PEC and the solution code are executed in the solution envrionment.
