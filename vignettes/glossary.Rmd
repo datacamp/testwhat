@@ -124,8 +124,8 @@ my_fun <- function(a, b) {
 # sct
 ex() %>% check_fun_def("my_fun") %>% {
   check_arguments(.)
-  check_call(., 1, 2) %>% check_result()
-  check_call(., -1, 2) %>% check_result()
+  check_call(., 1, 2) %>% check_result() %>% check_equal()
+  check_call(., -1, 2) %>% check_result() %>% check_equal()
   check_body(.) %>% {
     check_function(., "abs", index = 1)
     check_function(., "abs", index = 2)

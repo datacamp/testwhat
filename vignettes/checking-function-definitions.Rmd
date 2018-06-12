@@ -15,14 +15,14 @@ knitr::opts_chunk$set(
 )
 ```
 
-Many exercise require a student to hand-craft a function to make their code more dry. With `check_fun_def()` and a range of related helper `check_` functions you can effectively check the correctness of these user-defined functions.
+Some exercises require a student to hand-craft a function to make their code DRY. With `check_fun_def()` and a range of related helper `check_` functions you can check the correctness of these user-defined functions.
 
 As an example, have a look at the following solution:
 
 ```{r}
 # Define my_fun
 my_fun <- function(a, b) {
-	abs(a) + abs(b)
+  abs(a) + abs(b)
 }
 ```
 
@@ -31,10 +31,10 @@ The following SCT checks the function definition and whether the function was pr
 ```{r}
 ex() %>% check_fun_def("my_fun") %>% {
   check_arguments(.)
-  check_call(., 1, 2) %>% check_result()
-  check_call(., -1, 2) %>% check_result()
-  check_call(., 1, -2) %>% check_result()
-  check_call(., -1, -2) %>% check_result()
+  check_call(., 1, 2) %>% check_result() %>% check_equal()
+  check_call(., -1, 2) %>% check_result() %>% check_equal()
+  check_call(., 1, -2) %>% check_result() %>% check_equal()
+  check_call(., -1, -2) %>% check_result() %>% check_equal()
   check_body(.) %>% {
     check_function(., "abs", index = 1)
     check_function(., "abs", index = 2)
@@ -43,10 +43,8 @@ ex() %>% check_fun_def("my_fun") %>% {
 ```
 
 - `check_fun_def` checks whether `my_fun` was defined by the student. If this is the case, it will produce a substate that contains a reference to the function arguments and its body.
-- `check_arguments()` checks whether the arguments correspond to the function definition in the solution.
-- `check_call()` will call the function `my_fun()` as `my_fun(1,2)` inside the student process and check whether it gives the same result as calling `my_fun(1, 2)` in the solution process. This is a robust way of checking the function definition, as it makes abstraction of function arguments and underlying implementation of the function. It does the same for some other calls of `my_fun()`.
-- `check_body()` executes tests in the substate of the body of the function definition (as if the body of the function was the only code in the student submission). If, for example, the student used `abs()` outside the function definition, this would be ignored. Notice here that no arguments are specified. If we did this, `test_function()` would compare the actual values of the arguments. This is information that is not available, as `a` and `b` are not variables that are available in the workspace, only in the scope of the function. If all of the calls in `body_test` pass, the tests in `function_test` are executed again, this time not silently, and thus able to generate feedback messages.
+- `check_arguments()` checks whether the student specified the same number of arguments as the function definition in the solution did.
+- `check_call()` will create an R expression that calls the function `my_fun()` with the arguments specified in it. As an example, `check_call(., 1, 2)` will generate the expression `my_fun(1, 2)`. `check_result()` will then execute this expression (in both student and solution workspace), and focus on the result of the expression. Finally, `check_equal()` verifies whether these call results correspond.
+- `check_body()` zooms in on the body of the function definition (as if the body of the function was the only code in the student submission). If, for example, the student used `abs()` outside the function definition, this would be ignored. Notice here that no arguments are specified. If we did this, `check_function()` would compare the actual values of the arguments. This is information that is not available, as `a` and `b` are not variables that are available in the workspace, only in the scope of the function.
 
-**Note:** in addition to `check_result()`, you can also pipe the result of `check_call()` into `check_output()` and `check_error()`. These functions will respectively check the output and error the function call generated when executed in the student/solution environment.
-
-
+**Note:** in addition to `check_result()`, you can also pipe the result of `check_call()` into `check_output()` and `check_error()`, and follow up with `check_equal()`. These functions will respectively check the output and error the function call generated when executed in the student/solution environment.
