@@ -51,7 +51,7 @@ navbar:
       - text: Checking through string matching
         href: articles/checking-through-string-matching.html
       - text: Combining sets of SCTs
-        href: articles/combining-sets-of-scts.html
+        href: articles/combining-sets-of-SCTs.html
       - text: Electives
         href: articles/electives.html
     - text: Advanced
