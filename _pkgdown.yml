@@ -1,7 +1,8 @@
 template:
   params:
     bootswatch: cosmo
-    
+    ganalytics: "UA-120925561-1"
+
 reference:
   - title: Commonly used functions
     contents:
