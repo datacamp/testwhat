@@ -8,12 +8,12 @@ scale_y_continuous("Number") +
 scale_x_discrete("Cylinders") + xlab("test")'
 
 test_that("test_ggplot works 1", {
-  res <- setup_state(ex_code, pec = pec) %>% check_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")
+  res <- setup_state(ex_code, ex_code, pec = pec) %>% check_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")
   passes2(res)
 })
 
 test_that("backwards comp", {
-  setup_state(ex_code, pec = pec)
+  setup_state(ex_code, ex_code, pec = pec)
   res <- test_ggplot(1, check = c("geom", "scale"), exact_geom = TRUE, check_extra = "xlab")
   passes2(res)
 })

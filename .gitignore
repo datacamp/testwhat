@@ -8,3 +8,5 @@ inst/doc
 docs/*
 vignettes/*.R
 vignettes/*.html
+inst/blogposts/*.html
+inst/blogposts/submissions

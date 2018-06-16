@@ -30,24 +30,13 @@
 #' 
 #' @importFrom evaluate evaluate
 #' @export
-setup_state <- function(sol_code,
-                        stu_code,
+setup_state <- function(sol_code = "",
+                        stu_code = "",
                         sol_env = NULL,
                         stu_env = NULL,
                         stu_result = NULL,
                         pec = character(),
                         ex_type = "NormalExercise") {
-  
-  if (base::missing(stu_code) && base::missing(sol_code)) {
-    stop("Either stu_code or sol_code have to be specified.")
-  } else {
-    if (base::missing(stu_code)) {
-      stu_code <- sol_code
-    }
-    if (base::missing(sol_code)) {
-      sol_code <- stu_code
-    }
-  }
   
   if (ex_type == "MarkdownExercise") {
     capture_code <- function(lst) {
