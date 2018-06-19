@@ -21,11 +21,11 @@ check_ggplot(state, index = 1, all_fail_msg = NULL, check_data = TRUE,
 
 \item{all_fail_msg}{Message if all fails}
 
-\item{check_data}{Whether or not to check data latyer}
+\item{check_data}{Whether or not to check data layer}
 
 \item{data_fail_msg}{Message in case data layer fails}
 
-\item{check_aes}{Whether or not to check aes latyer}
+\item{check_aes}{Whether or not to check aes layer}
 
 \item{aes_fail_msg}{Message in case aes layer fails}
 
@@ -39,11 +39,11 @@ check_ggplot(state, index = 1, all_fail_msg = NULL, check_data = TRUE,
 
 \item{check_geom_params}{Should the geom parameters be checked?}
 
-\item{check_facet}{Whether or not to check facet latyer}
+\item{check_facet}{Whether or not to check facet layer}
 
 \item{facet_fail_msg}{Message in case facet layer fails}
 
-\item{check_scale}{Whether or not to check scale latyer}
+\item{check_scale}{Whether or not to check scale layer}
 
 \item{scale_fail_msg}{Message in case scale layer fails}
 
