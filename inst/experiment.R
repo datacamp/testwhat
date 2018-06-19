@@ -1,9 +1,16 @@
+pec <- '
+# pec here
+'
+
+sol_code <- '
+x <- 5
+'
+
+stu_code <- '
+x <- 4
+'
+
 library(testwhat)
-stu_env <- new.env(parent = globalenv())
-evaluate_result <- evaluate::evaluate("x <- 2", envir = stu_env)
-grade_testwhat(label = "test",
-               solution_code = "x <- 1",
-               user_code = "x <- 2",
-               check_code = "ex() %>% check_object('x') %>% check_equal()",
-               envir_result = stu_env,
-               evaluate_result = evaluate_result)
+setup_state(pec = pec, sol_code = sol_code, stu_code = stu_code)
+
+ex() %>% check_object('x')
