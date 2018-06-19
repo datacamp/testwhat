@@ -49,13 +49,13 @@ check_ggplot(state, index = 1, all_fail_msg = NULL, check_data = TRUE,
 
 \item{exact_scale}{Whether or not scales should be defined exactly}
 
-\item{check_coord}{Whether or not to check coord latyer}
+\item{check_coord}{Whether or not to check coord layer}
 
 \item{coord_fail_msg}{Message in case coord layer fails}
 
 \item{exact_coord}{Whether or not coords should be defined exactly}
 
-\item{check_stat}{Whether or not to check stat latyer}
+\item{check_stat}{Whether or not to check stat layer}
 
 \item{stat_fail_msg}{Message in case stat layer fails}
 

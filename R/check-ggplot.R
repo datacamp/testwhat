@@ -4,10 +4,10 @@
 #' @param index which call to check
 #' @param all_fail_msg Message if all fails
 #' 
-#' @param check_data Whether or not to check data latyer
+#' @param check_data Whether or not to check data layer
 #' @param data_fail_msg Message in case data layer fails
 #' 
-#' @param check_aes Whether or not to check aes latyer
+#' @param check_aes Whether or not to check aes layer
 #' @param aes_fail_msg Message in case aes layer fails
 #' @param exact_aes Should the aesthetics be exact?
 #' 
@@ -16,18 +16,18 @@
 #' @param exact_geom Should the geoms be exact?
 #' @param check_geom_params Should the geom parameters be checked?
 #' 
-#' @param check_facet Whether or not to check facet latyer
+#' @param check_facet Whether or not to check facet layer
 #' @param facet_fail_msg Message in case facet layer fails
-#' @param check_scale Whether or not to check scale latyer
+#' @param check_scale Whether or not to check scale layer
 #' 
 #' @param scale_fail_msg Message in case scale layer fails
 #' @param exact_scale Whether or not scales should be defined exactly
 #' 
-#' @param check_coord Whether or not to check coord latyer
+#' @param check_coord Whether or not to check coord layer
 #' @param coord_fail_msg Message in case coord layer fails
 #' @param exact_coord Whether or not coords should be defined exactly
 #' 
-#' @param check_stat Whether or not to check stat latyer
+#' @param check_stat Whether or not to check stat layer
 #' @param stat_fail_msg Message in case stat layer fails
 #' @param exact_stat Whether or not stats should be defined exactly
 #' 
