@@ -1,15 +1,19 @@
 ---
 title: "Using DataCamp's autograder to teach R"
 author: 'Filip Schouwenaars'
-date: '6/16/2018'
+date: '6/20/2018'
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+# install remotes if it isn't already installed
+if (!require("remotes")) {
+  install.packages("remotes")
+}
 ```
 
-Immediate and personalized feedback has been central to the learning experience on DataCamp since we launched the first courses. If students submit code that contains a mistake, they are told where they made a mistake, and how they can fix this. You can play around with it in our [free Introduction to R course](https://campus.datacamp.com/courses/free-introduction-to-r/chapter-1-intro-to-basics-1?ex=1). Below is an example of our [Intermediate R course](https://campus.datacamp.com/courses/intermediate-r).
+Immediate and personalized feedback has been central to the learning experience on DataCamp since we launched the first courses. If students submit code that contains a mistake, they are told where they made a mistake, and how they can fix this. You can play around with it in our [free Introduction to R course](https://campus.datacamp.com/courses/free-introduction-to-r/chapter-1-intro-to-basics-1?ex=1). The screenshot below is from our [Intermediate R course](https://campus.datacamp.com/courses/intermediate-r).
 
 ![](use-testwhat-to-teach-r_screenshot.png)
 
@@ -26,11 +30,11 @@ The SCT is a script of custom tests that assesses the code students submitted an
 - checking ggplot and ggvis plotting calls
 - ...
 
-When these checking functions spot a mistake, they will automatically generate a meaningful feedback message that points students to their mistakes. You can also specify custom feedback messages that override these automaticcally generated messages.
+When these checking functions spot a mistake, they will automatically generate a meaningful feedback message that points students to their mistakes. You can also specify custom feedback messages that override these automatically generated messages.
 
 Historically, `testwhat` was closely linked with our proprietary backend that executes R code on DataCamp's servers. Even though `testwhat` has always been open source, it wouldn't work well without this custom backend and `testwhat` could only be used in the context of DataCamp. Today, however, `testwhat` can be used independently and supports other use cases as well. You can leverage everything `testwhat` has to offer to test student submissions, even when your format of teaching is very different from DataCamp's. You can install the package from GitHub:
 
-```{r, eval = FALSE}
+```{r, message = FALSE}
 library(remotes) # devtools works fine too
 install_github('datacamp/testwhat')
 ```
@@ -123,9 +127,9 @@ results_df <- data.frame(name = all_files, correct = student_results,
 results_df
 ```
 
-This small demo is still a bit rough on the sides, but I hope it brings the point across: with some R magic to get the appropriate inputs for `setup_state()`, you can easily put all of `testwhat`'s checking functions to work. The tests you specify in `run_until_fail()` will both verify the student's work as well as generating meaningful feedback to point them to the mistakes they are making.
+This small demo is still a bit rough, but I hope it brings the point across: with some R fiddling to build the appropriate inputs for `setup_state()`, you can put all of `testwhat`'s checking functions to work. The tests you specify in `run_until_fail()` will both verify the students' work and generate meaningful feedback to point them to the mistakes they are making.
 
-To learn more about `testwhat`, you can visit the GitHub repo or the package documentation, generated with `pkgdown`. It features both vignettes that outline how to use certain checking functions as well as reference function that describes all arguments you can specify. Don't hesitate to raise issues on GitHub or reach out through [content-engineering@datacamp.com](mailto:content-engineering@datacamp.com), we love feedback! Happy teaching!
+To learn more about `testwhat`, you can visit the [GitHub repo](https://github.com/datacamp/testwhat) or the [package documentation](https://datacamp.github.io/testwhat), generated with `pkgdown`. It features both vignettes that outline how to use certain checking functions as well as reference function that describes all arguments you can specify. Don't hesitate to raise issues on GitHub or reach out through [content-engineering@datacamp.com](mailto:content-engineering@datacamp.com), we love feedback! Happy teaching!
 
-
+_This blog was generated with RMarkdown. You can find the source [here](https://github.com/datacamp/testwhat/blob/master/inst/blogposts/use-testwhat-to-teach-r.Rmd)._
 
