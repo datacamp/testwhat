@@ -2,7 +2,9 @@
 title: "Using DataCamp's autograder to teach R"
 author: 'Filip Schouwenaars'
 date: '6/20/2018'
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include=FALSE}
