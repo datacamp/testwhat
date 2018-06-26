@@ -50,6 +50,10 @@ line_info <- function(res, line_start, line_end, column_start, column_end) {
   if(!missing(column_end)) expect_equal(res$column_end, column_end)
 }
 
+no_line_info <- function(res) {
+  expect_false(any(c("line_start", "line_end", "column_start", "column_end") %in% names(res)))
+}
+
 print_fb <- function(output) {
   cat("\n", "FBM: \"", testwhat:::trim(res$message), "\"\n", sep = "")
 }

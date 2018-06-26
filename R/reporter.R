@@ -2,10 +2,14 @@ get_line_info <- function(feedback) {
   
   # take 'highest pd' in list of feedback
   pd <- NULL
+  disabled <- sapply(feedback, function(det) isTRUE(det$highlighting_disabled))
   for (i in length(feedback):1) {
-    if (!is.null(feedback[[i]][["pd"]])) {
-      pd <- feedback[[i]][["pd"]]
-      break
+    if (!is.null(feedback[[i]]$pd)) {
+      # if something found, check that it's not behind highlighting disabled
+      if (!any(disabled) || which(disabled) > i) {
+        pd <- feedback[[i]][["pd"]]
+        break
+      }
     }
   }
   

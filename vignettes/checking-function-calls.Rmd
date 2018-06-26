@@ -182,7 +182,7 @@ In terms of argument matching in general, 4 things can happen:
 
 1. `match.call()` perfectly works, and every argument you pass is matched to an argument name, without any ellipsis problems.
 
-2. `check_fucntion()` figures out that you wanted to test an S3 function (`predict()` is a great example, it has a bunch of class-specific implementation). Based on the class of the first argument, it figures out the 'more detailed', class-specific implementation and tries to match the arguments to the signature of this more detailed function. NOTE: it is still possible that this signature features the `...` arguments, so the points below apply as well for this case.
+2. `check_function()` figures out that you wanted to test an S3 function (`predict()` is a great example, it has a bunch of class-specific implementation). Based on the class of the first argument, it figures out the 'more detailed', class-specific implementation and tries to match the arguments to the signature of this more detailed function. NOTE: it is still possible that this signature features the `...` arguments, so the points below apply as well for this case.
 
 3. The function call that `match.call()` has to standardize contains arguments that are matched to the ellipsis, but these arguments are named explicitly, for example the the `main` argument in `plot(mtcars$wt, mtcars$hp, main = 'mtcars plot')`. In this case, `match.call()` will match `mtcars$wt` to `x`, `mtcars$hp` to `y` and `'mtcars plot'` to `main`, just like for regular arguments.
 
