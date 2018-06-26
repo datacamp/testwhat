@@ -76,7 +76,7 @@ ex() %>% check_object("x")
 mean(1:3)
 
 # old SCT
-test_fucntion("mean", args = c("x"))
+test_function("mean", args = c("x"))
 
 # new SCT
 ex() %>% check_function("mean") %>% check_arg("x") %>% check_equal()

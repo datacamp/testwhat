@@ -265,6 +265,17 @@ override_solution_env <- function(state, ...) {
   override_solution(state, code = NULL, ...)
 }
 
-
-
-
+#' Disable highlighting for any future checks in the chain
+#'
+#' If the function is used right after \code{ex()}, highlighting is disabled for
+#' the rest of the chain
+#'
+#' If the function used 'deep in a chain', the system will fall back on
+#' highlights that were collected earlier in the state.
+#'
+#' @param state the state to create a substate from
+disable_highlighting <- function(state) {
+  sub_state <- SubState$new(state)
+  sub_state$add_details(highlighting_disabled = TRUE)
+  return(sub_state)
+}

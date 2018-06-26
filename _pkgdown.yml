@@ -12,6 +12,7 @@ reference:
     - test_mc
     - success_msg
     - override
+    - disable_highlighting
   - title: High-level function
     contents:
     - check_ggplot
