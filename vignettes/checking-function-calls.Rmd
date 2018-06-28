@@ -82,7 +82,51 @@ ex() %>% check_function("round") %>% {
 
 not all of the student submissions listed above would be accepted, because now `pi` is checked literally, as the string `"pi"`, not as the number `3.1415...`. Using `eval = FALSE` is interesting when you're working with huge datasets and don't want to compare their values exhaustively, or for objects for which the equality operator is not standard, such as SQL connections.
 
-## Example 2: Multiple function calls
+### Example 2: Checking the reuslt of a function call instead of the arguments
+
+Checking whether the student function call, when executed, corresponds to the result of the solution function call is a **very** robust way of checking whether the function was called correctly. You can do this by piping `check_function()` into `check_result()`, `check_output()`, or `check_error()`, depending on whether you want to check the result of the function call, the output the function call generates, or the error the call generates.
+
+As an example, suppose you want the student to call the sum function on a vector containing the values 1 to 5.
+
+```{r}
+# Calculate sum of vector 1 to 5
+sum(1:5)
+```
+
+One way to solve this is with `check_output_expr()`, but this does not explicitly require the student to use the `sum()` function. To make the usage of `sum()` explicit, you can use `check_function()` in combination with `check_result()`:
+
+```{r}
+ex() %>% check_function("sum") %>% check_result() %>% check_equal()
+```
+
+Here, `check_function()` looks for the call of `round()` in both student and solution code, and then `check_result()` runs both (in their respective environments). Finally, with `check_equal()` you verify that the results of the function calls are equal. The above SCT would accept all of the following submissions:
+
+- `sum(5:1)`
+- `sum(c(1, 2, 4, 3, 5))`
+- `x <- c(1, 2, 3, 4, 5); sum(x)`
+
+When to use `check_result()` in combination with `check_function()`? Whenever there are is a multitude of ways to call a function, typically when the argument it takes is simply `...`. Functions from tidyverse packages such as `tidyr` and `dplyr` are typical use cases. Suppose you want to check whether a student correctly calculated a new column and selected two columsn from `mtcars`:
+
+```{r}
+# Create a new column lsp100km and select it, together with mpg
+library(dplyr)
+mtcars %>% mutate(lsp100km = 235.214 / mpg) %>% select(mpg, lsp100km)
+```
+
+With the following SCT:
+
+```{r}
+ex() %>% check_function("select") %>% check_result() %>% check_equal()
+```
+
+Both of the following submissions would pass. A `check_arg()`-based SCT chain would have a very hard time allowing for all of these solutions.
+
+- `mtcars %>% mutate(lsp100km = 235.214 / mpg) %>% select(mpg, lsp100km)`
+- `mtcars %>% select(mpg, lsp100km = 235.214 / mpg)`
+
+_Note:_ `testwhat` can handle the `%>%`: it will convert `a %>% f(b)` to `f(a, b)` again, so you don't have to worry about anything.
+
+## Example 3: Multiple function calls
 
 `index`, which is 1 by default, becomes important when there are several calls of the same function. Suppose that your exercise requires the student to call the `round()` function twice: once on `pi` and once on `exp(1)`, Euler's number. A possible solution could be the following:
 
@@ -112,7 +156,7 @@ This means that all of the following student submissions would be accepted:
 
 Of course, you can also specify all other arguments to customize your test, such as `eval`, `args`, `not_called_msg` and `incorrect_msg`.
 
-## Example 3: Multiple function calls (2)
+## Example 4: Multiple function calls (2)
 
 When you're checking a function call, `check_function()` will look for all 'possible candidates' to match the function call in the solution. This can have some nasty side effects, though. Similar to the previous example, suppose that you want the student to use `round()` twice, but you only want to test the second `round()` call:
 
@@ -155,7 +199,7 @@ ex() %>% check_function("round", index = 2) %>% check_arg("x") %>% check_equal()
 
 This way, the first `round()` call will not be considered as a candidate anymore by the time you're checking the second `round()` call. If you submit the same student code for this SCT, you will see that highlighting happens correctly this time.
 
-## Example 4: `...` argument
+## Example 5: `...` argument
 
 Behind the scenes `check_function()` uses the `match.call()` function, to match the arguments to the function parameters. As an example, all of these different but equivalent ways to call the `grepl()` function:
 
@@ -233,7 +277,7 @@ which is perfectly valid as well. That's why the following SCT would be more app
 test_output_contains("10", incorrect_msg = "Did you correctly print out the sum?")
 ```
 
-## Example 5: Allowing for different solutions
+## Example 6: Allowing for different solutions
 
 A typical example of this is an exercise with the `plot()` function:
 
@@ -273,50 +317,6 @@ test_or(ex() %>% check_function('plot') %>% {
           check_arg('formula') %>% check_equal()
         )
 ```
-
-### Example 6: Checking the reuslt of a function call instead of the arguments
-
-Checking whether the student function call, when executed, corresponds to the result of the solution function call is a **very** robust way of checking whether the function was called correctly. You can do this by piping `check_function()` into `check_result()`, `check_output()`, or `check_error()`, depending on whether you want to check the result of the function call, the output the function call generates, or the error the call generates.
-
-As an example, suppose you want the student to call the sum function on a vector containing the values 1 to 5.
-
-```{r}
-# Calculate sum of vector 1 to 5
-sum(1:5)
-```
-
-One way to solve this is with `check_output_expr()`, but this does not explicitly require the student to use the `sum()` function. To make the usage of `sum()` explicit, you can use `check_function()` in combination with `check_result()`:
-
-```{r}
-ex() %>% check_function("sum") %>% check_result() %>% check_equal()
-```
-
-Here, `check_function()` looks for the call of `round()` in both student and solution code, and then `check_result()` runs both (in their respective environments). Finally, with `check_equal()` you verify that the results of the function calls are equal. The above SCT would accept all of the following submissions:
-
-- `sum(5:1)`
-- `sum(c(1, 2, 4, 3, 5))`
-- `x <- c(1, 2, 3, 4, 5); sum(x)`
-
-When to use `check_result()` in combination with `check_function()`? Whenever there are is a multitude of ways to call a function, typically when the argument it takes is simply `...`. Functions from tidyverse packages such as `tidyr` and `dplyr` are typical use cases. Suppose you want to check whether a student correctly calculated a new column and selected two columsn from `mtcars`:
-
-```{r}
-# Create a new column lsp100km and select it, together with mpg
-library(dplyr)
-mtcars %>% mutate(lsp100km = 235.214 / mpg) %>% select(mpg, lsp100km)
-```
-
-With the following SCT:
-
-```{r}
-ex() %>% check_function("select") %>% check_result() %>% check_equal()
-```
-
-Both of the following submissions would pass. A `check_arg()`-based SCT chain would have a very hard time allowing for all of these solutions.
-
-- `mtcars %>% mutate(lsp100km = 235.214 / mpg) %>% select(mpg, lsp100km)`
-- `mtcars %>% select(mpg, lsp100km = 235.214 / mpg)`
-
-_Note:_ `testwhat` can handle the `%>%`: it will convert `a %>% f(b)` to `f(a, b)` again, so you don't have to worry about anything.
 
 ## Appendix: Advanced Automatic Feedback
 

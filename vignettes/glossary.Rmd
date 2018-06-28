@@ -51,6 +51,21 @@ ex() %>% check_function("mean") %>% {
 }
 ```
 
+### Check function result
+
+```{r}
+# solution
+class(TRUE)
+
+# sct
+ex() %>% check_function("mean") %>% check_result() %>% check_equal()
+
+# All submissions that pass (because they all return 'logical')
+class(TRUE)
+class(FALSE)
+class(NA)
+```
+
 ### Check object created through function call
 
 ```{r}
