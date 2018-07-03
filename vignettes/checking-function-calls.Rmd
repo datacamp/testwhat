@@ -299,7 +299,7 @@ All of the following submissions should pass:
 However, if you simply use the following SCT
 
 ```{r}
-check_function('plot') %>% {
+ex() %>% check_function('plot') %>% {
   check_arg(., 'x') %>% check_equal()
   check_arg(., 'y') %>% check_equal()
 }
