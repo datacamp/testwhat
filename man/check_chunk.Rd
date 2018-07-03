@@ -7,19 +7,24 @@
 check_chunk(state, index = 1, not_found_msg = NULL, append = TRUE)
 }
 \arguments{
-\item{state}{the state to start from. This state can be produced by \code{\link{check_rmd}}, but can also follow on \code{\link{check_header}} to look for a chunk in a specific header section.}
+\item{state}{the state to start from. This state can be produced by
+\code{\link{check_rmd}}, but can also follow on \code{\link{check_header}}
+to look for a chunk in a specific header section.}
 
-\item{index}{number that specifies which code chunk to check in the student and solution code that is zoomed in on.}
+\item{index}{number that specifies which code chunk to check in the student
+and solution code that is zoomed in on.}
 
-\item{not_found_msg}{If specified, this overrides the automatically generated message in case no index'th chunk was found.}
+\item{not_found_msg}{If specified, this overrides the automatically generated
+message in case no index'th chunk was found.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states.}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states.}
 }
 \value{
 A state that zooms in on the code chunk.
 }
 \description{
-Checks if a code chunk was specified.
-If not, generates a feedback message.
-If yes, zooms in on the code chunk so you can use functions like \code{\link{check_function}} as for any regular R exercise.
+Checks if a code chunk was specified. If not, generates a feedback message.
+If yes, zooms in on the code chunk so you can use functions like
+\code{\link{check_function}} as for any regular R exercise.
 }

@@ -8,11 +8,14 @@
   append = TRUE, ...)
 }
 \arguments{
-\item{state}{the state to start from. Should be a state produced by \code{\link{check_option}}.}
+\item{state}{the state to start from. Should be a state produced by
+\code{\link{check_option}}.}
 
-\item{incorrect_msg}{If specified, this overrides the automatically generated message in case the options don't match between student and solution.}
+\item{incorrect_msg}{If specified, this overrides the automatically generated
+message in case the options don't match between student and solution.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states.}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states.}
 
 \item{...}{S3 stuff}
 }

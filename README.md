@@ -3,7 +3,8 @@
 [![Build Status](https://api.travis-ci.org/datacamp/testwhat.svg?branch=master)](https://travis-ci.org/datacamp/testwhat)
 [![codecov.io](https://codecov.io/github/datacamp/testwhat/coverage.svg?branch=master)](https://codecov.io/github/datacamp/testwhat?branch=master)
 
-`testwhat` helps you write Submission Correctness Tests (SCTs). It is mainly built for DataCamp, but can also be used separately.
+Verify R code submissions and auto-generate meaningful feedback messages.
+Originally developed for R exercises on DataCamp for so-called Submission Correctness Tests, but can also be used independently.
 
 - If you are new to teaching on DataCamp, check out https://authoring.datacamp.com.
 - If you want to learn what SCTs are and how they work, visit [this article](https://authoring.datacamp.com/courses/exercises/technical-details/sct.html) specifically.

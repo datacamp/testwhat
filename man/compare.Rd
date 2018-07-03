@@ -6,7 +6,7 @@
 \alias{is_false}
 \alias{is_gte}
 \alias{is_lt}
-\title{Check if object is true, false or >=}
+\title{Check if object is true, false, >= or <.}
 \usage{
 is_true(x)
 

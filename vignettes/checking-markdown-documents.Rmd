@@ -1,0 +1,20 @@
+---
+title: "Checking markdown documents"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Checking function definitions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+DataCamp's campus application also features exercises of the type `MarkdownExercise`, where students are asked to make changes to a markdown document. When they submit their document, DataCamp's RBackend will render the markdown doc and verify its correctness with testwhat. Because a markdown document is pretty different from an R script, testwhat features a set of dedicated functions to test elements of a markdown document. This article will give one extended example, and walk through what the different functions do. For more details about each of the functions, check out the function documentation (see Reference section).
+
+Until the extended example is added and elaborated on, have a look at [the tests in `test-check-rmd.R` of the testwhat repository on GitHub](https://github.com/datacamp/testwhat/blob/master/tests/testthat/test-check-rmd.R). At the end, you will find a full example of an SCT chain that tests an entire Markdown document. The tests should be largely self-explanatory.

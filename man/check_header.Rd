@@ -13,16 +13,17 @@ check_header(state, level, index = 1, not_found_msg = NULL, append = TRUE)
 
 \item{index}{which h<level> header to check}
 
-\item{not_found_msg}{If specified, this overrides the automatically generated message in case not enough headers of the specified level were found.}
+\item{not_found_msg}{If specified, this overrides the automatically generated
+message in case not enough headers of the specified level were found.}
 
 \item{append}{Whether or not to append the feedback to feedback built in
 previous states}
 }
 \value{
-A state that zooms in on the section under the header until the next same-level header.
+A state that zooms in on the section under the header until the next
+  same-level header.
 }
 \description{
-Checks if a markdown header with a certain level exists.
-If not, generates a feedback message.
-If yes, zooms in on the entire header section.
+Checks if a markdown header with a certain level exists. If not, generates a
+feedback message. If yes, zooms in on the entire header section.
 }

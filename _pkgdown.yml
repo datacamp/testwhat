@@ -17,6 +17,16 @@ reference:
     contents:
     - check_ggplot
     - check_predefined_objects
+  - title: Checking markdown documents
+    contents:
+    - check_rmd
+    - check_header
+    - check_chunk
+    - check_option.MarkdownChunkState
+    - check_equal.MarkdownChunkOptionState
+    - check_yaml
+    - check_option.MarkdownYamlState
+    - check_equal.MarkdownYamlOptionState
   - title: Internals
     contents:
     - build_pd
@@ -29,6 +39,7 @@ reference:
     - state
     - test_exercise
     - tw
+    - testwhat_learnr
 
 navbar:
   title: ~
@@ -54,6 +65,8 @@ navbar:
         href: articles/checking-through-string-matching.html
       - text: Combining sets of SCTs
         href: articles/combining-sets-of-SCTs.html
+      - text: Checking markdown documents
+        href: articles/checking-markdown-documents.html
       - text: Electives
         href: articles/electives.html
     - text: Advanced
@@ -62,5 +75,6 @@ navbar:
         href: articles/test-to-check.html
       - text: Extensions
         href: articles/extensions.html
+        
     - text: Reference
       href: reference/index.html
