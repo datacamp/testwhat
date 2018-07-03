@@ -265,7 +265,7 @@ If the arguments that are matched to `...` are not correct, `check_equal()` will
 
     Check your call of `sum()`. Did you correctly specify the arguments that are matched to `...`?
 
-In this example of using the `sum()` function, using `test_function()` is a bad idea to start with. You also want to allow the student to use:
+In this example of using the `sum()` function, using `check_function()` is a bad idea to start with. You also want to allow the student to use:
 
 ```{r}
 sum(c(1, 2, 3, 4, NA), na.rm = TRUE)
@@ -299,23 +299,33 @@ All of the following submissions should pass:
 However, if you simply use the following SCT
 
 ```{r}
-test_function("plot", args = c("x", "y"))
+check_function('plot') %>% {
+  check_arg(., 'x') %>% check_equal()
+  check_arg(., 'y') %>% check_equal()
+}
 ```
 
 The third and fourth plot won't work, because the solution code does not contain the calls to compare to. You can use the more granular `check_*()` functions in combination with `test_or()` and `override_solution()`. As the name suggests, this temporarily overrides the solution so that you can use `check_function()` for different possibilities.
 
 ```{r}
-test_or(ex() %>% check_function('plot') %>% {
-          check_arg(., 'x') %>% check_equal()
-          check_arg(., 'y') %>% check_equal()
-        },
-        ex() %>% override_solution('plot(res ~ time, data = df)') %>% check_function('plot') %>% {
-          check_arg(., 'formula') %>% check_equal()
-          check_arg(., 'data') %>% check_equal()
-        },
-        ex() %>% override_solution('plot(df$res ~ df$time)') %>% check_function('plot') %>%
-          check_arg('formula') %>% check_equal()
-        )
+test_or(
+  ex() %>%
+    check_function('plot') %>% {
+      check_arg(., 'x') %>% check_equal()
+      check_arg(., 'y') %>% check_equal()
+    },
+  ex() %>%
+    override_solution('plot(res ~ time, data = df)') %>%
+    check_function('plot') %>% {
+      check_arg(., 'formula') %>% check_equal()
+      check_arg(., 'data') %>% check_equal()
+    },
+  ex() %>%
+    override_solution('plot(df$res ~ df$time)') %>%
+    check_function('plot') %>%
+    check_arg('formula') %>%
+    check_equal()
+)
 ```
 
 ## Appendix: Advanced Automatic Feedback
