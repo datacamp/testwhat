@@ -8,13 +8,18 @@
   append = TRUE, ...)
 }
 \arguments{
-\item{state}{the state to start from. Should be a state produced by \code{\link{check_yaml}}.}
+\item{state}{the state to start from. Should be a state produced by
+\code{\link{check_yaml}}.}
 
-\item{name}{name of the YAML header option to zoom in on.}
+\item{name}{name of the YAML header option to zoom in on. If you want to
+check a nested option, use \code{c()} to chain together the different
+names.}
 
-\item{not_found_msg}{If specified, this overrides the automatically generated message in case the option wasn't specified.}
+\item{not_found_msg}{If specified, this overrides the automatically generated
+message in case the option wasn't specified.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states.}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states.}
 
 \item{...}{S3 stuff}
 }
@@ -22,7 +27,7 @@
 A state that zooms in on the YAML header option.
 }
 \description{
-Checks if a yaml header option was specified.
-If not, generates a feedback message.
-If yes, zooms in on the YAML header option so you can use \code{\link{check_equal}} to verify equality.
+Checks if a yaml header option was specified. If not, generates a feedback
+message. If yes, zooms in on the YAML header option so you can use
+\code{\link{check_equal}} to verify equality.
 }

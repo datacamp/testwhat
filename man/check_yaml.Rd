@@ -7,17 +7,20 @@
 check_yaml(state, error_msg = NULL, append = TRUE)
 }
 \arguments{
-\item{state}{the state to start from. This state should be produced by \code{\link{check_rmd}}.}
+\item{state}{the state to start from. This state should be produced by
+\code{\link{check_rmd}}.}
 
-\item{error_msg}{If specified, this overrides the automatically generated message in case the YAML header couldn't be parsed.}
+\item{error_msg}{If specified, this overrides the automatically generated
+message in case the YAML header couldn't be parsed.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states.}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states.}
 }
 \value{
 A state that zooms in on the YAML header options.
 }
 \description{
-Checks if a YAML header was specified and can be parsed.
-If not, generates a feedback message.
-If yes, parses the YAML header and zooms in on its options so you can use \code{\link{check_option}} to verify the options.
+Checks if a YAML header was specified and can be parsed. If not, generates a
+feedback message. If yes, parses the YAML header and zooms in on its options
+so you can use \code{\link{check_option}} to verify the options.
 }

@@ -33,18 +33,19 @@ test_rmd_file <- function(code) {
 
 #' Check markdown header
 #'
-#' Checks if a markdown header with a certain level exists.
-#' If not, generates a feedback message.
-#' If yes, zooms in on the entire header section.
-#' 
+#' Checks if a markdown header with a certain level exists. If not, generates a
+#' feedback message. If yes, zooms in on the entire header section.
+#'
 #' @param state the state to start from.
 #' @param level the level of the header to check
 #' @param index which h<level> header to check
-#' @param not_found_msg If specified, this overrides the automatically generated message in case not enough headers of the specified level were found.
+#' @param not_found_msg If specified, this overrides the automatically generated
+#'   message in case not enough headers of the specified level were found.
 #' @param append Whether or not to append the feedback to feedback built in
 #'   previous states
 #'
-#' @return A state that zooms in on the section under the header until the next same-level header.
+#' @return A state that zooms in on the section under the header until the next
+#'   same-level header.
 #'
 #' @export
 check_header <- function(state, level, index = 1, not_found_msg = NULL, append = TRUE) {
@@ -81,14 +82,17 @@ check_header <- function(state, level, index = 1, not_found_msg = NULL, append =
 }
 
 #' Check markdown header title
-#' 
-#' Checks if a title was specified for a markdown header.
-#' If not, generates a feedback message.
-#' If yes, zooms in on the title so you can use \code{check_equal}.
-#' 
-#' @param state the state to start from. Should be a state produced by \code{\link{check_header}}.
-#' @param not_found_msg If specified, this overrides the automatically generated message in case no title was specified.
-#' @param append Whether or not to append the feedback to feedback built in previous states.
+#'
+#' Checks if a title was specified for a markdown header. If not, generates a
+#' feedback message. If yes, zooms in on the title so you can use
+#' \code{check_equal}.
+#'
+#' @param state the state to start from. Should be a state produced by
+#'   \code{\link{check_header}}.
+#' @param not_found_msg If specified, this overrides the automatically generated
+#'   message in case no title was specified.
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states.
 #'
 #' @return A state that zooms in on the title of the header.
 #'
@@ -121,15 +125,20 @@ check_title <- function(state, not_found_msg = NULL, append = TRUE) {
 
 
 #' Check markdown code chunk
-#' 
-#' Checks if a code chunk was specified.
-#' If not, generates a feedback message.
-#' If yes, zooms in on the code chunk so you can use functions like \code{\link{check_function}} as for any regular R exercise.
-#' 
-#' @param state the state to start from. This state can be produced by \code{\link{check_rmd}}, but can also follow on \code{\link{check_header}} to look for a chunk in a specific header section.
-#' @param index number that specifies which code chunk to check in the student and solution code that is zoomed in on.
-#' @param not_found_msg If specified, this overrides the automatically generated message in case no index'th chunk was found.
-#' @param append Whether or not to append the feedback to feedback built in previous states.
+#'
+#' Checks if a code chunk was specified. If not, generates a feedback message.
+#' If yes, zooms in on the code chunk so you can use functions like
+#' \code{\link{check_function}} as for any regular R exercise.
+#'
+#' @param state the state to start from. This state can be produced by
+#'   \code{\link{check_rmd}}, but can also follow on \code{\link{check_header}}
+#'   to look for a chunk in a specific header section.
+#' @param index number that specifies which code chunk to check in the student
+#'   and solution code that is zoomed in on.
+#' @param not_found_msg If specified, this overrides the automatically generated
+#'   message in case no index'th chunk was found.
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states.
 #'
 #' @return A state that zooms in on the code chunk.
 #'
@@ -170,17 +179,20 @@ check_chunk <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
 }
 
 #' Check markdown code chunk option
-#' 
-#' Checks if a code chunk option was specified.
-#' If not, generates a feedback message.
-#' If yes, zooms in on the code chunk option so you can use \code{\link{check_equal}} to verify equality.
-#' 
-#' @param state the state to start from. Should be a state produced by \code{\link{check_chunk}}.
+#'
+#' Checks if a code chunk option was specified. If not, generates a feedback
+#' message. If yes, zooms in on the code chunk option so you can use
+#' \code{\link{check_equal}} to verify equality.
+#'
+#' @param state the state to start from. Should be a state produced by
+#'   \code{\link{check_chunk}}.
 #' @param name name of the chunk option to zoom in on.
-#' @param not_found_msg If specified, this overrides the automatically generated message in case the option wasn't specified.
-#' @param append Whether or not to append the feedback to feedback built in previous states.
+#' @param not_found_msg If specified, this overrides the automatically generated
+#'   message in case the option wasn't specified.
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states.
 #' @param ... S3 stuff
-#' 
+#'
 #' @return A state that zooms in on the code chunk option.
 #'
 #' @export
@@ -207,15 +219,30 @@ check_option.MarkdownChunkState <- function(state, name, not_found_msg = NULL, a
   return(markdown_chunk_option_state)
 }
 
-#' Check markdown YAML header
-#' 
-#' Checks if a YAML header was specified and can be parsed.
-#' If not, generates a feedback message.
-#' If yes, parses the YAML header and zooms in on its options so you can use \code{\link{check_option}} to verify the options.
-#' 
-#' @param state the state to start from. This state should be produced by \code{\link{check_rmd}}.
-#' @param error_msg If specified, this overrides the automatically generated message in case the YAML header couldn't be parsed.
+#' Check equality of markdown code chunk option
+#'
+#' @param state the state to start from. Should be a state produced by \code{\link{check_option}}.
+#' @param incorrect_msg If specified, this overrides the automatically generated message in case the options don't match between student and solution.
 #' @param append Whether or not to append the feedback to feedback built in previous states.
+#' @param ... S3 stuff
+#'
+#' @export
+check_equal.MarkdownChunkOptionState <- function(state, incorrect_msg = NULL, append = FALSE, ...) {
+  check_equal_option_helper(state, "markdown_yaml_option", incorrect_msg = incorrect_msg, append = append)
+}
+
+#' Check markdown YAML header
+#'
+#' Checks if a YAML header was specified and can be parsed. If not, generates a
+#' feedback message. If yes, parses the YAML header and zooms in on its options
+#' so you can use \code{\link{check_option}} to verify the options.
+#'
+#' @param state the state to start from. This state should be produced by
+#'   \code{\link{check_rmd}}.
+#' @param error_msg If specified, this overrides the automatically generated
+#'   message in case the YAML header couldn't be parsed.
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states.
 #'
 #' @return A state that zooms in on the YAML header options.
 #'
@@ -247,17 +274,22 @@ check_yaml <- function(state, error_msg = NULL, append = TRUE) {
 }
 
 #' Check markdown YAML header option
-#' 
-#' Checks if a yaml header option was specified.
-#' If not, generates a feedback message.
-#' If yes, zooms in on the YAML header option so you can use \code{\link{check_equal}} to verify equality.
-#' 
-#' @param state the state to start from. Should be a state produced by \code{\link{check_yaml}}.
-#' @param name name of the YAML header option to zoom in on.
-#' @param not_found_msg If specified, this overrides the automatically generated message in case the option wasn't specified.
-#' @param append Whether or not to append the feedback to feedback built in previous states.
+#'
+#' Checks if a yaml header option was specified. If not, generates a feedback
+#' message. If yes, zooms in on the YAML header option so you can use
+#' \code{\link{check_equal}} to verify equality.
+#'
+#' @param state the state to start from. Should be a state produced by
+#'   \code{\link{check_yaml}}.
+#' @param name name of the YAML header option to zoom in on. If you want to
+#'   check a nested option, use \code{c()} to chain together the different
+#'   names.
+#' @param not_found_msg If specified, this overrides the automatically generated
+#'   message in case the option wasn't specified.
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states.
 #' @param ... S3 stuff
-#' 
+#'
 #' @return A state that zooms in on the YAML header option.
 #'
 #' @export
@@ -289,10 +321,13 @@ check_option.MarkdownYamlState <- function(state, name, not_found_msg = NULL, ap
 }
 
 #' Check equality of markdown YAML header option
-#' 
-#' @param state the state to start from. Should be a state produced by \code{\link{check_option}}.
-#' @param incorrect_msg If specified, this overrides the automatically generated message in case the options don't match between student and solution.
-#' @param append Whether or not to append the feedback to feedback built in previous states.
+#'
+#' @param state the state to start from. Should be a state produced by
+#'   \code{\link{check_option}}.
+#' @param incorrect_msg If specified, this overrides the automatically generated
+#'   message in case the options don't match between student and solution.
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states.
 #' @param ... S3 stuff
 #'
 #' @export
@@ -300,14 +335,3 @@ check_equal.MarkdownYamlOptionState <- function(state, incorrect_msg = NULL, app
   check_equal_option_helper(state, "markdown_chunk_option", incorrect_msg = incorrect_msg, append = append)
 }
 
-#' Check equality of markdown code chunk option
-#' 
-#' @param state the state to start from. Should be a state produced by \code{\link{check_option}}.
-#' @param incorrect_msg If specified, this overrides the automatically generated message in case the options don't match between student and solution.
-#' @param append Whether or not to append the feedback to feedback built in previous states.
-#' @param ... S3 stuff
-#' 
-#' @export
-check_equal.MarkdownChunkOptionState <- function(state, incorrect_msg = NULL, append = FALSE, ...) {
-  check_equal_option_helper(state, "markdown_yaml_option", incorrect_msg = incorrect_msg, append = append)
-}

@@ -8,13 +8,16 @@
   append = TRUE, ...)
 }
 \arguments{
-\item{state}{the state to start from. Should be a state produced by \code{\link{check_chunk}}.}
+\item{state}{the state to start from. Should be a state produced by
+\code{\link{check_chunk}}.}
 
 \item{name}{name of the chunk option to zoom in on.}
 
-\item{not_found_msg}{If specified, this overrides the automatically generated message in case the option wasn't specified.}
+\item{not_found_msg}{If specified, this overrides the automatically generated
+message in case the option wasn't specified.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states.}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states.}
 
 \item{...}{S3 stuff}
 }
@@ -22,7 +25,7 @@
 A state that zooms in on the code chunk option.
 }
 \description{
-Checks if a code chunk option was specified.
-If not, generates a feedback message.
-If yes, zooms in on the code chunk option so you can use \code{\link{check_equal}} to verify equality.
+Checks if a code chunk option was specified. If not, generates a feedback
+message. If yes, zooms in on the code chunk option so you can use
+\code{\link{check_equal}} to verify equality.
 }
