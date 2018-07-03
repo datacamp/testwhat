@@ -5,6 +5,7 @@
 \alias{is_true}
 \alias{is_false}
 \alias{is_gte}
+\alias{is_lt}
 \title{Check if object is true, false or >=}
 \usage{
 is_true(x)
@@ -12,6 +13,8 @@ is_true(x)
 is_false(x)
 
 is_gte(x, y)
+
+is_lt(x, y)
 }
 \arguments{
 \item{x}{object to test}

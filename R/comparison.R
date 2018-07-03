@@ -1,4 +1,4 @@
-#' Check if object is true, false or >=
+#' Check if object is true, false, >= or <.
 #'
 #' Utility functions to use inside \code{\link{check_that}}.
 #'
@@ -18,11 +18,18 @@ is_false <- function(x) {
   identical(as.vector(x), FALSE)
 }
 
-
 #' @rdname compare
 #' @export
 is_gte <- function(x, y) {
   stopifnot(is.numeric(x), length(x) == 1)
   stopifnot(is.numeric(y), length(y) == 1)
   x >= y
+}
+
+#' @rdname compare
+#' @export
+is_lt <- function(x, y) {
+  stopifnot(is.numeric(x), length(x) == 1)
+  stopifnot(is.numeric(y), length(y) == 1)
+  x < y
 }

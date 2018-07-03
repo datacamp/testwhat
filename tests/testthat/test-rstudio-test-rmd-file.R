@@ -3,8 +3,6 @@ context("test_rmd_file")
 test_that("test_rmd_file works", {
   lst <- list()
   lst$DC_TYPE <- "MarkdownExercise"
-  lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
-  lst$DC_FORMAT <- "HTML"
   
   lst$DC_CODE <- c(my_doc.Rmd = "\n---\ntitle: \"Testing\"\n---\n    \n    This\n    is\n    a\n    test\n    \n    ```{r}\n    dim(cars)\n    ```")
   lst$DC_SOLUTION <- c(my_solution.Rmd = "\n---\ntitle: \"Testing\"\n---\n    \n    This\n    is\n    a\n    test\n    but\n    doesn't \n    matter\n    \n    ```{r}\n    str(cars)\n    ```")
@@ -94,18 +92,6 @@ test_that("test_rmd_file works", {
   output <- test_it(lst)
   fails(output)
   lst$DC_SCT <- "test_rmd_file(test_yaml_header(options = c(\"output.pdf_document.test\")))"
-  output <- test_it(lst)
-  fails(output)
-  
-  lst$DC_CODE <- c(my_doc.Rmd = "\n---\ntitle: \"Testing\"\nauthor: \"Tester\"\noutput: \n  html_document:\n    test: true\n  extra: \"NOOO\"\n  pdf_document:\n    test: true\n---\n  \n  This\n  is\n  a\n  test\n  \n  ```{r}\n  dim(cars)\n  ```")
-  lst$DC_SOLUTION <- c(my_solution.Rmd = "\n---\ntitle: \"Testing\"\nauthor: \"Tester\"\noutput: \n  html_document:\n    test: false\n  pdf_document:\n    test: true\n---\n  \n  This\n  is\n  a\n  test\n  but\n  doesn't \n  matter\n  \n  ```{r}\n  str(cars)\n  ```")
-  lst$DC_SCT <- "test_rmd_file(test_yaml_header(options = c(\"title\", \"output.html_document.test\", \"author\"), allow_extra = FALSE))"
-  output <- test_it(lst)
-  fails(output)
-  lst$DC_SCT <- "test_yaml_header(options = c(\"title\", \"author\", \"output.pdf_document.test\"), allow_extra = FALSE)"
-  output <- test_it(lst)
-  fails(output)
-  lst$DC_SCT <- "test_rmd_file(test_yaml_header(options = c(\"output.pdf_document.test\"), allow_extra = FALSE))"
   output <- test_it(lst)
   fails(output)
   

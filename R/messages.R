@@ -205,3 +205,50 @@ build_message.output <- function(det) {
          expr = sprintf("Did your code produce the same output as `%s`?", det$expr),
          NULL)
 }
+
+# Markdown Messaging ----------------------------------------------------------
+
+build_message.markdown_header <- function(det) {
+  switch(det$case,
+         defined = sprintf("Have you included %s `h%i` header%s in your code?", get_num(det$index), det$level, if (det$index > 1) "s" else ""),
+         correct = sprintf("Check the %s `h%i` header.", get_ord(det$index), det$level)
+  )
+}
+
+build_message.markdown_title <- function(det) {
+  switch(det$case,
+         defined = sprintf("The system couldn't find a title."),
+         correct = sprintf("Check the title.")
+  )
+}
+
+build_message.markdown_chunk <- function(det) {
+  switch(det$case,
+         defined = sprintf("Have you included %s code chunk%s?", get_num(det$index), if (det$index > 1) "s" else ""),
+         correct = sprintf("Have a look at the %s code chunk.", get_ord(det$index))
+  )
+}
+
+build_message.markdown_chunk_option <- function(det) {
+  switch(det$case,
+         defined = sprintf("Have you specified the chunk option `%s`?", det$name),
+         correct = sprintf("The chunk option `%s` isn't correct.", det$name),
+         equal = build_diff(sol = det$solution, stud = det$student,
+                            eq_condition = "equal", id = "it")
+  )
+}
+
+build_message.markdown_yaml <- function(det) {
+  switch(det$case,
+         parsing_error = sprintf("Something went wrong when parsing the YAML header. Are you sure you indented everything properly?"),
+         correct = "Check your YAML header."
+  )
+}
+
+build_message.markdown_yaml_option <- function(det) {
+  switch(det$case,
+         defined = sprintf("Have you specified the YAML header option %s?", yaml_option_desc(det$name)),
+         correct = sprintf("The option %s is not correct", yaml_option_desc(det$name)),
+         equal = build_diff(sol = det$solution, stud = det$student, eq_condition = "equal", id = "it")
+  )
+}
