@@ -7,13 +7,10 @@
 #' This test can only be called inside a test_rmd_group() call!
 #' 
 #' @param options  Set of options
-#' @param allow_extra  whether or not the definition of additional options is
-#'   accepted (default TRUE)
 #' @param not_called_msg feedback message if option was not specified
 #' @param incorrect_msg  feedback message if option was incorrectly set
 #' @keywords internal
 test_chunk_options <- function(options = NULL,
-                               allow_extra = TRUE,
                                not_called_msg = NULL,
                                incorrect_msg = NULL) {
   state <- ex()
@@ -49,8 +46,6 @@ test_chunk_options <- function(options = NULL,
   if (is.null(incorrect_msg)) {
     incorrect_msg = sprintf("In code chunk %i of your submission, make sure to correctly define the option%s %s.",
                             chunk_number, if (length(options) == 1) "" else "s", collapse_props(options))
-    if (!allow_extra)
-      incorrect_msg = paste(incorrect_msg, "Do not define any other options!")
   }
       
   # select from sol_options and stud_props the ones to check on
@@ -71,10 +66,6 @@ test_chunk_options <- function(options = NULL,
   # check the equality of stud and solution options.
   if (!no_nas) {
     check_that(is_equal(sol_options_select, stud_options_select), incorrect_msg)
-  }
-
-  if(!allow_extra) {
-    check_that(is_equal(length(stud_options_select), length(stud_options)), incorrect_msg)
   }
 }
 

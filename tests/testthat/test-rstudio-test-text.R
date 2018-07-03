@@ -3,8 +3,6 @@ context("test_text")
 test_that("test_text works", {
   lst <- list()
   lst$DC_TYPE <- "MarkdownExercise"
-  lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
-  lst$DC_FORMAT <- "HTML"
   lst$DC_CODE <- c(my_doc.Rmd = "
 ---
     title: \"Testing\"

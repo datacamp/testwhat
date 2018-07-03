@@ -5,14 +5,12 @@
 \title{Check yaml header (Markdown)}
 \usage{
 test_yaml_header(options = NULL, check_equality = TRUE,
-  allow_extra = TRUE, not_called_msg = NULL, incorrect_msg = NULL)
+  not_called_msg = NULL, incorrect_msg = NULL)
 }
 \arguments{
 \item{options}{Set of options. Embedded options have to be specified using the dot notation.}
 
 \item{check_equality}{whether or not to actually check the value assigned to the option (default TRUE)}
-
-\item{allow_extra}{whether or not the definition of additional options is accepted (default TRUE)}
 
 \item{not_called_msg}{feedback message if option was not specified (optional but recommended)}
 

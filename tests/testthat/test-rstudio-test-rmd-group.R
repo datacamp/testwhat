@@ -3,8 +3,6 @@ context("test_rmd_group")
 test_that("test_rmd_group works", {
   lst <- list()
   lst$DC_TYPE <- "MarkdownExercise"
-  lst$DC_ACTIVE_TAB <- "my_doc.Rmd"
-  lst$DC_FORMAT <- "HTML"
   
   lst$DC_CODE <- c(my_doc.Rmd = "\n    ---\n    title: \"Testing\"\n    author: \"Tester\"\n    date: \"January 1, 2015\"\n    output: html_document\n    ---\n    \n    This\n    is\n    a\n    test\n    \n    ```{r}\n    dim(cars)\n    ```\n    \n    You can also embed plots, for example:\n    \n    ```{r, echo=FALSE}\n    plot(cars)\n    ```\n    \n    Wowww.")
   lst$DC_SOLUTION <- c(my_sol.Rmd = "\n    ---\n    title: \"Testing\"\n    author: \"Tester\"\n    date: \"January 1, 2015\"\n    output: html_document\n    ---\n    \n    This\n    is\n    a\n    test\n    but\n    doesn't \n    matter\n    \n    ```{r}\n    dim(cars)\n    ```\n    \n    You can also embed plots, for falafel:\n    \n    ```{r, echo=FALSE}\n    str(cars)\n    ```\n    \n    Wowww.")

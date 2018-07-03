@@ -5,13 +5,11 @@
 #'
 #' @param options  Set of options. Embedded options have to be specified using the dot notation.
 #' @param check_equality whether or not to actually check the value assigned to the option (default TRUE)
-#' @param allow_extra  whether or not the definition of additional options is accepted (default TRUE)
 #' @param not_called_msg feedback message if option was not specified (optional but recommended)
 #' @param incorrect_msg  feedback message if option was incorrectly set (optional but recommended)
 #' @keywords internal
 test_yaml_header <- function(options = NULL,
                              check_equality = TRUE,
-                             allow_extra = TRUE,
                              not_called_msg = NULL,
                              incorrect_msg = NULL) {
   state <- ex()
@@ -46,8 +44,6 @@ test_yaml_header <- function(options = NULL,
   if(is.null(incorrect_msg)) {
     incorrect_msg = sprintf("In your YAML header, correctly define the option%s %s.",
                             if(length(options) == 1) "" else "s", collapse_props(options))
-    if(!allow_extra)
-      incorrect_msg = paste(incorrect_msg, "Do not define any other options!")
   }
   
   # select from sol_options and stud_props the ones to check on
@@ -63,9 +59,5 @@ test_yaml_header <- function(options = NULL,
   
   if(!no_nas && check_equality) {
     check_that(is_equal(sol_options_select, stud_options_select), feedback = incorrect_msg)
-  }
-
-  if(!allow_extra) {
-    check_that(is_equal(length(stud_options_select), length(yaml_student)), feedback = incorrect_msg)
   }
 }

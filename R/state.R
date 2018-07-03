@@ -197,6 +197,25 @@ MarkdownState <- R6::R6Class("MarkdownState", inherit = ChildState,
                                             solution_ds_part = NULL,
                                             inline_number = NULL,
                                             chunk_number = NULL))
+
+MarkdownHeaderState <- R6::R6Class("MarkdownHeaderState", inherit = ChildState,
+                                   private = list(student_title = NULL,
+                                                  solution_title = NULL))
+
+MarkdownChunkState <- R6::R6Class("MarkdownChunkState", inherit = ChildState,
+                                  private = list(student_options = NULL,
+                                                 solution_options = NULL))
+
+MarkdownYamlState <- R6::R6Class("MarkdownYamlState", inherit = ChildState,
+                                 private = list(student_yaml = NULL,
+                                                solution_yaml = NULL))
+
+MarkdownOptionState <- R6::R6Class("MarkdownOptionState", inherit = ChildState,
+                                   private = list(student_option = NULL,
+                                                  solution_option = NULL))
+MarkdownChunkOptionState <- R6::R6Class("MarkdownChunkOptionState", inherit = MarkdownOptionState)
+MarkdownYamlOptionState <- R6::R6Class("MarkdownYamlOptionState", inherit = MarkdownOptionState)
+
 #' Get the main state
 #'
 #' \code{ex()} should be the start of every SCT chain

@@ -5,14 +5,11 @@
 \title{Check whether the student defined the correct chunk options (R Markdown
 exercises)}
 \usage{
-test_chunk_options(options = NULL, allow_extra = TRUE,
-  not_called_msg = NULL, incorrect_msg = NULL)
+test_chunk_options(options = NULL, not_called_msg = NULL,
+  incorrect_msg = NULL)
 }
 \arguments{
 \item{options}{Set of options}
-
-\item{allow_extra}{whether or not the definition of additional options is
-accepted (default TRUE)}
 
 \item{not_called_msg}{feedback message if option was not specified}
 
