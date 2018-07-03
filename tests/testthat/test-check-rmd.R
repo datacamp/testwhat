@@ -4,25 +4,21 @@ contents = "
 ---
 title: 'Title'
 author: 'nick'
-output: 
-  flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
-runtime: shiny
+output:
+  html_document:
+    toc: true
 ---
 
 ```{r global, include=FALSE}
-library(flexdashboard)
 library(ggplot2)
 my_df <- mtcars
 ```
 
-Column {data-width=200 .sidebar}
------------------------------------------------------------------------
+## H2 header 1
 
-Sidebar content
+H2 header 1 content
 
-Column {data-width=450}
+H2 header 2
 -----------------------------------------------------------------------
 
 ### h3 header 1
@@ -69,8 +65,8 @@ test_that("check_header and check_title zoom in properly", {
   new_state <- state %>%
     check_rmd() %>%
     check_header(level = 2, index = 1)
-  title <- 'Column {data-width=200 .sidebar}'
-  header_con <- '\nSidebar content\n'
+  title <- '## H2 header 1'
+  header_con <- '\nH2 header 1 content\n'
   expect_equal(new_state$get('student_title'), title)
   expect_equal(new_state$get('solution_title'), title)
   expect_equal(new_state$get('student_code'), header_con)
@@ -262,7 +258,7 @@ test_that("student made mistake in YAML header", {
   passes2(new_state %>%
                  check_rmd() %>%
                  check_yaml() %>%
-                 check_option(c('output', 'flexdashboard::flex_dashboard', 'vertical_layout')) %>%
+                 check_option(c('output', 'html_document', 'toc')) %>%
                  check_equal())
 })
 
@@ -270,34 +266,23 @@ test_that("student made mistake in YAML header", {
 
 context("test_check_rmd - full example")
 
-full_sct <- "
-ex() %>% check_rmd() %>% {
-  check_yaml(.) %>% check_option('title') %>% check_equal()
-  check_header(., level = 2, index = 1) %>% {
-    check_title(.) %>% check_code('data-width=200', fixed = TRUE)
-    check_code(., 'Sidebar content', fixed = TRUE)
-  }
-  check_header(., level = 2, index = 2) %>% {
-    check_title(.) %>% check_code('data-width=450', fixed = TRUE)
-    check_header(., level = 3, index = 1) %>% {
-      check_title(.) %>% check_code('h3 header 1', fixed = TRUE)
-      check_chunk(.) %>% {
-        check_option(., 'label') %>% check_equal()
-        check_function(.,'ggplot') %>% check_arg('data') %>% check_equal()
+test_that("full example", {
+
+  passes2(state %>% check_rmd() %>% {
+    check_yaml(.) %>% check_option('title') %>% check_equal()
+    check_header(., level = 2, index = 1) %>% {
+      check_title(.) %>% check_code('H2 header 1', fixed = TRUE)
+      check_code(., 'H2 header 1 content', fixed = TRUE)
+    }
+    check_header(., level = 2, index = 2) %>% {
+      check_title(.) %>% check_code('H2 header 2', fixed = TRUE)
+      check_header(., level = 3, index = 1) %>% {
+        check_title(.) %>% check_code('h3 header 1', fixed = TRUE)
+        check_chunk(.) %>% {
+          check_option(., 'label') %>% check_equal()
+          check_function(.,'ggplot') %>% check_arg('data') %>% check_equal()
+        }
       }
     }
-  }
-}
-"
-
-test_that("full example", {
-  lst <- list(
-    DC_TYPE = "MarkdownExercise",
-    DC_CODE = c(my_file.Rmd = contents),
-    DC_SOLUTION = c(my_file.Rmd = contents),
-    DC_SCT = full_sct
-  )
-
-  output <- test_it(lst)
-  passes(output)
+  })
 })
