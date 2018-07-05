@@ -11,9 +11,12 @@ find_prev_line <- function(lines, patt) {
 
 get_header_hits <- function(lines, level) {
   all_hits <- list(
+    h1 = sort(c(length(lines) + 1,
+                find_same_line(patt = "^#\\s+.*?", lines = lines),
+                find_prev_line(patt = "^={5,}$", lines = lines))),
     h2 = sort(c(length(lines) + 1,
-               find_same_line(patt = "^##\\s+.*?", lines = lines),
-               find_prev_line(patt = "---------", lines = lines))),
+                find_same_line(patt = "^##\\s+.*?", lines = lines),
+                find_prev_line(patt = "^-{5,}$", lines = lines))),
     h3 = sort(c(length(lines) + 1, find_same_line(patt = "^###\\s+.*?", lines = lines)))
   )
   
@@ -25,7 +28,8 @@ get_header_hits <- function(lines, level) {
 get_header_elements <- function(lines, hits, index) {
   title <- lines[hits[index]]
   contents <- lines[(hits[index] + 1): (hits[index+1] - 1)]
-  contents <- contents[!grepl("---------", contents)]
+  contents <- contents[!grepl("^-{5,}$", contents)]
+  contents <- contents[!grepl("^={5,}$", contents)]
   contents <- paste0(contents, collapse = "\n")
   
   return(list(contents = contents, title = title))

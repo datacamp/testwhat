@@ -14,6 +14,8 @@ library(ggplot2)
 my_df <- mtcars
 ```
 
+# H1 Header
+
 ## H2 header 1
 
 H2 header 1 content
@@ -270,6 +272,7 @@ test_that("full example", {
 
   passes2(state %>% check_rmd() %>% {
     check_yaml(.) %>% check_option('title') %>% check_equal()
+    check_header(., level = 1, index = 1) %>% check_title() %>% check_code("H1 Header")
     check_header(., level = 2, index = 1) %>% {
       check_title(.) %>% check_code('H2 header 1', fixed = TRUE)
       check_code(., 'H2 header 1 content', fixed = TRUE)
