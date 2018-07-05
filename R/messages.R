@@ -210,8 +210,8 @@ build_message.output <- function(det) {
 
 build_message.markdown_header <- function(det) {
   switch(det$case,
-         defined = sprintf("Have you included %s `h%i` header%s in your code?", get_num(det$index), det$level, if (det$index > 1) "s" else ""),
-         correct = sprintf("Check the %s `h%i` header.", get_ord(det$index), det$level)
+         defined = sprintf("Have you included %s level %i header%s in your code?", get_num(det$index), det$level, if (det$index > 1) "s" else ""),
+         correct = sprintf("Check the %s level %i header.", get_ord(det$index), det$level)
   )
 }
 

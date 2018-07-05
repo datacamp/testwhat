@@ -133,19 +133,19 @@ test_that("student didn't specify header", {
   expect_error(new_state %>%
                  check_rmd() %>%
                  check_header(level = 2, index = 1),
-               regexp = "Have you included one `h2` header",
+               regexp = "Have you included one level 2 header",
                class = "sct_failure")
 
   new_state$set(student_code = c(my_file.Rmd = "\n## My title\n\n"))
   expect_error(new_state %>%
                  check_rmd() %>%
                  check_header(level = 3, index = 1),
-               regexp = "Have you included one `h3` header",
+               regexp = "Have you included one level 3 header",
                class = "sct_failure")
   expect_error(new_state %>%
                  check_rmd() %>%
                  check_header(level = 2, index = 2),
-               regexp = "Have you included two `h2` headers",
+               regexp = "Have you included two level 2 headers",
                class = "sct_failure")
   passes2(new_state %>%
             check_rmd() %>%
@@ -160,7 +160,7 @@ test_that("student made mistake in the title", {
                  check_header(level = 2, index = 1) %>%
                  check_title() %>%
                  check_code("Column", missing_msg = "Wrong."),
-               regexp = "Check the first `h2` header. Check the title. Wrong.",
+               regexp = "Check the first level 2 header. Check the title. Wrong.",
                class = "sct_failure")
   passes2(new_state %>%
             check_rmd() %>%
@@ -181,7 +181,7 @@ test_that("student didn't specify chunk", {
                  check_rmd() %>%
                  check_header(level = 2, index = 2) %>%
                  check_chunk(),
-               regexp = "Check the second `h2` header. Have you included one code chunk?",
+               regexp = "Check the second level 2 header. Have you included one code chunk?",
                class = "sct_failure")
   passes2(new_state %>% check_rmd() %>% check_chunk())
 })
@@ -194,7 +194,7 @@ test_that("student made mistake in chunk", {
                  check_header(level = 2, index = 2) %>%
                  check_chunk() %>%
                  check_function('ggplot'),
-               regexp = "Check the second `h2` header. Have a look at the first code chunk. Have you called `ggplot()`?",
+               regexp = "Check the second level 2 header. Have a look at the first code chunk. Have you called `ggplot()`?",
                class = "sct_failure")
   passes2(new_state %>%
            check_rmd() %>%
@@ -211,7 +211,7 @@ test_that("student made mistake in chunk options", {
                  check_header(level = 2, index = 2) %>%
                  check_chunk() %>%
                  check_option('echo'),
-               regexp = "Check the second `h2` header. Have a look at the first code chunk. Have you specified the chunk option `echo`?",
+               regexp = "Check the second level 2 header. Have a look at the first code chunk. Have you specified the chunk option `echo`?",
                class = "sct_failure")
   expect_error(new_state %>%
                  check_rmd() %>%
@@ -219,7 +219,7 @@ test_that("student made mistake in chunk options", {
                  check_chunk() %>%
                  check_option('label') %>%
                  check_equal(),
-               regexp = "Check the second `h2` header. Have a look at the first code chunk. The chunk option `label` isn't correct.",
+               regexp = "Check the second level 2 header. Have a look at the first code chunk. The chunk option `label` isn't correct.",
                class = "sct_failure")
   passes2(new_state %>%
             check_rmd() %>%
