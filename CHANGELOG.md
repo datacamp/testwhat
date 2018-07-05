@@ -2,6 +2,16 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.5.1 - slight markdown improvements
+
+### Added
+
+- Support to test `h1`-level tags (starting with `#` or underlined with `=====`)
+
+### Changed
+
+- Automated messaging around `check_header()` does not use the `h<num>` reference, instead uses `level <num>` reference.
+
 ## 4.5.0 - test markdown exercises, the tidy way
 
 ### Added
