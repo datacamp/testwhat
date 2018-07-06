@@ -274,7 +274,7 @@ sum(c(1, 2, 3, 4, NA), na.rm = TRUE)
 which is perfectly valid as well. That's why the following SCT would be more appropriate:
 
 ```{r}
-test_output_contains("10", incorrect_msg = "Did you correctly print out the sum?")
+ex() %>% check_output_expr("10", missing_msg = "Did you correctly print out the sum?")
 ```
 
 ## Example 6: Allowing for different solutions
