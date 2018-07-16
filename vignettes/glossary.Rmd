@@ -17,13 +17,19 @@ knitr::opts_chunk$set(
   eval = FALSE
 )
 
-rc <- testwhat:::remove_comments
+clean <- function(x) {
+  lines <- strsplit(x, "\\n")[[1]]
+  clean1 <- lines[!grepl("^#", lines)]
+  clean2 <- lines[!grepl("^success_msg", lines)]
+  return(paste0(clean2, collapse = "\n"))
+}
 
 knit_hooks$set(autogen = function(before, options, envir) {
   if (before) {
     url <- sprintf("https://www.datacamp.com/api/courses/%i/chapters/%i/exercises.json", options$crs_id, options$chap_id)
     ex <- fromJSON(url, simplifyDataFrame = FALSE)[[options$ex_num]]
-    knitr::knit_hooks$get("source")(sprintf("# solution\n%s\n\n# sct\n%s\n", rc(ex$solution), rc(ex$sct)), options)
+    content <- sprintf("# solution\n%s\n\n# sct\n%s\n", clean(ex$solution), clean(ex$sct))
+    knitr::knit_hooks$get("source")(content, options)
   }
 })
 ```
@@ -50,135 +56,48 @@ For more context on why this particular SCT is a good idea, you can consult the 
 
 ### Check object created through function call
 
-```{r}
-# solution
-x <- mean(1:10, na.rm = TRUE)
-
-# sct
-test_correct(ex() %>% check_object("x") %>% check_equal(),
-             ex() %>% check_function("mean") %>% {
-               check_arg(., "x") %>% check_equal()
-               check_arg(., "na.rm") %>% check_equal()
-             })
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=5}
 ```
 
 ### Check output
 
-```{r}
-# solution
-print(mtcars)
-
-# sct
-ex() %>% check_output_expr("mtcars")
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=6}
 ```
 
-```{r}
-# solution
-print("Hi, DataCamp")
-
-# sct, robust against capitalization, multiple spaces and different names
-ex() %>% check_output("[H|h]i,\\s+[a-zA-Z]+?") 
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=7}
 ```
 
-### Check control flow
 
-```{r}
-# solution
-if (x) {
-  print("a")
-} else {
-  print("b")
-}
+### Check if else
 
-# sct
-ex() %>% check_if_else() %>% {
-  check_cond(.) %>% check_code("x")
-  check_if(.) %>% check_function("print") %>% check_arg("x") %>% check_equal()
-  check_else(.) %>% check_function("print") %>% check_arg("x") %>% check_equal()
-}
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=8}
 ```
 
-```{r}
-# solution
-for (i in 1:10) {
-  print(i)
-}
+### Check for loop
 
-ex() %>% check_for() %>% {
-  check_cond(.) %>% check_code("in\\s*1:10")
-  check_body(.) %>% check_function("print") %>% check_arg("x") %>% check_equal(eval = FALSE)
-}
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=9}
 ```
 
 ### Check function definition
 
-```{r}
-# solution
-my_fun <- function(a, b) {
-	abs(a) + abs(b)
-}
-
-# sct
-ex() %>% check_fun_def("my_fun") %>% {
-  check_arguments(.)
-  check_call(., 1, 2) %>% check_result() %>% check_equal()
-  check_call(., -1, 2) %>% check_result() %>% check_equal()
-  check_body(.) %>% {
-    check_function(., "abs", index = 1)
-    check_function(., "abs", index = 2)
-  }
-}
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=10}
 ```
 
 ### Check `library` or `require` call
 
-```{r}
-# solution
-library(dplyr)
-
-# sct
-ex() %>% check_library("dplyr")
-
-# submissions that pass
-library(dplyr)
-library('dplyr')
-library("dplyr")
-require(dplyr)
-require('dplyr')
-require("dplyr")
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=11}
 ```
 
 ### Check through string matching
 
-```{r}
-# code
-x <- "R is Rsome!"
-
-# sct, robust against capitalization and multiple spaces
-ex() %>% check_code("^\"[r|R] is [r|R]some!?\"$")
-                    
-# sct, if it has to be exact (check_equal will generate good feedback)
-ex() %>% check_object("x") %>% check_equal()
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=12}
 ```
 
 
 ### Check ggplot
 
-```{r}
-# code
-mtcars %>% 
-  ggplot(aes(wt, hp)) + 
-  geom_point()
-
-# sct
-ex() %>% {
-  check_function(., "ggplot") %>% check_arg("data") %>% check_equal()
-  check_function(., "aes") %>% {
-    check_arg(., "x") %>% check_equal(eval = FALSE) 
-    check_arg(., "y") %>% check_equal(eval = FALSE)
-  }
-  check_function(., "geom_point")
-}
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=13}
 ```
+
 
 NOTE: These exercises are pulled from a [DataCamp course](https://campus-no-cache.datacamp.com/courses/10945/34104?ex=1). You can find the source [here](https://github.com/datacamp/courses-xwhat-examples/tree/testwhat).
