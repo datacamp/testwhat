@@ -8,62 +8,44 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+library(knitr)
+library(jsonlite)
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   eval = FALSE
 )
+
+rc <- testwhat:::remove_comments
+
+knit_hooks$set(autogen = function(before, options, envir) {
+  if (before) {
+    url <- sprintf("https://www.datacamp.com/api/courses/%i/chapters/%i/exercises.json", options$crs_id, options$chap_id)
+    ex <- fromJSON(url, simplifyDataFrame = FALSE)[[options$ex_num]]
+    knitr::knit_hooks$get("source")(sprintf("# solution\n%s\n\n# sct\n%s\n", rc(ex$solution), rc(ex$sct)), options)
+  }
+})
 ```
 
 For more context on why this particular SCT is a good idea, you can consult the Guides. None of the examples below specify any custom messages; you can consult the function documentation to figure out how you can override the automatically generated messages.
 
 ### Check object
 
-```{r}
-# solution
-x <- 10
-
-# sct
-ex() %>% check_object("x") %>% check_equal()
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=1}
 ```
 
-```{r}
-# solution
-x <- data.frame(a = 1:3, b = 4:6)
-
-# sct
-ex() %>% check_object("x") %>% {
-  check_col(., "a") %>% check_equal()
-  check_col(., "b") %>% check_equal()
-}
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=2}
 ```
 
 ### Check function call
 
-```{r}
-# solution
-mean(1:10, na.rm = TRUE)
-
-# sct
-ex() %>% check_function("mean") %>% {
-  check_arg(., "x") %>% check_equal()
-  check_arg(., "na.rm") %>% check_equal()
-}
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=3}
 ```
 
 ### Check function result
 
-```{r}
-# solution
-class(TRUE)
-
-# sct
-ex() %>% check_function("mean") %>% check_result() %>% check_equal()
-
-# All submissions that pass (because they all return 'logical')
-class(TRUE)
-class(FALSE)
-class(NA)
+```{r, eval = TRUE, autogen=TRUE, crs_id=10945, chap_id=34104, ex_num=4}
 ```
 
 ### Check object created through function call
@@ -199,5 +181,4 @@ ex() %>% {
 }
 ```
 
-
-
+NOTE: These exercises are pulled from a [DataCamp course](https://campus-no-cache.datacamp.com/courses/10945/34104?ex=1). You can find the source [here](https://github.com/datacamp/courses-xwhat-examples/tree/testwhat).
