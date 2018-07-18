@@ -82,7 +82,7 @@ ex() %>% check_function("round") %>% {
 
 not all of the student submissions listed above would be accepted, because now `pi` is checked literally, as the string `"pi"`, not as the number `3.1415...`. Using `eval = FALSE` is interesting when you're working with huge datasets and don't want to compare their values exhaustively, or for objects for which the equality operator is not standard, such as SQL connections.
 
-### Example 2: Checking the reuslt of a function call instead of the arguments
+### Example 2: Checking the result of a function call instead of the arguments
 
 Checking whether the student function call, when executed, corresponds to the result of the solution function call is a **very** robust way of checking whether the function was called correctly. You can do this by piping `check_function()` into `check_result()`, `check_output()`, or `check_error()`, depending on whether you want to check the result of the function call, the output the function call generates, or the error the call generates.
 
