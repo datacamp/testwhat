@@ -7,8 +7,6 @@ reference:
   - title: Commonly used functions
     contents:
     - starts_with("check_")
-    - test_correct
-    - test_or
     - test_mc
     - success_msg
     - override

@@ -1,4 +1,4 @@
-context("test_correct")
+context("check_correct")
 
 test_that("test_correct - 1", {
   lst <- list()
@@ -129,8 +129,77 @@ test_that("test_correct - nested", {
   fails(output, mess_patt = 'B_incorrect')
 })
 
+test_that("check_correct - old skool", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- mean(1:11)"
+  lst$DC_SCT <- "check_correct(
+                      ex() %>% check_object('x') %>% check_equal(),
+                      ex() %>% check_function('mean') %>% check_arg('x') %>% check_equal()
+                 )"
 
-context("test_or")
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Have you called <code>mean\\(\\)</code>")
+
+  lst$DC_CODE <- "x <- 8"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Have you called <code>mean\\(\\)</code>")
+
+  lst$DC_CODE <- "x <- mean(1:123)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check your call of <code>mean\\(\\)</code>")
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code>")
+  fails(output, mess_patt = "It has length 123, while it should have length 11")
+
+  lst$DC_CODE <- "x <- mean(1:11) + 2"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable <code>x</code>")
+
+  lst$DC_CODE <- "x <- mean(1:11)"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "x <- 6"
+  output <- test_it(lst)
+  passes(output)
+})
+
+test_that("check_correct - new school", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- mean(1:11)"
+  lst$DC_SCT <- "ex() %>% check_correct(
+                      check_object(., 'x') %>% check_equal(),
+                      check_function(., 'mean') %>% check_arg('x') %>% check_equal()
+                 )"
+
+  lst$DC_CODE <- ""
+  output <- test_it(lst)
+  fails(output, mess_patt = "Have you called <code>mean\\(\\)</code>")
+
+  lst$DC_CODE <- "x <- 8"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Have you called <code>mean\\(\\)</code>")
+
+  lst$DC_CODE <- "x <- mean(1:123)"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Check your call of <code>mean\\(\\)</code>")
+  fails(output, mess_patt = "Did you correctly specify the argument <code>x</code>")
+  fails(output, mess_patt = "It has length 123, while it should have length 11")
+
+  lst$DC_CODE <- "x <- mean(1:11) + 2"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The contents of the variable <code>x</code>")
+
+  lst$DC_CODE <- "x <- mean(1:11)"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "x <- 6"
+  output <- test_it(lst)
+  passes(output)
+})
+
+context("check_or")
 
 test_that("test_or works", {
   lst <- list()
@@ -150,16 +219,74 @@ test_that("test_or works", {
   fails(output, mess_patt = "Incorrect")
 })
 
+test_that("check_or works old skool", {
+  lst <- list()
+  lst$DC_CODE <- "b = 3; c = 5"
+  lst$DC_SOLUTION <- "a = 2.5; b = 3; c = 29"
+
+  lst$DC_SCT <- "check_or(ex() %>% check_object('a') %>% check_equal(),
+                          ex() %>% check_object('b') %>% check_equal(),
+                          ex() %>% check_object('c') %>% check_equal())"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_SCT <- "test_or(test_object('a'), test_object('c'))"
+  output <- test_it(lst)
+  fails(output, mess_patt = ".*define .*a")
+
+  lst$DC_SCT <- "test_or(test_object('a'), test_object('c'), incorrect_msg = 'incorrect')"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Incorrect")
+})
+
+test_that("check_or works new skool", {
+  lst <- list()
+  lst$DC_CODE <- "b = 3; c = 5"
+  lst$DC_SOLUTION <- "a = 2.5; b = 3; c = 29"
+
+  lst$DC_SCT <- "ex() %>% check_or(check_object(., 'a') %>% check_equal(),
+                                   check_object(., 'b') %>% check_equal(),
+                                   check_object(., 'c') %>% check_equal())"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_SCT <- "test_or(test_object('a'), test_object('c'))"
+  output <- test_it(lst)
+  fails(output, mess_patt = ".*define .*a")
+
+  lst$DC_SCT <- "test_or(test_object('a'), test_object('c'), incorrect_msg = 'incorrect')"
+  output <- test_it(lst)
+  fails(output, mess_patt = "Incorrect")
+})
+
 test_that("test_or throws error if something is off", {
   lst <- list()
   lst$DC_CODE <- "summary(mtcars); str(mtcars[1, 2])"
   lst$DC_SOLUTION <- "summary(mtcars); str(mtcars)"
-  
+
   lst$DC_SCT <- "test_or(test_function('summary', 'object'), test_function('str', 'object'))"
   capture.output(output <- test_it(lst))
   passes(output)
-  
+
   # argument of second test function incorrect
   lst$DC_SCT <- "test_or(test_function('summary', 'object'), test_function('str', 'x'))"
   expect_error(test_it(lst))
+})
+
+test_that("check_or - new school - nested", {
+  lst <- list()
+  lst$DC_SOLUTION <- "a <- 3\nif(a > 3) { print('b') }"
+  
+  lst$DC_SCT <- "ex() %>% check_or(
+                    check_code(., 'c'),
+                    check_if_else(.) %>% check_cond() %>% check_or(
+                      check_code(., 'b'),
+                      check_code(., 'd')
+                    )
+                  )"
+
+  # Shouldn't pass, because b is not in the condition part of testwhat, and c or d aren't anywhere
+  lst$DC_SOLUTION <- "a <- 3\nif(a > 3) { print('b') }"
+  output <- test_it(lst)
+  fails(output, mess_patt = "The system wanted to find the pattern <code>c</code>")
 })

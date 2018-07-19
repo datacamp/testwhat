@@ -242,7 +242,7 @@ decorate_state <- function(state, stud, sol, el = NULL) {
 #' Functions to override solution code (and parse data) and variables in the solution environment.
 #' 
 #' Produces a new state with a custom solution code. Mostly useful inside
-#' \code{test_or}, if you want to test for different cases.
+#' \code{check_or}, if you want to test for different cases.
 #' 
 #' @param state the state to create a substate from
 #' @param code the solution code to put into the state
