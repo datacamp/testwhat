@@ -305,23 +305,20 @@ ex() %>% check_function('plot') %>% {
 }
 ```
 
-The third and fourth plot won't work, because the solution code does not contain the calls to compare to. You can use the more granular `check_*()` functions in combination with `test_or()` and `override_solution()`. As the name suggests, this temporarily overrides the solution so that you can use `check_function()` for different possibilities.
+The third and fourth plot won't work, because the solution code does not contain the calls to compare to. You can use the more granular `check_*()` functions in combination with `check_or()` and `override_solution()`. As the name suggests, this temporarily overrides the solution so that you can use `check_function()` for different possibilities.
 
 ```{r}
-test_or(
-  ex() %>%
-    check_function('plot') %>% {
-      check_arg(., 'x') %>% check_equal()
-      check_arg(., 'y') %>% check_equal()
-    },
-  ex() %>%
-    override_solution('plot(res ~ time, data = df)') %>%
+ex() %>% check_or(
+  check_function(., 'plot') %>% {
+    check_arg(., 'x') %>% check_equal()
+    check_arg(., 'y') %>% check_equal()
+  },
+  override_solution(., 'plot(res ~ time, data = df)') %>%
     check_function('plot') %>% {
       check_arg(., 'formula') %>% check_equal()
       check_arg(., 'data') %>% check_equal()
     },
-  ex() %>%
-    override_solution('plot(df$res ~ df$time)') %>%
+  override_solution(., 'plot(df$res ~ df$time)') %>%
     check_function('plot') %>%
     check_arg('formula') %>%
     check_equal()
