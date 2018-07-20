@@ -56,6 +56,25 @@ test_that("check_function - step by step - append", {
   passes(output)
 })
 
+test_that("check_function - custom eq_fun", {
+  lst <- list()
+  lst$DC_SOLUTION <- "mean(c(1, 2, 3))"
+  lst$DC_SCT <- "ex() %>% check_function('mean') %>% check_arg('x') %>% check_equal(eq_fun = function(x, y) length(x) == length(y))"
+
+  # correct
+  exs <- list(
+    list(code = "mean(c(1, 2, 3))", correct = TRUE),
+    list(code = "mean(c(2, 3, 4))", correct = TRUE),
+    list(code = "mean(1)", correct = FALSE)
+  )
+
+  for (ex in exs) {
+    lst$DC_CODE <- ex$code
+    output <- test_it(c(lst, DC_CODE = ex$code))
+    if (ex$correct) passes(output) else fails(output)
+  }
+})
+
 test_that("test_function step by step", {
   lst <- list(DC_SOLUTION = "mean(1:3, na.rm = TRUE)",
               DC_SCT = "test_function('mean', args = c('x', 'na.rm'))")

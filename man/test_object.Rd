@@ -17,24 +17,25 @@ check_column(state, col, col_missing_msg = NULL, append = TRUE)
 check_element(state, el, el_missing_msg = NULL, append = TRUE)
 
 \method{check_equal}{ObjectState}(state, incorrect_msg = NULL,
-  append = TRUE, eq_condition = "equivalent", ...)
+  append = TRUE, eq_condition = "equivalent", eq_fun = NULL, ...)
 
 \method{check_equal}{ObjectColumnState}(state, incorrect_msg = NULL,
-  append = TRUE, eq_condition = "equivalent", ...)
+  append = TRUE, eq_condition = "equivalent", eq_fun = NULL, ...)
 
 \method{check_equal}{ObjectElementState}(state, incorrect_msg = NULL,
-  append = TRUE, eq_condition = "equivalent", ...)
+  append = TRUE, eq_condition = "equivalent", eq_fun = NULL, ...)
 }
 \arguments{
 \item{state}{the state to start from}
 
 \item{name}{name of the object to test.}
 
-\item{undefined_msg}{Optional feedback message in case the student did not 
-define the object. A meaningful message is automatically generated if not 
+\item{undefined_msg}{Optional feedback message in case the student did not
+define the object. A meaningful message is automatically generated if not
 supplied.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states}
 
 \item{col}{name of column to check}
 
@@ -47,8 +48,12 @@ supplied.}
 \item{incorrect_msg}{Custom feedback message in case the student's object is
 not the same as in the sample solution.}
 
-\item{eq_condition}{character string indicating how to compare. See 
+\item{eq_condition}{character string indicating how to compare. See
 \code{\link{is_equal}}.}
+
+\item{eq_fun}{optional argument to specify a custom equality function. The
+function should take two arguments and always return a single boolean
+value: \code{TRUE} or \code{FALSE}.}
 
 \item{...}{S3 stuff}
 }
@@ -57,28 +62,43 @@ Check whether a student defined a certain object (correctly)
 }
 \examples{
 \dontrun{
+
 # Example 1
 x <- mean(1:3, na.rm = TRUE)
 
-# SCT
-ex() \%>\% check_object("x") \%>\% check_equal()
+# sct to only check existence of x
+ex() \%>\%
+  check_object("x")
+
+# sct to check existence and equality
+ex() \%>\%
+  check_object("x") \%>\%
+  check_equal()
 
 # Example 2
-x <- mean(1:3, na.rm = TRUE)
-
-# SCT option
-ex() \%>\% check_object("x")
-
-# Example 3
 df <- data.frame(a = 1:3, b = LETTERS[1:3])
 
-# SCT to test column a
-ex() \%>\% check_object("df") \%>\% check_column("a") \%>\% check_equal()
+# sct to test column a
+ex() \%>\%
+  check_object("df") \%>\%
+  check_column("a") \%>\%
+  check_equal()
 
-# Example 4
+# Example 3
 lst <- list(a = 1, b = 2)
 
-# SCT to test only element b
-ex() \%>\% check_object("lst") \%>\% check_element("b") \%>\% check_equal()
+# sct to test only element b
+ex() \%>\%
+  check_object("lst") \%>\%
+  check_element("b") \%>\%
+  check_equal()
+
+# Example 4
+today <- Sys.Date()
+
+# sct to check if classes are equal
+ex() \%>\%
+  check_object("today") \%>\%
+  check_equal(eq_fun = function(x, y) { all.equal(class(x), class(y)) })
 }
 }

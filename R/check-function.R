@@ -16,10 +16,13 @@
 #'   student code is evaluated in the student environment and the argument in
 #'   the solution code is evaluated in the solution environment, and their
 #'   results are compared. Setting this to \code{FALSE} can be useful, e.g., to
-#'   check whether the student supplied a large predefined object, or when you're
-#'   in a sub-SCT where the environments are not unambiguously available.
+#'   check whether the student supplied a large predefined object, or when
+#'   you're in a sub-SCT where the environments are not unambiguously available.
 #' @param eq_condition  character vector indicating how to perform the
 #'   comparison for each argument. See \code{\link{is_equal}}
+#' @param eq_fun optional argument to specify a custom equality function. The
+#'   function should take two arguments and always return a single boolean
+#'   value: \code{TRUE} or \code{FALSE}.
 #' @param not_called_msg custom feedback message in case the student did not
 #'   call the function often enough.
 #' @param incorrect_msg custom feedback message in case the student did not call
@@ -173,7 +176,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
 
 #' @rdname check_function
 #' @export
-check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, eq_condition = "equivalent", append = TRUE, ...) {
+check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, eq_condition = "equivalent", eq_fun = NULL, append = TRUE, ...) {
 
   solution_arg <- state$get("solution_arg")
   student_args <- state$get("student_args")
@@ -192,6 +195,10 @@ check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, 
 
   if (isTRUE(try(all.equal(solution_obj, tryerrorstring), silent = TRUE))) {
     stop("check_equal() found an argument that causes an error when evaluated.")
+  }
+
+  if (is.null(eq_fun)) {
+    eq_fun <- function(x, y) is_equal(x, y, eq_condition)
   }
 
   res <- logical(length(student_args))
@@ -220,7 +227,7 @@ check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, 
     }
 
     # Check if the function arguments correspond
-    if (is_equal(student_obj, solution_obj, eq_condition)) {
+    if (eq_fun(student_obj, solution_obj)) {
       state$log(index = i, success = TRUE)
       res[i] <- TRUE
     } else {

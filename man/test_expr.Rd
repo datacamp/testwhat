@@ -21,14 +21,14 @@ check_expr(state, expr)
 \method{check_error}{ExprState}(state, no_error_msg = NULL, append = TRUE,
   ...)
 
-\method{check_equal}{ExprResultState}(state, incorrect_msg = NULL,
-  append = TRUE, eq_condition = "equivalent", ...)
+\method{check_equal}{ExprResultState}(state, eq_condition = "equivalent",
+  eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...)
 
-\method{check_equal}{ExprOutputState}(state, incorrect_msg = NULL,
-  append = TRUE, ...)
+\method{check_equal}{ExprOutputState}(state, eq_fun = NULL,
+  incorrect_msg = NULL, append = TRUE, ...)
 
-\method{check_equal}{ExprErrorState}(state, incorrect_msg = NULL,
-  append = TRUE, ...)
+\method{check_equal}{ExprErrorState}(state, eq_fun = NULL,
+  incorrect_msg = NULL, append = TRUE, ...)
 }
 \arguments{
 \item{state}{state to start from (only for \code{check_} functions)}
@@ -38,18 +38,23 @@ check_expr(state, expr)
 \item{error_msg}{custom message in case the expression throws an error while
 it shouldn't}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states}
 
 \item{...}{S3 stuff}
 
 \item{no_error_msg}{custom message in case the expression doesn't throw an
 error while it should}
 
-\item{incorrect_msg}{custom message in case the result, output or error of
-the expression does not correspond with the solution}
-
 \item{eq_condition}{character string indicating how to compare. See
 \code{\link{is_equal}}.}
+
+\item{eq_fun}{optional argument to specify a custom equality function. The
+function should take two arguments and always return a single boolean
+value: \code{TRUE} or \code{FALSE}.}
+
+\item{incorrect_msg}{custom message in case the result, output or error of
+the expression does not correspond with the solution}
 }
 \description{
 Run an expression in student and solution environment and compare the result,
@@ -58,7 +63,7 @@ output or error that is thrown by it.
 \examples{
 \dontrun{
 # Example 1
-a <- c(1, 2, 3, 4, 5, 6) 
+a <- c(1, 2, 3, 4, 5, 6)
 
 # SCT
 ex() \%>\% check_expr("a[c(2, 4)]") \%>\% check_result() \%>\% check_equal()

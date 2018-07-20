@@ -1,13 +1,16 @@
 #' Check R object existence and value
-#' 
+#'
 #' Check whether a student defined a certain object (correctly)
-#' 
+#'
 #' @param state the state to start from
 #' @param name name of the object to test.
-#' @param eq_condition character string indicating how to compare. See 
+#' @param eq_condition character string indicating how to compare. See
 #'   \code{\link{is_equal}}.
-#' @param undefined_msg Optional feedback message in case the student did not 
-#'   define the object. A meaningful message is automatically generated if not 
+#' @param eq_fun optional argument to specify a custom equality function. The
+#'   function should take two arguments and always return a single boolean
+#'   value: \code{TRUE} or \code{FALSE}.
+#' @param undefined_msg Optional feedback message in case the student did not
+#'   define the object. A meaningful message is automatically generated if not
 #'   supplied.
 #' @param incorrect_msg Custom feedback message in case the student's object is
 #'   not the same as in the sample solution.
@@ -15,34 +18,50 @@
 #' @param col name of column to check
 #' @param el_missing_msg Custom message in case element is messing.
 #' @param el name of element to check
-#' @param append Whether or not to append the feedback to feedback built in previous states
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states
 #' @param ... S3 stuff
-#' 
+#'
 #' @examples
 #' \dontrun{
+#'
 #' # Example 1
 #' x <- mean(1:3, na.rm = TRUE)
-#' 
-#' # SCT
-#' ex() %>% check_object("x") %>% check_equal()
-#' 
+#'
+#' # sct to only check existence of x
+#' ex() %>%
+#'   check_object("x")
+#'
+#' # sct to check existence and equality
+#' ex() %>%
+#'   check_object("x") %>%
+#'   check_equal()
+#'
 #' # Example 2
-#' x <- mean(1:3, na.rm = TRUE)
-#' 
-#' # SCT option
-#' ex() %>% check_object("x")
-#' 
-#' # Example 3
 #' df <- data.frame(a = 1:3, b = LETTERS[1:3])
 #'
-#' # SCT to test column a
-#' ex() %>% check_object("df") %>% check_column("a") %>% check_equal()
-#' 
-#' # Example 4
+#' # sct to test column a
+#' ex() %>%
+#'   check_object("df") %>%
+#'   check_column("a") %>%
+#'   check_equal()
+#'
+#' # Example 3
 #' lst <- list(a = 1, b = 2)
-#' 
-#' # SCT to test only element b
-#' ex() %>% check_object("lst") %>% check_element("b") %>% check_equal()
+#'
+#' # sct to test only element b
+#' ex() %>%
+#'   check_object("lst") %>%
+#'   check_element("b") %>%
+#'   check_equal()
+#'
+#' # Example 4
+#' today <- Sys.Date()
+#'
+#' # sct to check if classes are equal
+#' ex() %>%
+#'   check_object("today") %>%
+#'   check_equal(eq_fun = function(x, y) { all.equal(class(x), class(y)) })
 #' }
 #' @name test_object
 
@@ -120,23 +139,23 @@ check_sub_helper <- function(state, sub, sub_missing_msg, append, type = c("colu
 
 #' @rdname test_object
 #' @export
-check_equal.ObjectState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
-  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, type = "object")
+check_equal.ObjectState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", eq_fun = NULL, ...) {
+  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, eq_fun = eq_fun, type = "object")
 }
 
 #' @rdname test_object
 #' @export
-check_equal.ObjectColumnState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
-  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, type = "column")
+check_equal.ObjectColumnState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", eq_fun = NULL, ...) {
+  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, eq_fun = eq_fun, type = "column")
 }
 
 #' @rdname test_object
 #' @export
-check_equal.ObjectElementState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
-  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, type = "element")
+check_equal.ObjectElementState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", eq_fun = NULL, ...) {
+  check_equal_helper(state, incorrect_msg = incorrect_msg, append = append, eq_condition = eq_condition, eq_fun = eq_fun, type = "element")
 }
 
-check_equal_helper <- function(state, incorrect_msg, eq_condition, append, type = c("object", "column", "element"), ...) {
+check_equal_helper <- function(state, incorrect_msg, eq_condition, append, eq_fun, type = c("object", "column", "element"), ...) {
   type <- match.arg(type)
   student_obj <- state$get("student_object")
   solution_obj <- state$get("solution_object")
@@ -148,8 +167,10 @@ check_equal_helper <- function(state, incorrect_msg, eq_condition, append, type 
                     message = incorrect_msg,
                     append = append)
   
-  check_that(is_equal(student_obj, solution_obj, eq_condition),
-             feedback = state$details)
+  if (is.null(eq_fun)) {
+    eq_fun <- function(x, y) is_equal(x, y, eq_condition)
+  }
+  check_that(eq_fun(student_obj, solution_obj), feedback = state$details)
   return(state)
 }
 
