@@ -2,6 +2,34 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.6.0
+
+### Added
+
+- You can now pipe the state into `check_correct()` and `check_or()`. These functions will then expose a special variable `.` for the subtests to use:
+
+  ```R
+  ex() %>% check_correct(
+    check_object(., 'x') %>% check_equal(),
+    check_function(., 'mean') %>% check_arg('x') %>% check_equal()
+  )
+  ```
+
+- You can specify custom equality functions to compare objects, function arguments and function results:
+
+  ```R
+  # solution
+  x <- list(a = 1)
+
+  # sct
+  ex() %>% check_object('x') %>% check_equal(eq_fun = function(x, y) { x$a == x$b })
+
+  # submissions that will pass
+  x <- list(a = 1)
+  x <- data.frame(a = 1)
+  x <- list(a = 1, b = 2)
+  ```
+
 ## 4.5.1 - slight markdown improvements
 
 ### Added
