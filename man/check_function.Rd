@@ -16,7 +16,8 @@ check_operator(state, name, index = 1, append = TRUE,
 check_arg(state, arg, arg_not_specified_msg = NULL, append = TRUE)
 
 \method{check_equal}{ArgumentState}(state, incorrect_msg = NULL,
-  eval = TRUE, eq_condition = "equivalent", append = TRUE, ...)
+  eval = TRUE, eq_condition = "equivalent", eq_fun = NULL,
+  append = TRUE, ...)
 }
 \arguments{
 \item{state}{state to start from}
@@ -50,11 +51,15 @@ arguments are compared. If \code{eval} is \code{TRUE}, the argument in the
 student code is evaluated in the student environment and the argument in
 the solution code is evaluated in the solution environment, and their
 results are compared. Setting this to \code{FALSE} can be useful, e.g., to
-check whether the student supplied a large predefined object, or when you're
-in a sub-SCT where the environments are not unambiguously available.}
+check whether the student supplied a large predefined object, or when
+you're in a sub-SCT where the environments are not unambiguously available.}
 
 \item{eq_condition}{character vector indicating how to perform the
 comparison for each argument. See \code{\link{is_equal}}}
+
+\item{eq_fun}{optional argument to specify a custom equality function. The
+function should take two arguments and always return a single boolean
+value: \code{TRUE} or \code{FALSE}.}
 
 \item{...}{S3 stuff}
 }

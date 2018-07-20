@@ -1,17 +1,24 @@
 #' Check the result of a function call/operation
-#' 
-#' @param error_msg feedback message in case the student function call at the mentioned index generated an error.
-#' @param incorrect_msg  feedback message in case the evaluation was not the same as in the solution.
-#' @param eq_condition how to compare student and solution.
+#'
+#' @param error_msg feedback message in case the student function call at the
+#'   mentioned index generated an error.
+#' @param incorrect_msg  feedback message in case the evaluation was not the
+#'   same as in the solution.
+#' @param eq_condition character string indicating how to compare. See
+#'   \code{\link{is_equal}}.
+#' @param eq_fun optional argument to specify a custom equality function. The
+#'   function should take two arguments and always return a single boolean
+#'   value: \code{TRUE} or \code{FALSE}.
 #' @param state the state to start from (for \code{check_} functions)
-#' @param append Whether or not to append the feedback to feedback built in previous states
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states
 #' @param ... S3 stuff
 #'
 #' @examples
 #' \dontrun{
 #' # Example 1
 #' mean(1:3)
-#' 
+#'
 #' # SCT
 #' ex() %>% check_function("mean") %>% check_result() %>% check_equal()
 #' }
@@ -31,14 +38,14 @@ check_result.FunctionState <- function(state, error_msg = NULL, append = TRUE, .
 
 #' @rdname check_function_result
 #' @export
-check_equal.FunctionResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, append = TRUE, ...) {
-  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = append, type = "function")
+check_equal.FunctionResultState <- function(state, eq_condition = "equivalent", eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  check_call_result_equal(state, eq_condition = eq_condition, eq_fun = eq_fun, incorrect_msg = incorrect_msg, append = append, type = "function")
 }
 
 #' @rdname check_function_result
 #' @export
-check_equal.OperationResultState <- function(state, eq_condition = "equivalent", incorrect_msg = NULL, append = TRUE, ...) {
-  check_call_result_equal(state, eq_condition = eq_condition, incorrect_msg = incorrect_msg, append = append, type = "operator")
+check_equal.OperationResultState <- function(state, eq_condition = "equivalent", eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  check_call_result_equal(state, eq_condition = eq_condition, eq_fun = eq_fun, incorrect_msg = incorrect_msg, append = append, type = "operator")
 }
 
 check_call_result <- function(state, error_msg, append, type = c("function", "operator")) {
@@ -102,7 +109,7 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
 
 
 
-check_call_result_equal <- function(state, eq_condition, incorrect_msg, append, type = c("function", "operator")) {
+check_call_result_equal <- function(state, eq_condition, eq_fun, incorrect_msg, append, type = c("function", "operator")) {
   type <- match.arg(type)
   solution_call <- state$get("solution_call")
   student_calls <- state$get("student_calls")
@@ -114,6 +121,10 @@ check_call_result_equal <- function(state, eq_condition, incorrect_msg, append, 
   
   sol_res <- solution_call$result
   
+  if (is.null(eq_fun)) {
+    eq_fun <- function(x, y) is_equal(x, y, eq_condition)
+  }
+
   res <- logical(length(student_calls))
   details <- NULL
   for (i in seq_along(student_calls)) {
@@ -130,7 +141,7 @@ check_call_result_equal <- function(state, eq_condition, incorrect_msg, append, 
     }
     
     # Check if the function arguments correspond
-    if (is_equal(stud_res, sol_res, eq_condition)) {
+    if (eq_fun(stud_res, sol_res)) {
       state$log(index = i, success = TRUE)
       res[i] <- TRUE
     } else {

@@ -155,6 +155,24 @@ test_that("test call result - functions - indexing", {
   passes(output)
 })
 
+test_that("test call result - custom eq_fun", {
+  lst <- list()
+  lst$DC_SOLUTION <- "my_fun <- function() return(list(a = 1))\nmy_fun()"
+  lst$DC_SCT <- "ex() %>% check_function('my_fun') %>% check_result() %>% check_equal(eq_fun = function(x, y) { x$a == y$a })"
+
+  # correct
+  exs <- list(
+    list(code = "my_fun <- function() return(list(a = 1, b = 2))\nmy_fun()", correct = TRUE),
+    list(code = "my_fun <- function() return(list(a = 2))\nmy_fun()", correct = FALSE),
+    list(code = "my_fun <- function() return(1))\nmy_fun()", correct = FALSE)
+  )
+
+  for (ex in exs) {
+    lst$DC_CODE <- ex$code
+    output <- test_it(c(lst, DC_CODE = ex$code))
+    if (ex$correct) passes(output) else fails(output)
+  }
+})
 
 context("check operator result")
 

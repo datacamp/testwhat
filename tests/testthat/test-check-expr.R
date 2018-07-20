@@ -29,6 +29,25 @@ test_that("check_expr - result with randomness", {
   passes(output)
 })
 
+test_that("check_expr - custom eq_fun", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- list(a = 1)"
+  lst$DC_SCT <- "ex() %>% check_expr('x') %>% check_result() %>% check_equal(eq_fun = function(x, y) { x$a == y$a })"
+
+  # correct
+  exs <- list(
+    list(code = "x <- list(a = 1, b = 2)", correct = TRUE),
+    list(code = "x <- list(a = 2)", correct = FALSE),
+    list(code = "x <- 1", correct = FALSE)
+  )
+
+  for (ex in exs) {
+    lst$DC_CODE <- ex$code
+    output <- test_it(c(lst, DC_CODE = ex$code))
+    if (ex$correct) passes(output) else fails(output)
+  }
+})
+
 test_that("check_expr - result - custom", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))"

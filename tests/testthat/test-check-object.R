@@ -149,6 +149,25 @@ test_that("test_object - eq_condition = identical", {
   fails(output)
 })
 
+test_that("check_object - custom eq_fun", {
+  lst <- list()
+  lst$DC_SOLUTION <- "x <- list(a = 1)"
+  lst$DC_SCT <- "ex() %>% check_object('x') %>% check_equal(eq_fun = function(x, y) { x$a == y$a })"
+
+  # correct
+  exs <- list(
+    list(code = "x <- list(a = 1, b = 2)", correct = TRUE),
+    list(code = "x <- list(a = 2)", correct = FALSE),
+    list(code = "x <- 1", correct = FALSE)
+  )
+
+  for (ex in exs) {
+    lst$DC_CODE <- ex$code
+    output <- test_it(c(lst, DC_CODE = ex$code))
+    if (ex$correct) passes(output) else fails(output)
+  }
+})
+
 test_that("test_object - different classes - 1", {
   lst <- list()
   lst$DC_CODE <- "carriers <- c(1, 2, 3)"

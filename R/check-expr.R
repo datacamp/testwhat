@@ -1,33 +1,37 @@
 #' Check the result, output or errors thrown by an expression
-#' 
+#'
 #' Run an expression in student and solution environment and compare the result,
 #' output or error that is thrown by it.
-#' 
+#'
 #' @param state state to start from (only for \code{check_} functions)
 #' @param expr the expression to run
+#' @param eq_condition character string indicating how to compare. See
+#'   \code{\link{is_equal}}.
+#' @param eq_fun optional argument to specify a custom equality function. The
+#'   function should take two arguments and always return a single boolean
+#'   value: \code{TRUE} or \code{FALSE}.
 #' @param error_msg custom message in case the expression throws an error while
 #'   it shouldn't
 #' @param no_error_msg custom message in case the expression doesn't throw an
 #'   error while it should
-#' @param eq_condition character string indicating how to compare. See
-#'   \code{\link{is_equal}}.
 #' @param incorrect_msg custom message in case the result, output or error of
 #'   the expression does not correspond with the solution
-#' @param append Whether or not to append the feedback to feedback built in previous states
+#' @param append Whether or not to append the feedback to feedback built in
+#'   previous states
 #' @param ... S3 stuff
-#' 
+#'
 #' @rdname test_expr
 #' @examples
 #' \dontrun{
 #' # Example 1
-#' a <- c(1, 2, 3, 4, 5, 6) 
-#' 
+#' a <- c(1, 2, 3, 4, 5, 6)
+#'
 #' # SCT
 #' ex() %>% check_expr("a[c(2, 4)]") %>% check_result() %>% check_equal()
-#' 
+#'
 #' # Example 2
 #' my_fun <- function() { print('hello') }
-#' 
+#'
 #' # SCT
 #' ex() %>% check_expr("my_fun()") %>% check_output() %>% check_equal()
 #' }
@@ -78,20 +82,20 @@ check_error.ExprState <- function(state, no_error_msg = NULL, append = TRUE, ...
 
 #' @rdname test_expr
 #' @export
-check_equal.ExprResultState <- function(state, incorrect_msg = NULL, append = TRUE, eq_condition = "equivalent", ...) {
-  fundef_check_equal_helper(state, incorrect_msg, eq_condition, append = append, type = "result")
+check_equal.ExprResultState <- function(state, eq_condition = "equivalent", eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  expr_check_equal_helper(state, incorrect_msg, eq_condition, eq_fun = eq_fun, append = append, type = "result")
 }
 
 #' @rdname test_expr
 #' @export
-check_equal.ExprOutputState <- function(state, incorrect_msg = NULL, append = TRUE, ...) {
-  return(fundef_check_equal_helper(state, incorrect_msg, append = append, type = "output"))
+check_equal.ExprOutputState <- function(state, eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  expr_check_equal_helper(state, incorrect_msg, eq_fun = eq_fun, append = append, type = "output")
 }
 
 #' @rdname test_expr
 #' @export
-check_equal.ExprErrorState <- function(state, incorrect_msg = NULL, append = TRUE, ...) {
-  return(fundef_check_equal_helper(state, incorrect_msg, append = append, type = "error"))
+check_equal.ExprErrorState <- function(state, eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  expr_check_equal_helper(state, incorrect_msg, eq_fun = eq_fun, append = append, type = "error")
 }
 
 run_expr_helper <- function(state, expr, expr_str, error_msg, append, case = c("result", "output")) {
@@ -182,7 +186,7 @@ run_expr_error_helper <- function(state, expr, expr_str, no_error_msg, append) {
 }
 
 
-fundef_check_equal_helper <- function(state, incorrect_msg, eq_condition = "equivalent", append, type = c("result", "output", "error")) {
+expr_check_equal_helper <- function(state, incorrect_msg, eq_condition = "equivalent", eq_fun = NULL, append, type = c("result", "output", "error")) {
   type <- match.arg(type)
   student_obj <- state$get("student_object")
   solution_obj <- state$get("solution_object")
@@ -194,7 +198,11 @@ fundef_check_equal_helper <- function(state, incorrect_msg, eq_condition = "equi
                     message = incorrect_msg,
                     append = append)
   
-  check_that(is_equal(student_obj, solution_obj, eq_condition),
+  if (is.null(eq_fun)) {
+    eq_fun <- function(x, y) is_equal(x, y, eq_condition)
+  }
+
+  check_that(eq_fun(student_obj, solution_obj),
              feedback = state$details)
   return(state)
 }

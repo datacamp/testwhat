@@ -15,23 +15,31 @@
   ...)
 
 \method{check_equal}{FunctionResultState}(state, eq_condition = "equivalent",
-  incorrect_msg = NULL, append = TRUE, ...)
+  eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...)
 
 \method{check_equal}{OperationResultState}(state, eq_condition = "equivalent",
-  incorrect_msg = NULL, append = TRUE, ...)
+  eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...)
 }
 \arguments{
 \item{state}{the state to start from (for \code{check_} functions)}
 
-\item{error_msg}{feedback message in case the student function call at the mentioned index generated an error.}
+\item{error_msg}{feedback message in case the student function call at the
+mentioned index generated an error.}
 
-\item{append}{Whether or not to append the feedback to feedback built in previous states}
+\item{append}{Whether or not to append the feedback to feedback built in
+previous states}
 
 \item{...}{S3 stuff}
 
-\item{eq_condition}{how to compare student and solution.}
+\item{eq_condition}{character string indicating how to compare. See
+\code{\link{is_equal}}.}
 
-\item{incorrect_msg}{feedback message in case the evaluation was not the same as in the solution.}
+\item{eq_fun}{optional argument to specify a custom equality function. The
+function should take two arguments and always return a single boolean
+value: \code{TRUE} or \code{FALSE}.}
+
+\item{incorrect_msg}{feedback message in case the evaluation was not the
+same as in the solution.}
 }
 \description{
 Check the result of a function call/operation
