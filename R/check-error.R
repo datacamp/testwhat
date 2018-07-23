@@ -75,5 +75,6 @@ check_error.default <- function(state, incorrect_msg = NULL, ...) {
 
 # Deprecated
 test_error <- function(incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% check_error(incorrect_msg = incorrect_msg)
 }

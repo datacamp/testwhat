@@ -42,5 +42,6 @@ check_library <- function(state, package, not_called_msg = NULL, incorrect_msg =
 test_library_function <- function(package,
                           not_called_msg = NULL, 
                           incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% check_library(package, not_called_msg = not_called_msg, incorrect_msg = incorrect_msg)
 }

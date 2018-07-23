@@ -24,6 +24,7 @@ check_rmd <- function(state) {
 
 # Deprecated:
 test_rmd_file <- function(code) {
+  fail_if_v2_only()
   old_state <- ex()
   on.exit(tw$set(state = old_state))
   test_env <- old_state$get("test_env")

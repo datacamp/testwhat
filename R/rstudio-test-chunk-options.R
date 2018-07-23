@@ -13,6 +13,7 @@
 test_chunk_options <- function(options = NULL,
                                not_called_msg = NULL,
                                incorrect_msg = NULL) {
+  fail_if_v2_only()
   state <- ex()
   chunk_number <- state$get("chunk_number")
   student_chunk <- state$get("student_ds_part")

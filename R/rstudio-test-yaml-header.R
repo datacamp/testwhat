@@ -12,6 +12,7 @@ test_yaml_header <- function(options = NULL,
                              check_equality = TRUE,
                              not_called_msg = NULL,
                              incorrect_msg = NULL) {
+  fail_if_v2_only()
   state <- ex()
   chunk_number <- state$get("chunk_number")
   student_code <- state$get("student_code")

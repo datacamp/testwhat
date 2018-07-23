@@ -284,6 +284,7 @@ test_function <- function(name,
                           not_called_msg = NULL,
                           args_not_specified_msg = NULL,
                           incorrect_msg = NULL) {
+  fail_if_v2_only()
   n_args <- length(args)
   if (!is.null(args_not_specified_msg) && length(args_not_specified_msg) < n_args) {
     args_not_specified_msg <- rep(args_not_specified_msg[1], n_args)

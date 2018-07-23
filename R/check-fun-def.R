@@ -145,6 +145,7 @@ test_function_definition <- function(name,
                                      body_test = NULL,
                                      undefined_msg = NULL, 
                                      incorrect_number_arguments_msg = NULL) {
+  fail_if_v2_only()
   body_test <- substitute(body_test)
   function_test <- substitute(function_test)
   fundef <- ex() %>% check_fun_def(name, 

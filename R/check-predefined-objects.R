@@ -61,6 +61,7 @@ test_predefined_objects <- function(name,
                                     eval = TRUE,
                                     undefined_msg = NULL, 
                                     incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% check_predefined_objects(name = name,
                                     eq_condition = eq_condition,
                                     eval = eval,

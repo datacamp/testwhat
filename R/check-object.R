@@ -179,6 +179,7 @@ check_equal_helper <- function(state, incorrect_msg, eq_condition, append, eq_fu
 test_object <- function(name, eq_condition = "equivalent",
                         eval = TRUE,
                         undefined_msg = NULL, incorrect_msg = NULL) {
+  fail_if_v2_only()
   obj_state <- ex() %>% check_object(name, 
                                      undefined_msg = undefined_msg,
                                      append = is.null(undefined_msg))
@@ -194,6 +195,7 @@ test_data_frame <- function(name, columns = NULL,
                             undefined_msg = NULL,
                             undefined_cols_msg = NULL, 
                             incorrect_msg = NULL) {
+  fail_if_v2_only()
   obj_state <- ex() %>% check_object(name = name, 
                                      undefined_msg = undefined_msg,
                                      append = is.null(undefined_msg))

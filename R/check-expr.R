@@ -134,6 +134,7 @@ run_expr_helper <- function(state, expr, expr_str, error_msg, append, case = c("
 test_expression_result <- function(expr, 
                                    eq_condition = "equivalent",
                                    incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% 
     check_expr(expr) %>% 
     check_result() %>% 
@@ -142,6 +143,7 @@ test_expression_result <- function(expr,
 
 #' @importFrom utils capture.output
 test_expression_output <- function(expr, incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% 
     check_expr(expr) %>% 
     check_output() %>% 
@@ -149,6 +151,7 @@ test_expression_output <- function(expr, incorrect_msg = NULL) {
 }
 
 test_expression_error <- function(expr, no_error_msg = NULL, incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% 
     check_expr(expr) %>% 
     check_error(no_error_msg = no_error_msg, append = is.null(no_error_msg)) %>% 

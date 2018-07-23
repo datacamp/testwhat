@@ -6,6 +6,7 @@
 #' @param code  SCT code to test the group (in curly braces)
 #' @keywords internal
 test_rmd_group <- function(group_number, code) {
+  fail_if_v2_only()
   old_state <- ex()
   on.exit(tw$set(state = old_state))
   test_env <- old_state$get("test_env")

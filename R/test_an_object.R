@@ -3,6 +3,7 @@
 test_an_object <- function(name, 
                            undefined_msg = NULL,
                            eq_condition = "equivalent") {
+  fail_if_v2_only()
   
   # Get needed elements from tw
   student_env <- ex()$get("student_env")

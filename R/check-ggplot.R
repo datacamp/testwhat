@@ -50,6 +50,7 @@ check_ggplot <- function(state,
                          check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
                          check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                          check = NULL) {
+  fail_if_v2_only(err_msg)
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")
   student_code <- state$get("student_code")
@@ -173,6 +174,7 @@ test_ggplot <- function(index = 1,
                         check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
                         check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                         check = NULL) {
+  fail_if_v2_only(err_msg)
   ex() %>% check_ggplot(index = index,
                         all_fail_msg = all_fail_msg,
                         check_data = check_data, data_fail_msg = data_fail_msg,
@@ -759,3 +761,5 @@ is_geom_command <- function(code, envir) {
 map_synonyms <- function(fun) {
   gsub("scale_colour_", "scale_color_", fun, fixed = TRUE)
 }
+
+err_msg <- "test_ggplot() and check_ggplot() should not be used anymore. Use check_function() instead. Visit the glossary for examples."
