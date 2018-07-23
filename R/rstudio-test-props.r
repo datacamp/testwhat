@@ -23,6 +23,7 @@ test_props <- function(index = 1,
                        not_called_msg = NULL,
                        incorrect_msg = NULL,
                        error_msg = NULL) {
+  fail_if_v2_only()
   state <- ex()
   student_pd <- state$get("student_pd")
   solution_pd <- state$get("solution_pd")

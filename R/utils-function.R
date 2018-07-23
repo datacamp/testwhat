@@ -69,7 +69,7 @@ get_args <- function(pd, standard_call) {
     hits <- which(names(args) == "")
     if (length(hits) > 0) {
       # Some arguments not named
-      args$`...` <- args[hits]
+      args[["..."]] <- args[hits]
       args[hits] <- NULL
     }
   }

@@ -65,6 +65,7 @@ test_student_typed <- function(strings,
                                fixed = TRUE,
                                times = 1,
                                not_typed_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% check_code(strings, fixed = fixed, times = times, missing_msg = not_typed_msg, append = is.null(not_typed_msg))
 }
 

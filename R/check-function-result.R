@@ -165,6 +165,7 @@ test_function_result <- function(name = NULL,
                                  not_called_msg = NULL,
                                  error_msg = NULL,
                                  incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% 
     check_function(name, index = index, not_called_msg = not_called_msg, append = is.null(not_called_msg)) %>% 
     check_result(error_msg = error_msg, append = is.null(error_msg)) %>%

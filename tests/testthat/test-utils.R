@@ -18,7 +18,8 @@ test_that("accessor works", {
 })
 
 test_that("get_num_hits works", {
-  #TODO
+  expect_equal(get_num_hits('a', 'abc', TRUE), 1)
+  expect_equal(get_num_hits('a', 'aba', TRUE), 2)
 })
 
 test_that("check_defined works", {
@@ -39,3 +40,19 @@ test_that("remove_comments works", {
     expect_equal(remove_comments("#"), "")  
   }
 })
+
+test_that("fail_if_v2_only", {
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = ''), {
+    expect_equal(fail_if_v2_only(), NULL)
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '0'), {
+    expect_equal(fail_if_v2_only(), NULL)
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(fail_if_v2_only())
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(fail_if_v2_only('test'), regexp = 'test')
+  })
+})
+

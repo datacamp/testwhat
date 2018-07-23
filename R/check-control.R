@@ -191,6 +191,7 @@ test_if_else <- function(index = 1,
                          else_expr_test = NULL,
                          not_found_msg = NULL,
                          missing_else_msg = NULL) {
+  fail_if_v2_only()
   old_state <- ex()  
   test_env <- old_state$get("test_env")
   on.exit(tw$set(state = old_state))
@@ -223,6 +224,7 @@ test_while_loop <- function(index = 1,
                             cond_test = NULL, 
                             expr_test = NULL,                          
                             not_found_msg = NULL) {
+  fail_if_v2_only()
   cond_test <- substitute(cond_test)
   expr_test <- substitute(expr_test)
   test_loop(index = index, 
@@ -236,6 +238,7 @@ test_for_loop <- function(index = 1,
                           cond_test = NULL,
                           expr_test = NULL,
                           not_found_msg = NULL) {
+  fail_if_v2_only()
   cond_test <- substitute(cond_test)
   expr_test <- substitute(expr_test)
   test_loop(index = index, 

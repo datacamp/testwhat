@@ -125,6 +125,7 @@ clean_up <- function(x) {
 # Deprecated
 
 test_output_contains <- function(expr, times = 1, incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% check_output_expr(expr = expr, times = times, missing_msg = incorrect_msg, append = is.null(incorrect_msg))
 }
 

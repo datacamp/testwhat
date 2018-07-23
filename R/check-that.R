@@ -50,6 +50,7 @@ throw_sct_failure <- function(message, feedback, call = sys.call(-1)) {
 #' @rdname check_that
 #' @export
 test_what <- function(code, feedback) {
+  fail_if_v2_only()
   lut <- list(expect_true = call("is_true"),
               expect_false = call("is_false"),
               expect_equal = call("is_equal"))

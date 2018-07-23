@@ -25,5 +25,6 @@ check_wd <- function(state, path, missing_msg = NULL) {
 }
 
 test_file_exists <- function(path, incorrect_msg = NULL) {
+  fail_if_v2_only()
   ex() %>% check_wd(path = path, missing_msg = incorrect_msg)
 }

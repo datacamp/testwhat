@@ -525,3 +525,16 @@ test_that("test_element - step by step", {
   passes(output)
 })
 
+test_that("test_object fails if ENV set", {
+  setup_state(stu_code = 'x <- 5', sol_code = 'x <- 5')
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = ''), {
+    passes2(test_object('x'))
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '0'), {
+    passes2(test_object('x'))
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(test_object('x'), regexp = 'test_object() can no longer be used in SCTs', fixed = TRUE)
+  })
+})
+
