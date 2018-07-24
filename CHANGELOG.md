@@ -2,6 +2,10 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.7.0
+
+When executing old skool `test_()` functions, `testwhat` will now check the environment variable `TESTWHAT_V2_ONLY`. If it is set to `1`, an error will be generated. This will effectively make `test_()` functions unavailable for newer courses whose course image will have this environment variable baked in.
+
 ## 4.6.0
 
 ### Added
