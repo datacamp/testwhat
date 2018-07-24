@@ -17,6 +17,8 @@ knitr::opts_chunk$set(
 
 If you are looking at the SCTs of old DataCamp courses, you'll notice they use `test_x()` functions instead of `check_x()` functions, and there is no usage of `ex()`. The `test_x()` way of doing things has now been phased out in favor of the more verbose, but more transparent and composable `check_x()` functions that start with `ex()` and are chained together with the `%>%` operator.
 
+## Common cases
+
 Whenever you come across an SCT that uses `test_x()` functions, you'll make everybody's life easier by converting it to a `check_x()`-based SCT. Below are the most common cases you will encounter, together with instructions on how to translate from one to the other.
 
 Something you came across that you didn't find in this list? Just create an issue on [`testwhat`'s GitHub repo](https://github.com/datacamp/testwhat). Content Engineering will explain how to translate the SCT and update this article.
@@ -133,5 +135,17 @@ ex() %>% check_correct(
   check_object(., "x") %>% check_equal(),
   check_fun(., "mean") %>% check_arg("x") %>% check_equal()
 )
+```
+
+## Enforcing check functions
+
+For newer courses an updated version of the base Docker image is used that sets the `TESTWHAT_V2_ONLY` environment variable. When this variable is set, `testwhat` will no longer allow SCT authors to use the old `test_x()` functions. If you are updating the Docker image for courses that have old skool SCTs, this would mean you have to rewrite all the SCTs to their check equivalents to make the build pass. If you want to work around this, thus being able to use test functions even with the latest base image, you can include one of the following snippets of code:
+
+```
+# in requirements.sh (bash code)
+echo TESTWHAT_V2_ONLY=0 > .Renviron
+
+# in requirements.r (R code)
+write("TESWHAT_V2_ONLY=0", file = ".Renviron")
 ```
 
