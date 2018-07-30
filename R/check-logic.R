@@ -70,7 +70,7 @@ check_correct <- function(state, ...) {
   if (nargs() == 3) {
     # If three inputs, the first one must be a state
     set_dot(state)
-    test_correct(...)
+    test_correct(..., v2_check = FALSE)
   } else {
     # Else, fall back on old behavior
     input <- as.list(substitute(list(...)))
@@ -84,7 +84,7 @@ check_or <- function(state, ...) {
   if (class(substitute(state)) == "name") {
     # If something was piped in, it will be a . (class name, done by magrittr)
     set_dot(state)
-    test_or(...)
+    test_or(..., v2_check = FALSE)
   } else {
     # Else, fall back on previous behavior
     tests <- as.list(substitute(list(...)))
@@ -97,7 +97,10 @@ set_dot <- function(x) {
   assign(".", x, envir = tw$get("state")$get("test_env"))
 }
 
-test_correct <- function(check_code, diagnose_code, sub = TRUE) {
+test_correct <- function(check_code, diagnose_code, sub = TRUE, v2_check = TRUE) {
+  if(v2_check) {
+    fail_if_v2_only(errmsg = 'test_correct() can no longer be used in SCTs. Use ex() %>% check_correct() instead.')
+  }
   if(sub) {
     check_code <- substitute(check_code)
     diagnose_code <- substitute(diagnose_code)
@@ -113,9 +116,13 @@ test_correct <- function(check_code, diagnose_code, sub = TRUE) {
       check_that(failure(), feedback = diagnose_res$feedback)
     }
   }
+  return(invisible(NULL))
 }
 
-test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
+test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1, v2_check = TRUE) {
+  if(v2_check) {
+    fail_if_v2_only(errmsg = 'test_or() can no longer be used in SCTs. Use ex() %>% check_or() instead.')
+  }
   input <- as.list(substitute(list(...)))
   input[[1]] <- NULL
   
@@ -136,4 +143,5 @@ test_or <- function(..., incorrect_msg = NULL, choose_feedback = 1) {
       check_that(failure(), feedback = incorrect_msg)
     }
   }
+  return(invisible(NULL))
 }
