@@ -326,7 +326,31 @@ test_that("check_object in combination with test_or", {
   fails(output)
 })
 
-test_that("check_object in combination with test_or", {
+test_that("check_object in combination with check_or", {
+  lst <- list()
+  lst$DC_SOLUTION <- "a <- 2"
+  lst$DC_SCT <- "ex() %>% check_or(check_object(., 'a') %>% check_equal(),
+                                   override_solution_env(., a = 2.5) %>% check_object('a') %>% check_equal(),
+                                   override_solution_env(., a = 3) %>% check_object('a') %>% check_equal())"
+
+  lst$DC_CODE <- "a <- 2"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "a <- 2.5"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "a <- 3"
+  output <- test_it(lst)
+  passes(output)
+
+  lst$DC_CODE <- "a <- 4"
+  output <- test_it(lst)
+  fails(output)
+})
+
+test_that("check_object in combination with check_or (old)", {
   lst <- list()
   lst$DC_SOLUTION <- "a <- 2"
   lst$DC_SCT <- "check_or(ex() %>% check_object('a') %>% check_equal(),

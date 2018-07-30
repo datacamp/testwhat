@@ -49,11 +49,13 @@ Multiple choice exercises are straightforward to test. Use `test_mc()` to provid
     msg1 <- "That's someone who makes soups."
     msg2 <- "That's a clown who likes burgers."
     msg3 <- "Correct! Head over to the next exercise!"
-    test_mc(correct = 3, 
-            feedback_msgs = c(msg1, msg2, msg3))
+    ex() %>% check_mc(correct = 3,
+                      feedback_msgs = c(msg1, msg2, msg3))
     ```
 
-The first argument of `test_mc()`, `correct`, should be the number of the correct answer in this list. Here, the correct answer is Ross Ihaka, corresponding to 3. The `feedback_msgs` argument should be a list of strings with a length equal to the number of options. We encourage you to provide feedback messages that are informative and tailored to the (incorrect) option that people selected. Make sure to correctly order the feedback message such that it corresponds to the possible answers that are listed in the instructions tab. Notice that there's no need for `success_msg()` in multiple choice exercises, as you have to specify the success message inside `test_mc()`, along with the feedback for incorrect options.
+- `correct` specifies the number of the correct answer in this list. Here, the correct answer is Ross Ihaka, corresponding to 3.
+- The `feedback_msgs` argument is a list of strings with a length equal to the number of options. It is encouraged to provide feedback messages that are informative and tailored to the (incorrect) option that people selected.
+- Notice that there's no need for `success_msg()` in multiple choice exercises, as you have to specify the success message inside `test_mc()`, along with the feedback for incorrect options.
 
 ## Checking library calls
 

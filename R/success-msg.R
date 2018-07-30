@@ -6,7 +6,7 @@
 #' you specify this message, but at the end makes most sense.
 #' 
 #' For multiple choice exercises, the success message is specified
-#' inside \code{\link{test_mc}}, so an additional call of \code{success_msg}
+#' inside \code{\link{check_mc}}, so an additional call of \code{success_msg}
 #' is not necessary.
 #' 
 #' @param msg The success message as a character string.
