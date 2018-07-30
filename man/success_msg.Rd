@@ -19,6 +19,6 @@ you specify this message, but at the end makes most sense.
 }
 \details{
 For multiple choice exercises, the success message is specified
-inside \code{\link{test_mc}}, so an additional call of \code{success_msg}
+inside \code{\link{check_mc}}, so an additional call of \code{success_msg}
 is not necessary.
 }

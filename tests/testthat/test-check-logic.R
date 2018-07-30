@@ -290,3 +290,44 @@ test_that("check_or - new school - nested", {
   output <- test_it(lst)
   fails(output, mess_patt = "The system wanted to find the pattern <code>c</code>")
 })
+
+context("check_logic v2 only")
+
+test_that("test_or fails if ENV set", {
+  setup_state(stu_code = 'x <- 5', sol_code = 'x <- 5')
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = ''), {
+    is.null(test_or(test_student_typed('x'), test_student_typed('x')))
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '0'), {
+    is.null(test_or(test_student_typed('x'), test_student_typed('x')))
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(test_or(test_student_typed('x'), test_student_typed('x')), regexp = 'test_or() can no longer be used in SCTs', fixed = TRUE)
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(check_or(ex() %>% check_code('x'), ex() %>% check_code('x')), regexp = 'test_or() can no longer be used in SCTs', fixed = TRUE)
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    is.null(ex() %>% check_or(check_code(., 'x'), check_code(., 'x')))
+  })
+})
+
+test_that("test_correct fails if ENV set", {
+  setup_state(stu_code = 'x <- 5', sol_code = 'x <- 5')
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = ''), {
+    is.null(test_correct(test_student_typed('x'), test_student_typed('x')))
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '0'), {
+    is.null(test_correct(test_student_typed('x'), test_student_typed('x')))
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(test_correct(test_student_typed('x'), test_student_typed('x')), regexp = 'test_correct() can no longer be used in SCTs', fixed = TRUE)
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(check_correct(ex() %>% check_code('x'), ex() %>% check_code('x')), regexp = 'test_correct() can no longer be used in SCTs', fixed = TRUE)
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    is.null(ex() %>% check_correct(check_code(., 'x'), check_code(., 'x')))
+  })
+})
+
