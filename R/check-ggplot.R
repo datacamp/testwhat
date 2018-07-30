@@ -37,7 +37,7 @@
 #' 
 #' @param check Which layers to check
 #' 
-#' @export
+#' @keywords internal
 check_ggplot <- function(state,
                          index = 1,
                          all_fail_msg = NULL,

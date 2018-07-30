@@ -72,3 +72,4 @@ check_ggplot(state, index = 1, all_fail_msg = NULL, check_data = TRUE,
 \description{
 Test ggplot call
 }
+\keyword{internal}
