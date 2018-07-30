@@ -2,6 +2,24 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.7.1
+
+### Added
+
+- New function `check_mc()` to use instead of `test_mc()`.
+
+### Changed
+
+- If `TESTWHAT_V2_ONLY=1` the `test_mc()` function will error out.
+- `test_correct()`, `test_or()` will error out.
+- If `TESTWHAT_V2_ONLY=1`, old skool usage of `check_correct()` and `check_or()` will error out.
+  You _have_ to pipe in `ex()`:
+
+  ```R
+  ex() %>% check_correct(...)
+  ex() %>% check_or(...)
+  ```
+
 ## 4.7.0
 
 When executing old skool `test_()` functions, `testwhat` will now check the environment variable `TESTWHAT_V2_ONLY`. If it is set to `1`, an error will be generated. This will effectively make `test_()` functions unavailable for newer courses whose course image will have this environment variable baked in.
