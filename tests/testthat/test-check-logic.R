@@ -168,7 +168,7 @@ test_that("check_correct - new school", {
   lst <- list()
   lst$DC_SOLUTION <- "x <- mean(1:11)"
   lst$DC_SCT <- "ex() %>% check_correct(
-                      check_object(., 'x') %>% check_equal(),
+                      check_object(., 'x') %>% check_equal(.),
                       check_function(., 'mean') %>% check_arg('x') %>% check_equal()
                  )"
 
@@ -244,7 +244,7 @@ test_that("check_or works new skool", {
   lst$DC_CODE <- "b = 3; c = 5"
   lst$DC_SOLUTION <- "a = 2.5; b = 3; c = 29"
 
-  lst$DC_SCT <- "ex() %>% check_or(check_object(., 'a') %>% check_equal(),
+  lst$DC_SCT <- "ex() %>% check_or(check_object(., 'a') %>% check_equal(.),
                                    check_object(., 'b') %>% check_equal(),
                                    check_object(., 'c') %>% check_equal())"
   output <- test_it(lst)
@@ -276,7 +276,7 @@ test_that("test_or throws error if something is off", {
 test_that("check_or - new school - nested", {
   lst <- list()
   lst$DC_SOLUTION <- "a <- 3\nif(a > 3) { print('b') }"
-  
+
   lst$DC_SCT <- "ex() %>% check_or(
                     check_code(., 'c'),
                     check_if_else(.) %>% check_cond() %>% check_or(
@@ -330,4 +330,3 @@ test_that("test_correct fails if ENV set", {
     is.null(ex() %>% check_correct(check_code(., 'x'), check_code(., 'x')))
   })
 })
-
