@@ -2,7 +2,7 @@
 #' 
 #' \code{check_fun_def} checks whether an object is defined in the student enviornment, and returns a state that can be piped to:
 #' \itemize{
-#'   \item{\code{check_arguments}, to check whether the correct arguments where specified.}
+#'   \item{\code{check_arguments}, to check whether the correct arguments were specified.}
 #'   \item{\code{check_call}, to call the function with the provided arguments, and produces a state that can be piped to \code{check_output}, \code{check_result} and \code{check_error} to compare the output, result or error from calling the function between student and solution.}
 #'   \item{\code{check_body}, that returns a state that focuses on the body that defines the function. Note that you cannot use \code{\link{check_object}} to compare variables that are limited to the function scope.}
 #' }
