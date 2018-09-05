@@ -373,7 +373,7 @@ test_that("test_object inside MarkdownExercise doesn't show line numbers", {
   lst$DC_TYPE <- "MarkdownExercise"
   lst$DC_SOLUTION <- c(my_solution.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n")
   lst$DC_CODE <- c(my_doc.Rmd = "# This is a test\n```{r}\nx <- 5\n```\n")
-  lst$DC_SCT <- "test_rmd_group(2, test_object('x'))\nsuccess_msg(\"OK\")"
+  lst$DC_SCT <- "test_object('x')"
 
   output <- test_it(lst)
   passes(output)
@@ -559,6 +559,19 @@ test_that("test_object fails if ENV set", {
   })
   withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
     expect_error(test_object('x'), regexp = 'test_object() can no longer be used in SCTs', fixed = TRUE)
+  })
+})
+
+test_that("check_object fails if not called on root state if v2 set.", {
+  code = "for (x in 1:2) y = 2"
+  s <- setup_state(stu_code = code, sol_code = code)
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = ''), {
+    passes2(s %>% check_for() %>% check_body() %>% check_object('x'))
+  })
+  withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
+    expect_error(s %>% check_for() %>% check_body() %>% check_object('x'),
+                 regexp = "`check_object()` should only be called from the root state, `ex()`.",
+                 fixed = TRUE)
   })
 })
 

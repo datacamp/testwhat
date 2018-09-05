@@ -305,7 +305,7 @@ test_that("test_or fails if ENV set", {
     expect_error(test_or(test_student_typed('x'), test_student_typed('x')), regexp = 'test_or() can no longer be used in SCTs', fixed = TRUE)
   })
   withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
-    expect_error(check_or(ex() %>% check_code('x'), ex() %>% check_code('x')), regexp = 'test_or() can no longer be used in SCTs', fixed = TRUE)
+    expect_error(check_or(ex() %>% check_code('x'), ex() %>% check_code('x')), regexp = 'check_or() can only be used with a state as the first argument, e.g. ex() %>% check_or(...).', fixed = TRUE)
   })
   withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
     is.null(ex() %>% check_or(check_code(., 'x'), check_code(., 'x')))
@@ -324,7 +324,7 @@ test_that("test_correct fails if ENV set", {
     expect_error(test_correct(test_student_typed('x'), test_student_typed('x')), regexp = 'test_correct() can no longer be used in SCTs', fixed = TRUE)
   })
   withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
-    expect_error(check_correct(ex() %>% check_code('x'), ex() %>% check_code('x')), regexp = 'test_correct() can no longer be used in SCTs', fixed = TRUE)
+    expect_error(check_correct(ex() %>% check_code('x'), ex() %>% check_code('x')), regexp = 'check_correct() can only be used with a state as the first argument, e.g. ex() %>% check_corrrect(...).', fixed = TRUE)
   })
   withr::with_envvar(c(TESTWHAT_V2_ONLY = '1'), {
     is.null(ex() %>% check_correct(check_code(., 'x'), check_code(., 'x')))

@@ -393,3 +393,11 @@ test_that("test_function_definition works with control structure in there", {
   capture.output(output <- test_it(lst))
   passes(output)
 })
+
+test_that("check_call fails if not called on function definition state.", {
+  code = "x <- function(a) a"
+  s <- setup_state(stu_code = code, sol_code = code)
+  expect_error(s %>% check_fun_def('x') %>% check_body() %>% check_call('x'),
+               regexp = "`check_call()` can only be called on `check_fun_def()`.",
+               fixed = TRUE)
+})

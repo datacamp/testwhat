@@ -153,4 +153,10 @@ test_that("check_output - message output", {
   passes(output)
 })
 
-
+test_that("check_output_expr fails if not called on root state.", {
+  code = "for (x in 1:2) print(2)"
+  s <- setup_state(stu_code = code, sol_code = code)
+  expect_error(s %>% check_for() %>% check_body() %>% check_output_expr('2'),
+               regexp = "`check_output_expr()` should only be called from the root state, `ex()`.",
+               fixed = TRUE)
+})

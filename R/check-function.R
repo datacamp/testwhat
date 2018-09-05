@@ -65,16 +65,19 @@
 #' @rdname check_function
 #' @export
 check_function <- function(state, name, index = 1, not_called_msg = NULL, append = TRUE) {
+  state$assert_is_not("ObjectState", "check_object")
   check_fun_op_helper(state, name = name, index = index, not_called_msg = not_called_msg, append = append, type = "function")
 }
 
 #' @rdname check_function
 #' @export
 check_operator <- function(state, name, index = 1, append = TRUE, not_called_msg = NULL) {
+  state$assert_is_not("ObjectState", "check_object")
   check_fun_op_helper(state, name = name, index = index, not_called_msg = not_called_msg, append = append, type = "operator")
 }
 
 check_fun_op_helper <- function(state, name, index, not_called_msg, append, type = c("function", "operator")) {
+
   type <- match.arg(type)
   finder <- switch(type, `function` = find_function_calls, operator = find_operators)
   CallState <- switch(type, `function` = FunctionState, operator = OperationState)
@@ -119,6 +122,8 @@ check_fun_op_helper <- function(state, name, index, not_called_msg, append, type
 #' @rdname check_function
 #' @export
 check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
+
+  state$assert_is("CallState", "check_function")
 
   solution_call <- state$get("solution_call")
   student_calls <- state$get("student_calls")

@@ -616,3 +616,19 @@ test_that("test_function works appropriately inside test_corect", {
   fails(output)
   line_info(output, 2, 2)
 })
+
+test_that("check_function fails if called on the object state.", {
+  code = "x = mean(1:3)"
+  s <- setup_state(stu_code = code, sol_code = code)
+  expect_error(s %>% check_object('x') %>% check_function('mean'),
+               regexp = "`check_function()` should not be called on `check_object()`.",
+               fixed = TRUE)
+})
+
+test_that("check_arg fails if not called on function state.", {
+  code = "x = mean(1:3)"
+  s <- setup_state(stu_code = code, sol_code = code)
+  expect_error(s %>% check_object('x') %>% check_arg('x'),
+               regexp = "`check_arg()` can only be called on `check_function()`.",
+               fixed = TRUE)
+})

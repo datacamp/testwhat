@@ -43,9 +43,13 @@ check_sufficient <- function(calls, index, name) {
   }
 }
 
-fail_if_v2_only <- function(errmsg = sprintf("%s() can no longer be used in SCTs. Use its check equivalent instead.", deparse(sys.call(-1)[[1]]))) {
+v2_only <- function() {
   env_var <- "TESTWHAT_V2_ONLY"
-  if (Sys.getenv(env_var) != "" && Sys.getenv(env_var) == "1") {
+  Sys.getenv(env_var) != "" && Sys.getenv(env_var) == "1"
+}
+
+fail_if_v2_only <- function(errmsg = sprintf("%s() can no longer be used in SCTs. Use its check equivalent instead.", deparse(sys.call(-1)[[1]]))) {
+  if (v2_only()) {
     stop(errmsg)
   } else {
     return(invisible(NULL))
