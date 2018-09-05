@@ -132,6 +132,7 @@ check_body.FunDefState <- function(state, not_found_msg = NULL, append = TRUE, .
 #' @rdname check_fun_def
 #' @export
 check_call <- function(state, ...) {
+  state$assert_is("FunDefState", "check_fun_def")
   expr_state <- ExprState$new(state)
   expr_str <- gsub("list", state$get("name"), deparse(substitute(list(...))))
   expr_state$set(expr = parse(text = expr_str))

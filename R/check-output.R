@@ -80,6 +80,8 @@ check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, time
 #' @export
 check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
 
+  state$verify_root()
+
   expr_output <- try(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), silent = TRUE)
   if (inherits(expr_output, "try-error")) {
     expr_output <- ""

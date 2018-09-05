@@ -68,6 +68,14 @@
 #' @rdname test_object
 #' @export
 check_object <- function(state, name, undefined_msg = NULL, append = TRUE) {
+
+  # This check fails for quite a lot of old exercises,
+  # so currently doing the verification only if V2_ONLY is set.
+  # See https://github.com/datacamp/testwhat/issues/197
+  if(v2_only()) {
+    state$verify_root()
+  }
+
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")
   

@@ -78,6 +78,19 @@ State <- R6::R6Class("State",
                          } else {
                            setdiff(1:n_calls, sapply(bl, `[[`, "stud_index"))
                          }
+                       },
+                       verify_root = function(fun = deparse(sys.call(-1)[[1]])) {
+                         stop(sprintf("`%s()` should only be called from the root state, `ex()`.", fun))
+                       },
+                       assert_is = function(cls, parent, fun=deparse(sys.call(-1)[[1]])) {
+                         if (!any(class(self) %in% cls)) {
+                           stop(sprintf("`%s()` can only be called on `%s()`.", fun, parent))
+                         }
+                       },
+                       assert_is_not = function(cls, parent, fun=deparse(sys.call(-1)[[1]])) {
+                         if (any(class(self) %in% cls)) {
+                           stop(sprintf("`%s()` should not be called on `%s()`.", fun, parent))
+                         }
                        }
                      ),
                      private = list(
@@ -123,6 +136,9 @@ RootState <- R6::R6Class("RootState", inherit = State,
                            },
                            get = function(name) {
                              return(private[[name]])
+                           },
+                           verify_root = function(...) {
+                             return(TRUE)
                            }
                          )
 )
@@ -159,7 +175,7 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
 )
 
 
-CallState <- R6::R6Class("FunctionState", inherit = ChildState, private = list(student_calls = NULL, solution_call = NULL))
+CallState <- R6::R6Class("CallState", inherit = ChildState, private = list(student_calls = NULL, solution_call = NULL))
 FunctionState <- R6::R6Class("FunctionState", inherit = CallState)
 OperationState <- R6::R6Class("OperationState", inherit = CallState)
 
@@ -185,6 +201,18 @@ ExprErrorState <- R6::R6Class("ExprErrorState", inherit = ExprEvalState)
 ControlState <- R6::R6Class("ControlState", inherit = ChildState, private = list(student_struct = NULL, solution_struct = NULL))
 
 SubState <- R6::R6Class("SubState", inherit = ChildState)
+ProxySubState <- R6::R6Class("ProxySubState", inherit = SubState,
+                             public = list(
+                               verify_root = function(fun = deparse(sys.call(-1)[[1]])) {
+                                 private$parent$verify_root(fun)
+                               },
+                               assert_is = function(cls, parent, fun=deparse(sys.call(-1)[[1]])) {
+                                 private$parent$assert_is(cls, parent, fun)
+                               },
+                               assert_is_not = function(cls, parent, fun=deparse(sys.call(-1)[[1]])) {
+                                 private$parent$assert_is_not(cls, parent, fun)
+                               }
+                             ))
 
 RegexState <- R6::R6Class("RegexState", inherit = ChildState)
 FileState <- R6::R6Class("FileState", inherit = ChildState)
@@ -253,7 +281,7 @@ decorate_state <- function(state, stud, sol, el = NULL) {
 #' @rdname override
 #' @export
 override_solution <- function(state, code = NULL, ...) {
-  sub_state <- SubState$new(state)
+  sub_state <- ProxySubState$new(state)
   if (!is.null(code)) {
     sub_state$set(solution_code = code, solution_pd = build_pd(code))
   }
@@ -294,7 +322,7 @@ override_solution_env <- function(state, ...) {
 #'
 #' @param state the state to create a substate from
 disable_highlighting <- function(state) {
-  sub_state <- SubState$new(state)
+  sub_state <- ProxySubState$new(state)
   sub_state$add_details(highlighting_disabled = TRUE)
   return(sub_state)
 }
