@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Testing functions is probably one of the most common things you'll do when writing SCTs. The functions in `testwhat` related to testing functions allow you to test whether students correctly called particular functions, with the correct arguments and whether these arguments are correct. To assess all of these aspects, `testwhat` goes through the solution code to see which functions were called there and how, and also checks the solution environment to see what the value of the parameters is. In addition to argument checking, you can also check the result of calling a function and compare it with the result of calling the same function in student environment, another very robust way of checking a student's work. **This article is arguably one of the most important ones in this documentation, so read it carefully and completely.**
+Testing function calls is probably one of the most common things you'll do when writing SCTs. With `testwhat`, you can check whether students correctly called particular functions, whether the expected arguments were specified, and whether the values passed to these arguments are correct. In addition to argument checking, you can also check the result of calling a function and compare it with with this function call should've returned; another very robust way of checking a student's work. **This article is arguably one of the most important ones in this documentation, so read it carefully and completely.**
 
 ## Example 1: Basic
 
@@ -99,7 +99,7 @@ One way to solve this is with `check_output_expr()`, but this does not explicitl
 ex() %>% check_function("sum") %>% check_result() %>% check_equal()
 ```
 
-Here, `check_function()` looks for the call of `round()` in both student and solution code, and then `check_result()` runs both (in their respective environments). Finally, with `check_equal()` you verify that the results of the function calls are equal. The above SCT would accept all of the following submissions:
+Here, `check_function()` looks for the call of `sum()` in both student and solution code, and then `check_result()` runs both (in their respective environments). Finally, with `check_equal()` you verify that the results of the function calls are equal. The above SCT would accept all of the following submissions:
 
 - `sum(5:1)`
 - `sum(c(1, 2, 4, 3, 5))`

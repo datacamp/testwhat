@@ -114,5 +114,5 @@ ex() %>% check_if_else() %>% {
 
 ## Caution
 
-Not all of the SCT chains that you specify after a 'zooming in' step might work as you'd expect. Remind that functions like `check_object()` and `check_function()` often depend on both the student and solution environment. It is possible that during execution of control flow these values change. The `testwhat` functions will always compare the 'end environment' of student and solution, it is not possible to do matching on intermediate values of objects that are changed further in the script.
+Not all of the SCT chains that you specify after a 'zooming in' step might work as you'd expect. Remember that functions like `check_object()` and `check_function()` often depend on both the student and solution environment. It is possible that during execution of control flow these values change. The `testwhat` functions will always compare the 'end environment' of student and solution, it is not possible to do matching on intermediate values of objects that are changed further in the script.
 

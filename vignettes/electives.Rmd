@@ -120,7 +120,7 @@ This tells the backend that the solution code will generate an error when execut
 
 An issue with R packages is that they're often not developed by software developers. Sometimes, very specialized R packages only work in a certain context. More specifically, some packages expect data to be available in the global environment (the top of the search path).
 
-For `testwhat` and DataCamp's R Backend it communicates with, this can cause problems: there's a solution enviroment and a student environment (so that `testwhat` can easily compare objects that student created with the object that they should've created, for example with `test_object()`). If the code that's executed in the solution environment implicitly expects data to be available in the global environment (which is the student environment), things get messed up.
+For `testwhat` and DataCamp's R Backend it communicates with, this can cause problems: there's a solution enviroment and a student environment (so that `testwhat` can easily compare objects that student created with the object that they should've created, for example with `check_object()`). If the code that's executed in the solution environment implicitly expects data to be available in the global environment (which is the student environment), things get messed up.
 
 To circumvent these errors, you can use the `SingleProcessExercise`. This is the same as a `NormalExercise`, but the backend will not execute the solution code in the solution environment, and the issues won't appear. This does limit the power of the SCT: there are no objects available in the solution environment to compare with now. There are ways to work around this, though.
 
@@ -143,7 +143,7 @@ If you want to test this exercise, you cannot use
     ex() %>% check_object('x')
     ```
 
-because `test_object()` will look for `x` in the solution environment and not find it. You can work around this by using the chained syntax and manually storing elements in the solution environment:
+because `check_object()` will look for `x` in the solution environment and not find it. You can work around this by using the chained syntax and manually storing elements in the solution environment:
 
     *** =sct
     ```{r}

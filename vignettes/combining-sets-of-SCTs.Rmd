@@ -15,11 +15,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-In R, there are many ways to solve a problem. Writing an SCT that checks when students make a mistake, but is robust to multiple different solutions is a challenge. `check_or` and `check_or` allow you to add logic to your SCT. Instead of running all tests and failing as soon as one of the tests fail, you can conditionally execute tests, and interpret the results separately.
+In R, there are many ways to solve a problem. Writing an SCT that checks when students make a mistake, but is robust to multiple different solutions is a challenge. `check_correct()` and `check_or()` allow you to add logic to your SCT. Instead of running all tests and failing as soon as one of the tests fail, you can conditionally execute tests, and interpret the results separately.
 
 ### Example 1: `check_correct`
 
-As an example, suppose you want the student to calculate the mean of a vector `vec` and store it in `res`. A possible solution could be:
+As an example, suppose you want the student to calculate the mean of a vector `vec` and store it in `result`. A possible solution could be:
 
 ```{r}
 # vec is predefined for you
@@ -29,7 +29,7 @@ vec <- c(1, 2, 3, 4, 5, 6)
 result <- mean(vec)
 ```
 
-You want the SCT to pass when the student manages to store the correct value in the object `result`. How `result` was calculated, does not matter to you: as long as `result` is correct, the SCT should accept the submission. If something `result` is not correct, you want to dig a little deeper and see if the student used the `mean()` function correctly. The following SCT will do just that:
+You want the SCT to pass when the student manages to store the correct value in the object `result`. How `result` was calculated, does not matter to you: as long as `result` is correct, the SCT should accept the submission. If `result` is not correct, you want to dig a little deeper and see if the student used the `mean()` function correctly. The following SCT will do just that:
 
 ```{r}
 ex() %>% check_correct(
@@ -65,7 +65,7 @@ Let's go over what happens when the student submits different versions of the fi
   + `check_correct()` executes the first sub-SCT chain
   + This sub-SCT chain fails _silently_, so `check_correct()` heads over to the second, 'diagnose' sub-SCT chain (`check_function()` etc)
   + Both functions in the second sub-SCT chain pass, because `mean()` is called in exactly the same way in the student code as in the solution.
-  + Because there is clearly something wrong - `result` is not correct - the 'check' sub-SCT, `ex() %>% test_object("result")` is executed again, but _loudly_ this time.
+  + Because there is clearly something wrong - `result` is not correct - the 'check' sub-SCT, `ex() %>% check_object("result")` is executed again, but _loudly_ this time.
   + `check_object()` fails _loudly_ and the student gets the message that `result` does not contain the correct value.
 
 ## Example 2: `check_or`
