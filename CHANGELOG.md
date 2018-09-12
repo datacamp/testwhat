@@ -2,6 +2,20 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.7.2
+
+### Improved
+
+- Improve check_or/check_correct message if it is used incorrectly
+
+### Added
+
+- Error out in case `check_object()` is not used on root state (and `TESTWHAT_V2_ONLY` set)
+- Error out in case `check_output_expr()` is not used on root state
+- Error out in case `check_function()` called on `check_object()`
+- Error out in case `check_call()` not called on `check_function_def()`
+- Error out in case `check_arg()` not called on `check_function()`
+
 ## 4.7.1
 
 ### Added
