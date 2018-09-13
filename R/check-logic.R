@@ -72,7 +72,7 @@ check_correct <- function(state, ...) {
     set_dot(state)
     test_correct(..., v2_check = FALSE)
   } else {
-    fail_if_v2_only(errmsg = 'check_correct() can only be used with a state as the first argument, e.g. ex() %>% check_corrrect(...).')
+    fail_if_v2_only(errmsg = 'check_correct() can only be used with a state as the first argument, e.g. ex() %>% check_correct(...).')
     # Else, fall back on old behavior
     input <- as.list(substitute(list(...)))
     test_correct(substitute(state), input[[2]], sub = FALSE)
