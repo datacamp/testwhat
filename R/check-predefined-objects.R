@@ -30,7 +30,7 @@ check_predefined_objects <- function(state,
                                      eval = TRUE,
                                      undefined_msg = NULL, 
                                      incorrect_msg = NULL) {
-  
+  assert_state(state)
   n_names <- length(name)
   eq_condition <- rep(eq_condition, n_names, length.out = n_names)
   eval <- rep(eval, n_names, length.out = n_names)

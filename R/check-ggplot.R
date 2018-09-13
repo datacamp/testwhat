@@ -50,6 +50,7 @@ check_ggplot <- function(state,
                          check_stat = TRUE, stat_fail_msg = NULL, exact_stat = FALSE,
                          check_extra = NULL, extra_fail_msg = NULL, exact_extra = NULL,
                          check = NULL) {
+  assert_state(state)
   fail_if_v2_only(err_msg)
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")

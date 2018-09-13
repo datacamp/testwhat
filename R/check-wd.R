@@ -14,6 +14,7 @@
 #' }
 #' @export
 check_wd <- function(state, path, missing_msg = NULL) {
+  assert_state(state)
   file_state <- FileState$new(state)
   file_state$add_details(type = 'file',
                          case = 'available',

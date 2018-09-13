@@ -39,6 +39,7 @@ check_code <- function(state, regex,
                        fixed = FALSE, times = 1,
                        missing_msg = NULL, append = TRUE,
                        drop_comments = FALSE) {
+  assert_state(state)
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "typed",
                           regex = regex,

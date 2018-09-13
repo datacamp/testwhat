@@ -59,6 +59,7 @@ check_output <- function(state, ...) {
 #' @rdname check_output
 #' @export
 check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, times = 1, output_only = FALSE, missing_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   regex_state <- RegexState$new(state)
   regex_state$add_details(type = "output",
                           case = "regex",
@@ -79,7 +80,7 @@ check_output.default <- function(state, regex, fixed = FALSE, trim = FALSE, time
 #' @rdname check_output
 #' @export
 check_output_expr <- function(state, expr, times = 1, missing_msg = NULL, append = TRUE) {
-
+  assert_state(state)
   state$verify_root()
 
   expr_output <- try(capture.output(base::eval(parse(text = expr), envir = ex()$get("student_env"))), silent = TRUE)

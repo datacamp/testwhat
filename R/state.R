@@ -326,3 +326,9 @@ disable_highlighting <- function(state) {
   sub_state$add_details(highlighting_disabled = TRUE)
   return(sub_state)
 }
+
+assert_state <- function(x, fun = deparse(sys.call(-1)[[1]])) {
+  if (!isTRUE(inherits(x, "State"))) {
+    stop(sprintf("The first argument to `%s()` should be a state object. Maybe you forgot a dot?", fun))
+  }
+}
