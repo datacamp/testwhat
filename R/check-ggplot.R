@@ -94,7 +94,7 @@ check_ggplot <- function(state,
     check_that(failure(), feedback = "You didn't define enough `ggplot` commands.")
   }
   
-  feedback <- sprintf("In your %s `ggplot` command,", nd(index))
+  feedback <- sprintf("In your %s `ggplot` command,", get_ord(index))
   
   stud_selected <- stud_ggplot_objects[[index]]
   
@@ -540,13 +540,6 @@ without_args <- function(x) {
   return(copy)
 }
 
-nd <- function(number) {
-  switch(number, "1" = "first", "2" = "second", "3" = "third", 
-                 "4" = "fourth", "5" = "fifth", "6" = "sixth", 
-                 "7" = "seventh", "8" = "eighth", "9" = "ninth", 
-                 "10" = "tenth")
-}
-
 #' @importFrom utils argsAnywhere
 extract_params <- function(command) {
   if (!is.call(command)) {
@@ -562,13 +555,13 @@ extract_params <- function(command) {
     if (is.null(param_names)) {
       for (i in 1:length(param_list)) {
         attr(param_list[[i]], "dot") <- TRUE
-        param_names[i] <- paste(nd(i), "argument")
+        param_names[i] <- paste(get_ord(i), "argument")
       }
     } else {
       for (i in 1:length(param_names)) {
         if (is_equal(param_names[i], "")) {
           attr(param_list[[i]], "dot") <- TRUE
-          param_names[i] <- paste(nd(i), "argument")
+          param_names[i] <- paste(get_ord(i), "argument")
         }
       }
     }
@@ -608,16 +601,6 @@ compare_positions <- function(sol_layer, stud_layer) {
    stud_position <- stud_layer$position
 
    return(is_equal(sol_position, stud_position))
-}
-
-almost_equal <- function(value1, value2) {
-  if (identical(value1, value2)) {
-    return(TRUE)
-  } else if (is.numeric(value1) && is.numeric(value2)) {
-    return(abs(value1 - value2) <= 1e-5)
-  } else {
-    return(FALSE)
-  }
 }
 
 get_geom_params <- function(geom_layer) {

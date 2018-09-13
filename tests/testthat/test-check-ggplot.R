@@ -24,7 +24,7 @@ test_that("test_ggplot works 2", {
     sol_code = 'ggplot(mtcars, aes(x = wt, y = mpg)) + stat_smooth(method = "auto",se = F)',
     pec = pec
   )
-  
+
   passes2(s %>% check_ggplot(1, check = "geom", check_geom_params = "method"))
   passes2(s %>% check_ggplot(1, check = "geom", check_geom_params = "se"))
 })
@@ -102,5 +102,29 @@ test_that("can handle exotic geom_labels", {
     sol_code = code
   )
   passes2(check_ggplot(s))
+})
+
+test_that("different ways of specifying ggplots", {
+  # normal + assignment
+  plotcalls <- c(
+    "ggplot(cars, aes(speed, dist)) + geom_point()",
+    "x <- ggplot(cars, aes(speed, dist)) + geom_point()"
+  )
+  for (p in plotcalls) {
+    s <- setup_state(pec = pec, stu_code = p, sol_code = plotcalls[1])
+    passes2(check_ggplot(s))
+  }
+  
+  # incremental
+  code <- "x <- ggplot(cars, aes(speed, dist))\nx + geom_point()"
+  s <- setup_state(pec = pec, stu_code = code, sol_code = code)
+  passes2(check_ggplot(s, 1))
+  passes2(check_ggplot(s, 2))
+  
+  # in pec
+  local_pec <- "library(ggplot2)\nx <- ggplot(cars, aes(speed, dist))"
+  code <- "x + geom_point()"
+  s <- setup_state(pec = local_pec, stu_code = code, sol_code = code)
+  passes2(check_ggplot(s, 1))
 })
 
