@@ -4,8 +4,8 @@
 \alias{check_equal.MarkdownChunkOptionState}
 \title{Check equality of markdown code chunk option}
 \usage{
-\method{check_equal}{MarkdownChunkOptionState}(state, incorrect_msg = NULL,
-  append = FALSE, ...)
+\method{check_equal}{MarkdownChunkOptionState}(state,
+  incorrect_msg = NULL, append = FALSE, ...)
 }
 \arguments{
 \item{state}{the state to start from. Should be a state produced by \code{\link{check_option}}.}

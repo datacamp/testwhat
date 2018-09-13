@@ -1,12 +1,18 @@
 #' Build ParseData from string representing code
 #'
 #' @param code character string representing code
-#'
+#' @param silent if TRUE, parsing errors are caugt and NULL is returned.
 #' @importFrom utils getParseData
 #' @export
-build_pd <- function(code) {
+build_pd <- function(code, silent=TRUE) {
   tryCatch(getParseData(parse(text = code, keep.source = TRUE), includeText = TRUE),
-           error = function(e) return(NULL))
+           error = function(e) {
+             if (silent) {
+               return(NULL)
+             } else {
+               stop(e)
+             }
+           })
 }
 
 get_children <- function(pd, ids) {

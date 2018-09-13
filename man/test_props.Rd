@@ -4,8 +4,9 @@
 \alias{test_props}
 \title{Check whether the student used the correct properties (ggvis exercises)}
 \usage{
-test_props(index = 1, funs = "ggvis", props = NULL, allow_extra = TRUE,
-  not_called_msg = NULL, incorrect_msg = NULL, error_msg = NULL)
+test_props(index = 1, funs = "ggvis", props = NULL,
+  allow_extra = TRUE, not_called_msg = NULL, incorrect_msg = NULL,
+  error_msg = NULL)
 }
 \arguments{
 \item{index}{number of ggvis caommdn to be checked}

@@ -4,8 +4,8 @@
 \alias{check_equal.MarkdownYamlOptionState}
 \title{Check equality of markdown YAML header option}
 \usage{
-\method{check_equal}{MarkdownYamlOptionState}(state, incorrect_msg = NULL,
-  append = TRUE, ...)
+\method{check_equal}{MarkdownYamlOptionState}(state,
+  incorrect_msg = NULL, append = TRUE, ...)
 }
 \arguments{
 \item{state}{the state to start from. Should be a state produced by

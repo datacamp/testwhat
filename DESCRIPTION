@@ -39,5 +39,5 @@ Authors@R: c(
     person("Filip", "Schouwenaars", ,"filip@datacamp.com", role = c("aut", "cre")),
     person("Vincent", "Vankrunkelsven", ,"vincent@datacamp.com", role = c("aut"))
     )
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr

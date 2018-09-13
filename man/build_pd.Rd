@@ -4,10 +4,12 @@
 \alias{build_pd}
 \title{Build ParseData from string representing code}
 \usage{
-build_pd(code)
+build_pd(code, silent = TRUE)
 }
 \arguments{
 \item{code}{character string representing code}
+
+\item{silent}{if TRUE, parsing errors are caugt and NULL is returned.}
 }
 \description{
 Build ParseData from string representing code

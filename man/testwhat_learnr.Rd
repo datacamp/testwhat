@@ -5,7 +5,8 @@
 \title{A checker function to use with learnr}
 \usage{
 testwhat_learnr(label = NULL, solution_code = NULL, user_code = NULL,
-  check_code = NULL, envir_result = NULL, evaluate_result = NULL, ...)
+  check_code = NULL, envir_result = NULL, evaluate_result = NULL,
+  ...)
 }
 \arguments{
 \item{label}{Label for exercise chunk}

@@ -8,9 +8,9 @@
 \usage{
 check_output(state, ...)
 
-\method{check_output}{default}(state, regex, fixed = FALSE, trim = FALSE,
-  times = 1, output_only = FALSE, missing_msg = NULL, append = TRUE,
-  ...)
+\method{check_output}{default}(state, regex, fixed = FALSE,
+  trim = FALSE, times = 1, output_only = FALSE, missing_msg = NULL,
+  append = TRUE, ...)
 
 check_output_expr(state, expr, times = 1, missing_msg = NULL,
   append = TRUE)
