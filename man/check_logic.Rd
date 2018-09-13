@@ -3,7 +3,6 @@
 \name{check_logic}
 \alias{check_logic}
 \alias{check_correct}
-\alias{check_logic}
 \alias{check_or}
 \title{Combine tests}
 \usage{

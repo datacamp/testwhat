@@ -4,8 +4,8 @@
 \alias{check_code}
 \title{Test the student's code as text}
 \usage{
-check_code(state, regex, fixed = FALSE, times = 1, missing_msg = NULL,
-  append = TRUE, drop_comments = FALSE)
+check_code(state, regex, fixed = FALSE, times = 1,
+  missing_msg = NULL, append = TRUE, drop_comments = FALSE)
 }
 \arguments{
 \item{state}{the state to start from}

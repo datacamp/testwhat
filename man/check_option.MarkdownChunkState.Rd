@@ -4,8 +4,8 @@
 \alias{check_option.MarkdownChunkState}
 \title{Check markdown code chunk option}
 \usage{
-\method{check_option}{MarkdownChunkState}(state, name, not_found_msg = NULL,
-  append = TRUE, ...)
+\method{check_option}{MarkdownChunkState}(state, name,
+  not_found_msg = NULL, append = TRUE, ...)
 }
 \arguments{
 \item{state}{the state to start from. Should be a state produced by

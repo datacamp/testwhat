@@ -283,7 +283,7 @@ decorate_state <- function(state, stud, sol, el = NULL) {
 override_solution <- function(state, code = NULL, ...) {
   sub_state <- ProxySubState$new(state)
   if (!is.null(code)) {
-    sub_state$set(solution_code = code, solution_pd = build_pd(code))
+    sub_state$set(solution_code = code, solution_pd = build_pd(code, silent=FALSE))
   }
   env = list(...)
   if (!is.null(env)) {

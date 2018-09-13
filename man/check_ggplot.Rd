@@ -4,15 +4,15 @@
 \alias{check_ggplot}
 \title{Test ggplot call}
 \usage{
-check_ggplot(state, index = 1, all_fail_msg = NULL, check_data = TRUE,
-  data_fail_msg = NULL, check_aes = TRUE, aes_fail_msg = NULL,
-  exact_aes = FALSE, check_geom = TRUE, geom_fail_msg = NULL,
-  exact_geom = FALSE, check_geom_params = NULL, check_facet = TRUE,
-  facet_fail_msg = NULL, check_scale = TRUE, scale_fail_msg = NULL,
-  exact_scale = FALSE, check_coord = TRUE, coord_fail_msg = NULL,
-  exact_coord = FALSE, check_stat = TRUE, stat_fail_msg = NULL,
-  exact_stat = FALSE, check_extra = NULL, extra_fail_msg = NULL,
-  exact_extra = NULL, check = NULL)
+check_ggplot(state, index = 1, all_fail_msg = NULL,
+  check_data = TRUE, data_fail_msg = NULL, check_aes = TRUE,
+  aes_fail_msg = NULL, exact_aes = FALSE, check_geom = TRUE,
+  geom_fail_msg = NULL, exact_geom = FALSE, check_geom_params = NULL,
+  check_facet = TRUE, facet_fail_msg = NULL, check_scale = TRUE,
+  scale_fail_msg = NULL, exact_scale = FALSE, check_coord = TRUE,
+  coord_fail_msg = NULL, exact_coord = FALSE, check_stat = TRUE,
+  stat_fail_msg = NULL, exact_stat = FALSE, check_extra = NULL,
+  extra_fail_msg = NULL, exact_extra = NULL, check = NULL)
 }
 \arguments{
 \item{state}{the state to start from}
