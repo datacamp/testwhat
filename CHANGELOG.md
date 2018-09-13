@@ -2,6 +2,14 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.7.3
+
+### Improved
+
+- Error out in case the first argument to any `check_` function is not a state, which happens if you forget the `.`.
+- Error out if the code you pass in `override_solution()` does not parse.
+- Improve test coverage.
+
 ## 4.7.2
 
 ### Improved
