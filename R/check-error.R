@@ -29,6 +29,7 @@ check_error <- function(state, ...) {
 #' @rdname check_error
 #' @export
 check_error.default <- function(state, incorrect_msg = NULL, ...) {
+  assert_state(state)
   output_list <- state$get("output_list")
   student_pd <- state$get("student_pd")
   

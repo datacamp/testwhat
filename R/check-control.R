@@ -67,18 +67,21 @@
 #' @rdname check_control
 #' @export
 check_if_else <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
+  assert_state(state)
   check_control(state, index, not_found_msg, append = append, type = "if")
 }
 
 #' @rdname check_control
 #' @export
 check_while <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
+  assert_state(state)
   check_control(state, index, not_found_msg, append = append, type = "while")
 }
 
 #' @rdname check_control
 #' @export
 check_for <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
+  assert_state(state)
   check_control(state, index, not_found_msg, append = append, type = "for")
 }
 
@@ -127,6 +130,7 @@ check_control <- function(state, index, not_found_msg, append, type = c("if", "w
 #' @rdname check_control
 #' @export
 check_cond <- function(state) {
+  assert_state(state)
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   cond_state <- SubState$new(state)
@@ -138,6 +142,7 @@ check_cond <- function(state) {
 #' @rdname check_control
 #' @export
 check_body.ControlState <- function(state, ...) {
+  assert_state(state)
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   body_state <- SubState$new(state)
@@ -149,6 +154,7 @@ check_body.ControlState <- function(state, ...) {
 #' @rdname check_control
 #' @export
 check_if <- function(state) {
+  assert_state(state)
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   if_state <- SubState$new(state)
@@ -160,6 +166,7 @@ check_if <- function(state) {
 #' @rdname check_control
 #' @export
 check_else <- function(state, not_found_msg = NULL, append = TRUE) {
+  assert_state(state)
   student_struct <- state$get("student_struct")
   solution_struct <- state$get("solution_struct")
   else_state <- SubState$new(state)

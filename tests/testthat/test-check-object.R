@@ -575,3 +575,9 @@ test_that("check_object fails if not called on root state if v2 set.", {
   })
 })
 
+test_that("check_object fails if not called on state.", {
+  s <- setup_state("", "")
+  expect_error(check_object('s'),
+               regexp = "The first argument to `check_object()` should be a state object. Maybe you forgot a dot?",
+               fixed = TRUE)
+})

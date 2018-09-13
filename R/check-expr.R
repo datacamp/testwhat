@@ -39,6 +39,7 @@
 #' @rdname test_expr
 #' @export
 check_expr <- function(state, expr) {
+  assert_state(state)
   expr_state <- ExprState$new(state)
   expr_state$set(expr = parse(text = expr))
   return(expr_state)
@@ -47,6 +48,7 @@ check_expr <- function(state, expr) {
 #' @rdname test_expr
 #' @export
 check_result.ExprState <- function(state, error_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   expr <- state$get("expr")
   run_expr_helper(state, 
                   expr = expr,
@@ -60,6 +62,7 @@ check_result.ExprState <- function(state, error_msg = NULL, append = TRUE, ...) 
 #' @rdname test_expr
 #' @export
 check_output.ExprState <- function(state, error_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   expr <- state$get("expr")
   run_expr_helper(state, 
                   expr = expr,
@@ -72,6 +75,7 @@ check_output.ExprState <- function(state, error_msg = NULL, append = TRUE, ...) 
 #' @rdname test_expr
 #' @export
 check_error.ExprState <- function(state, no_error_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   expr <- state$get("expr")
   run_expr_error_helper(state, 
                         expr = expr,
@@ -83,18 +87,21 @@ check_error.ExprState <- function(state, no_error_msg = NULL, append = TRUE, ...
 #' @rdname test_expr
 #' @export
 check_equal.ExprResultState <- function(state, eq_condition = "equivalent", eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   expr_check_equal_helper(state, incorrect_msg, eq_condition, eq_fun = eq_fun, append = append, type = "result")
 }
 
 #' @rdname test_expr
 #' @export
 check_equal.ExprOutputState <- function(state, eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   expr_check_equal_helper(state, incorrect_msg, eq_fun = eq_fun, append = append, type = "output")
 }
 
 #' @rdname test_expr
 #' @export
 check_equal.ExprErrorState <- function(state, eq_fun = NULL, incorrect_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   expr_check_equal_helper(state, incorrect_msg, eq_fun = eq_fun, append = append, type = "error")
 }
 

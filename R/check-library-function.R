@@ -24,6 +24,7 @@
 #' 
 #' @export
 check_library <- function(state, package, not_called_msg = NULL, incorrect_msg = NULL) {
+  assert_state(state)
   if(is.null(not_called_msg)) {
     not_called_msg <- sprintf("Make sure to call the `library()` function to load the `%s` package.", package)
   }

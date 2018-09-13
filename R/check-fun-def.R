@@ -44,6 +44,7 @@
 #' @rdname check_fun_def
 #' @export
 check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NULL, append = TRUE) {
+  assert_state(state)
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")
   
@@ -85,6 +86,7 @@ check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NUL
 #' @rdname check_fun_def
 #' @export
 check_arguments <- function(state, incorrect_number_arguments_msg = NULL, append = TRUE) {
+  assert_state(state)
   stud_arguments <- as.list(formals(state$get("student_object")))
   sol_arguments <- as.list(formals(state$get("solution_object")))
   
@@ -104,6 +106,7 @@ check_arguments <- function(state, incorrect_number_arguments_msg = NULL, append
 #' @rdname check_fun_def
 #' @export
 check_body.FunDefState <- function(state, not_found_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   name <- state$get("name")
   student_pd <- state$get("student_pd")
   solution_pd <- state$get("solution_pd")
@@ -132,6 +135,7 @@ check_body.FunDefState <- function(state, not_found_msg = NULL, append = TRUE, .
 #' @rdname check_fun_def
 #' @export
 check_call <- function(state, ...) {
+  assert_state(state)
   state$assert_is("FunDefState", "check_fun_def")
   expr_state <- ExprState$new(state)
   expr_str <- gsub("list", state$get("name"), deparse(substitute(list(...))))

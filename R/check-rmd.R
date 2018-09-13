@@ -6,6 +6,7 @@
 #' 
 #' @export
 check_rmd <- function(state) {
+  assert_state(state)
   student_code <- state$get("student_code")
   solution_code <- state$get("solution_code")
 
@@ -50,6 +51,7 @@ test_rmd_file <- function(code) {
 #'
 #' @export
 check_header <- function(state, level, index = 1, not_found_msg = NULL, append = TRUE) {
+  assert_state(state)
   student_lines <- strsplit(state$get("student_code"), split = "\n")[[1]]
   solution_lines <- strsplit(state$get("solution_code"), split = "\n")[[1]]
 
@@ -99,6 +101,7 @@ check_header <- function(state, level, index = 1, not_found_msg = NULL, append =
 #'
 #' @export
 check_title <- function(state, not_found_msg = NULL, append = TRUE) {
+  assert_state(state)
   stopifnot(inherits(state, "MarkdownHeaderState"))
   student_title <- state$get("student_title")
   solution_title <- state$get("solution_title")
@@ -145,6 +148,7 @@ check_title <- function(state, not_found_msg = NULL, append = TRUE) {
 #'
 #' @export
 check_chunk <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
+  assert_state(state)
   student_code <- state$get("student_code")
   solution_code <- state$get("solution_code")
   
@@ -198,6 +202,7 @@ check_chunk <- function(state, index = 1, not_found_msg = NULL, append = TRUE) {
 #'
 #' @export
 check_option.MarkdownChunkState <- function(state, name, not_found_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   student_options <- state$get("student_options")
   solution_options <- state$get("solution_options")
   markdown_chunk_option_state <- MarkdownChunkOptionState$new(state)
@@ -229,6 +234,7 @@ check_option.MarkdownChunkState <- function(state, name, not_found_msg = NULL, a
 #'
 #' @export
 check_equal.MarkdownChunkOptionState <- function(state, incorrect_msg = NULL, append = FALSE, ...) {
+  assert_state(state)
   check_equal_option_helper(state, "markdown_yaml_option", incorrect_msg = incorrect_msg, append = append)
 }
 
@@ -249,6 +255,7 @@ check_equal.MarkdownChunkOptionState <- function(state, incorrect_msg = NULL, ap
 #'
 #' @export
 check_yaml <- function(state, error_msg = NULL, append = TRUE) {
+  assert_state(state)
   student_code <- state$get("student_code")
   solution_code <- state$get("solution_code")
   
@@ -295,6 +302,7 @@ check_yaml <- function(state, error_msg = NULL, append = TRUE) {
 #'
 #' @export
 check_option.MarkdownYamlState <- function(state, name, not_found_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   student_yaml <- state$get("student_yaml")
   solution_yaml <- state$get("solution_yaml")
   markdown_yaml_option_state <- MarkdownYamlOptionState$new(state)
@@ -333,6 +341,7 @@ check_option.MarkdownYamlState <- function(state, name, not_found_msg = NULL, ap
 #'
 #' @export
 check_equal.MarkdownYamlOptionState <- function(state, incorrect_msg = NULL, append = TRUE, ...) {
+  assert_state(state)
   check_equal_option_helper(state, "markdown_chunk_option", incorrect_msg = incorrect_msg, append = append)
 }
 

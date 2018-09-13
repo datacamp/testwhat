@@ -632,3 +632,10 @@ test_that("check_arg fails if not called on function state.", {
                regexp = "`check_arg()` can only be called on `check_function()`.",
                fixed = TRUE)
 })
+
+test_that("check_function fails if not called on state.", {
+  s <- setup_state("", "")
+  expect_error(check_function('mean'),
+               regexp = "The first argument to `check_function()` should be a state object. Maybe you forgot a dot?",
+               fixed = TRUE)
+})
