@@ -88,7 +88,7 @@ ex() %>% check_function("mean") %>% check_arg("x") %>% check_equal()
 # Solution, value of na.rm does not matter
 mean(c(1, 2, 3), na.rm = TRUE)
 
-# Old SCT
+# old SCT
 test_function("mean", args = c("x", "na.rm"), eval = c(TRUE, NA))
 
 # SCT
@@ -127,13 +127,62 @@ ex() %>% check_function("mean") %>% check_result() %>% check_equal()
 # Solution (how x is calculated does not matter)
 x <- mean(1:3)
 
-# old_SCT
+# old SCT
 test_correct(test_object("x"), test_function("mean", args = c("x")))
 
 # new SCT
 ex() %>% check_correct(
   check_object(., "x") %>% check_equal(),
   check_fun(., "mean") %>% check_arg("x") %>% check_equal()
+)
+```
+
+### `test_function_definition()`
+
+```{r}
+# Solution
+my_fun <- function(a, b) {
+  print("summing")
+  return(a + b)
+}
+
+# old SCT
+test_function_definition("my_fun",
+                         function_test = {
+                           test_expression_result("my_fun(1, 2)")
+                           test_expression_output("my_fun(1, 2)")
+                         },
+                         body_test = {
+                           test_function("print", "x")
+                           test_student_typed(c("a + b", "b + a"))
+                         })
+
+# new SCT (not so great)
+ex() %>% check_fun_def('my_fun') %>% {
+  check_arguments(.)
+  check_call(., 1, 2) %>% {
+    check_result(.) %>% check_equal()
+    check_output(.) %>% check_equal()
+  }
+  check_body(.) %>% {
+    check_function(., "print") %>% check_arg("x") %>% check_equal()
+    check_code(., c("a + b", "b + a"), fixed = TRUE)
+  }
+}
+
+# new SCT (better, uses check_correct)
+ex() %>% check_fun_def('my_fun') %>% check_correct(
+  check_call(., 1, 2) %>% {
+    check_result(.) %>% check_equal()
+    check_output(.) %>% check_equal()
+  },
+  {
+    check_arguments(.)
+    check_body(.) %>% {
+      check_function(., "print") %>% check_arg("x") %>% check_equal()
+      check_code(., c("a + b", "b + a"), fixed = TRUE)
+    }
+  }
 )
 ```
 
