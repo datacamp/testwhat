@@ -321,6 +321,8 @@ override_solution_env <- function(state, ...) {
 #' highlights that were collected earlier in the state.
 #'
 #' @param state the state to create a substate from
+#'
+#' @export
 disable_highlighting <- function(state) {
   sub_state <- ProxySubState$new(state)
   sub_state$add_details(highlighting_disabled = TRUE)
