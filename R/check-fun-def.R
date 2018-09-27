@@ -22,21 +22,33 @@
 #' @examples
 #' \dontrun{
 #' # Example:
-#' my_fun <- function(a, b) { 
-#'   stopifnot(is.numeric(a), is.numeric(b))
-#'   a + b 
+#' my_op <- function(a, b) {
+#'   stopifnot(length(a) == length(b))
+#'   return(abs(a) + abs(b))
 #' }
 #' 
-#' # SCT
-#' ex() %>% check_fun_def("my_fun") %>% {
-#'   check_arguments(.)
-#'   check_call(., a = 1, b = 2) %>% {
-#'     check_result(.) %>% check_equal()
-#'     check_output(.) %>% check_equal()
+#' # Robust SCT
+#' ex() %>% check_fun_def('my_op') %>% check_correct(
+#'   {
+#'     check_call(., c(1, 2), c(3, 4)) %>% check_result() %>% check_equal()
+#'     check_call(., c(1, -2), c(3, -4)) %>% check_result() %>% check_equal()
+#'     check_call(., c(-1, 2), c(-3, 4)) %>% check_result() %>% check_equal()
+#'     check_call(., 1, c(3, 4)) %>% check_error()
+#'     check_call(., c(1, -2), 3) %>% check_error()
+#'   },
+#'   {
+#'     check_arguments(.)
+#'     check_body(.) %>% {
+#'       check_function(., 'stopifnot') %>% check_arg('...') %>% {
+#'         check_function(., 'length', index = 1) %>% check_arg('x') %>% check_equal(eval = FALSE)
+#'         check_function(., 'length', index = 2) %>% check_arg('x') %>% check_equal(eval = FALSE)
+#'         check_code(., '==')
+#'       }
+#'       check_function(., 'abs', index = 1) %>% check_arg('x') %>% check_equal(eval = FALSE)
+#'       check_function(., 'abs', index = 2) %>% check_arg('x') %>% check_equal(eval = FALSE)
+#'     }
 #'   }
-#'   check_call(., a = 'c', b = 3) %>% check_error() %>% check_equal()
-#'   check_body(.) %>% check_code("+")
-#' }
+#' )
 #' }
 #' 
 #' @name check_fun_def
