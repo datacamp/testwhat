@@ -325,6 +325,35 @@ ex() %>% check_or(
 )
 ```
 
+## Example 7: Comparing formulas
+
+`testwhat` has built-in functionality to deal with formulas rather robustly. Suppose you want to check whether a student called the `lm` function correctly:
+
+```{r}
+lm(mpg ~ wt + hp, data = mtcars)
+```
+
+If you use the following SCT:
+
+```{r}
+ex() %>% check_function('mtcars') %>% check_arg('formula') %>% check_equal()
+```
+
+`testwhat` will recognize that the `formula` argument you specified is indeed an R formula object. It will then deparse the formula and make it robust to different orderings. This means that the following submissions pass:
+
+```{r}
+lm(mpg ~ wt + hp, data = mtcars)
+lm(mpg ~ hp + wt, data = mtcars)
+```
+
+And the following fail:
+
+```{r}
+lm(mpg ~ wt + hp + drat, data = mtcars)
+```
+
+So there is some 'normalization' going on, but handle with care.
+
 ## Appendix: Advanced Automatic Feedback
 
 The automatic messages that are generated when the student makes mistakes of different kinds is continuously improved to be as insightful as possible. For example, when the solution expects:

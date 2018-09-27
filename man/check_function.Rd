@@ -55,7 +55,7 @@ check whether the student supplied a large predefined object, or when
 you're in a sub-SCT where the environments are not unambiguously available.}
 
 \item{eq_condition}{character vector indicating how to perform the
-comparison for each argument. See \code{\link{is_equal}}}
+comparison for each argument. See \code{\link{is_equal}}.}
 
 \item{eq_fun}{optional argument to specify a custom equality function. The
 function should take two arguments and always return a single boolean
