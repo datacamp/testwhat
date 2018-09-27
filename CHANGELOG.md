@@ -2,6 +2,18 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.8.0
+
+### Added
+
+- Automatic `ex() %>% check_error()` check after an SCT finished successfully, unless `allow_errors` is set to `FALSE` by RBackend, which is the case if the exericse has `allow_solution_error()` in the pre-exercise-code
+- Explicitly export `disable_highlighting()`
+- Add example for test to check for function definitions
+
+### Fixed
+
+- Some typos in error messages (thanks Richie)
+
 ## 4.7.3
 
 ### Improved
