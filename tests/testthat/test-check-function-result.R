@@ -19,6 +19,7 @@ test_that("test call result - functions - step by step", {
 
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(mpg))"
   output <- test_it(lst)
+  fails(output)
   fb_contains(output, "Check your call of <code>summarise()</code>")
   fb_contains(output, "Running it again doesn")
 
@@ -89,24 +90,24 @@ test_that("test call result - functions - backwards compatbile - custom", {
   lst$DC_PEC <- "library(dplyr)"
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
   lst$DC_SCT <- "test_function_result('summarise', not_called_msg = 'notcalled', error_msg = 'error', incorrect_msg = 'incorrect')"
-  
+
   lst$DC_CODE <- "mtcars %>% filter(mpg > 20)"
   output <- test_it(lst)
   fails(output)
   fb_contains(output, "Notcalled")
-  
+
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(non_existing))"
   output <- test_it(lst)
   fails(output)
   fb_excludes(output, "Check your call of <code>summarise()</code>")
   fb_contains(output, "Error")
-  
+
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), max = max(mpg))"
   output <- test_it(lst)
   fails(output)
   fb_excludes(output, "Check your call of <code>summarise()</code>")
   fb_contains(output, "Incorrect")
-  
+
   lst$DC_CODE <- lst$DC_SOLUTION
   output <- test_it(lst)
   passes(output)
@@ -117,7 +118,7 @@ test_that("test call result - functions - errs appropriately", {
   lst$DC_PEC <- "library(dplyr)"
   lst$DC_SOLUTION <- "mtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
   lst$DC_SCT <- "test_function_result('mutate')"
-  
+
   expect_error(test_it(lst))
 })
 
@@ -150,9 +151,11 @@ test_that("test call result - functions - indexing", {
   output <- test_it(lst)
   passes(output)
 
+  # no blacklisting anymore, so this shouldn't pass
   lst$DC_CODE <- "mtcars %>% summarise(min = min(mpg), sd = sd(mpg))\nmtcars %>% summarise(avg = mean(mpg), max = max(mpg))"
   output <- test_it(lst)
-  passes(output)
+  fails(output)
+  line_info(output, 1, 1)
 })
 
 test_that("test call result - custom eq_fun", {
@@ -173,7 +176,7 @@ test_that("test call result - custom eq_fun", {
     if (ex$correct) passes(output) else fails(output)
   }
 })
-
+ 
 context("check operator result")
 
 test_that("check_operator - step by step", {
@@ -231,17 +234,14 @@ test_that("check_operator - arithmetic/relational/logical", {
   output <- test_it(lst)
   passes(output)
 
-  lst$DC_CODE <- "1 + 3\n7 + 8"
-  output <- test_it(lst)
-  passes(output)
-
   lst$DC_CODE <- "6 + 9"
   output <- test_it(lst)
   passes(output)
-
-  lst$DC_CODE <- "1 + 3\n6 + 9"
+  
+  # no blacklisting anymore, this fails
+  lst$DC_CODE <- "1 + 3\n7 + 8"
   output <- test_it(lst)
-  passes(output)
+  fails(output)
 
   lst$DC_CODE <- "mean(7 + 8)"
   output <- test_it(lst)
@@ -294,9 +294,10 @@ test_that("check_operator - index", {
   output <- test_it(lst)
   passes(output)
 
+  # no blacklisting, this should fail
   lst$DC_CODE <- "10 + 20\n4 + 5"
   output <- test_it(lst)
-  passes(output)
+  fails(output)
 
   lst$DC_CODE <- ""
   output <- test_it(lst)
@@ -324,5 +325,3 @@ test_that("check_operator - errs correctly", {
   lst$DC_SOLUTION <- ""
   expect_error(test_it(lst))
 })
-
-

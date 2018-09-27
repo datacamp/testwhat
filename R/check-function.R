@@ -104,20 +104,14 @@ check_fun_op_helper <- function(state, name, index, not_called_msg, append, type
   solution_call <- solution_calls[[index]]
 
   check_that(is_true(length(student_calls) >= index), feedback = call_state$details)
+  student_call <- student_calls[[index]]
 
   # update the case for future tests
   call_state$set_details(case = "correct",
                          message = NULL)
 
-  # manage blacklisting of operators
-  state$update_blacklist()
-  state$set(active_name = name)
-  state$set(active_sol_index = index)
-  options <- state$get_options(length(student_calls))
-
-  student_calls[-options] <- NA
   call_state$set(solution_call = solution_call)
-  call_state$set(student_calls = student_calls)
+  call_state$set(student_call = student_call)
   return(call_state)
 }
 
@@ -128,13 +122,14 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   state$assert_is("CallState", "check_function")
 
   solution_call <- state$get("solution_call")
-  student_calls <- state$get("student_calls")
+  student_call <- state$get("student_call")
 
   arg_state <- ArgumentState$new(state)
   arg_state$add_details(type = "argument",
                         case = "specified",
                         name = arg,
                         message = arg_not_specified_msg,
+                        pd = student_call$pd,
                         append = append)
 
   if (! arg %in% names(solution_call$args)) {
@@ -142,38 +137,17 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
          " by the corresponding function call in the solution code.")
   }
 
-  res <- logical(length(student_calls))
-  details <- NULL
-  for (i in seq_along(student_calls)) {
-    student_call <- student_calls[[i]]
-    if (isTRUE(is.na(student_call))) next
-
-    # If no hits, use details of the first try
-    if (is.null(details)) {
-      arg_state$set_details(pd = student_call$pd)
-      details <- arg_state$details
-    }
-
-    # Check if the function is called with the right arguments
-    if (arg %in% names(student_call$args)) {
-      arg_state$log(index = i, arg = arg, success = TRUE)
-      res[i] <- TRUE
-    } else {
-      arg_state$log(index = i, arg = arg, success = FALSE)
-    }
-  }
-
-  if (is.null(details)) {
-    details <- arg_state$details
-  }
-  check_that(is_gte(sum(res), 1), feedback = details)
-
-  student_args <- student_calls
-  student_args[res] <- lapply(student_args[res], function(x) x$args[[arg]])
-  student_args[!res] <- NA
-  arg_state$set(student_args = student_args)
-  arg_state$set(solution_arg = solution_call$args[[arg]])
-
+  # Check if the function is called with the right arg
+  check_that(is_true(arg %in% names(student_call$args)), feedback = arg_state$details)
+  
+  sol_arg = solution_call$args[[arg]]
+  stu_arg = student_call$args[[arg]]
+  arg_state$set(solution_arg = sol_arg)
+  arg_state$set(solution_pd = sol_arg$pd)
+  arg_state$set(solution_code = deparse(sol_arg$expr))
+  arg_state$set(student_arg = stu_arg)
+  arg_state$set(student_pd = stu_arg$pd)
+  arg_state$set(student_code = deparse(stu_arg$expr))
   arg_state$set_details(case = "correct",
                         message = NULL)
 
@@ -186,16 +160,17 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
 check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, eq_condition = "equivalent", eq_fun = NULL, append = TRUE, ...) {
   assert_state(state)
   solution_arg <- state$get("solution_arg")
-  student_args <- state$get("student_args")
+  student_arg <- state$get("student_arg")
 
   state$add_details(type = "argument",
                     case = "equal",
                     eval = eval,
                     eq_condition = eq_condition,
                     message = incorrect_msg,
+                    pd = student_arg$pd,
                     append = append)
 
-  # Check if the specified arguments are correctly called
+  # Evaluate the solution argument and see if no error
   solution_obj <- eval_argument(solution_arg,
                                 eval = eval,
                                 env = state$get("solution_env"))
@@ -208,45 +183,16 @@ check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, 
     eq_fun <- function(x, y) is_equal(x, y, eq_condition)
   }
 
-  res <- logical(length(student_args))
-  details <- NULL
-  for (i in seq_along(student_args)) {
-    student_arg <- student_args[[i]]
-    if (isTRUE(is.na(student_arg))) next
-    student_obj <- eval_argument(student_arg,
-                                 eval = eval,
-                                 env = state$get("student_env"))
+  # Evaluate the student argument
+  student_obj <- eval_argument(student_arg,
+                               eval = eval,
+                               env = state$get("student_env"))
 
-    # If no hits, use details of the first try
-    if (is.null(details)) {
-      if (is_dots(student_arg)) {
-        pd <- state$student_calls[[i]]$pd
-        is_dots <- TRUE
-      } else {
-        pd <- student_arg$pd
-        is_dots <- FALSE
-      }
-      state$set_details(student = student_obj,
-                        solution = solution_obj,
-                        pd = pd,
-                        is_dots = is_dots)
-      details <- state$details
-    }
+  state$set_details(student = student_obj,
+                    solution = solution_obj,
+                    is_dots = is_dots(student_arg))
 
-    # Check if the function arguments correspond
-    if (eq_fun(student_obj, solution_obj)) {
-      state$log(index = i, success = TRUE)
-      res[i] <- TRUE
-    } else {
-      state$log(index = i, success = FALSE)
-    }
-  }
-
-  if (is.null(details)) {
-    details <- state$details
-  }
-
-  check_that(is_gte(sum(res), 1), feedback = details)
+  check_that(is_true(eq_fun(student_obj, solution_obj)), feedback = state$details)
 
   return(state)
 }

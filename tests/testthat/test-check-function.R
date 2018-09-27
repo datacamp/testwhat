@@ -166,15 +166,16 @@ test_that("test_function - index (1)", {
   line_info(output, 1, 1, 20, 24)
   fails(output)
 
+  # no more blacklisting, so fails
   lst$DC_CODE <- "mean(1:10, na.rm = FALSE)\nmean(1:10, na.rm = TRUE)"
   output <- test_it(lst)
-  passes(output)
+  fails(output)
 })
 
 test_that("test_function - index (2)", {
   lst <- list()
   lst$DC_SOLUTION <- "mean(1:10, na.rm = TRUE)\nmean(1:10)"
-  lst$DC_SCT <- "test_function('mean', args = c('x', 'na.rm'), index = 1)\ntest_function('mean', args = 'x', index = 2)"
+  lst$DC_SCT <- "test_function('mean', args = 'x', index = 2)"
 
   lst$DC_CODE <- "mean(1:10, na.rm = TRUE)\nmean(1:10)"
   output <- test_it(lst)
@@ -218,23 +219,6 @@ test_that("test_function - index (3)", {
                       'test_function("sub", "x", index = 2)')
   output <- test_it(lst)
   passes(output)
-})
-
-test_that("test_function - index (4)", {
-  lst <- list()
-  lst$DC_PEC <- ""
-  lst$DC_SOLUTION <- "round(pi, 3)\nround(exp(1), 3)"
-  lst$DC_CODE <- "round(pi, 3)\nround(exp(2), 3)"
-
-  lst$DC_SCT <- 'test_function("round", args = "x", index = 2)'
-  output <- test_it(lst)
-  fails(output)
-  line_info(output, 1, 1, 7, 8)
-
-  lst$DC_SCT <- 'test_function("round", args = "x", index = 1)\ntest_function("round", args = "x", index = 2)'
-  output <- test_it(lst)
-  fails(output)
-  line_info(output, 2, 2, 7, 12)
 })
 
 test_that("test_function - eq_condition", {
@@ -438,11 +422,12 @@ test_that("test_function - diff messages - try-errors", {
 })
 
 test_that("test_function - S3 functions", {
-  lst <- list()
-  lst$DC_PEC <- "set.seed(1)\nlibrary(rpart)\nfit <- rpart(Kyphosis ~ Age + Number + Start, method='class', data=kyphosis)"
-  lst$DC_CODE <- "predict(type = 'class', newdata = test, lm(c(1,2,3) ~ c(4,5,6)))\npredict(object = fit, type = 'class', kyphosis)"
-  lst$DC_SOLUTION <- "predict(object = fit, type = 'class', kyphosis)\npredict(type = 'class', newdata = kyphosis, fit)"
-  lst$DC_SCT <- "test_function('predict', args = c('object', 'type'), index = 1)"
+  lst <- list(
+    DC_PEC = "set.seed(1)\nlibrary(rpart)\nfit <- rpart(Kyphosis ~ Age + Number + Start, method='class', data=kyphosis)",
+    DC_CODE = "predict(object = fit, type = 'class', kyphosis)",
+    DC_SOLUTION = "predict(object = fit, type = 'class', kyphosis)",
+    DC_SCT = "test_function('predict', args = c('object', 'type'), index = 1)"
+  )
   output <- test_it(lst)
   passes(output)
 
@@ -616,6 +601,20 @@ test_that("test_function works appropriately inside test_corect", {
   fails(output)
   line_info(output, 2, 2)
 })
+
+test_that("check_arg allows for further zooming in", {
+  code <- "ggplot(ChickWeight, aes(x = Time, y = weight)) + geom_line(aes(group = Chick))"
+  lst <- list(
+    DC_PEC = "library(ggplot2)",
+    DC_SOLUTION = code,
+    DC_CODE = code,
+    DC_SCT = 'ex() %>% check_function("geom_line") %>% check_arg("mapping") %>% check_function("aes") %>% check_arg("group") %>% check_equal(eval = FALSE)'
+  )
+  output <- test_it(lst)
+  passes(output)
+})
+
+# Instructor errors -----------------------------------------------------------
 
 test_that("check_function fails if called on the object state.", {
   code = "x = mean(1:3)"
