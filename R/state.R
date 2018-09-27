@@ -102,23 +102,7 @@ State <- R6::R6Class("State",
                        solution_pd = NULL,
                        solution_env = NULL,
                        output_list = NULL,
-                       test_env = NULL,
-                       # fun usage
-                       fun_usage = NULL,
-                       active_name = NULL,
-                       active_sol_index = NULL,
-                       active_arg = NULL,
-                       blacklist = list(),
-                       set_used = function(name, sol_index, stud_index) {
-                         add <- list(name = name,
-                                     stud_index = stud_index,
-                                     sol_index = sol_index)
-                         if (any(sapply(private$blacklist, function(x) isTRUE(try(all.equal(add, x)))))) {
-                           # don't add
-                         } else {
-                           private$blacklist = c(private$blacklist, list(add))
-                         }
-                       }
+                       test_env = NULL
                      )
 )
 
@@ -175,15 +159,16 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
 )
 
 
-CallState <- R6::R6Class("CallState", inherit = ChildState, private = list(student_calls = NULL, solution_call = NULL))
+CallState <- R6::R6Class("CallState", inherit = ChildState, private = list(student_call = NULL, solution_call = NULL))
 FunctionState <- R6::R6Class("FunctionState", inherit = CallState)
 OperationState <- R6::R6Class("OperationState", inherit = CallState)
 
-CallResultState <- R6::R6Class("CallResultState", inherit = CallState)
+CallResultState <- R6::R6Class("CallResultState", inherit = CallState, private = list(student_call_result = NULL,
+                                                                                      solution_call_result = NULL))
 FunctionResultState <- R6::R6Class("FunctionResultState", inherit = CallResultState)
 OperationResultState <- R6::R6Class("OperationResultState", inherit = CallResultState)
 
-ArgumentState <- R6::R6Class("ArgumentState", inherit = ChildState, private = list(student_args = NULL, solution_arg = NULL))
+ArgumentState <- R6::R6Class("ArgumentState", inherit = ChildState, private = list(student_arg = NULL, solution_arg = NULL))
 
 ObjectState <- R6::R6Class("ObjectState", inherit = ChildState, private = list(name = NULL, student_object = NULL, solution_object = NULL))
 ObjectColumnState <- R6::R6Class("ObjectColumnState", inherit = ObjectState)
