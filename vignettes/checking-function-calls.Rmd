@@ -339,7 +339,7 @@ If you use the following SCT:
 ex() %>% check_function('mtcars') %>% check_arg('formula') %>% check_equal()
 ```
 
-`testwhat` will recognize that the `formula` argument you specified is indeed an R formula object. It will then deparse the formula and make it robust to different orderings. This means that the following submissions pass:
+`testwhat` will recognize that the `formula` argument you specified is indeed an R formula object. It will then parse the formula and make it robust to different orderings. This means that the following submissions pass:
 
 ```{r}
 lm(mpg ~ wt + hp, data = mtcars)
