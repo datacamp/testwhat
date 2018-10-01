@@ -2,6 +2,12 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.9.0
+
+### Changed
+
+- Blacklisting has been removed as a mechanism to help match function calls.
+
 ## 4.8.0
 
 ### Added
