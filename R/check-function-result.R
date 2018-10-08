@@ -73,8 +73,11 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
   
   check_that(is_false(inherits(stud_res, 'error')), feedback = callresult_state$details)
   
-  callresult_state$set(student_call_result = stud_res,
-                       solution_call_result = sol_res)
+  solution_call$result = sol_res
+  student_call$result = stud_res
+  
+  callresult_state$set(student_call = student_call,
+                       solution_call = solution_call)
   callresult_state$set_details(case = "result_correct",
                                message = NULL)
   return(callresult_state)
@@ -84,8 +87,8 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
 
 check_call_result_equal <- function(state, eq_condition, eq_fun, incorrect_msg, append, type = c("function", "operator")) {
   type <- match.arg(type)
-  sol_res <- state$get("solution_call_result")
-  stud_res <- state$get("student_call_result")
+  sol_res <- state$get("solution_call")$result
+  stud_res <- state$get("student_call")$result
   state$add_details(type = type,
                     case = "result_equal",
                     eq_condition = eq_condition,
