@@ -104,6 +104,8 @@ check_fun_op_helper <- function(state, name, index, not_called_msg, append, type
   solution_call <- solution_calls[[index]]
 
   check_that(is_true(length(student_calls) >= index), feedback = call_state$details)
+  student_calls <- student_calls[index]
+  
 
   # update the case for future tests
   call_state$set_details(case = "correct",
