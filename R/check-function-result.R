@@ -98,7 +98,7 @@ check_call_result_equal <- function(state, eq_condition, eq_fun, incorrect_msg, 
     eq_fun <- function(x, y) is_equal(x, y, eq_condition)
   }
 
-  check_that(expect_true(eq_fun(stud_res, sol_res)), feedback = state$details)
+  check_that(is_true(eq_fun(stud_res, sol_res)), feedback = state$details)
   
   return(state)
 }
