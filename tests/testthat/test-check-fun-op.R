@@ -423,10 +423,10 @@ test_that("test_function - diff messages - try-errors", {
 
 test_that("test_function - S3 functions", {
   lst <- list()
-  lst$DC_PEC <- "set.seed(1)\nlibrary(rpart)\nfit <- rpart(Kyphosis ~ Age + Number + Start, method='class', data=kyphosis)"
-  lst$DC_CODE <- "predict(type = 'class', newdata = test, lm(c(1,2,3) ~ c(4,5,6)))\npredict(object = fit, type = 'class', kyphosis)"
-  lst$DC_SOLUTION <- "predict(object = fit, type = 'class', kyphosis)\npredict(type = 'class', newdata = kyphosis, fit)"
-  lst$DC_SCT <- "test_function('predict', args = c('object', 'type'), index = 1)"
+  lst$DC_PEC = "set.seed(1)\nlibrary(rpart)\nfit <- rpart(Kyphosis ~ Age + Number + Start, method='class', data=kyphosis)"
+  lst$DC_CODE = "predict(object = fit, type = 'class', kyphosis)"
+  lst$DC_SOLUTION = "predict(object = fit, type = 'class', kyphosis)"
+  lst$DC_SCT = "test_function('predict', args = c('object', 'type'), index = 1)"
   output <- test_it(lst)
   passes(output)
   

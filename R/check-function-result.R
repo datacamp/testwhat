@@ -89,49 +89,24 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
 
 check_call_result_equal <- function(state, eq_condition, eq_fun, incorrect_msg, append, type = c("function", "operator")) {
   type <- match.arg(type)
-  solution_call <- state$get("solution_call")
-  student_calls <- state$get("student_calls")
+  sol_res <- state$get("solution_call")$result
+  stud_res <- state$get("student_calls")[[1]]$result
   state$add_details(type = type,
                     case = "result_equal",
                     eq_condition = eq_condition,
                     message = incorrect_msg,
+                    student = stud_res,
+                    solution = sol_res,
                     append = append)
-  
-  sol_res <- solution_call$result
   
   if (is.null(eq_fun)) {
     eq_fun <- function(x, y) is_equal(x, y, eq_condition)
   }
-
-  res <- logical(length(student_calls))
-  details <- NULL
-  for (i in seq_along(student_calls)) {
-    student_call <- student_calls[[i]]
-    if (isTRUE(is.na(student_call))) next
-    stud_res <- student_call$result
-    
-    # If no hits, use details of the first try
-    if (is.null(details)) {
-      state$set_details(student = stud_res,
-                        solution = sol_res,
-                        pd = student_call$pd)
-      details <- state$details
-    }
-    
-    # Check if the function arguments correspond
-    if (eq_fun(stud_res, sol_res)) {
-      state$log(index = i, success = TRUE)
-      res[i] <- TRUE
-    } else {
-      state$log(index = i, success = FALSE)
-    }
-  }
   
-  if (is.null(details)) {
-    details <- state$details
-  }
+  check_that(eq_fun(stud_res, sol_res), feedback = state$details)
   
-  check_that(is_gte(sum(res), 1), feedback = details)
+  state$log(index = 1, success = TRUE) # todo
+  
   return(state)
 }
 
