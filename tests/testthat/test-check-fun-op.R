@@ -601,17 +601,17 @@ test_that("test_function works appropriately inside test_corect", {
   line_info(output, 2, 2)
 })
 
-# test_that("check_arg allows for further zooming in", {
-#   code <- "ggplot(ChickWeight, aes(x = Time, y = weight)) + geom_line(aes(group = Chick))"
-#   lst <- list(
-#     DC_PEC = "library(ggplot2)",
-#     DC_SOLUTION = code,
-#     DC_CODE = code,
-#     DC_SCT = 'ex() %>% check_function("geom_line") %>% check_arg("mapping") %>% check_function("aes") %>% check_arg("group") %>% check_equal(eval = FALSE)'
-#   )
-#   output <- test_it(lst)
-#   passes(output)
-# })
+test_that("check_arg allows for further zooming in", {
+  code <- "ggplot(ChickWeight, aes(x = Time, y = weight)) + geom_line(aes(group = Chick))"
+  lst <- list(
+    DC_PEC = "library(ggplot2)",
+    DC_SOLUTION = code,
+    DC_CODE = code,
+    DC_SCT = 'ex() %>% check_function("geom_line") %>% check_arg("mapping") %>% check_function("aes") %>% check_arg("group") %>% check_equal(eval = FALSE)'
+  )
+  output <- test_it(lst)
+  passes(output)
+})
 
 # Instructor errors -----------------------------------------------------------
 

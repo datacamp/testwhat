@@ -178,7 +178,7 @@ check_equal_helper <- function(state, incorrect_msg, eq_condition, append, eq_fu
   if (is.null(eq_fun)) {
     eq_fun <- function(x, y) is_equal(x, y, eq_condition)
   }
-  check_that(eq_fun(student_obj, solution_obj), feedback = state$details)
+  check_that(is_true(eq_fun(student_obj, solution_obj)), feedback = state$details)
   return(state)
 }
 

@@ -145,10 +145,10 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   stu_arg = student_call$args[[arg]]
   arg_state$set(solution_arg = sol_arg)
   arg_state$set(solution_pd = sol_arg$pd)
-  arg_state$set(solution_code = deparse(sol_arg$expr))
+  # arg_state$set(solution_code = deparse(sol_arg$expr))
   arg_state$set(student_arg = stu_arg)
   arg_state$set(student_pd = stu_arg$pd)
-  arg_state$set(student_code = deparse(stu_arg$expr))
+  # arg_state$set(student_code = deparse(stu_arg$expr))
 
   arg_state$set_details(case = "correct",
                         message = NULL)
@@ -169,6 +169,7 @@ check_equal.ArgumentState <- function(state, incorrect_msg = NULL, eval = TRUE, 
                     eval = eval,
                     eq_condition = eq_condition,
                     message = incorrect_msg,
+                    pd = student_arg$pd,
                     append = append)
 
   # Evaluate the solution argument and see if no error
