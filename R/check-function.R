@@ -104,14 +104,14 @@ check_fun_op_helper <- function(state, name, index, not_called_msg, append, type
   solution_call <- solution_calls[[index]]
 
   check_that(is_true(length(student_calls) >= index), feedback = call_state$details)
-  student_calls <- student_calls[index]
+  student_call <- student_calls[[index]]
 
   # update the case for future tests
   call_state$set_details(case = "correct",
                          message = NULL)
 
   call_state$set(solution_call = solution_call)
-  call_state$set(student_calls = student_calls)
+  call_state$set(student_call = student_call)
   
   return(call_state)
 }
@@ -123,7 +123,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   state$assert_is("CallState", "check_function")
 
   solution_call <- state$get("solution_call")
-  student_call <- state$get("student_calls")[[1]]
+  student_call <- state$get("student_call")
 
   arg_state <- ArgumentState$new(state)
   arg_state$add_details(type = "argument",

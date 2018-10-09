@@ -100,7 +100,7 @@ ChildState <- R6::R6Class("ChildState", inherit = State,
 )
 
 
-CallState <- R6::R6Class("CallState", inherit = ChildState, private = list(student_calls = NULL, solution_call = NULL))
+CallState <- R6::R6Class("CallState", inherit = ChildState, private = list(student_call = NULL, solution_call = NULL))
 FunctionState <- R6::R6Class("FunctionState", inherit = CallState)
 OperationState <- R6::R6Class("OperationState", inherit = CallState)
 

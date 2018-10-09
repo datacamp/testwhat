@@ -53,7 +53,7 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
   CallResultState <- switch(type, `function` = FunctionResultState, operator = OperationResultState)
   
   solution_call <- state$get("solution_call")
-  student_calls <- state$get("student_calls")
+  student_call <- state$get("student_call")
   student_env <- state$get("student_env")
   solution_env <- state$get("solution_env")
   
@@ -61,7 +61,7 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
   callresult_state$add_details(type = type,
                                case = "result_runs",
                                message = error_msg,
-                               pd = student_calls[[1]]$pd,
+                               pd = student_call$pd,
                                append = append)
   
   sol_res <- tryCatch(base::eval(solution_call$call, envir = solution_env), error = function(e) e)
@@ -70,12 +70,12 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
   }
   solution_call$result <- sol_res
   
-  stud_res <- tryCatch(base::eval(student_calls[[1]]$call, envir = student_env), error = function(e) e)
-  student_calls[[1]]$result = stud_res
+  stud_res <- tryCatch(base::eval(student_call$call, envir = student_env), error = function(e) e)
+  student_call$result = stud_res
   
   check_that(is_false(inherits(stud_res, 'error')), feedback = callresult_state$details)
 
-  callresult_state$set(student_calls = student_calls,
+  callresult_state$set(student_call = student_call,
                        solution_call = solution_call)
   
   callresult_state$set_details(case = "result_correct",
@@ -88,7 +88,7 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
 check_call_result_equal <- function(state, eq_condition, eq_fun, incorrect_msg, append, type = c("function", "operator")) {
   type <- match.arg(type)
   sol_res <- state$get("solution_call")$result
-  stud_res <- state$get("student_calls")[[1]]$result
+  stud_res <- state$get("student_call")$result
   state$add_details(type = type,
                     case = "result_equal",
                     eq_condition = eq_condition,
