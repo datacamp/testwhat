@@ -115,9 +115,9 @@ check_fun_op_helper <- function(state, name, index, not_called_msg, append, type
   state$update_blacklist()
   state$set(active_name = name)
   state$set(active_sol_index = index)
-  options <- state$get_options(length(student_calls))
+  # options <- state$get_options(length(student_calls))
 
-  student_calls[-options] <- NA
+  # student_calls[-options] <- NA
   call_state$set(solution_call = solution_call)
   call_state$set(student_calls = student_calls)
   return(call_state)
@@ -171,8 +171,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   check_that(is_gte(sum(res), 1), feedback = details)
 
   student_args <- student_calls
-  student_args[res] <- lapply(student_args[res], function(x) x$args[[arg]])
-  student_args[!res] <- NA
+  student_args <- lapply(student_args, function(x) x$args[[arg]])
   arg_state$set(student_args = student_args)
   arg_state$set(solution_arg = solution_call$args[[arg]])
 

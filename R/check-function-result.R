@@ -61,6 +61,7 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
   callresult_state$add_details(type = type,
                                case = "result_runs",
                                message = error_msg,
+                               pd = student_calls[[1]]$pd,
                                append = append)
   
   sol_res <- tryCatch(base::eval(solution_call$call, envir = solution_env), error = function(e) e)
@@ -69,36 +70,13 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
   }
   solution_call$result <- sol_res
   
-  res <- logical(length(student_calls))
-  details <- NULL
-  for (i in seq_along(student_calls)) {
-    student_call <- student_calls[[i]]
-    if (isTRUE(is.na(student_call))) next
-    
-    # If no hits, use details of the first try
-    if (is.null(details)) {
-      callresult_state$set_details(pd = student_call$pd)
-      details <- callresult_state$details
-    }
-    
-    stud_res <- tryCatch(base::eval(student_call$call, envir = student_env), error = function(e) e)
-    
-    # Check if the call passed
-    if (!inherits(stud_res, 'error')) {
-      callresult_state$log(index = i, arg = 'none', success = TRUE)
-      student_calls[[i]]$result <- stud_res
-      res[i] <- TRUE
-    } else {
-      callresult_state$log(index = i, arg = 'none', success = FALSE)
-    }
-  }
+  stud_res <- tryCatch(base::eval(student_calls[[1]]$call, envir = student_env), error = function(e) e)
+  student_calls[[1]]$result = stud_res
   
-  if (is.null(details)) {
-    details <- callresult_state$details
-  }
-  check_that(is_gte(sum(res), 1), feedback = details)
+  callresult_state$log(index = 1, arg = 'none', success = TRUE) # todo
   
-  student_calls[!res] <- NA
+  check_that(is_false(inherits(stud_res, 'error')), feedback = callresult_state$details)
+
   callresult_state$set(student_calls = student_calls,
                        solution_call = solution_call)
   
