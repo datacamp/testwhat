@@ -20,65 +20,6 @@ State <- R6::R6Class("State",
                                     })
                          }
                        },
-                       # blacklisting stuff
-                       update_blacklist = function() {
-                         # first, blacklist earlier work, if any.
-                         fun_usage <- private$fun_usage
-                         l <- length(fun_usage)
-                         if (l > 0) {
-                           if (l == 1) {
-                             df <- as.data.frame(fun_usage)
-                           } else {
-                             df <- do.call(rbind.data.frame, c(fun_usage, list(stringsAsFactors = FALSE)))
-                           }
-                           agg <- aggregate(df$success, by=list(stud_index = df$stud_index), FUN=all)
-                           passed_stud_indices <- agg$stud_index[agg$x]
-                           if (length(passed_stud_indices) > 0) {
-                             ind_to_blacklist <- min(passed_stud_indices)
-                             if (isTRUE(try(length(unique(df$name)) == 1, silent = TRUE)) &&
-                                 isTRUE(try(length(unique(df$sol_index)) == 1, silent = TRUE))) {
-                               private$set_used(df$name[1], df$sol_index[1], ind_to_blacklist)
-                             }
-                           }
-                         }
-                         private$fun_usage <- list()
-                       },
-                       log = function(index, arg = NULL, success) {
-                         if (is.null(private$fun_usage)) {
-                           # fun usage not defined at this level, throw up
-                           private$parent$log(index, arg = arg, success)
-                         } else {
-                           if (!is.null(arg)) {
-                             private$active_arg <- arg
-                           }
-                           private$fun_usage <- c(private$fun_usage,
-                                                  list(list(name = private$active_name,
-                                                            sol_index = private$active_sol_index,
-                                                            arg = private$active_arg,
-                                                            stud_index = index,
-                                                            success = success)))
-                         }
-                       },
-                       get_options = function(n_calls) {
-                         if (is.null(private$active_name) ||
-                             is.null(private$active_sol_index) ||
-                             is.null(private$blacklist)) {
-                           # required info not at this level, throw up
-                           self$parent$get_options()
-                         }
-                         name = private$active_name
-                         sol_index = private$active_sol_index
-                         bl <- private$blacklist
-                         name_hits <- sapply(bl, `[[`, "name") == name
-                         bl <- bl[name_hits]
-                         sol_index_hits <- sapply(bl, `[[`, "sol_index") == sol_index
-                         if (any(sol_index_hits)) {
-                           bl <- bl[sol_index_hits]
-                           bl[[1]]$stud_index
-                         } else {
-                           setdiff(1:n_calls, sapply(bl, `[[`, "stud_index"))
-                         }
-                       },
                        verify_root = function(fun = deparse(sys.call(-1)[[1]])) {
                          stop(sprintf("`%s()` should only be called from the root state, `ex()`.", fun))
                        },
@@ -102,23 +43,7 @@ State <- R6::R6Class("State",
                        solution_pd = NULL,
                        solution_env = NULL,
                        output_list = NULL,
-                       test_env = NULL,
-                       # fun usage
-                       fun_usage = NULL,
-                       active_name = NULL,
-                       active_sol_index = NULL,
-                       active_arg = NULL,
-                       blacklist = list(),
-                       set_used = function(name, sol_index, stud_index) {
-                         add <- list(name = name,
-                                     stud_index = stud_index,
-                                     sol_index = sol_index)
-                         if (any(sapply(private$blacklist, function(x) isTRUE(try(all.equal(add, x)))))) {
-                           # don't add
-                         } else {
-                           private$blacklist = c(private$blacklist, list(add))
-                         }
-                       }
+                       test_env = NULL
                      )
 )
 
@@ -183,7 +108,7 @@ CallResultState <- R6::R6Class("CallResultState", inherit = CallState)
 FunctionResultState <- R6::R6Class("FunctionResultState", inherit = CallResultState)
 OperationResultState <- R6::R6Class("OperationResultState", inherit = CallResultState)
 
-ArgumentState <- R6::R6Class("ArgumentState", inherit = ChildState, private = list(student_args = NULL, solution_arg = NULL))
+ArgumentState <- R6::R6Class("ArgumentState", inherit = ChildState, private = list(student_arg = NULL, solution_arg = NULL))
 
 ObjectState <- R6::R6Class("ObjectState", inherit = ChildState, private = list(name = NULL, student_object = NULL, solution_object = NULL))
 ObjectColumnState <- R6::R6Class("ObjectColumnState", inherit = ObjectState)

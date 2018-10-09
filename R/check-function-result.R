@@ -73,8 +73,6 @@ check_call_result <- function(state, error_msg, append, type = c("function", "op
   stud_res <- tryCatch(base::eval(student_calls[[1]]$call, envir = student_env), error = function(e) e)
   student_calls[[1]]$result = stud_res
   
-  callresult_state$log(index = 1, arg = 'none', success = TRUE) # todo
-  
   check_that(is_false(inherits(stud_res, 'error')), feedback = callresult_state$details)
 
   callresult_state$set(student_calls = student_calls,
@@ -104,8 +102,6 @@ check_call_result_equal <- function(state, eq_condition, eq_fun, incorrect_msg, 
   }
   
   check_that(eq_fun(stud_res, sol_res), feedback = state$details)
-  
-  state$log(index = 1, success = TRUE) # todo
   
   return(state)
 }
