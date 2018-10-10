@@ -145,7 +145,7 @@ ex() %>% check_function("round", index = 1) %>% check_arg("x") %>% check_equal()
 ex() %>% check_function("round", index = 2) %>% check_arg("x") %>% check_equal()
 ```
 
-The first `check_function()` chain, where `index = 1`, checks the solution code for the first function call of `round()`, finds it - `round(pi, 3)` - and then goes to look through the student code to find a function call of `round()` that matches the arguments. It is perfectly possible that there are 5 function calls of `round()` in the student's submission, and that only the fourth call matches the requirements for the first `check_function()` chain. As soon as a function call is found in the student code that passes all tests, `testwhat` heads over to the second `check_function()` chain, where `index = 2`. The same thing happens: the second call of `round()` is found from the solution code, and a match is sought for in the student code. This time, however, the function call that was matched before is now 'blacklisted'; it is not possible that the same function call in the student code causes both `check_function()` chains to pass.
+The first `check_function()` chain, where `index = 1`, checks the solution code for the first function call of `round()`, finds it - `round(pi, 3)` - and then goes to look through the student code to find a function call of `round()`. It is possible that there are 5 function calls of `round()` in the student's submission, and that only the fourth call matches the requirements for the first `check_function()` chain, but testwhat matches function calls in the student code by the index of the call in the solution code.
 
 This means that all of the following student submissions would be accepted:
 
