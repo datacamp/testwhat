@@ -1,7 +1,12 @@
+url: https://datacamp.github.io/testwhat/
+
 template:
   params:
     bootswatch: cosmo
     ganalytics: "UA-120925561-1"
+    docsearch:
+      api_key: cba84df952b7606852b92617801244e5
+      index_name: datacamp_testwhat
 
 reference:
   - title: Commonly used functions
