@@ -24,7 +24,7 @@ ex() %>% check_object("x") %>% check_equal()
 success_msg("Great job! You're getting _so_ goot at object assignment!")
 ```
 
-[This article on the authoring docs](https://authoring.datacamp.com/courses/exercises/all-exercise-types/success-message.html) describes how to write good success messages.
+[This article on the authoring docs](https://instructor-support.datacamp.com/courses/course-development/submission-correctness-tests) describes how to write good success messages.
 
 ## Multiple choice exercises
 
