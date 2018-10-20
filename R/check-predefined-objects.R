@@ -35,7 +35,7 @@ check_predefined_objects <- function(state,
   eq_condition <- rep(eq_condition, n_names, length.out = n_names)
   eval <- rep(eval, n_names, length.out = n_names)
   
-  already <- "it has already been coded for you! You can use the arrow next to 'Submit Answer' to reset your code."
+  already <- "it has already been coded for you! You can use the arrow to the left of 'Run Code' to reset your code."
   
   if (is.null(undefined_msg)) {
     undefined_msg <- sprintf("Don't remove the predefined variable `%s`; %s", name, already)
