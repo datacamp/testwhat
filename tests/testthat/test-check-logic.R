@@ -80,6 +80,9 @@ test_that("test_correct throws errors if incorrect diagnose_code", {
   lst$DC_SCT <- "test_correct(test_object('c'), test_object('a'))"
   expect_error(test_it(lst))
 
+  lst$DC_SCT <- "test_correct(test_object('c'), test_object('a'), force_diagnose = TRUE)"
+  expect_error(test_it(lst))
+
   lst <- list()
   lst$DC_CODE <- "x <- nchar('test')"
   lst$DC_SOLUTION <- "x <- nchar('test')"

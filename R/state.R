@@ -43,7 +43,8 @@ State <- R6::R6Class("State",
                        solution_pd = NULL,
                        solution_env = NULL,
                        output_list = NULL,
-                       test_env = NULL
+                       test_env = NULL,
+                       force_diagnose = FALSE
                      )
 )
 
