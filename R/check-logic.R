@@ -67,15 +67,16 @@
 #' @name check_logic
 #' @export
 check_correct <- function(state, ...) {
+  force_diagnose <- tw$get("state")$get('force_diagnose')
   if (nargs() == 3) {
     # If three inputs, the first one must be a state
     set_dot(state)
-    test_correct(..., v2_check = FALSE)
+    test_correct(..., v2_check = FALSE, force_diagnose = force_diagnose)
   } else {
     fail_if_v2_only(errmsg = 'check_correct() can only be used with a state as the first argument, e.g. ex() %>% check_correct(...).')
     # Else, fall back on old behavior
     input <- as.list(substitute(list(...)))
-    test_correct(substitute(state), input[[2]], sub = FALSE)
+    test_correct(substitute(state), input[[2]], sub = FALSE, force_diagnose = force_diagnose)
   }
 }
 
@@ -99,7 +100,7 @@ set_dot <- function(x) {
   assign(".", x, envir = tw$get("state")$get("test_env"))
 }
 
-test_correct <- function(check_code, diagnose_code, sub = TRUE, v2_check = TRUE) {
+test_correct <- function(check_code, diagnose_code, sub = TRUE, v2_check = TRUE, force_diagnose = FALSE) {
   if(v2_check) {
     fail_if_v2_only(errmsg = 'test_correct() can no longer be used in SCTs. Use ex() %>% check_correct() instead.')
   }
@@ -109,13 +110,13 @@ test_correct <- function(check_code, diagnose_code, sub = TRUE, v2_check = TRUE)
   }
   check_res <- run_until_fail(check_code)
   diagnose_res <- run_until_fail(diagnose_code)
-  if (check_res$correct) {
+  if (check_res$correct && !force_diagnose) {
     # all good
   } else {
-    if (diagnose_res$correct) {
-      check_that(failure(), feedback = check_res$feedback)
-    } else {
+    if (!diagnose_res$correct) {
       check_that(failure(), feedback = diagnose_res$feedback)
+    } else if (!check_res$correct) {
+      check_that(failure(), feedback = check_res$feedback)
     }
   }
   return(invisible(NULL))
