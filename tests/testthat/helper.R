@@ -12,7 +12,8 @@ test_it <- function(lst) {
               stu_env = NULL,
               stu_result = NULL,
               pec = lst$DC_PEC %||% "",
-              ex_type = ex_type)
+              ex_type = ex_type,
+              force_diagnose = lst$DC_FORCE_DIAGNOSE %||% FALSE)
   post_process(run_until_fail(parse(text = lst$DC_SCT %||% "")),
                ex_type = ex_type)
 }

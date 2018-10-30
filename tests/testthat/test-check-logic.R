@@ -200,6 +200,18 @@ test_that("check_correct - new school", {
   lst$DC_CODE <- "x <- 6"
   output <- test_it(lst)
   passes(output)
+  
+  lst$DC_CODE <- "x <- 5"
+  lst$DC_SCT <- "ex() %>% check_correct(
+                      check_object(., 'x'),
+                      check_object(., 'x') %>% check_equal(.)
+                 )"
+  output <- test_it(lst)
+  passes(output)
+  
+  lst$DC_FORCE_DIAGNOSE <- TRUE
+  output <- test_it(lst)
+  fails(output)
 })
 
 context("check_or")
