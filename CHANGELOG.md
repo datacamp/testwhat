@@ -2,6 +2,10 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.10.0
+
+- Add optional parameter to force passing the `diagnose` tests in `check_correct`.
+
 ## 4.9.8
 
 ### Fixed
