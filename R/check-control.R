@@ -25,7 +25,7 @@
 #'     check_code(., "vec")
 #'   }
 #'   check_if(.) %>% check_function(., "print")
-#'   check_else(.) %>% check_if_else() {
+#'   check_else(.) %>% check_if_else() %>% {
 #'     check_cond(.) %>% check_code(">")
 #'     check_if(.) %>% check_function("cat")
 #'     check_else(.) %>% check_function("str")
