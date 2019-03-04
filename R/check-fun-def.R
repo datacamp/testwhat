@@ -150,8 +150,10 @@ check_call <- function(state, ...) {
   assert_state(state)
   state$assert_is("FunDefState", "check_fun_def")
   expr_state <- ExprState$new(state)
-  expr_str <- gsub("list", state$get("name"), deparse(substitute(list(...))))
-  expr_state$set(expr = parse(text = expr_str))
+  fn_name <- state$get("name")
+  fn_call <- substitute(list(...))
+  fn_call[1] <- call(fn_name)
+  expr_state$set(expr = as.expression(fn_call))
   return(expr_state)
 }
 
