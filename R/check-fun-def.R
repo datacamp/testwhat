@@ -70,8 +70,8 @@ check_fun_def <- function(state, name, undefined_msg = NULL, no_fundef_msg = NUL
   
   check_defined(name, solution_env)
   solution_object <- get(name, envir = solution_env, inherits = FALSE)
-  if (!inherits(solution_object, "function")) {
-    stop("%s is not a user-defined function in the solution code.", name)
+  if (!is.function(solution_object)) {
+    stop(sprintf("%s is not a user-defined function in the solution code.", name))
   }
   
   check_that(is_true(exists(name, envir = student_env, inherits = FALSE)), feedback = fundef_state$details)
