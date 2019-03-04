@@ -401,3 +401,15 @@ test_that("check_call fails if not called on function definition state.", {
                regexp = "`check_call()` can only be called on `check_fun_def()`.",
                fixed = TRUE)
 })
+
+test_that("check_call works with list arguments", {
+  code <- "add_first_two_elts_of_list <- function(l) l[[1]] + l[[2]]"
+  s <- setup_state(stu_code = code, sol_code = code)
+  expect_pass(
+    s %>% 
+      check_fun_def() %>% 
+      check_call("add_first_two_elts_of_list(list(2, 4))") %>%
+      check_result() %>%
+      check_equal()
+  )
+})
