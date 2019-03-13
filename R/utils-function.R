@@ -148,38 +148,27 @@ find_S3_call <- function(matched_call, call, env) {
 }
 
 # Convert an expression that uses the pipe operator to a regular embedded expression.
+is_pipe <- function(expr) {
+  identical(deparse(expr), "%>%")
+}
+
 unpipe <- function(expr) {
-  cnv <- function(x) {
-    lhs <- x[[2]]
-    rhs <- x[[3]]
-    
-    dot_pos <- which(
-      vapply(rhs
-             , function(x) paste0(as.character(x), collapse = "") == "."
-             , logical(1)
-             , USE.NAMES = FALSE))
-    
-    if (any(all.names(rhs) == "%>%")) rhs <- decomp(rhs)
-    if (any(all.names(lhs) == "%>%")) lhs <- decomp(lhs)
-    
-    # main
-    if (length(dot_pos) > 0) {
-      rhs[[dot_pos]] <- lhs
-      rhs
-    } else if (is.symbol(rhs) || rhs[[1]] == "function" || rhs[[1]] == "(") {
-      as.call(c(rhs, lhs))
-    } else if (is.call(rhs)) {
-      as.call(c(rhs[[1]], lhs, lapply(rhs[-1], decomp)))
-    } else {
-      stop("missing condition error")
-    }
+  if(!is_pipe(expr[[1L]])) {
+    return(expr)
   }
-  
-  decomp <- function(x) {
-    if (length(x) == 1) x
-    else if (length(x) == 3 && x[[1]] == "%>%") cnv(x)
-    else if (is.pairlist(x)) as.pairlist(lapply(x, decomp))
-    else as.call(lapply(x, decomp))
+  lhs <- as.list(expr[[2L]])
+  if(is_pipe(lhs[[1L]])) {
+    lhs <- unpipe(lhs)
   }
-  decomp(expr)
+  rhs <- as.list(expr[[3L]])
+  if(is_pipe(rhs[[1L]])) {
+    rhs <- unpipe(rhs)
+  }
+  is_dot <- vapply(rhs, identical, logical(1L), as.name("."))
+  if(any(is_dot)) {
+    rhs[is_dot] <- as.expression(lhs)
+    as.call(rhs)
+  } else {
+    as.call(append(rhs, lhs, 1L))
+  }
 }
