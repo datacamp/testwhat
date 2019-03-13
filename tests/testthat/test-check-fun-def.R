@@ -408,7 +408,19 @@ test_that("check_call works with list arguments", {
   passes2(
     s %>% 
       check_fun_def("calc_with_first_two_elts_of_list") %>% 
-      check_call("list(2, 4)", "mean") %>%
+      check_call(list(2, 4), mean) %>%
+      check_result() %>%
+      check_equal()
+  )
+})
+
+test_that("check_call works with many argument types", {
+  code <- "dotsy <- function(...) list(...)"
+  s <- setup_state(stu_code = code, sol_code = code) 
+  passes2(
+    s %>% 
+      check_fun_def("dotsy") %>% 
+      check_call(x = matrix(1:12, 4), letters, na.rm = TRUE, as.name("variable"), `+`, y ~ x, e = new.env()) %>%
       check_result() %>%
       check_equal()
   )
