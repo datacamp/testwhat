@@ -631,6 +631,26 @@ test_that("check_function() works on nested function calls", {
   )
 })
 
+test_that("check_function works with more deeply nested code", {
+  code <- "cars %>% dplyr::mutate(disty = factor(format(sqrt(dist + 1), digits = 5)))"
+  s <- setup_state(stu_code = code, sol_code = code) 
+  passes2(
+    s %>% 
+      check_function("mutate") %>% 
+      check_arg("disty") %>% 
+      check_function("factor") %>%
+      check_arg("x") %>% 
+      check_function("format") %>% {
+        check_arg(., "x") %>% 
+          check_function("sqrt") %>%
+          check_arg("x") %>% 
+          check_equal(eval = FALSE)
+        check_arg(., "digits") %>% 
+          check_equal()
+      }
+  )
+})
+
 # Instructor errors -----------------------------------------------------------
 
 test_that("check_function fails if called on the object state.", {
