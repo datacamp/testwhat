@@ -638,3 +638,30 @@ test_that("check_function fails if not called on state.", {
                regexp = "The first argument to `check_function()` should be a state object. Maybe you forgot a dot?",
                fixed = TRUE)
 })
+
+test_that("check_arg works with positional arguments.", {
+  code <- "cor(1:10, runif(10))"
+  state <- setup_state(
+    sol_code = code, stu_code = code
+  )
+  expect_error(
+    state %>% 
+      check_function("cor") %>% 
+      check_arg(0)
+  )
+  expect_pass(
+    state %>% 
+      check_function("cor") %>% 
+      check_arg(1)
+  )
+  expect_pass(
+    state %>% 
+      check_function("cor") %>% 
+      check_arg(2)
+  )
+  expect_error(
+    state %>% 
+      check_function("cor") %>% 
+      check_arg(3)
+  )
+})
