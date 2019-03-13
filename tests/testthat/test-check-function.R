@@ -614,6 +614,23 @@ test_that("check_arg allows for further zooming in", {
   passes(output)
 })
 
+
+# Nested function calls ---------------------------------------------------
+
+test_that("check_function() works on nested function calls", {
+  code <- "mean(rnorm(100, 10))"
+  s <- setup_state(stu_code = code, sol_code = code) 
+  passes2(
+    s %>% 
+      check_function("mean") %>% 
+      check_arg("x") %>% 
+      check_function("rnorm") %>% {
+        check_arg(., "n") %>% check_equal()
+        check_arg(., "mean") %>% check_equal()
+      }
+  )
+})
+
 # Instructor errors -----------------------------------------------------------
 
 test_that("check_function fails if called on the object state.", {
