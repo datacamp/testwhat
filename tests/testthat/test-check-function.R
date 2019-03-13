@@ -665,3 +665,52 @@ test_that("check_arg works with positional arguments.", {
       check_arg(3)
   )
 })
+
+test_that("check_arg works with positional arguments for dots.", {
+  code <- "sum(1:5, 6:10)"
+  state <- setup_state(
+    sol_code = code, stu_code = code
+  )
+  expect_error(
+    state %>% 
+      check_function("sum") %>% 
+      check_arg(0)
+  )
+  expect_pass(
+    state %>% 
+      check_function("sum") %>% 
+      check_arg(1)
+  )
+  expect_pass(
+    state %>% 
+      check_function("sum") %>% 
+      check_arg(2)
+  )
+  expect_error(
+    state %>% 
+      check_function("sum") %>% 
+      check_arg(3)
+  )
+})
+
+test_that("check_arg works with ..n arguments for dots.", {
+  code <- "sum(1:5, 6:10)"
+  state <- setup_state(
+    sol_code = code, stu_code = code
+  )
+  expect_pass(
+    state %>% 
+      check_function("sum") %>% 
+      check_arg("..1")
+  )
+  expect_pass(
+    state %>% 
+      check_function("sum") %>% 
+      check_arg("..2")
+  )
+  expect_error(
+    state %>% 
+      check_function("sum") %>% 
+      check_arg("..3")
+  )
+})

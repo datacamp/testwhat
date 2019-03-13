@@ -142,7 +142,12 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
       stop(msg)
     }
     arg <- names(solution_call$args)[arg]
-  } else if (!arg %in% names(solution_call$args)) {
+  }
+  # For backwards compatibility
+  if(identical(arg, "...")) {
+    arg <- "..1"
+  }
+  if (!arg %in% names(solution_call$args)) {
     stop(" Make sure that the arguments you specify are actually specified",
          " by the corresponding function call in the solution code.")
   }
