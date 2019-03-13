@@ -403,12 +403,12 @@ test_that("check_call fails if not called on function definition state.", {
 })
 
 test_that("check_call works with list arguments", {
-  code <- "add_first_two_elts_of_list <- function(l) l[[1]] + l[[2]]"
+  code <- "calc_with_first_two_elts_of_list <- function(l, fn) fn(l[[1]] + l[[2]])"
   s <- setup_state(stu_code = code, sol_code = code)
   passes2(
     s %>% 
-      check_fun_def() %>% 
-      check_call("add_first_two_elts_of_list(list(2, 4))") %>%
+      check_fun_def("calc_with_first_two_elts_of_list") %>% 
+      check_call("list(2, 4)", "mean") %>%
       check_result() %>%
       check_equal()
   )
