@@ -58,7 +58,3 @@ no_line_info <- function(res) {
 print_fb <- function(output) {
   cat("\n", "FBM: \"", testwhat:::trim(res$message), "\"\n", sep = "")
 }
-
-expect_pass <- function(res) {
-  expect_true(inherits(res, "State"))
-}

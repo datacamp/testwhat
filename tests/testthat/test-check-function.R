@@ -649,12 +649,12 @@ test_that("check_arg works with positional arguments.", {
       check_function("cor") %>% 
       check_arg(0)
   )
-  expect_pass(
+  passes2(
     state %>% 
       check_function("cor") %>% 
       check_arg(1)
   )
-  expect_pass(
+  passes2(
     state %>% 
       check_function("cor") %>% 
       check_arg(2)
@@ -676,12 +676,12 @@ test_that("check_arg works with positional arguments for dots.", {
       check_function("sum") %>% 
       check_arg(0)
   )
-  expect_pass(
+  passes2(
     state %>% 
       check_function("sum") %>% 
       check_arg(1)
   )
-  expect_pass(
+  passes2(
     state %>% 
       check_function("sum") %>% 
       check_arg(2)
@@ -698,12 +698,12 @@ test_that("check_arg works with ..n arguments for dots.", {
   state <- setup_state(
     sol_code = code, stu_code = code
   )
-  expect_pass(
+  passes2(
     state %>% 
       check_function("sum") %>% 
       check_arg("..1")
   )
-  expect_pass(
+  passes2(
     state %>% 
       check_function("sum") %>% 
       check_arg("..2")
