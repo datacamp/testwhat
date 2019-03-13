@@ -9,25 +9,27 @@ find_function_calls <- function(pd, name, env) {
   # Retrieve all function calls from parse information
   fun_ids <- pd$parent[pd$text == name & pd$token == "SYMBOL_FUNCTION_CALL"]
   
-  lapply(fun_ids, function(fun_id) {
-    expr_id <- pd$parent[pd$id == fun_id] 
-    
-    # if parent expression contains %>% on left hand side ...
-    siblings <- pd$id[pd$parent == pd$parent[pd$id == expr_id]]
-    if ("%>%" %in% pd$text[pd$id %in% siblings] && pd$id[pd$text == "%>%" & pd$id %in% siblings] < expr_id) {
-      # ... go one level up, normalize call, and return string
-      expr_id <- pd$parent[pd$id == expr_id]
-      expr_string <- deparse(unpipe(as.call(parse(text = getParseText(pd, expr_id)))[[1]]))
-    } else {
-      expr_string <- getParseText(pd, expr_id)  
-    }
-    expr <- parse(text = expr_string)
-    original_call <- as.call(expr)[[1]]
-    standard_call <- standardize_call(original_call, expr_string, env)
-    function_pd <- get_sub_pd(pd = pd, expr_id)
-    arg_pds <- get_args(function_pd, standard_call)
-    list(call = standard_call, pd = function_pd, args = arg_pds)
-  })
+  lapply(fun_ids, get_call_data, pd = pd, env = env)
+}
+
+get_call_data <- function(fun_id, pd, env) {
+  expr_id <- pd$parent[pd$id == fun_id] 
+  
+  # if parent expression contains %>% on left hand side ...
+  siblings <- pd$id[pd$parent == pd$parent[pd$id == expr_id]]
+  if ("%>%" %in% pd$text[pd$id %in% siblings] && pd$id[pd$text == "%>%" & pd$id %in% siblings] < expr_id) {
+    # ... go one level up, normalize call, and return string
+    expr_id <- pd$parent[pd$id == expr_id]
+    expr_string <- deparse(unpipe(as.call(parse(text = getParseText(pd, expr_id)))[[1]]))
+  } else {
+    expr_string <- getParseText(pd, expr_id)  
+  }
+  expr <- parse(text = expr_string)
+  original_call <- as.call(expr)[[1]]
+  standard_call <- standardize_call(original_call, expr_string, env)
+  function_pd <- get_sub_pd(pd = pd, expr_id)
+  arg_pds <- get_args(function_pd, standard_call)
+  list(call = standard_call, pd = function_pd, args = arg_pds)
 }
 
 # Find all operators in the parse data
@@ -53,7 +55,7 @@ get_args <- function(pd, standard_call) {
     return(list())
   }
   
-  params <- standard_call[2:n]
+  params <- standard_call[-1]
   args <- lapply(params, function(param) {
     id <- pd$id[clean(deparse(param)) == clean(pd$text) & pd$token == "expr"]
     list(expr = param, pd = get_sub_pd(pd, id))
@@ -64,12 +66,12 @@ get_args <- function(pd, standard_call) {
   m <- length(args)
   if (is.null(names(args))) {
     # All are unnamed
-    args <- list(`...` = args)
+    names(args) <- paste0("..", seq_along(args))
   } else {
     hits <- which(names(args) == "")
     if (length(hits) > 0) {
       # Some arguments not named
-      args[["..."]] <- args[hits]
+      names(args)[hits] <- paste0("..", seq_along(hits))
       args[hits] <- NULL
     }
   }
