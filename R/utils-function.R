@@ -67,11 +67,13 @@ get_args <- function(pd, standard_call) {
   if (is.null(names(args))) {
     # All are unnamed
     names(args) <- paste0("..", seq_along(args))
+    args[["..."]] <- args
   } else {
     hits <- which(names(args) == "")
     if (length(hits) > 0) {
       # Some arguments not named
       names(args)[hits] <- paste0("..", seq_along(hits))
+      args[["..."]] <- args[hits]
       args[hits] <- NULL
     }
   }
