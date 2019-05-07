@@ -133,7 +133,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
                         append = append)
 
   if(is.numeric(arg)) {
-    if(!arg %in% seq_along(solution_call$args)) {
+    if(!arg %in% seq_along(solution_call$args) | names(solution_call$args)[arg] == '...') {
       msg <- sprintf(
         "A numeric 'arg' should be between 1 and the number of arguments (%d). You specified %d.", 
         length(solution_call$args),
@@ -142,10 +142,6 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
       stop(msg)
     }
     arg <- names(solution_call$args)[arg]
-  }
-  # For backwards compatibility
-  if(identical(arg, "...")) {
-    arg <- "..1"
   }
   if (!arg %in% names(solution_call$args)) {
     stop(" Make sure that the arguments you specify are actually specified",
