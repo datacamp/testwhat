@@ -681,15 +681,10 @@ test_that("check_arg works with positional arguments for dots.", {
       check_function("sum") %>% 
       check_arg(1)
   )
-  passes2(
-    state %>% 
-      check_function("sum") %>% 
-      check_arg(2)
-  )
   expect_error(
     state %>% 
       check_function("sum") %>% 
-      check_arg(3)
+      check_arg(2)
   )
 })
   

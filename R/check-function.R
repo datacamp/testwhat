@@ -133,7 +133,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
                         append = append)
 
   if(is.numeric(arg)) {
-    if(!arg %in% seq_along(solution_call$args) | names(solution_call$args)[arg] == '...') {
+    if(!arg %in% seq_along(solution_call$args)) {
       msg <- sprintf(
         "A numeric 'arg' should be between 1 and the number of arguments (%d). You specified %d.", 
         length(solution_call$args),
@@ -143,16 +143,32 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
     }
     arg <- names(solution_call$args)[arg]
   }
+
+  index = NULL
   if (!arg %in% names(solution_call$args)) {
-    stop(" Make sure that the arguments you specify are actually specified",
-         " by the corresponding function call in the solution code.")
+    index = as.integer(substr(arg, 3, nchar(arg)))
+    if (substr(arg, 1, 2) == ".." & 
+        index %in% seq_along(solution_call$args[["..."]])) {
+      arg <- "..."
+    } else {
+      stop(" Make sure that the arguments you specify are actually specified",
+           " by the corresponding function call in the solution code.")
+    }
   }
 
   # Check if the function is called with the right arg
   check_that(is_true(arg %in% names(student_call$args)), feedback = arg_state$details)
+  if (!is.null(index)) {
+    check_that(is_true(index %in% seq_along(student_call$args[["..."]])), feedback = arg_state$details)
+  }
   
   sol_arg = solution_call$args[[arg]]
   stu_arg = student_call$args[[arg]]
+  if (!is.null(index)) {
+    sol_arg = sol_arg[[index]]
+    stu_arg = stu_arg[[index]]
+  }
+  
   arg_state$set(solution_arg = sol_arg)
   arg_state$set(solution_pd = sol_arg$pd)
   arg_state$set(solution_code = deparse(sol_arg$expr))
