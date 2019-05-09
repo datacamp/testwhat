@@ -2,7 +2,7 @@
 title: "Checking markdown documents"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Checking function definitions}
+  %\VignetteIndexEntry{Checking markdown documents}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
