@@ -83,9 +83,19 @@ get_args <- function(pd, standard_call) {
 standardize_call <- function(call, call_string, env) {
   stopifnot(is.call(call))
   
-  f <- args(get(as.character(call[[1]]), env))
+  name <- as.character(call[[1]])
   
-  e <- try(match.call(f, call), silent = TRUE)
+  if (name[[1]] == "::") {
+    f <- getExportedValue(name[[2]], name[[3]])
+  } else if (name[[1]] == ":::") {
+    f <- get(name[[3]], envir = asNamespace(name[[2]]), inherits = FALSE)
+  } else {
+    f <- get(name, env)
+  }
+  
+  a <- args(f)
+  
+  e <- try(match.call(a, call), silent = TRUE)
   
   e <- find_S3_call(matched_call = e, call = call, env = env)
   
@@ -153,25 +163,20 @@ unpipe <- function(expr) {
     lhs <- x[[2]]
     rhs <- x[[3]]
     
-    dot_pos <- which(
-      vapply(rhs
-             , function(x) paste0(as.character(x), collapse = "") == "."
-             , logical(1)
-             , USE.NAMES = FALSE))
-    
     if (any(all.names(rhs) == "%>%")) rhs <- decomp(rhs)
     if (any(all.names(lhs) == "%>%")) lhs <- decomp(lhs)
     
     # main
-    if (length(dot_pos) > 0) {
-      rhs[[dot_pos]] <- lhs
-      rhs
-    } else if (is.symbol(rhs) || rhs[[1]] == "function" || rhs[[1]] == "(") {
-      as.call(c(rhs, lhs))
-    } else if (is.call(rhs)) {
-      as.call(c(rhs[[1]], lhs, lapply(rhs[-1], decomp)))
-    } else {
-      stop("missing condition error")
+    is_dot <- vapply(rhs, identical, logical(1L), as.name("."))
+    if(any(is_dot)) {
+      rhs[is_dot] <- as.expression(lhs)
+      rhs	
+    } else if (is.symbol(rhs) || rhs[[1]] == "function" || rhs[[1]] == "(") {	
+      as.call(c(rhs, lhs))	
+    } else if (is.call(rhs)) {	
+      as.call(c(rhs[[1]], lhs, lapply(rhs[-1], decomp)))	
+    } else {	
+      stop("missing condition error")	
     }
   }
   

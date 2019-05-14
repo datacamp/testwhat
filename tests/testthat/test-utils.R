@@ -56,3 +56,38 @@ test_that("fail_if_v2_only", {
   })
 })
 
+test_that("unpipe works with a single pipe", {
+  expected <- quote(select(cars, speed))
+  actual <- unpipe(quote(cars %>% select(speed)))
+  expect_identical(actual, expected)
+})
+
+test_that("unpipe works with a single pipe and dot", {
+  expected <- quote(select(cars, speed))
+  actual <- unpipe(quote(cars %>% select(., speed)))
+  expect_identical(actual, expected)
+})
+
+test_that("unpipe works with two pipes", {
+  expected <- quote(filter(select(cars, speed), speed > 20))
+  actual <- unpipe(quote(cars %>% select(speed) %>% filter(speed > 20)))
+  expect_identical(actual, expected)
+})
+
+test_that("unpipe works with two pipes and dot", {
+  expected <- quote(filter(select(cars, speed), speed > 20))
+  actual <- unpipe(quote(cars %>% select(., speed) %>% filter(., speed > 20)))
+  expect_identical(actual, expected)
+})
+
+test_that("unpipe works with qualifed function names", {
+  expected <- quote(dplyr::filter(dplyr::select(cars, speed), speed > 20))
+  actual <- unpipe(quote(cars %>% dplyr::select(speed) %>% dplyr::filter(speed > 20)))
+  expect_identical(actual, expected)
+})
+
+test_that("unpipe works with multiple dots", {
+  expected <- quote(setNames(letters, letters))
+  actual <- unpipe(quote(letters %>% setNames(., .)))
+  expect_identical(actual, expected)
+})
