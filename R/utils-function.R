@@ -83,9 +83,19 @@ get_args <- function(pd, standard_call) {
 standardize_call <- function(call, call_string, env) {
   stopifnot(is.call(call))
   
-  f <- args(get(as.character(call[[1]]), env))
+  name <- as.character(call[[1]])
   
-  e <- try(match.call(f, call), silent = TRUE)
+  if (name[[1]] == "::") {
+    f <- getExportedValue(name[[2]], name[[3]])
+  } else if (name[[1]] == ":::") {
+    f <- get(name[[3]], envir = asNamespace(name[[2]]), inherits = FALSE)
+  } else {
+    f <- get(name, env)
+  }
+  
+  a <- args(f)
+  
+  e <- try(match.call(a, call), silent = TRUE)
   
   e <- find_S3_call(matched_call = e, call = call, env = env)
   
@@ -148,27 +158,33 @@ find_S3_call <- function(matched_call, call, env) {
 }
 
 # Convert an expression that uses the pipe operator to a regular embedded expression.
-is_pipe <- function(expr) {
-  identical(deparse(expr), "%>%")
-}
-
 unpipe <- function(expr) {
-  if(!is_pipe(expr[[1L]])) {
-    return(expr)
+  cnv <- function(x) {
+    lhs <- x[[2]]
+    rhs <- x[[3]]
+    
+    if (any(all.names(rhs) == "%>%")) rhs <- decomp(rhs)
+    if (any(all.names(lhs) == "%>%")) lhs <- decomp(lhs)
+    
+    # main
+    is_dot <- vapply(rhs, identical, logical(1L), as.name("."))
+    if(any(is_dot)) {
+      rhs[is_dot] <- as.expression(lhs)
+      rhs	
+    } else if (is.symbol(rhs) || rhs[[1]] == "function" || rhs[[1]] == "(") {	
+      as.call(c(rhs, lhs))	
+    } else if (is.call(rhs)) {	
+      as.call(c(rhs[[1]], lhs, lapply(rhs[-1], decomp)))	
+    } else {	
+      stop("missing condition error")	
+    }
   }
-  lhs <- as.list(expr[[2L]])
-  if(is_pipe(lhs[[1L]])) {
-    lhs <- unpipe(lhs)
+  
+  decomp <- function(x) {
+    if (length(x) == 1) x
+    else if (length(x) == 3 && x[[1]] == "%>%") cnv(x)
+    else if (is.pairlist(x)) as.pairlist(lapply(x, decomp))
+    else as.call(lapply(x, decomp))
   }
-  rhs <- as.list(expr[[3L]])
-  if(is_pipe(rhs[[1L]])) {
-    rhs <- unpipe(rhs)
-  }
-  is_dot <- vapply(rhs, identical, logical(1L), as.name("."))
-  if(any(is_dot)) {
-    rhs[is_dot] <- as.expression(lhs)
-    as.call(rhs)
-  } else {
-    as.call(append(rhs, lhs, 1L))
-  }
+  decomp(expr)
 }
