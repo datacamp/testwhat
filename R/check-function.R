@@ -5,8 +5,10 @@
 #' can be used.
 #'
 #' @param state state to start from
-#' @param name  name of the function/operator as a string, e.g. \code{"mean"} or
-#'   \code{"+"}
+#' @param name  name of the function/operator as a string, e.g. \code{"mean"},
+#'   \code{"+"} or \code{"..."}; can also be used for positional access, e.g.
+#'   \code{1} for the first argument and \code{"..1"} for the first item in
+#'   \code{"..."}
 #' @param index  integer that specifies which call of \code{name} in the
 #'   solution code will be checked.
 #' @param eval  logical vector indicating whether and how to compare arguments.
@@ -135,7 +137,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   if(is.numeric(arg)) {
     if(!arg %in% seq_along(solution_call$args)) {
       msg <- sprintf(
-        "A numeric 'arg' should be between 1 and the number of arguments (%d). You specified %d.", 
+        "A numeric 'arg' should be between 1 and the number of arguments (%d). You specified %d.",
         length(solution_call$args),
         arg
       )
@@ -147,7 +149,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   index = NULL
   if (!arg %in% names(solution_call$args)) {
     index = as.integer(substr(arg, 3, nchar(arg)))
-    if (substr(arg, 1, 2) == ".." & 
+    if (substr(arg, 1, 2) == ".." &
         index %in% seq_along(solution_call$args[["..."]])) {
       arg <- "..."
     } else {
@@ -161,14 +163,14 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   if (!is.null(index)) {
     check_that(is_true(index %in% seq_along(student_call$args[["..."]])), feedback = arg_state$details)
   }
-  
+
   sol_arg = solution_call$args[[arg]]
   stu_arg = student_call$args[[arg]]
   if (!is.null(index)) {
     sol_arg = sol_arg[[index]]
     stu_arg = stu_arg[[index]]
   }
-  
+
   arg_state$set(solution_arg = sol_arg)
   arg_state$set(solution_pd = sol_arg$pd)
   arg_state$set(solution_code = deparse(sol_arg$expr))
@@ -274,7 +276,7 @@ test_function <- function(name,
   }
   eval <- rep(eval, length.out = n_args)
   eq_condition <- rep(eq_condition, length.out = n_args)
-  
+
   fun_state <- check_function(ex(), name, index = index,
                               not_called_msg = not_called_msg,
                               append = is.null(not_called_msg))
