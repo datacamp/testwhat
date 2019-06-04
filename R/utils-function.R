@@ -62,18 +62,14 @@ get_args <- function(pd, standard_call) {
   })
 
   # Some arguments are not named because passed via ...
-  # Group these arguments in a list
   m <- length(args)
+  default_arg_names <- paste0("..", seq_len(m))
   if (is.null(names(args))) {
     # All are unnamed
-    args <- list("..." = args)
+    names(args) <- default_arg_names
   } else {
-    hits <- which(names(args) == "")
-    if (length(hits) > 0) {
-      # Some arguments not named
-      args[["..."]] <- args[hits]
-      args[hits] <- NULL
-    }
+    no_name <- names(args) == ""
+    names(args)[no_name] <-default_arg_names[no_name]
   }
   return(args)
 }

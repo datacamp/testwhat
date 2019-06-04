@@ -22,8 +22,10 @@ check_arg(state, arg, arg_not_specified_msg = NULL, append = TRUE)
 \arguments{
 \item{state}{state to start from}
 
-\item{name}{name of the function/operator as a string, e.g. \code{"mean"} or
-\code{"+"}}
+\item{name}{name of the function/operator as a string, e.g. \code{"mean"},
+\code{"+"} or \code{"..."}; can also be used for positional access, e.g.
+\code{1} for the first argument and \code{"..1"} for the first item in
+\code{"..."}}
 
 \item{index}{integer that specifies which call of \code{name} in the
 solution code will be checked.}

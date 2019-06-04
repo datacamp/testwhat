@@ -145,31 +145,18 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
     }
     arg <- names(solution_call$args)[arg]
   }
-
-  index = NULL
-  if (!arg %in% names(solution_call$args)) {
-    index = as.integer(substr(arg, 3, nchar(arg)))
-    if (substr(arg, 1, 2) == ".." &
-        index %in% seq_along(solution_call$args[["..."]])) {
-      arg <- "..."
-    } else {
-      stop(" Make sure that the arguments you specify are actually specified",
-           " by the corresponding function call in the solution code.")
-    }
+  if(arg == "...") {
+    arg <- "..1"
   }
 
   # Check if the function is called with the right arg
-  check_that(is_true(arg %in% names(student_call$args)), feedback = arg_state$details)
-  if (!is.null(index)) {
-    check_that(is_true(index %in% seq_along(student_call$args[["..."]])), feedback = arg_state$details)
-  }
+  check_that(
+    is_true(arg %in% names(student_call$args)), 
+    feedback = arg_state$details
+  )
 
   sol_arg = solution_call$args[[arg]]
   stu_arg = student_call$args[[arg]]
-  if (!is.null(index)) {
-    sol_arg = sol_arg[[index]]
-    stu_arg = stu_arg[[index]]
-  }
 
   arg_state$set(solution_arg = sol_arg)
   arg_state$set(solution_pd = sol_arg$pd)
@@ -177,8 +164,7 @@ check_arg <- function(state, arg, arg_not_specified_msg = NULL, append = TRUE) {
   arg_state$set(student_arg = stu_arg)
   arg_state$set(student_pd = stu_arg$pd)
   arg_state$set(student_code = deparse(stu_arg$expr))
-  arg_state$set_details(case = "correct",
-                        message = NULL)
+  arg_state$set_details(case = "correct", message = NULL)
 
   return(arg_state)
 }

@@ -4,13 +4,13 @@
 \alias{setup_state}
 \title{Set up state for local experimentation.}
 \usage{
-setup_state(sol_code = "", stu_code = "", sol_env = NULL,
+setup_state(sol_code = "", stu_code = sol_code, sol_env = NULL,
   stu_env = NULL, stu_result = NULL, pec = character(),
   ex_type = "NormalExercise", force_diagnose = FALSE)
 }
 \arguments{
-\item{sol_code}{Solution script as a string. If it is not specified, the
-student code will be used.}
+\item{sol_code}{Solution script as a string. If it is not specified, it will 
+be an empty string.}
 
 \item{stu_code}{Student submission as a string. If it is not specified, the
 solution code will be used.}
