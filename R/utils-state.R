@@ -32,7 +32,7 @@
 #' @importFrom evaluate evaluate
 #' @export
 setup_state <- function(sol_code = "",
-                        stu_code = "",
+                        stu_code  = sol_code,
                         sol_env = NULL,
                         stu_env = NULL,
                         stu_result = NULL,
