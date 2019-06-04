@@ -22,7 +22,7 @@ test_that("setup_state works", {
   s <- setup_state(sol_code = code)
   expect_equal(get("x", s$get("solution_env")), 5)
   expect_false("y" %in% ls(s$get("solution_env")))
-  expect_false("x" %in% ls(s$get("student_env")))
+  expect_true("x" %in% ls(s$get("student_env")))
   expect_false("y" %in% ls(s$get("student_env")))
   
   s <- setup_state()

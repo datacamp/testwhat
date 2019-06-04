@@ -101,9 +101,9 @@ test_that("test_correct throws errors if incorrect diagnose_code", {
   lst$DC_CODE <- "x <- nchar('tester')"
   lst$DC_SOLUTION <- "x <- nchar('test')"
   lst$DC_SCT <- "test_correct(test_object('x'), test_function('nchar', 'object'))"
-  expect_error(test_it(lst))
+  fails(test_it(lst))
   lst$DC_CODE <- "x <- nchar('test')"
-  expect_error(test_it(lst))
+  passes(test_it(lst))
 })
 
 test_that("test_correct - nested", {
@@ -285,7 +285,7 @@ test_that("test_or throws error if something is off", {
 
   # argument of second test function incorrect
   lst$DC_SCT <- "test_or(test_function('summary', 'object'), test_function('str', 'x'))"
-  expect_error(test_it(lst))
+  fails(test_it(lst))
 })
 
 test_that("check_or - new school - nested", {

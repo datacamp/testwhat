@@ -5,8 +5,8 @@
 #' available thorugh \code{\link{ex}}, from which you can start your SCT chains.
 #' In a way, this function is a very light weight version of DataCamp's R Backend.
 #' 
-#' @param sol_code Solution script as a string. If it is not specified, the
-#'   student code will be used.
+#' @param sol_code Solution script as a string. If it is not specified, it will 
+#'   be an empty string.
 #' @param stu_code Student submission as a string. If it is not specified, the
 #'   solution code will be used.
 #' @param sol_env Solution environment. If this is specified, the solution code is not rerun.
