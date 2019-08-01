@@ -22,6 +22,11 @@ test_that("get_num_hits works", {
   expect_equal(get_num_hits('a', 'aba', TRUE), 2)
 })
 
+test_that("get_num_hits uses Perl regex", {
+  expect_equal(get_num_hits('^[^b]+(?!b)', 'abc', FALSE), 0)
+  expect_equal(get_num_hits('^[^b]+(?!b)', 'ac', FALSE), 1)
+})
+
 test_that("check_defined works", {
   testenv <- new.env()
   assign("x", 5, envir = testenv)
