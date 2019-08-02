@@ -10,6 +10,9 @@ get_num_hits <- function(regex, x, fixed) {
     return(0)
   } else {
     counts <- sapply(regex, function(patt) {
+      if (!fixed) {
+        patt = paste0('(?s)', patt)
+      }
       res <- gregexpr(patt, text = x, perl = !fixed, fixed = fixed)[[1]]
       if (any(res == -1)) {
         return(0L)
