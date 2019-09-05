@@ -2,6 +2,10 @@
 
 All notable changes to the `testwhat` project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 4.11.1
+
+- Use Perl RegEx
+
 ## 4.11.0
 
 - Add support for positional argument access (`check_arg(n)`) and `...` element argument access (`..n`)
