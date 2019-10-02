@@ -34,8 +34,8 @@ testwhat_learnr <- function(label = NULL,
                             envir_result = NULL,
                             evaluate_result = NULL,
                             ...) {
-  
-  ######### START COPY FROM grade_learnr ##################
+
+  ######### START COPY FROM gradethis ##################
   # Sometimes no user code is provided, but
   # that means there is nothing to check. Also,
   # you do not want to parse NULL
@@ -59,8 +59,8 @@ testwhat_learnr <- function(label = NULL,
       location = "append"
     ))
   }
-  ######### END COPY FROM grade_learnr ##################
-  
+  ######### END COPY FROM gradethis ##################
+
   setup_state(sol_code = solution_code,
               stu_code = user_code,
               sol_env = NULL,
