@@ -22,8 +22,10 @@ check_arg(state, arg, arg_not_specified_msg = NULL, append = TRUE)
 \arguments{
 \item{state}{state to start from}
 
-\item{name}{name of the function/operator as a string, e.g. \code{"mean"} or
-\code{"+"}}
+\item{name}{name of the function/operator as a string, e.g. \code{"mean"},
+\code{"+"} or \code{"..."}; can also be used for positional access, e.g.
+\code{1} for the first argument and \code{"..1"} for the first item in
+\code{"..."}}
 
 \item{index}{integer that specifies which call of \code{name} in the
 solution code will be checked.}
@@ -34,7 +36,8 @@ call the function often enough.}
 \item{append}{Whether or not to append the feedback to feedback built in
 previous states}
 
-\item{arg}{name of argument to specify (for \code{check_arg})}
+\item{arg}{name or position of argument to specify
+... Arguments can be accessed using '..<INDEX>' (see example 4) (for \code{check_arg})}
 
 \item{arg_not_specified_msg}{custom message in case argument was not
 specified (for \code{check_arg})}
@@ -90,6 +93,16 @@ ex() \%>\% check_function("mean") \%>\% {
 
 # SCT
 ex() \%>\% check_operator("+") \%>\% check_result() \%>\% check_equal()
+}
+
+# Example 4: ... in check_args
+
+soln <- "std_dev <- purrr::compose(sqrt, var, .dir='forward')"
+state <- setup_state(soln, soln)
+state \%>\% check_function(., "compose") \%>\% {
+ check_arg(., '..1') \%>\% check_equal() # sqrt
+ check_arg(., '..2') \%>\% check_equal() # var
+ check_arg(., '.dir') \%>\% check_equal()
 }
 
 }

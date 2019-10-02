@@ -4,10 +4,12 @@
 \alias{run_until_fail}
 \title{Run SCT until it fails}
 \usage{
-run_until_fail(code)
+run_until_fail(code, envir = NULL)
 }
 \arguments{
 \item{code}{the SCT script to run as an expression}
+
+\item{envir}{environment in which to execute the SCT script}
 }
 \description{
 Run SCT until it fails
