@@ -6,7 +6,7 @@
 \usage{
 testwhat_learnr(label = NULL, solution_code = NULL, user_code = NULL,
   check_code = NULL, envir_result = NULL, evaluate_result = NULL,
-  ...)
+  envir_prep = NULL, ...)
 }
 \arguments{
 \item{label}{Label for exercise chunk}
@@ -22,6 +22,8 @@ exercise.}
 
 \item{evaluate_result}{The return value from the \code{evaluate::evaluate}
 function.}
+
+\item{envir_prep}{A copy of the R environment before the execution of the exercise}
 
 \item{...}{Unused (include for compatibility with parameters to be added in
 the future)}
