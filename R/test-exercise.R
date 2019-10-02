@@ -76,12 +76,16 @@ test_exercise <- function(sct,
 #' Run SCT until it fails
 #'
 #' @param code the SCT script to run as an expression
+#' @param envir environment in which to execute the SCT script
 #'
 #' @export
-run_until_fail <- function(code) {
+run_until_fail <- function(code, envir = NULL) {
   tryCatch({
+    if (is.null(envir)) {
+      envir <- tw$get("state")$get("test_env")
+    }
     # Run the SCT
-    eval(code, envir = tw$get("state")$get("test_env"))
+    eval(code, envir = envir)
     # If it got here, the SCT passed
     return(list(correct = TRUE, message = tw$get("success_msg")))
   }, sct_failure = function(e) {
