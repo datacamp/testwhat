@@ -21,6 +21,7 @@
 #' @param envir_result 	The R environment after the execution of the chunk.
 #' @param evaluate_result The return value from the \code{evaluate::evaluate}
 #'   function.
+#' @param envir_prep A copy of the R environment before the execution of the exercise
 #' @param ... Unused (include for compatibility with parameters to be added in
 #'   the future)
 #'
@@ -33,6 +34,7 @@ testwhat_learnr <- function(label = NULL,
                             check_code = NULL,
                             envir_result = NULL,
                             evaluate_result = NULL,
+                            envir_prep = NULL,
                             ...) {
 
   ######### START COPY FROM gradethis ##################
@@ -47,7 +49,7 @@ testwhat_learnr <- function(label = NULL,
       location = "append"
     ))
   }
-  
+
   # Sometimes no solution is provided, but that
   # means there is nothing to check against. Also,
   # you do not want to parse NULL
@@ -66,8 +68,8 @@ testwhat_learnr <- function(label = NULL,
               sol_env = NULL,
               stu_env = envir_result,
               stu_result = evaluate_result)
-  
-  res <- run_until_fail(parse(text = check_code))
+
+  res <- run_until_fail(parse(text = check_code), envir = envir_prep)
   return(list(message = res$message,
               correct = res$correct,
               location = "append",
