@@ -66,7 +66,7 @@ x <- mean(-1:5)
 # Example SCT
 ex() \%>\% check_or(
   check_object(., 'a') \%>\% check_equal(),
-  check_object(., 'b') \%>\% checK-equal()
+  check_object(., 'b') \%>\% check-equal()
 )
 
 # Following submissions will all be accepted:

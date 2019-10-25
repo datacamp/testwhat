@@ -5,10 +5,8 @@
 #' can be used.
 #'
 #' @param state state to start from
-#' @param name  name of the function/operator as a string, e.g. \code{"mean"},
-#'   \code{"+"} or \code{"..."}; can also be used for positional access, e.g.
-#'   \code{1} for the first argument and \code{"..1"} for the first item in
-#'   \code{"..."}
+#' @param name  name of the function/operator as a string, e.g. \code{"mean"} or
+#'   \code{"+"}
 #' @param index  integer that specifies which call of \code{name} in the
 #'   solution code will be checked.
 #' @param eval  logical vector indicating whether and how to compare arguments.
@@ -37,7 +35,7 @@
 #' @param arg_not_specified_msg custom message in case argument was not
 #'   specified (for \code{check_arg})
 #' @param arg name or position of argument to specify
-#'   ... Arguments can be accessed using '..<INDEX>' (see example 4) (for \code{check_arg})
+#'   ... Arguments can be accessed using '..<INDEX>' (see example 5) (for \code{check_arg})
 #'
 #' @examples
 #' \dontrun{
@@ -62,8 +60,17 @@
 #' # SCT
 #' ex() %>% check_operator("+") %>% check_result() %>% check_equal()
 #' }
+#' 
+#' # Example 4: Positional argument check
+#' cor(rnorm(10), rnorm(10))
+#' 
+#' # SCT
+#' ex() %>% check_function("cor") %>% {
+#'   check_arg(., 1) %>% check_equal()
+#'   check_arg(., 2) %>% check_equal()
+#' }
 #'
-#' # Example 4: ... in check_args
+#' # Example 5: ... in check_args
 #'
 #'soln <- "std_dev <- purrr::compose(sqrt, var, .dir='forward')"
 #'state <- setup_state(soln, soln)
