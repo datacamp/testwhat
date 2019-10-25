@@ -59,7 +59,6 @@
 #'
 #' # SCT
 #' ex() %>% check_operator("+") %>% check_result() %>% check_equal()
-#' }
 #' 
 #' # Example 4: Positional argument check
 #' cor(rnorm(10), rnorm(10))
@@ -72,14 +71,15 @@
 #'
 #' # Example 5: ... in check_args
 #'
-#'soln <- "std_dev <- purrr::compose(sqrt, var, .dir='forward')"
-#'state <- setup_state(soln, soln)
-#'state %>% check_function(., "compose") %>% {
-#'  check_arg(., '..1') %>% check_equal() # sqrt
-#'  check_arg(., '..2') %>% check_equal() # var
-#'  check_arg(., '.dir') %>% check_equal()
-#'}
+#' soln <- "std_dev <- purrr::compose(sqrt, var, .dir='forward')"
+#' state <- setup_state(soln, soln)
+#' state %>% check_function(., "compose") %>% {
+#'   check_arg(., '..1') %>% check_equal() # sqrt
+#'   check_arg(., '..2') %>% check_equal() # var
+#'   check_arg(., '.dir') %>% check_equal()
+#' }
 #'
+#' }
 #' @name check_function
 
 #' @rdname check_function
