@@ -315,7 +315,7 @@ check_option.MarkdownYamlState <- function(state, name, not_found_msg = NULL, ap
   
   solution_option <- try(solution_yaml[[name]], silent = TRUE)
   if (inherits(solution_option, "try-error") || is.null(solution_option)) {
-    stop(sprintf('check_option() tries to check the option %s of the yaml, but it iss not specified in the solution',
+    stop(sprintf('check_option() tries to check the option %s of the yaml, but it is not specified in the solution',
                  yaml_option_desc(name)))
   }
   
