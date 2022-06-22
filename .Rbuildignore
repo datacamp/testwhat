@@ -1,6 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^\.travis\.yml$
 ^\.git$
 ^inst/web$
 ^docs$
@@ -8,5 +7,4 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^pkgdown$
-^codecov\.yml$
 ^CHANGELOG\.md$
